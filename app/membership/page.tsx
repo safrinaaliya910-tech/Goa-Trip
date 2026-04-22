@@ -481,225 +481,231 @@ export default function MembershipPage() {
       </section>
 
       <AnimatePresence>
-        {selectedTier && (
-          <motion.div
-            className="fixed inset-0 z-[100] bg-black/70 px-4 py-6 backdrop-blur-sm"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+  {selectedTier && (
+    <motion.div
+      className="fixed inset-0 z-[100] overflow-y-auto bg-black/70 px-4 py-6 backdrop-blur-sm"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
+      <div className="flex min-h-full items-start justify-center md:items-center">
+        <motion.div
+          initial={{ opacity: 0, y: 24, scale: 0.98 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 24, scale: 0.98 }}
+          transition={{ duration: 0.25 }}
+          className="relative my-4 w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-primary/30 bg-card shadow-[0_0_50px_rgba(0,0,0,0.5)]"
+        >
+          <button
+            onClick={closeCheckout}
+            className="absolute right-4 top-4 z-10 text-muted-foreground transition hover:text-foreground"
+            aria-label="Close checkout"
           >
-            <div className="flex min-h-full items-center justify-center">
-              <motion.div
-                initial={{ opacity: 0, y: 24, scale: 0.98 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 24, scale: 0.98 }}
-                transition={{ duration: 0.25 }}
-                className="relative w-full max-w-2xl border border-primary/30 bg-card shadow-[0_0_50px_rgba(0,0,0,0.5)]"
+            <X className="h-5 w-5" />
+          </button>
+
+          <div className="border-b border-border p-6 md:p-8">
+            <p className="text-xs uppercase tracking-[0.3em] text-primary">
+              Secure Checkout
+            </p>
+            <h3 className="mt-3 text-2xl font-light text-foreground md:text-3xl">
+              {checkoutStep === 1 && `Order Details — ${selectedTier.name}`}
+              {checkoutStep === 2 && "Complete Order"}
+            </h3>
+
+            <div className="mt-6 flex items-center gap-3 text-xs uppercase tracking-widest">
+              <span
+                className={`rounded-full px-3 py-1 ${
+                  checkoutStep >= 1
+                    ? "bg-primary text-primary-foreground"
+                    : "border border-border text-muted-foreground"
+                }`}
               >
-                <button
-                  onClick={closeCheckout}
-                  className="absolute right-4 top-4 text-muted-foreground transition hover:text-foreground"
-                  aria-label="Close checkout"
-                >
-                  <X className="h-5 w-5" />
-                </button>
+                1. Details
+              </span>
+              <span
+                className={`rounded-full px-3 py-1 ${
+                  checkoutStep >= 2
+                    ? "bg-primary text-primary-foreground"
+                    : "border border-border text-muted-foreground"
+                }`}
+              >
+                2. Complete
+              </span>
+            </div>
+          </div>
 
-                <div className="border-b border-border p-6 md:p-8">
-                  <p className="text-xs uppercase tracking-[0.3em] text-primary">
-                    Secure Checkout
-                  </p>
-                  <h3 className="mt-3 text-2xl font-light text-foreground md:text-3xl">
-                    {checkoutStep === 1 && `Order Details — ${selectedTier.name}`}
-                    {checkoutStep === 2 && "Complete Order"}
-                  </h3>
+          {checkoutStep === 1 && (
+            <div className="p-6 md:p-8">
+              <div className="grid gap-8 md:grid-cols-[1.1fr_0.9fr]">
+                <div>
+                  <div className="border border-border bg-background/40 p-5">
+                    <p className="text-xs uppercase tracking-[0.3em] text-primary">
+                      Selected Membership
+                    </p>
+                    <h4 className="mt-3 text-2xl font-light text-foreground">
+                      {selectedTier.name}
+                    </h4>
+                    <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                      {selectedTier.tagline}
+                    </p>
 
-                  <div className="mt-6 flex items-center gap-3 text-xs uppercase tracking-widest">
-                    <span
-                      className={`rounded-full px-3 py-1 ${
-                        checkoutStep >= 1
-                          ? "bg-primary text-primary-foreground"
-                          : "border border-border text-muted-foreground"
-                      }`}
-                    >
-                      1. Details
-                    </span>
-                    <span
-                      className={`rounded-full px-3 py-1 ${
-                        checkoutStep >= 2
-                          ? "bg-primary text-primary-foreground"
-                          : "border border-border text-muted-foreground"
-                      }`}
-                    >
-                      2. Complete
-                    </span>
+                    <div className="mt-6 space-y-2 text-sm text-muted-foreground">
+                      <div className="flex items-center justify-between">
+                        <span>Membership Price</span>
+                        <span className="text-foreground">${selectedTier.price}</span>
+                      </div>
+                      <div className="flex items-center justify-between border-t border-border pt-3">
+                        <span className="font-medium text-foreground">Total</span>
+                        <span className="text-xl font-light text-primary">
+                          ${selectedTier.price}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="mt-6 rounded-sm border border-primary/20 bg-primary/5 p-4 text-sm leading-relaxed text-muted-foreground">
+                      Includes digital membership activation and lifetime access.
+                    </div>
                   </div>
                 </div>
 
-                {checkoutStep === 1 && (
-                  <div className="p-6 md:p-8">
-                    <div className="grid gap-8 md:grid-cols-[1.1fr_0.9fr]">
-                      <div>
-                        <div className="border border-border bg-background/40 p-5">
-                          <p className="text-xs uppercase tracking-[0.3em] text-primary">
-                            Selected Membership
-                          </p>
-                          <h4 className="mt-3 text-2xl font-light text-foreground">
-                            {selectedTier.name}
-                          </h4>
-                          <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                            {selectedTier.tagline}
-                          </p>
-
-                          <div className="mt-6 space-y-2 text-sm text-muted-foreground">
-                            <div className="flex items-center justify-between">
-                              <span>Membership Price</span>
-                              <span className="text-foreground">${selectedTier.price}</span>
-                            </div>
-                            <div className="flex items-center justify-between border-t border-border pt-3">
-                              <span className="font-medium text-foreground">Total</span>
-                              <span className="text-xl font-light text-primary">
-                                ${selectedTier.price}
-                              </span>
-                            </div>
-                          </div>
-
-                          <div className="mt-6 rounded-sm border border-primary/20 bg-primary/5 p-4 text-sm leading-relaxed text-muted-foreground">
-                            Includes digital membership activation and lifetime access.
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="space-y-4">
-                        <div>
-                          <label className="mb-2 block text-sm text-foreground">Full Name</label>
-                          <input
-                            value={customerName}
-                            onChange={(e) => setCustomerName(e.target.value)}
-                            placeholder="Enter your full name"
-                            className="w-full border border-border bg-background px-4 py-3 text-foreground outline-none transition focus:border-primary"
-                          />
-                        </div>
-
-                        <div>
-                          <label className="mb-2 block text-sm text-foreground">Email Address</label>
-                          <input
-                            type="email"
-                            value={customerEmail}
-                            onChange={(e) => setCustomerEmail(e.target.value)}
-                            placeholder="Enter your email"
-                            className="w-full border border-border bg-background px-4 py-3 text-foreground outline-none transition focus:border-primary"
-                          />
-                        </div>
-
-                        <div>
-                          <label className="mb-2 block text-sm text-foreground">Phone Number</label>
-                          <input
-                            value={customerPhone}
-                            onChange={(e) => setCustomerPhone(e.target.value)}
-                            placeholder="Enter your phone number"
-                            className="w-full border border-border bg-background px-4 py-3 text-foreground outline-none transition focus:border-primary"
-                          />
-                        </div>
-
-                        <div>
-                          <label className="mb-2 block text-sm text-foreground">City</label>
-                          <input
-                            value={customerCity}
-                            onChange={(e) => setCustomerCity(e.target.value)}
-                            placeholder="Enter your city"
-                            className="w-full border border-border bg-background px-4 py-3 text-foreground outline-none transition focus:border-primary"
-                          />
-                        </div>
-
-                        <button
-                          type="button"
-                          onClick={() => setCheckoutStep(2)}
-                          disabled={!canContinueToPayment}
-                          className="mt-2 w-full bg-primary px-5 py-4 text-sm uppercase tracking-widest text-primary-foreground transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
-                        >
-                          Continue
-                        </button>
-                      </div>
-                    </div>
+                <div className="space-y-4">
+                  <div>
+                    <label className="mb-2 block text-sm text-foreground">
+                      Full Name
+                    </label>
+                    <input
+                      value={customerName}
+                      onChange={(e) => setCustomerName(e.target.value)}
+                      placeholder="Enter your full name"
+                      className="w-full border border-border bg-background px-4 py-3 text-foreground outline-none transition focus:border-primary"
+                    />
                   </div>
-                )}
 
-                {checkoutStep === 2 && (
-                  <div className="p-6 md:p-8">
-                    <div className="grid gap-8 md:grid-cols-[1fr_0.95fr]">
-                      <div className="border border-border bg-background/40 p-5">
-                        <p className="text-xs uppercase tracking-[0.3em] text-primary">
-                          Order Summary
-                        </p>
-                        <div className="mt-5 space-y-3 text-sm text-muted-foreground">
-                          <div className="flex items-center justify-between">
-                            <span>Plan</span>
-                            <span className="text-foreground">{selectedTier.name}</span>
-                          </div>
-                          <div className="flex items-center justify-between">
-                            <span>Name</span>
-                            <span className="text-foreground">{customerName}</span>
-                          </div>
-                          <div className="flex items-center justify-between">
-                            <span>Email</span>
-                            <span className="text-foreground">{customerEmail}</span>
-                          </div>
-                          <div className="flex items-center justify-between">
-                            <span>Phone</span>
-                            <span className="text-foreground">{customerPhone}</span>
-                          </div>
-                          <div className="flex items-center justify-between">
-                            <span>City</span>
-                            <span className="text-foreground">{customerCity}</span>
-                          </div>
-                          <div className="flex items-center justify-between border-t border-border pt-3">
-                            <span className="font-medium text-foreground">Amount</span>
-                            <span className="text-xl font-light text-primary">
-                              ${selectedTier.price}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="border border-border p-5">
-                        <p className="text-xs uppercase tracking-[0.3em] text-primary">
-                          Complete Order
-                        </p>
-                        <h4 className="mt-3 text-xl font-light text-foreground">
-                          Confirm Membership
-                        </h4>
-                        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                          Review the details and continue to activate your membership.
-                          This keeps your current design and flow without Razorpay.
-                        </p>
-
-                        <div className="mt-6 flex gap-3">
-                          <button
-                            type="button"
-                            onClick={() => setCheckoutStep(1)}
-                            className="w-1/2 border border-border px-4 py-4 text-sm uppercase tracking-widest text-foreground transition hover:border-primary hover:text-primary"
-                          >
-                            Back
-                          </button>
-                          <button
-                            type="button"
-                            onClick={completeOrder}
-                            className="w-1/2 bg-primary px-4 py-4 text-sm uppercase tracking-widest text-primary-foreground transition hover:bg-primary/90"
-                          >
-                            Complete Order
-                          </button>
-                        </div>
-
-                        
-                      </div>
-                    </div>
+                  <div>
+                    <label className="mb-2 block text-sm text-foreground">
+                      Email Address
+                    </label>
+                    <input
+                      type="email"
+                      value={customerEmail}
+                      onChange={(e) => setCustomerEmail(e.target.value)}
+                      placeholder="Enter your email"
+                      className="w-full border border-border bg-background px-4 py-3 text-foreground outline-none transition focus:border-primary"
+                    />
                   </div>
-                )}
-              </motion.div>
+
+                  <div>
+                    <label className="mb-2 block text-sm text-foreground">
+                      Phone Number
+                    </label>
+                    <input
+                      value={customerPhone}
+                      onChange={(e) => setCustomerPhone(e.target.value)}
+                      placeholder="Enter your phone number"
+                      className="w-full border border-border bg-background px-4 py-3 text-foreground outline-none transition focus:border-primary"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="mb-2 block text-sm text-foreground">
+                      City
+                    </label>
+                    <input
+                      value={customerCity}
+                      onChange={(e) => setCustomerCity(e.target.value)}
+                      placeholder="Enter your city"
+                      className="w-full border border-border bg-background px-4 py-3 text-foreground outline-none transition focus:border-primary"
+                    />
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => setCheckoutStep(2)}
+                    disabled={!canContinueToPayment}
+                    className="mt-2 w-full bg-primary px-5 py-4 text-sm uppercase tracking-widest text-primary-foreground transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    Continue
+                  </button>
+                </div>
+              </div>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          )}
+
+          {checkoutStep === 2 && (
+            <div className="p-6 md:p-8">
+              <div className="grid gap-8 md:grid-cols-[1fr_0.95fr]">
+                <div className="border border-border bg-background/40 p-5">
+                  <p className="text-xs uppercase tracking-[0.3em] text-primary">
+                    Order Summary
+                  </p>
+                  <div className="mt-5 space-y-3 text-sm text-muted-foreground">
+                    <div className="flex items-center justify-between">
+                      <span>Plan</span>
+                      <span className="text-foreground">{selectedTier.name}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span>Name</span>
+                      <span className="text-foreground">{customerName}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span>Email</span>
+                      <span className="text-foreground">{customerEmail}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span>Phone</span>
+                      <span className="text-foreground">{customerPhone}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span>City</span>
+                      <span className="text-foreground">{customerCity}</span>
+                    </div>
+                    <div className="flex items-center justify-between border-t border-border pt-3">
+                      <span className="font-medium text-foreground">Amount</span>
+                      <span className="text-xl font-light text-primary">
+                        ${selectedTier.price}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="border border-border p-5">
+                  <p className="text-xs uppercase tracking-[0.3em] text-primary">
+                    Complete Order
+                  </p>
+                  <h4 className="mt-3 text-xl font-light text-foreground">
+                    Confirm Membership
+                  </h4>
+                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                    Review the details and continue to activate your membership.
+                    This keeps your current design and flow without Razorpay.
+                  </p>
+
+                  <div className="mt-6 flex gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setCheckoutStep(1)}
+                      className="w-1/2 border border-border px-4 py-4 text-sm uppercase tracking-widest text-foreground transition hover:border-primary hover:text-primary"
+                    >
+                      Back
+                    </button>
+                    <button
+                      type="button"
+                      onClick={completeOrder}
+                      className="w-1/2 bg-primary px-4 py-4 text-sm uppercase tracking-widest text-primary-foreground transition hover:bg-primary/90"
+                    >
+                      Complete Order
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </motion.div>
+      </div>
+    </motion.div>
+  )}
+</AnimatePresence>
 
       <Footer />
     </main>
