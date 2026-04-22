@@ -1,0 +1,232 @@
+{
+  "nav": {
+    "home": "Startseite",
+    "about": "Über Uns",
+    "membership": "Mitgliedschaft",
+    "contact": "Kontakt",
+    "joinNow": "Jetzt Beitreten"
+  },
+  "hero": {
+    "title1": "Erlebe Goa",
+    "title2": "Wie Könige",
+    "subtitle": "Luxusaufenthalte, exklusiver Zugang und unvergessliche Erlebnisse — alles mit einer Mitgliedschaft.",
+    "cta1": "Früher Zugang",
+    "cta2": "Mitgliedschaft Erkunden"
+  },
+  "experiences": {
+    "badge": "Kuratierte Erlebnisse",
+    "title": "Eine Welt der Privilegien",
+    "subtitle": "Von unberührten Stränden bis zu High-Stakes-Casinos ist jeder Moment für diejenigen geschaffen, die nichts weniger als Außergewöhnliches erwarten.",
+    "items": {
+      "beach": {
+        "title": "Goldene Küsten",
+        "subtitle": "Privater Strandzugang",
+        "description": "Exklusive Sonnenauf- und Sonnenuntergangserlebnisse an Goas reinsten Stränden."
+      },
+      "nightlife": {
+        "title": "Nach Einbruch der Dunkelheit",
+        "subtitle": "Elite-Nachtleben",
+        "description": "Überspringe die Schlangen. Zugang zu VIP-Bereichen in Goas exklusivsten Clubs."
+      },
+      "casino": {
+        "title": "Hohe Einsätze",
+        "subtitle": "VIP-Casino-Privilegien",
+        "description": "Private Tische, engagierte Gastgeber und unbegrenzter Champagner in Luxus-Casinos."
+      },
+      "yacht": {
+        "title": "Ozeanreisen",
+        "subtitle": "Private Yachtcharter",
+        "description": "Segeln Sie dem Sonnenuntergang entgegen an Bord von Luxusyachten mit persönlicher Crew und Koch."
+      }
+    }
+  },
+  "about": {
+    "badge": "Über Uns",
+    "title": "Die Kunst des Exklusiven Lebens",
+    "subtitle": "Wir kuratieren außergewöhnliche Erlebnisse für diejenigen, die den Gipfel des Luxus in Goa suchen.",
+    "mission": {
+      "title": "Unsere Mission",
+      "description": "Das Luxusleben in Goa neu zu definieren, indem wir unvergleichlichen Zugang zu den besten Erlebnissen, Orten und Dienstleistungen der Region bieten."
+    },
+    "vision": {
+      "title": "Unsere Vision",
+      "description": "Die prestigeträchtigste Lifestyle-Mitgliedschaft Indiens zu werden und neue Maßstäbe für Exklusivität und persönlichen Service zu setzen."
+    },
+    "values": {
+      "title": "Unsere Werte",
+      "description": "Exzellenz, Diskretion und Liebe zum Detail leiten alles, was wir tun."
+    },
+    "stats": {
+      "members": "Elite-Mitglieder",
+      "partners": "Partner-Locations",
+      "experiences": "Kuratierte Erlebnisse",
+      "concierge": "24/7 Concierge"
+    }
+  },
+  "membership": {
+    "badge": "Mitgliedschaftsstufen",
+    "title": "Wählen Sie Ihr Luxusniveau",
+    "subtitle": "Wählen Sie die Mitgliedschaft, die zu Ihrem Lebensstil passt.",
+    "benefits": {
+      "title": "Mitgliedervorteile",
+      "subtitle": "Jede Mitgliedschaft beinhaltet Zugang zu unseren erstklassigen Einrichtungen und Dienstleistungen.",
+      "concierge": {
+        "title": "24/7 Concierge",
+        "description": "Persönliche Unterstützung rund um die Uhr"
+      },
+      "beach": {
+        "title": "Strandzugang",
+        "description": "Private Cabanas an Premium-Stränden"
+      },
+      "dining": {
+        "title": "Fine Dining",
+        "description": "Reservierte Tische in Top-Restaurants"
+      },
+      "events": {
+        "title": "Exklusive Events",
+        "description": "Nur auf Einladung-Veranstaltungen"
+      },
+      "yacht": {
+        "title": "Yachtcharter",
+        "description": "Ermäßigte private Yacht-Erlebnisse"
+      },
+      "spa": {
+        "title": "Spa & Wellness",
+        "description": "Kostenlose Spa-Behandlungen"
+      }
+    },
+    "process": {
+      "title": "Einfacher Bewerbungsprozess",
+      "step1": {
+        "title": "Online Bewerben",
+        "description": "Reichen Sie Ihre Bewerbung mit grundlegenden Daten ein"
+      },
+      "step2": {
+        "title": "Verifizierung",
+        "description": "Unser Team prüft Ihre Bewerbung"
+      },
+      "step3": {
+        "title": "Willkommen",
+        "description": "Erhalten Sie Ihre Mitgliedskarte und Vorteile"
+      }
+    },
+    "tiers": {
+      "gold": {
+        "name": "Gold",
+        "price": "₹2,50,000",
+        "period": "/Jahr",
+        "features": ["Privater Strandzugang", "Restaurant-Prioritätsbuchung", "Casino VIP-Eintritt", "Monatliche kuratierte Events", "24/7 Concierge-Support"]
+      },
+      "platinum": {
+        "name": "Platin",
+        "price": "₹5,00,000",
+        "period": "/Jahr",
+        "popular": "Am Beliebtesten",
+        "features": ["Alle Gold-Vorteile", "Yachtcharter-Rabatte", "Helikopter-Transfers", "Persönlicher Lifestyle-Manager", "Exklusiver Villa-Zugang", "Partner-Hotel-Upgrades"]
+      },
+      "diamond": {
+        "name": "Diamant",
+        "price": "₹12,00,000",
+        "period": "/Jahr",
+        "features": ["Alle Platin-Vorteile", "Unbegrenzter Yachtzugang", "Privatjet-Koordination", "Maßgeschneiderte Erlebniskreation", "Globales Partnernetzwerk", "Familienmitgliedschaft inklusive", "Investitionsmöglichkeiten"]
+      }
+    },
+    "select": "Plan Auswählen",
+    "currentPlan": "Aktueller Plan"
+  },
+  "contact": {
+    "badge": "Kontaktieren Sie Uns",
+    "title": "Verbinden Sie Sich Mit Uns",
+    "subtitle": "Unser Concierge-Team steht rund um die Uhr für Anfragen und Mitgliedschaftsanträge zur Verfügung.",
+    "form": {
+      "name": "Vollständiger Name",
+      "email": "E-Mail-Adresse",
+      "phone": "Telefonnummer",
+      "interest": "Interessengebiet",
+      "interests": {
+        "membership": "Mitgliedschaftsanfrage",
+        "events": "Private Events",
+        "partnerships": "Partnerschaften",
+        "other": "Sonstiges"
+      },
+      "message": "Ihre Nachricht",
+      "submit": "Nachricht Senden",
+      "sending": "Wird gesendet..."
+    },
+    "info": {
+      "visit": {
+        "title": "Besuchen Sie Uns",
+        "line1": "Die Goa Elite Lounge",
+        "line2": "Candolim Beach Road",
+        "line3": "Nord-Goa, Indien 403515"
+      },
+      "call": {
+        "title": "Rufen Sie Uns An",
+        "line1": "+91 832 XXX XXXX",
+        "line2": "Mo-So: 24 Stunden"
+      },
+      "email": {
+        "title": "Schreiben Sie Uns",
+        "line1": "concierge@goaelite.com",
+        "line2": "membership@goaelite.com"
+      }
+    }
+  },
+  "comingSoon": {
+    "badge": "Demnächst",
+    "title": "Etwas Außergewöhnliches Erwartet Sie",
+    "subtitle": "Wir erschaffen ein Erlebnis, das Ihrer Erwartungen würdig ist. Erfahren Sie als Erster, wenn wir starten.",
+    "form": {
+      "placeholder": "Geben Sie Ihre E-Mail ein",
+      "submit": "Benachrichtigen",
+      "submitting": "Wird beigetreten..."
+    },
+    "features": {
+      "exclusive": "Exklusive Launch-Angebote",
+      "priority": "Prioritärer Zugang",
+      "updates": "Insider-Updates"
+    },
+    "back": "Zurück zur Startseite"
+  },
+  "footer": {
+    "description": "Der Gipfel des Luxus-Lebensstils in Goa. Exklusiver Zugang zu Premium-Erlebnissen, -Orten und -Dienstleistungen für anspruchsvolle Mitglieder.",
+    "quickLinks": "Schnelllinks",
+    "experiences": "Erlebnisse",
+    "experiencesList": {
+      "beach": "Private Strände",
+      "casino": "VIP-Casinos",
+      "yacht": "Yachtcharter",
+      "dining": "Fine Dining"
+    },
+    "contact": "Kontakt",
+    "newsletter": {
+      "title": "Treten Sie Unserem Kreis Bei",
+      "description": "Abonnieren Sie für exklusive Updates und nur für Mitglieder-Angebote.",
+      "placeholder": "Ihre E-Mail",
+      "submit": "Abonnieren"
+    },
+    "copyright": "© 2024 Goa Elite. Alle Rechte vorbehalten.",
+    "legal": {
+      "privacy": "Datenschutzrichtlinie",
+      "terms": "Nutzungsbedingungen"
+    }
+  },
+  "theme": {
+    "light": "Hell",
+    "dark": "Dunkel",
+    "system": "System"
+  },
+  "language": {
+    "select": "Sprache",
+    "en": "English",
+    "ta": "தமிழ்",
+    "hi": "हिन्दी",
+    "zh": "中文",
+    "es": "Español",
+    "fr": "Français",
+    "ar": "العربية",
+    "pt": "Português",
+    "de": "Deutsch",
+    "ml": "മലയാളം"
+  }
+}

@@ -1,0 +1,232 @@
+{
+  "nav": {
+    "home": "首页",
+    "about": "关于我们",
+    "membership": "会员",
+    "contact": "联系",
+    "joinNow": "立即加入"
+  },
+  "hero": {
+    "title1": "体验果阿",
+    "title2": "如同皇室",
+    "subtitle": "奢华住宿、专属通道和难忘体验 — 一张会员卡尽享所有。",
+    "cta1": "抢先体验",
+    "cta2": "探索会员"
+  },
+  "experiences": {
+    "badge": "精选体验",
+    "title": "特权世界",
+    "subtitle": "从原始海滩到高端赌场，每一刻都为追求卓越的您精心打造。",
+    "items": {
+      "beach": {
+        "title": "金色海岸",
+        "subtitle": "私人海滩通道",
+        "description": "在果阿最纯净的海滩独享日出和日落体验。"
+      },
+      "nightlife": {
+        "title": "夜幕降临",
+        "subtitle": "精英夜生活",
+        "description": "免排队。进入果阿最独家俱乐部的VIP区域。"
+      },
+      "casino": {
+        "title": "高额赌注",
+        "subtitle": "VIP赌场特权",
+        "description": "豪华赌场的私人桌台、专属管家和无限香槟。"
+      },
+      "yacht": {
+        "title": "海上之旅",
+        "subtitle": "私人游艇包租",
+        "description": "乘坐豪华游艇，配备私人船员和厨师，驶向夕阳。"
+      }
+    }
+  },
+  "about": {
+    "badge": "关于我们",
+    "title": "专属生活的艺术",
+    "subtitle": "我们为追求果阿奢华巅峰的人士提供非凡体验。",
+    "mission": {
+      "title": "我们的使命",
+      "description": "通过提供该地区最佳体验、场所和服务的无与伦比的通道，重新定义果阿的奢华生活。"
+    },
+    "vision": {
+      "title": "我们的愿景",
+      "description": "成为印度最负盛名的生活方式会员俱乐部，树立专属性和个性化服务的新标准。"
+    },
+    "values": {
+      "title": "我们的价值观",
+      "description": "卓越、谨慎和注重细节指导我们所做的一切。"
+    },
+    "stats": {
+      "members": "精英会员",
+      "partners": "合作场所",
+      "experiences": "精选体验",
+      "concierge": "24/7礼宾"
+    }
+  },
+  "membership": {
+    "badge": "会员等级",
+    "title": "选择您的奢华等级",
+    "subtitle": "选择与您生活方式相匹配的会员资格。",
+    "benefits": {
+      "title": "会员福利",
+      "subtitle": "每项会员资格都包括使用我们世界一流设施和服务的权限。",
+      "concierge": {
+        "title": "24/7礼宾",
+        "description": "全天候个人协助"
+      },
+      "beach": {
+        "title": "海滩通道",
+        "description": "高级海滩的私人凉亭"
+      },
+      "dining": {
+        "title": "精致餐饮",
+        "description": "顶级餐厅的预留座位"
+      },
+      "events": {
+        "title": "专属活动",
+        "description": "仅限受邀者参加的聚会"
+      },
+      "yacht": {
+        "title": "游艇包租",
+        "description": "折扣私人游艇体验"
+      },
+      "spa": {
+        "title": "水疗与健康",
+        "description": "免费水疗护理"
+      }
+    },
+    "process": {
+      "title": "简单申请流程",
+      "step1": {
+        "title": "在线申请",
+        "description": "提交您的基本信息申请"
+      },
+      "step2": {
+        "title": "审核验证",
+        "description": "我们的团队审核您的申请"
+      },
+      "step3": {
+        "title": "欢迎加入",
+        "description": "获得您的会员卡和福利"
+      }
+    },
+    "tiers": {
+      "gold": {
+        "name": "黄金",
+        "price": "₹2,50,000",
+        "period": "/年",
+        "features": ["私人海滩通道", "餐厅优先预订", "赌场VIP入场", "每月精选活动", "24/7礼宾支持"]
+      },
+      "platinum": {
+        "name": "铂金",
+        "price": "₹5,00,000",
+        "period": "/年",
+        "popular": "最受欢迎",
+        "features": ["所有黄金福利", "游艇包租折扣", "直升机接送", "私人生活方式经理", "专属别墅通道", "合作酒店升级"]
+      },
+      "diamond": {
+        "name": "钻石",
+        "price": "₹12,00,000",
+        "period": "/年",
+        "features": ["所有铂金福利", "无限游艇使用", "私人飞机协调", "定制体验创造", "全球合作网络", "家庭会员包含", "投资机会"]
+      }
+    },
+    "select": "选择方案",
+    "currentPlan": "当前方案"
+  },
+  "contact": {
+    "badge": "联系我们",
+    "title": "与我们联系",
+    "subtitle": "我们的礼宾团队全天候为您提供咨询和会员申请协助。",
+    "form": {
+      "name": "全名",
+      "email": "电子邮件地址",
+      "phone": "电话号码",
+      "interest": "感兴趣的领域",
+      "interests": {
+        "membership": "会员咨询",
+        "events": "私人活动",
+        "partnerships": "合作伙伴",
+        "other": "其他"
+      },
+      "message": "您的留言",
+      "submit": "发送消息",
+      "sending": "发送中..."
+    },
+    "info": {
+      "visit": {
+        "title": "访问我们",
+        "line1": "果阿精英会所",
+        "line2": "坎多林海滩路",
+        "line3": "北果阿，印度 403515"
+      },
+      "call": {
+        "title": "致电我们",
+        "line1": "+91 832 XXX XXXX",
+        "line2": "周一至周日：24小时"
+      },
+      "email": {
+        "title": "发送邮件",
+        "line1": "concierge@goaelite.com",
+        "line2": "membership@goaelite.com"
+      }
+    }
+  },
+  "comingSoon": {
+    "badge": "即将推出",
+    "title": "非凡体验即将到来",
+    "subtitle": "我们正在打造值得您期待的体验。第一时间获取发布通知。",
+    "form": {
+      "placeholder": "输入您的邮箱",
+      "submit": "通知我",
+      "submitting": "加入中..."
+    },
+    "features": {
+      "exclusive": "专属发布优惠",
+      "priority": "优先通道",
+      "updates": "内部更新"
+    },
+    "back": "返回首页"
+  },
+  "footer": {
+    "description": "果阿奢华生活方式的巅峰。为精明会员提供高端体验、场所和服务的专属通道。",
+    "quickLinks": "快速链接",
+    "experiences": "体验",
+    "experiencesList": {
+      "beach": "私人海滩",
+      "casino": "VIP赌场",
+      "yacht": "游艇包租",
+      "dining": "精致餐饮"
+    },
+    "contact": "联系",
+    "newsletter": {
+      "title": "加入我们的圈子",
+      "description": "订阅获取专属更新和会员专享优惠。",
+      "placeholder": "您的邮箱",
+      "submit": "订阅"
+    },
+    "copyright": "© 2024 果阿精英。保留所有权利。",
+    "legal": {
+      "privacy": "隐私政策",
+      "terms": "服务条款"
+    }
+  },
+  "theme": {
+    "light": "浅色",
+    "dark": "深色",
+    "system": "系统"
+  },
+  "language": {
+    "select": "语言",
+    "en": "English",
+    "ta": "தமிழ்",
+    "hi": "हिन्दी",
+    "zh": "中文",
+    "es": "Español",
+    "fr": "Français",
+    "ar": "العربية",
+    "pt": "Português",
+    "de": "Deutsch",
+    "ml": "മലയാളം"
+  }
+}

@@ -1,0 +1,232 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "about": "Sobre",
+    "membership": "Associacao",
+    "contact": "Contato",
+    "joinNow": "Junte-se Agora"
+  },
+  "hero": {
+    "title1": "Experimente Goa",
+    "title2": "Como a Realeza",
+    "subtitle": "Estadias de luxo, acesso exclusivo e experiencias inesqueciveis - tudo com uma associacao.",
+    "cta1": "Acesso Antecipado",
+    "cta2": "Explorar Associacao"
+  },
+  "experiences": {
+    "badge": "Experiencias Selecionadas",
+    "title": "Um Mundo de Privilegios",
+    "subtitle": "Das praias intocadas aos cassinos de alto nivel, cada momento e criado para quem nao aceita menos que o extraordinario.",
+    "items": {
+      "beach": {
+        "title": "Costas Douradas",
+        "subtitle": "Acesso Privado a Praia",
+        "description": "Experiencias exclusivas de nascer e por do sol nas praias mais puras de Goa."
+      },
+      "nightlife": {
+        "title": "Apos o Anoitecer",
+        "subtitle": "Vida Noturna de Elite",
+        "description": "Pule as filas. Acesso as areas VIP dos clubes mais exclusivos de Goa."
+      },
+      "casino": {
+        "title": "Apostas Altas",
+        "subtitle": "Privilegios VIP de Cassino",
+        "description": "Mesas privadas, anfitrioes dedicados e champanhe ilimitado em cassinos de luxo."
+      },
+      "yacht": {
+        "title": "Viagens Oceanicas",
+        "subtitle": "Aluguel de Iates Privados",
+        "description": "Navegue em direcao ao por do sol a bordo de iates de luxo com tripulacao e chef pessoais."
+      }
+    }
+  },
+  "about": {
+    "badge": "Sobre Nos",
+    "title": "A Arte do Viver Exclusivo",
+    "subtitle": "Curamos experiencias extraordinarias para quem busca o apice do luxo em Goa.",
+    "mission": {
+      "title": "Nossa Missao",
+      "description": "Redefinir a vida de luxo em Goa, proporcionando acesso incomparavel as melhores experiencias, locais e servicos que a regiao oferece."
+    },
+    "vision": {
+      "title": "Nossa Visao",
+      "description": "Tornar-se a associacao de estilo de vida mais prestigiada da India, estabelecendo novos padroes de exclusividade e servico personalizado."
+    },
+    "values": {
+      "title": "Nossos Valores",
+      "description": "Excelencia, discricao e atencao aos detalhes guiam tudo o que fazemos."
+    },
+    "stats": {
+      "members": "Membros de Elite",
+      "partners": "Locais Parceiros",
+      "experiences": "Experiencias Selecionadas",
+      "concierge": "Concierge 24/7"
+    }
+  },
+  "membership": {
+    "badge": "Niveis de Associacao",
+    "title": "Escolha Seu Nivel de Luxo",
+    "subtitle": "Selecione a associacao que combina com seu estilo de vida.",
+    "benefits": {
+      "title": "Beneficios de Membro",
+      "subtitle": "Cada associacao inclui acesso as nossas instalacoes e servicos de classe mundial.",
+      "concierge": {
+        "title": "Concierge 24/7",
+        "description": "Assistencia pessoal 24 horas"
+      },
+      "beach": {
+        "title": "Acesso a Praia",
+        "description": "Cabanas privadas em praias premium"
+      },
+      "dining": {
+        "title": "Alta Gastronomia",
+        "description": "Mesas reservadas nos melhores restaurantes"
+      },
+      "events": {
+        "title": "Eventos Exclusivos",
+        "description": "Encontros apenas por convite"
+      },
+      "yacht": {
+        "title": "Aluguel de Iates",
+        "description": "Experiencias de iate privado com desconto"
+      },
+      "spa": {
+        "title": "Spa e Bem-estar",
+        "description": "Tratamentos de spa cortesia"
+      }
+    },
+    "process": {
+      "title": "Processo de Inscricao Simples",
+      "step1": {
+        "title": "Inscreva-se Online",
+        "description": "Envie sua inscricao com dados basicos"
+      },
+      "step2": {
+        "title": "Verificacao",
+        "description": "Nossa equipe analisa sua inscricao"
+      },
+      "step3": {
+        "title": "Boas-vindas",
+        "description": "Receba seu cartao de membro e beneficios"
+      }
+    },
+    "tiers": {
+      "gold": {
+        "name": "Ouro",
+        "price": "R$2,50,000",
+        "period": "/ano",
+        "features": ["Acesso privado a praia", "Reserva prioritaria em restaurantes", "Entrada VIP no cassino", "Eventos mensais selecionados", "Suporte concierge 24/7"]
+      },
+      "platinum": {
+        "name": "Platina",
+        "price": "R$5,00,000",
+        "period": "/ano",
+        "popular": "Mais Popular",
+        "features": ["Todos os beneficios Ouro", "Descontos em aluguel de iates", "Transfers de helicoptero", "Gerente de estilo de vida pessoal", "Acesso exclusivo a vilas", "Upgrades em hoteis parceiros"]
+      },
+      "diamond": {
+        "name": "Diamante",
+        "price": "R$12,00,000",
+        "period": "/ano",
+        "features": ["Todos os beneficios Platina", "Acesso ilimitado a iates", "Coordenacao de jato privado", "Criacao de experiencias personalizadas", "Rede global de parceiros", "Associacao familiar incluida", "Oportunidades de investimento"]
+      }
+    },
+    "select": "Selecionar Plano",
+    "currentPlan": "Plano Atual"
+  },
+  "contact": {
+    "badge": "Entre em Contato",
+    "title": "Conecte-se Conosco",
+    "subtitle": "Nossa equipe de concierge esta disponivel 24 horas para ajudar com consultas e inscricoes de associacao.",
+    "form": {
+      "name": "Nome Completo",
+      "email": "Endereco de Email",
+      "phone": "Numero de Telefone",
+      "interest": "Area de Interesse",
+      "interests": {
+        "membership": "Consulta de Associacao",
+        "events": "Eventos Privados",
+        "partnerships": "Parcerias",
+        "other": "Outro"
+      },
+      "message": "Sua Mensagem",
+      "submit": "Enviar Mensagem",
+      "sending": "Enviando..."
+    },
+    "info": {
+      "visit": {
+        "title": "Visite-nos",
+        "line1": "O Lounge Goa Elite",
+        "line2": "Candolim Beach Road",
+        "line3": "Norte de Goa, India 403515"
+      },
+      "call": {
+        "title": "Ligue para Nos",
+        "line1": "+91 832 XXX XXXX",
+        "line2": "Seg-Dom: 24 Horas"
+      },
+      "email": {
+        "title": "Envie-nos um Email",
+        "line1": "concierge@goaelite.com",
+        "line2": "membership@goaelite.com"
+      }
+    }
+  },
+  "comingSoon": {
+    "badge": "Em Breve",
+    "title": "Algo Extraordinario Aguarda",
+    "subtitle": "Estamos criando uma experiencia digna de suas expectativas. Seja o primeiro a saber quando lancarmos.",
+    "form": {
+      "placeholder": "Digite seu email",
+      "submit": "Notifique-me",
+      "submitting": "Entrando..."
+    },
+    "features": {
+      "exclusive": "Ofertas Exclusivas de Lancamento",
+      "priority": "Acesso Prioritario",
+      "updates": "Atualizacoes Internas"
+    },
+    "back": "Voltar ao Inicio"
+  },
+  "footer": {
+    "description": "O apice do estilo de vida de luxo em Goa. Acesso exclusivo a experiencias, locais e servicos premium para membros exigentes.",
+    "quickLinks": "Links Rapidos",
+    "experiences": "Experiencias",
+    "experiencesList": {
+      "beach": "Praias Privadas",
+      "casino": "Cassinos VIP",
+      "yacht": "Aluguel de Iates",
+      "dining": "Alta Gastronomia"
+    },
+    "contact": "Contato",
+    "newsletter": {
+      "title": "Junte-se ao Nosso Circulo",
+      "description": "Inscreva-se para atualizacoes exclusivas e ofertas apenas para membros.",
+      "placeholder": "Seu email",
+      "submit": "Inscrever-se"
+    },
+    "copyright": "2024 Goa Elite. Todos os direitos reservados.",
+    "legal": {
+      "privacy": "Politica de Privacidade",
+      "terms": "Termos de Servico"
+    }
+  },
+  "theme": {
+    "light": "Claro",
+    "dark": "Escuro",
+    "system": "Sistema"
+  },
+  "language": {
+    "select": "Idioma",
+    "en": "English",
+    "ta": "Tamil",
+    "hi": "Hindi",
+    "zh": "Chinese",
+    "es": "Espanol",
+    "fr": "Francais",
+    "ar": "Arabic",
+    "pt": "Portugues",
+    "de": "Deutsch",
+    "ml": "Malayalam"
+  }
+}

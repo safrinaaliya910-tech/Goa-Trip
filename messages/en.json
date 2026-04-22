@@ -1,0 +1,232 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "membership": "Membership",
+    "contact": "Contact",
+    "joinNow": "Join Now"
+  },
+  "hero": {
+    "title1": "Experience Goa",
+    "title2": "Like Royalty",
+    "subtitle": "Luxury stays, exclusive access, and unforgettable experiences — all with one membership.",
+    "cta1": "Get Early Access",
+    "cta2": "Explore Membership"
+  },
+  "experiences": {
+    "badge": "Curated Experiences",
+    "title": "A World of Privilege",
+    "subtitle": "From pristine beaches to high-stakes casinos, every moment is crafted for those who expect nothing less than extraordinary.",
+    "items": {
+      "beach": {
+        "title": "Golden Shores",
+        "subtitle": "Private Beach Access",
+        "description": "Exclusive sunrise and sunset experiences at Goa's most pristine beaches."
+      },
+      "nightlife": {
+        "title": "After Dark",
+        "subtitle": "Elite Nightlife",
+        "description": "Skip the lines. Access to VIP areas at Goa's most exclusive clubs."
+      },
+      "casino": {
+        "title": "High Stakes",
+        "subtitle": "VIP Casino Privileges",
+        "description": "Private tables, dedicated hosts, and unlimited champagne at luxury casinos."
+      },
+      "yacht": {
+        "title": "Ocean Voyages",
+        "subtitle": "Private Yacht Charters",
+        "description": "Sail into the sunset aboard luxury yachts with personal crew and chef."
+      }
+    }
+  },
+  "about": {
+    "badge": "About Us",
+    "title": "The Art of Exclusive Living",
+    "subtitle": "We curate extraordinary experiences for those who seek the pinnacle of luxury in Goa.",
+    "mission": {
+      "title": "Our Mission",
+      "description": "To redefine luxury living in Goa by providing unparalleled access to the finest experiences, venues, and services the region has to offer."
+    },
+    "vision": {
+      "title": "Our Vision",
+      "description": "To become the most prestigious lifestyle membership in India, setting new standards for exclusivity and personalized service."
+    },
+    "values": {
+      "title": "Our Values",
+      "description": "Excellence, discretion, and attention to detail guide everything we do. Every experience is meticulously crafted."
+    },
+    "stats": {
+      "members": "Elite Members",
+      "partners": "Partner Venues",
+      "experiences": "Curated Experiences",
+      "concierge": "24/7 Concierge"
+    }
+  },
+  "membership": {
+    "badge": "Membership Tiers",
+    "title": "Choose Your Level of Luxury",
+    "subtitle": "Select the membership that matches your lifestyle. Each tier unlocks progressively more exclusive privileges.",
+    "benefits": {
+      "title": "Member Benefits",
+      "subtitle": "Every membership includes access to our world-class amenities and services.",
+      "concierge": {
+        "title": "24/7 Concierge",
+        "description": "Personal assistance around the clock"
+      },
+      "beach": {
+        "title": "Beach Access",
+        "description": "Private cabanas at premium beaches"
+      },
+      "dining": {
+        "title": "Fine Dining",
+        "description": "Reserved tables at top restaurants"
+      },
+      "events": {
+        "title": "Exclusive Events",
+        "description": "Invitation-only gatherings"
+      },
+      "yacht": {
+        "title": "Yacht Charters",
+        "description": "Discounted private yacht experiences"
+      },
+      "spa": {
+        "title": "Spa & Wellness",
+        "description": "Complimentary spa treatments"
+      }
+    },
+    "process": {
+      "title": "Simple Application Process",
+      "step1": {
+        "title": "Apply Online",
+        "description": "Submit your application with basic details"
+      },
+      "step2": {
+        "title": "Verification",
+        "description": "Our team reviews your application"
+      },
+      "step3": {
+        "title": "Welcome",
+        "description": "Receive your membership card and benefits"
+      }
+    },
+    "tiers": {
+      "gold": {
+        "name": "Gold",
+        "price": "₹2,50,000",
+        "period": "/year",
+        "features": ["Private beach access", "Restaurant priority booking", "Casino VIP entry", "Monthly curated events", "24/7 Concierge support"]
+      },
+      "platinum": {
+        "name": "Platinum",
+        "price": "₹5,00,000",
+        "period": "/year",
+        "popular": "Most Popular",
+        "features": ["All Gold benefits", "Yacht charter discounts", "Helicopter transfers", "Personal lifestyle manager", "Exclusive villa access", "Partner hotel upgrades"]
+      },
+      "diamond": {
+        "name": "Diamond",
+        "price": "₹12,00,000",
+        "period": "/year",
+        "features": ["All Platinum benefits", "Unlimited yacht access", "Private jet coordination", "Bespoke experience creation", "Global partner network", "Family membership included", "Investment opportunities"]
+      }
+    },
+    "select": "Select Plan",
+    "currentPlan": "Current Plan"
+  },
+  "contact": {
+    "badge": "Get in Touch",
+    "title": "Connect With Us",
+    "subtitle": "Our concierge team is available around the clock to assist with inquiries and membership applications.",
+    "form": {
+      "name": "Full Name",
+      "email": "Email Address",
+      "phone": "Phone Number",
+      "interest": "Area of Interest",
+      "interests": {
+        "membership": "Membership Inquiry",
+        "events": "Private Events",
+        "partnerships": "Partnerships",
+        "other": "Other"
+      },
+      "message": "Your Message",
+      "submit": "Send Message",
+      "sending": "Sending..."
+    },
+    "info": {
+      "visit": {
+        "title": "Visit Us",
+        "line1": "The Goa Elite Lounge",
+        "line2": "Candolim Beach Road",
+        "line3": "North Goa, India 403515"
+      },
+      "call": {
+        "title": "Call Us",
+        "line1": "+91 832 XXX XXXX",
+        "line2": "Mon-Sun: 24 Hours"
+      },
+      "email": {
+        "title": "Email Us",
+        "line1": "concierge@goaelite.com",
+        "line2": "membership@goaelite.com"
+      }
+    }
+  },
+  "comingSoon": {
+    "badge": "Coming Soon",
+    "title": "Something Extraordinary Awaits",
+    "subtitle": "We're crafting an experience worthy of your expectations. Be the first to know when we launch.",
+    "form": {
+      "placeholder": "Enter your email",
+      "submit": "Notify Me",
+      "submitting": "Joining..."
+    },
+    "features": {
+      "exclusive": "Exclusive Launch Offers",
+      "priority": "Priority Access",
+      "updates": "Insider Updates"
+    },
+    "back": "Back to Home"
+  },
+  "footer": {
+    "description": "The pinnacle of luxury lifestyle in Goa. Exclusive access to premium experiences, venues, and services for discerning members.",
+    "quickLinks": "Quick Links",
+    "experiences": "Experiences",
+    "experiencesList": {
+      "beach": "Private Beaches",
+      "casino": "VIP Casinos",
+      "yacht": "Yacht Charters",
+      "dining": "Fine Dining"
+    },
+    "contact": "Contact",
+    "newsletter": {
+      "title": "Join Our Circle",
+      "description": "Subscribe for exclusive updates and member-only offers.",
+      "placeholder": "Your email",
+      "submit": "Subscribe"
+    },
+    "copyright": "© 2024 Goa Elite. All rights reserved.",
+    "legal": {
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service"
+    }
+  },
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "language": {
+    "select": "Language",
+    "en": "English",
+    "ta": "தமிழ்",
+    "hi": "हिन्दी",
+    "zh": "中文",
+    "es": "Español",
+    "fr": "Français",
+    "ar": "العربية",
+    "pt": "Português",
+    "de": "Deutsch",
+    "ml": "മലയാളം"
+  }
+}
