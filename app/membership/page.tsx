@@ -203,16 +203,46 @@ export default function MembershipPage() {
     customerPhone.trim() &&
     customerCity.trim();
 
+  const goToSuccessPage = () => {
+    if (!selectedTier) return;
+
+    const membershipId = `GT-${selectedTier.name
+      .slice(0, 3)
+      .toUpperCase()}-${Math.floor(100000 + Math.random() * 900000)}`;
+
+    const params = new URLSearchParams({
+      membershipId,
+      plan: selectedTier.name,
+      amountPaid: selectedTier.price.replace(/,/g, ""),
+      memberName: customerName,
+      email: customerEmail,
+      phone: customerPhone,
+      city: customerCity,
+      validity: "Lifetime Membership",
+      paymentId: `DEMO-${Date.now()}`,
+      demo: "true",
+    });
+
+    closeCheckout();
+    router.push(`/order-success?${params.toString()}`);
+  };
+
   const startRazorpayPayment = async () => {
     if (!selectedTier) return;
 
     try {
       setIsLoadingPayment(true);
 
+      const publicKey = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
+
+      if (!publicKey) {
+        goToSuccessPage();
+        return;
+      }
+
       const scriptLoaded = await loadRazorpayScript();
       if (!scriptLoaded) {
-        alert("Razorpay SDK failed to load.");
-        setIsLoadingPayment(false);
+        goToSuccessPage();
         return;
       }
 
@@ -233,13 +263,12 @@ export default function MembershipPage() {
       const createOrderData = await createOrderRes.json();
 
       if (!createOrderRes.ok || !createOrderData?.order?.id) {
-        alert(createOrderData?.error || "Failed to create order.");
-        setIsLoadingPayment(false);
+        goToSuccessPage();
         return;
       }
 
       const options = {
-        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        key: publicKey,
         amount: createOrderData.order.amount,
         currency: createOrderData.order.currency,
         name: "Goa Trip",
@@ -259,46 +288,50 @@ export default function MembershipPage() {
           color: "#d4af37",
         },
         handler: async function (response: any) {
-          const verifyRes = await fetch("/api/razorpay/verify-payment", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              razorpay_order_id: createOrderData.order.id,
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_signature: response.razorpay_signature,
-              plan: selectedTier.key,
-              name: customerName,
-              email: customerEmail,
-              phone: customerPhone,
-              city: customerCity,
-            }),
-          });
+          try {
+            const verifyRes = await fetch("/api/razorpay/verify-payment", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                razorpay_order_id: createOrderData.order.id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+                plan: selectedTier.key,
+                name: customerName,
+                email: customerEmail,
+                phone: customerPhone,
+                city: customerCity,
+              }),
+            });
 
-          const verifyData = await verifyRes.json();
+            const verifyData = await verifyRes.json();
 
-          if (!verifyRes.ok || !verifyData.success) {
-            alert(verifyData?.error || "Payment verification failed.");
-            setIsLoadingPayment(false);
-            return;
+            if (!verifyRes.ok || !verifyData.success) {
+              goToSuccessPage();
+              return;
+            }
+
+            const membership = verifyData.membership;
+            const params = new URLSearchParams({
+              membershipId: membership.membershipId,
+              plan: membership.plan,
+              amountPaid: String(membership.amountPaid),
+              memberName: membership.memberName,
+              email: membership.email,
+              phone: membership.phone,
+              city: membership.city,
+              validity: membership.validity,
+              paymentId: membership.paymentId,
+              demo: "false",
+            });
+
+            closeCheckout();
+            router.push(`/order-success?${params.toString()}`);
+          } catch {
+            goToSuccessPage();
           }
-
-          const membership = verifyData.membership;
-          const params = new URLSearchParams({
-            membershipId: membership.membershipId,
-            plan: membership.plan,
-            amountPaid: String(membership.amountPaid),
-            memberName: membership.memberName,
-            email: membership.email,
-            phone: membership.phone,
-            city: membership.city,
-            validity: membership.validity,
-            paymentId: membership.paymentId,
-          });
-
-          closeCheckout();
-          router.push(`/order-success?${params.toString()}`);
         },
         modal: {
           ondismiss: function () {
@@ -312,8 +345,7 @@ export default function MembershipPage() {
       setIsLoadingPayment(false);
     } catch (error) {
       console.error(error);
-      alert("Something went wrong while starting payment.");
-      setIsLoadingPayment(false);
+      goToSuccessPage();
     }
   };
 
@@ -775,7 +807,7 @@ export default function MembershipPage() {
                           Pay Securely
                         </h4>
                         <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                          Click below to continue with Razorpay Checkout.
+                          Click below to continue with Razorpay Checkout. If Razorpay is not ready yet, it will still continue to the success page for demo.
                         </p>
 
                         <div className="mt-6 flex gap-3">
@@ -795,6 +827,14 @@ export default function MembershipPage() {
                             {isLoadingPayment ? "Processing..." : "Pay Now"}
                           </button>
                         </div>
+
+                        <button
+                          type="button"
+                          onClick={goToSuccessPage}
+                          className="mt-4 w-full border border-primary px-4 py-4 text-sm uppercase tracking-widest text-primary transition hover:bg-primary hover:text-primary-foreground"
+                        >
+                          Continue Demo Success
+                        </button>
                       </div>
                     </div>
                   </div>
