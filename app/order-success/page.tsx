@@ -66,6 +66,7 @@ export default function OrderSuccessPage() {
                     {plan} Membership
                   </p>
                 </div>
+
                 <button
                   type="button"
                   onClick={downloadCard}
@@ -75,8 +76,8 @@ export default function OrderSuccessPage() {
                 </button>
               </div>
 
-              <div className="mt-6 flex min-h-[280px] items-center justify-center bg-black/40 p-4 md:min-h-[420px]">
-                <div className="relative h-[220px] w-full max-w-[700px] md:h-[380px]">
+              <div className="mt-6 flex min-h-72 items-center justify-center bg-black/40 p-4 md:min-h-96">
+                <div className="relative h-56 w-full max-w-[700px] md:h-[380px]">
                   <Image
                     src="/images/membership-card.png"
                     alt="Membership card"
@@ -116,7 +117,7 @@ export default function OrderSuccessPage() {
 
                 <div className="flex items-start justify-between gap-4">
                   <span>Email</span>
-                  <span className="text-right break-all text-foreground">{email}</span>
+                  <span className="break-all text-right text-foreground">{email}</span>
                 </div>
 
                 <div className="flex items-start justify-between gap-4">
@@ -131,7 +132,7 @@ export default function OrderSuccessPage() {
 
                 <div className="flex items-start justify-between gap-4">
                   <span>Payment ID</span>
-                  <span className="text-right break-all text-foreground">{paymentId}</span>
+                  <span className="break-all text-right text-foreground">{paymentId}</span>
                 </div>
 
                 <div className="flex items-start justify-between gap-4">

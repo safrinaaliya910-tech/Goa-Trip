@@ -99,7 +99,7 @@ const tiers: Tier[] = [
     key: "gold",
     name: "Gold",
     icon: Crown,
-    price: "10,000",
+    price: "$110",
     tagline:
       "Perfect for smart travelers who want premium Goa access at the best value.",
     idealFor: "Ideal for couples, solo travelers, and frequent weekend visitors.",
@@ -117,7 +117,7 @@ const tiers: Tier[] = [
     key: "platinum",
     name: "Platinum",
     icon: Star,
-    price: "15,000",
+    price: "$160",
     tagline:
       "Our most popular membership for premium experiences and bigger savings.",
     idealFor: "Ideal for families, premium travelers, and regular Goa visitors.",
@@ -136,7 +136,7 @@ const tiers: Tier[] = [
     key: "diamond",
     name: "Diamond",
     icon: Gem,
-    price: "25,000",
+    price: "$260",
     tagline:
       "The ultimate elite card for high-value savings and top-tier member treatment.",
     idealFor:
