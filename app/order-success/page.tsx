@@ -16,8 +16,7 @@ export default function OrderSuccessPage() {
   const phone = searchParams.get("phone") || "";
   const city = searchParams.get("city") || "";
   const validity = searchParams.get("validity") || "Lifetime Membership";
-  const paymentId = searchParams.get("paymentId") || "DEMO";
-  const isDemo = searchParams.get("demo") === "true";
+  const orderId = searchParams.get("paymentId") || `ORDER-${Date.now()}`;
 
   const downloadCard = () => {
     const link = document.createElement("a");
@@ -36,7 +35,7 @@ export default function OrderSuccessPage() {
         <div className="mx-auto max-w-6xl">
           <div className="text-center">
             <p className="text-xs uppercase tracking-[0.35em] text-primary">
-              Payment Confirmed
+              Order Confirmed
             </p>
 
             <h1 className="mt-5 text-5xl font-light text-foreground md:text-6xl lg:text-7xl">
@@ -47,12 +46,6 @@ export default function OrderSuccessPage() {
               Welcome to Goa Trip. Your membership has been activated successfully,
               and your card is ready to download.
             </p>
-
-            {isDemo && (
-              <div className="mx-auto mt-6 inline-flex border border-primary/30 bg-primary/10 px-4 py-2 text-sm text-primary">
-                Demo success mode is enabled because Razorpay is not fully configured yet.
-              </div>
-            )}
           </div>
 
           <div className="mt-14 grid gap-8 lg:grid-cols-[1.15fr_0.85fr]">
@@ -131,8 +124,8 @@ export default function OrderSuccessPage() {
                 </div>
 
                 <div className="flex items-start justify-between gap-4">
-                  <span>Payment ID</span>
-                  <span className="break-all text-right text-foreground">{paymentId}</span>
+                  <span>Order ID</span>
+                  <span className="break-all text-right text-foreground">{orderId}</span>
                 </div>
 
                 <div className="flex items-start justify-between gap-4">

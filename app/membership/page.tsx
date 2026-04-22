@@ -17,12 +17,6 @@ import {
   BadgeCheck,
 } from "lucide-react";
 
-declare global {
-  interface Window {
-    Razorpay: any;
-  }
-}
-
 type Tier = {
   key: "gold" | "platinum" | "diamond";
   name: string;
@@ -84,7 +78,7 @@ const steps = [
     number: "02",
     title: "Complete Your Checkout",
     description:
-      "Review your order, fill in your details, and make a secure payment in minutes.",
+      "Review your order, fill in your details, and complete your order in minutes.",
   },
   {
     number: "03",
@@ -154,28 +148,11 @@ const tiers: Tier[] = [
   },
 ];
 
-function loadRazorpayScript() {
-  return new Promise<boolean>((resolve) => {
-    if (document.getElementById("razorpay-checkout-script")) {
-      resolve(true);
-      return;
-    }
-
-    const script = document.createElement("script");
-    script.id = "razorpay-checkout-script";
-    script.src = "https://checkout.razorpay.com/v1/checkout.js";
-    script.onload = () => resolve(true);
-    script.onerror = () => resolve(false);
-    document.body.appendChild(script);
-  });
-}
-
 export default function MembershipPage() {
   const router = useRouter();
 
   const [selectedTier, setSelectedTier] = useState<Tier | null>(null);
   const [checkoutStep, setCheckoutStep] = useState<1 | 2>(1);
-  const [isLoadingPayment, setIsLoadingPayment] = useState(false);
 
   const [customerName, setCustomerName] = useState("");
   const [customerEmail, setCustomerEmail] = useState("");
@@ -194,7 +171,6 @@ export default function MembershipPage() {
     setCustomerEmail("");
     setCustomerPhone("");
     setCustomerCity("");
-    setIsLoadingPayment(false);
   };
 
   const canContinueToPayment =
@@ -203,7 +179,7 @@ export default function MembershipPage() {
     customerPhone.trim() &&
     customerCity.trim();
 
-  const goToSuccessPage = () => {
+  const completeOrder = () => {
     if (!selectedTier) return;
 
     const membershipId = `GT-${selectedTier.name
@@ -219,134 +195,12 @@ export default function MembershipPage() {
       phone: customerPhone,
       city: customerCity,
       validity: "Lifetime Membership",
-      paymentId: `DEMO-${Date.now()}`,
+      paymentId: `ORDER-${Date.now()}`,
       demo: "true",
     });
 
     closeCheckout();
     router.push(`/order-success?${params.toString()}`);
-  };
-
-  const startRazorpayPayment = async () => {
-    if (!selectedTier) return;
-
-    try {
-      setIsLoadingPayment(true);
-
-      const publicKey = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
-
-      if (!publicKey) {
-        goToSuccessPage();
-        return;
-      }
-
-      const scriptLoaded = await loadRazorpayScript();
-      if (!scriptLoaded) {
-        goToSuccessPage();
-        return;
-      }
-
-      const createOrderRes = await fetch("/api/razorpay/create-order", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          plan: selectedTier.key,
-          name: customerName,
-          email: customerEmail,
-          phone: customerPhone,
-          city: customerCity,
-        }),
-      });
-
-      const createOrderData = await createOrderRes.json();
-
-      if (!createOrderRes.ok || !createOrderData?.order?.id) {
-        goToSuccessPage();
-        return;
-      }
-
-      const options = {
-        key: publicKey,
-        amount: createOrderData.order.amount,
-        currency: createOrderData.order.currency,
-        name: "Goa Trip",
-        description: `${selectedTier.name} Membership`,
-        image: "/images/logo.png",
-        order_id: createOrderData.order.id,
-        prefill: {
-          name: customerName,
-          email: customerEmail,
-          contact: customerPhone,
-        },
-        notes: {
-          city: customerCity,
-          membershipPlan: selectedTier.name,
-        },
-        theme: {
-          color: "#d4af37",
-        },
-        handler: async function (response: any) {
-          try {
-            const verifyRes = await fetch("/api/razorpay/verify-payment", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                razorpay_order_id: createOrderData.order.id,
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_signature: response.razorpay_signature,
-                plan: selectedTier.key,
-                name: customerName,
-                email: customerEmail,
-                phone: customerPhone,
-                city: customerCity,
-              }),
-            });
-
-            const verifyData = await verifyRes.json();
-
-            if (!verifyRes.ok || !verifyData.success) {
-              goToSuccessPage();
-              return;
-            }
-
-            const membership = verifyData.membership;
-            const params = new URLSearchParams({
-              membershipId: membership.membershipId,
-              plan: membership.plan,
-              amountPaid: String(membership.amountPaid),
-              memberName: membership.memberName,
-              email: membership.email,
-              phone: membership.phone,
-              city: membership.city,
-              validity: membership.validity,
-              paymentId: membership.paymentId,
-              demo: "false",
-            });
-
-            closeCheckout();
-            router.push(`/order-success?${params.toString()}`);
-          } catch {
-            goToSuccessPage();
-          }
-        },
-        modal: {
-          ondismiss: function () {
-            setIsLoadingPayment(false);
-          },
-        },
-      };
-
-      const paymentObject = new window.Razorpay(options);
-      paymentObject.open();
-      setIsLoadingPayment(false);
-    } catch (error) {
-      console.error(error);
-      goToSuccessPage();
-    }
   };
 
   return (
@@ -656,7 +510,7 @@ export default function MembershipPage() {
                   </p>
                   <h3 className="mt-3 text-2xl font-light text-foreground md:text-3xl">
                     {checkoutStep === 1 && `Order Details — ${selectedTier.name}`}
-                    {checkoutStep === 2 && "Payment"}
+                    {checkoutStep === 2 && "Complete Order"}
                   </h3>
 
                   <div className="mt-6 flex items-center gap-3 text-xs uppercase tracking-widest">
@@ -676,7 +530,7 @@ export default function MembershipPage() {
                           : "border border-border text-muted-foreground"
                       }`}
                     >
-                      2. Payment
+                      2. Complete
                     </span>
                   </div>
                 </div>
@@ -703,7 +557,9 @@ export default function MembershipPage() {
                             </div>
                             <div className="flex items-center justify-between border-t border-border pt-3">
                               <span className="font-medium text-foreground">Total</span>
-                              <span className="text-xl font-light text-primary">${selectedTier.price}</span>
+                              <span className="text-xl font-light text-primary">
+                                ${selectedTier.price}
+                              </span>
                             </div>
                           </div>
 
@@ -761,7 +617,7 @@ export default function MembershipPage() {
                           disabled={!canContinueToPayment}
                           className="mt-2 w-full bg-primary px-5 py-4 text-sm uppercase tracking-widest text-primary-foreground transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
                         >
-                          Proceed to Payment
+                          Continue
                         </button>
                       </div>
                     </div>
@@ -773,7 +629,7 @@ export default function MembershipPage() {
                     <div className="grid gap-8 md:grid-cols-[1fr_0.95fr]">
                       <div className="border border-border bg-background/40 p-5">
                         <p className="text-xs uppercase tracking-[0.3em] text-primary">
-                          Payment Summary
+                          Order Summary
                         </p>
                         <div className="mt-5 space-y-3 text-sm text-muted-foreground">
                           <div className="flex items-center justify-between">
@@ -792,22 +648,29 @@ export default function MembershipPage() {
                             <span>Phone</span>
                             <span className="text-foreground">{customerPhone}</span>
                           </div>
+                          <div className="flex items-center justify-between">
+                            <span>City</span>
+                            <span className="text-foreground">{customerCity}</span>
+                          </div>
                           <div className="flex items-center justify-between border-t border-border pt-3">
-                            <span className="font-medium text-foreground">Payable Amount</span>
-                            <span className="text-xl font-light text-primary">${selectedTier.price}</span>
+                            <span className="font-medium text-foreground">Amount</span>
+                            <span className="text-xl font-light text-primary">
+                              ${selectedTier.price}
+                            </span>
                           </div>
                         </div>
                       </div>
 
                       <div className="border border-border p-5">
                         <p className="text-xs uppercase tracking-[0.3em] text-primary">
-                          Razorpay Payment
+                          Complete Order
                         </p>
                         <h4 className="mt-3 text-xl font-light text-foreground">
-                          Pay Securely
+                          Confirm Membership
                         </h4>
                         <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                          Click below to continue with Razorpay Checkout. If Razorpay is not ready yet, it will still continue to the success page for demo.
+                          Review the details and continue to activate your membership.
+                          This keeps your current design and flow without Razorpay.
                         </p>
 
                         <div className="mt-6 flex gap-3">
@@ -820,21 +683,14 @@ export default function MembershipPage() {
                           </button>
                           <button
                             type="button"
-                            onClick={startRazorpayPayment}
-                            disabled={isLoadingPayment}
-                            className="w-1/2 bg-primary px-4 py-4 text-sm uppercase tracking-widest text-primary-foreground transition hover:bg-primary/90 disabled:opacity-50"
+                            onClick={completeOrder}
+                            className="w-1/2 bg-primary px-4 py-4 text-sm uppercase tracking-widest text-primary-foreground transition hover:bg-primary/90"
                           >
-                            {isLoadingPayment ? "Processing..." : "Pay Now"}
+                            Complete Order
                           </button>
                         </div>
 
-                        <button
-                          type="button"
-                          onClick={goToSuccessPage}
-                          className="mt-4 w-full border border-primary px-4 py-4 text-sm uppercase tracking-widest text-primary transition hover:bg-primary hover:text-primary-foreground"
-                        >
-                          Continue Demo Success
-                        </button>
+                        
                       </div>
                     </div>
                   </div>
