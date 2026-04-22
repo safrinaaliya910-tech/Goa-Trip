@@ -99,7 +99,7 @@ const tiers: Tier[] = [
     key: "gold",
     name: "Gold",
     icon: Crown,
-    price: "$110",
+    price: "110",
     tagline:
       "Perfect for smart travelers who want premium Goa access at the best value.",
     idealFor: "Ideal for couples, solo travelers, and frequent weekend visitors.",
@@ -117,7 +117,7 @@ const tiers: Tier[] = [
     key: "platinum",
     name: "Platinum",
     icon: Star,
-    price: "$160",
+    price: "160",
     tagline:
       "Our most popular membership for premium experiences and bigger savings.",
     idealFor: "Ideal for families, premium travelers, and regular Goa visitors.",
@@ -136,7 +136,7 @@ const tiers: Tier[] = [
     key: "diamond",
     name: "Diamond",
     icon: Gem,
-    price: "$260",
+    price: "260",
     tagline:
       "The ultimate elite card for high-value savings and top-tier member treatment.",
     idealFor:
@@ -213,7 +213,7 @@ export default function MembershipPage() {
     const params = new URLSearchParams({
       membershipId,
       plan: selectedTier.name,
-      amountPaid: selectedTier.price.replace(/,/g, ""),
+      amountPaid: String(selectedTier.price),
       memberName: customerName,
       email: customerEmail,
       phone: customerPhone,
@@ -592,7 +592,7 @@ export default function MembershipPage() {
                 <div className="mt-6 text-center">
                   <span className="text-sm text-muted-foreground">Lifetime membership price</span>
                   <div className="mt-2">
-                    <span className="text-4xl font-light text-primary">₹{tier.price}</span>
+                    <span className="text-4xl font-light text-primary">${tier.price}</span>
                   </div>
                 </div>
 
@@ -699,11 +699,11 @@ export default function MembershipPage() {
                           <div className="mt-6 space-y-2 text-sm text-muted-foreground">
                             <div className="flex items-center justify-between">
                               <span>Membership Price</span>
-                              <span className="text-foreground">₹{selectedTier.price}</span>
+                              <span className="text-foreground">${selectedTier.price}</span>
                             </div>
                             <div className="flex items-center justify-between border-t border-border pt-3">
                               <span className="font-medium text-foreground">Total</span>
-                              <span className="text-xl font-light text-primary">₹{selectedTier.price}</span>
+                              <span className="text-xl font-light text-primary">${selectedTier.price}</span>
                             </div>
                           </div>
 
@@ -794,7 +794,7 @@ export default function MembershipPage() {
                           </div>
                           <div className="flex items-center justify-between border-t border-border pt-3">
                             <span className="font-medium text-foreground">Payable Amount</span>
-                            <span className="text-xl font-light text-primary">₹{selectedTier.price}</span>
+                            <span className="text-xl font-light text-primary">${selectedTier.price}</span>
                           </div>
                         </div>
                       </div>
