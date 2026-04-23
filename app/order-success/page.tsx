@@ -4,11 +4,12 @@ import { useSearchParams } from "next/navigation";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import Image from "next/image";
+import { CheckCircle2, ShieldCheck } from "lucide-react";
 
 export default function OrderSuccessPage() {
   const searchParams = useSearchParams();
 
-  const membershipId = searchParams.get("membershipId") || "GT-XXX-000000";
+  const membershipId = searchParams.get("membershipId") || "GM-XXX-000000";
   const plan = searchParams.get("plan") || "Membership";
   const amountPaid = searchParams.get("amountPaid") || "0";
   const memberName = searchParams.get("memberName") || "Member";
@@ -17,6 +18,7 @@ export default function OrderSuccessPage() {
   const city = searchParams.get("city") || "";
   const validity = searchParams.get("validity") || "Lifetime Membership";
   const orderId = searchParams.get("paymentId") || `ORDER-${Date.now()}`;
+  const paymentMethod = searchParams.get("paymentMethod") || "Secure Checkout";
 
   const downloadCard = () => {
     const link = document.createElement("a");
@@ -34,7 +36,11 @@ export default function OrderSuccessPage() {
       <section className="px-4 py-16 sm:px-6 md:py-24">
         <div className="mx-auto max-w-6xl">
           <div className="text-center">
-            <p className="text-xs uppercase tracking-[0.35em] text-primary">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-primary/30 bg-primary/10">
+              <CheckCircle2 className="h-8 w-8 text-primary" />
+            </div>
+
+            <p className="mt-6 text-xs uppercase tracking-[0.35em] text-primary">
               Order Confirmed
             </p>
 
@@ -43,9 +49,23 @@ export default function OrderSuccessPage() {
             </h1>
 
             <p className="mx-auto mt-6 max-w-3xl text-lg leading-relaxed text-muted-foreground md:text-xl">
-              Welcome to Goa Trip. Your membership has been activated successfully,
-              and your card is ready to download.
+              Welcome to GOA MOMENTS. Your membership has been activated successfully, and your card is now ready to download.
             </p>
+
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-3 text-[11px] uppercase tracking-widest">
+              <span className="rounded-full border border-border px-3 py-1 text-muted-foreground">
+                1. Details
+              </span>
+              <span className="rounded-full border border-border px-3 py-1 text-muted-foreground">
+                2. Confirm Order
+              </span>
+              <span className="rounded-full border border-border px-3 py-1 text-muted-foreground">
+                3. Payment Method
+              </span>
+              <span className="rounded-full bg-primary px-3 py-1 text-primary-foreground">
+                4. Order Successful
+              </span>
+            </div>
           </div>
 
           <div className="mt-14 grid gap-8 lg:grid-cols-[1.15fr_0.85fr]">
@@ -83,9 +103,12 @@ export default function OrderSuccessPage() {
             </div>
 
             <div className="border border-border bg-card p-6 md:p-8">
-              <h2 className="text-3xl font-light text-foreground">
-                Order Details
-              </h2>
+              <div className="flex items-center justify-between">
+                <h2 className="text-3xl font-light text-foreground">
+                  Order Details
+                </h2>
+                <ShieldCheck className="h-6 w-6 text-primary" />
+              </div>
 
               <div className="mt-8 space-y-5 text-sm text-muted-foreground">
                 <div className="flex items-start justify-between gap-4">
@@ -100,7 +123,7 @@ export default function OrderSuccessPage() {
 
                 <div className="flex items-start justify-between gap-4">
                   <span>Amount Paid</span>
-                  <span className="text-right text-foreground">₹{amountPaid}</span>
+                  <span className="text-right text-foreground">${amountPaid}</span>
                 </div>
 
                 <div className="flex items-start justify-between gap-4">
@@ -121,6 +144,13 @@ export default function OrderSuccessPage() {
                 <div className="flex items-start justify-between gap-4">
                   <span>City</span>
                   <span className="text-right text-foreground">{city}</span>
+                </div>
+
+                <div className="flex items-start justify-between gap-4">
+                  <span>Payment Method</span>
+                  <span className="text-right text-foreground capitalize">
+                    {paymentMethod}
+                  </span>
                 </div>
 
                 <div className="flex items-start justify-between gap-4">

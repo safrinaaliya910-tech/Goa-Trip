@@ -10,8 +10,8 @@ const contactInfo = [
   {
     icon: Mail,
     label: "Email",
-    value: "concierge@goaelite.com",
-    href: "mailto:concierge@goaelite.com",
+    value: "concierge@goamoments.com",
+    href: "mailto:concierge@goamoments.com",
   },
   {
     icon: Phone,
@@ -42,7 +42,7 @@ export default function ContactPage() {
           priority
         />
         <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/50 to-background" />
-        
+
         <div className="absolute inset-0 flex items-center justify-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -89,9 +89,9 @@ export default function ContactPage() {
               <h2 className="mt-4 text-3xl font-light text-foreground md:text-4xl">
                 We&apos;re Here to <span className="text-primary">Assist</span>
               </h2>
-              <p className="mt-6 text-muted-foreground leading-relaxed">
-                Whether you have questions about membership, need travel recommendations, 
-                or want to plan a bespoke Goa experience, our dedicated concierge team 
+              <p className="mt-6 leading-relaxed text-muted-foreground">
+                Whether you have questions about membership, need travel recommendations,
+                or want to plan a bespoke Goa experience, our dedicated concierge team
                 is available to help.
               </p>
 
@@ -123,7 +123,7 @@ export default function ContactPage() {
 
               <div className="mt-12">
                 <p className="text-sm text-muted-foreground">
-                  <span className="text-primary">Response Time:</span> Our team typically 
+                  <span className="text-primary">Response Time:</span> Our team typically
                   responds within 2-4 hours during business hours.
                 </p>
               </div>
@@ -147,20 +147,30 @@ export default function ContactPage() {
                 <div className="mt-8 space-y-6">
                   <div className="grid gap-6 md:grid-cols-2">
                     <div>
-                      <label className="text-xs uppercase tracking-widest text-muted-foreground">
+                      <label
+                        htmlFor="firstName"
+                        className="text-xs uppercase tracking-widest text-muted-foreground"
+                      >
                         First Name
                       </label>
                       <input
+                        id="firstName"
+                        name="firstName"
                         type="text"
                         className="mt-2 w-full border-b border-border bg-transparent py-3 text-foreground outline-none transition-colors focus:border-primary"
                         placeholder="John"
                       />
                     </div>
                     <div>
-                      <label className="text-xs uppercase tracking-widest text-muted-foreground">
+                      <label
+                        htmlFor="lastName"
+                        className="text-xs uppercase tracking-widest text-muted-foreground"
+                      >
                         Last Name
                       </label>
                       <input
+                        id="lastName"
+                        name="lastName"
                         type="text"
                         className="mt-2 w-full border-b border-border bg-transparent py-3 text-foreground outline-none transition-colors focus:border-primary"
                         placeholder="Doe"
@@ -169,10 +179,15 @@ export default function ContactPage() {
                   </div>
 
                   <div>
-                    <label className="text-xs uppercase tracking-widest text-muted-foreground">
+                    <label
+                      htmlFor="email"
+                      className="text-xs uppercase tracking-widest text-muted-foreground"
+                    >
                       Email Address
                     </label>
                     <input
+                      id="email"
+                      name="email"
                       type="email"
                       className="mt-2 w-full border-b border-border bg-transparent py-3 text-foreground outline-none transition-colors focus:border-primary"
                       placeholder="john@example.com"
@@ -180,10 +195,15 @@ export default function ContactPage() {
                   </div>
 
                   <div>
-                    <label className="text-xs uppercase tracking-widest text-muted-foreground">
+                    <label
+                      htmlFor="phone"
+                      className="text-xs uppercase tracking-widest text-muted-foreground"
+                    >
                       Phone Number
                     </label>
                     <input
+                      id="phone"
+                      name="phone"
                       type="tel"
                       className="mt-2 w-full border-b border-border bg-transparent py-3 text-foreground outline-none transition-colors focus:border-primary"
                       placeholder="+91 98765 43210"
@@ -191,23 +211,45 @@ export default function ContactPage() {
                   </div>
 
                   <div>
-                    <label className="text-xs uppercase tracking-widest text-muted-foreground">
+                    <label
+                      htmlFor="interest"
+                      className="text-xs uppercase tracking-widest text-muted-foreground"
+                    >
                       Interest
                     </label>
-                    <select className="mt-2 w-full border-b border-border bg-transparent py-3 text-foreground outline-none transition-colors focus:border-primary">
-                      <option value="" className="bg-background">Select your interest</option>
-                      <option value="membership" className="bg-background">Membership Inquiry</option>
-                      <option value="travel" className="bg-background">Travel Planning</option>
-                      <option value="partnership" className="bg-background">Partnership</option>
-                      <option value="other" className="bg-background">Other</option>
+                    <select
+                      id="interest"
+                      name="interest"
+                      className="mt-2 w-full border-b border-border bg-transparent py-3 text-foreground outline-none transition-colors focus:border-primary"
+                    >
+                      <option value="" className="bg-background">
+                        Select your interest
+                      </option>
+                      <option value="membership" className="bg-background">
+                        Membership Inquiry
+                      </option>
+                      <option value="travel" className="bg-background">
+                        Travel Planning
+                      </option>
+                      <option value="partnership" className="bg-background">
+                        Partnership
+                      </option>
+                      <option value="other" className="bg-background">
+                        Other
+                      </option>
                     </select>
                   </div>
 
                   <div>
-                    <label className="text-xs uppercase tracking-widest text-muted-foreground">
+                    <label
+                      htmlFor="message"
+                      className="text-xs uppercase tracking-widest text-muted-foreground"
+                    >
                       Message
                     </label>
                     <textarea
+                      id="message"
+                      name="message"
                       rows={4}
                       className="mt-2 w-full resize-none border-b border-border bg-transparent py-3 text-foreground outline-none transition-colors focus:border-primary"
                       placeholder="Tell us about your inquiry..."

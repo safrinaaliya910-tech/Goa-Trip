@@ -15,6 +15,7 @@ import {
   ShieldCheck,
   CreditCard,
   BadgeCheck,
+  Sparkles,
 } from "lucide-react";
 
 type Tier = {
@@ -32,7 +33,7 @@ const benefits = [
   {
     category: "Hotels & Resorts",
     items: [
-      "Up to 60–80% savings at selected partner stays",
+      "Up to 10–70% savings at selected partner stays",
       "Priority reservations during peak season",
       "Room upgrades and late checkout benefits",
       "Special member-only resort packages",
@@ -72,19 +73,25 @@ const steps = [
     number: "01",
     title: "Choose Your Membership",
     description:
-      "Select the Goa Trip card that fits your lifestyle, budget, and travel plans.",
+      "Select the GOA MOMENTS card that fits your lifestyle, budget, and travel style.",
   },
   {
     number: "02",
-    title: "Complete Your Checkout",
+    title: "Confirm Your Order",
     description:
-      "Review your order, fill in your details, and complete your order in minutes.",
+      "Review your order details and confirm your membership with confidence.",
   },
   {
     number: "03",
-    title: "Use Your Card in Goa",
+    title: "Select Payment Method",
     description:
-      "Show your membership and unlock premium discounts, benefits, and exclusive privileges across Goa.",
+      "Choose your preferred payment option and proceed through a secure payment experience.",
+  },
+  {
+    number: "04",
+    title: "Enjoy Goa Privileges",
+    description:
+      "Use your card in Goa and unlock premium benefits, discounts, and exclusive access.",
   },
 ];
 
@@ -99,7 +106,7 @@ const tiers: Tier[] = [
     idealFor: "Ideal for couples, solo travelers, and frequent weekend visitors.",
     features: [
       "Access to selected partner hotels, restaurants, and travel partners",
-      "Up to 60% discounts at participating venues",
+      "Up to 10%–70% discounts at participating venues",
       "Priority reservation support",
       "Special seasonal member offers",
       "Digital membership card",
@@ -117,7 +124,7 @@ const tiers: Tier[] = [
     idealFor: "Ideal for families, premium travelers, and regular Goa visitors.",
     features: [
       "Broader partner network across Goa",
-      "Up to 70% discounts at participating venues",
+      "Up to 10%–70% discounts at participating venues",
       "Priority booking and premium support",
       "Special access to curated experiences",
       "Enhanced dining, stay, and travel privileges",
@@ -137,7 +144,7 @@ const tiers: Tier[] = [
       "Ideal for luxury travelers, VIP clients, and those who want the best of Goa.",
     features: [
       "Premium access across top partner categories",
-      "Up to 80% discounts at participating venues",
+      "Up to 10%–70% discounts at participating venues",
       "Priority concierge-style assistance",
       "High-value luxury stay and dining privileges",
       "Premium event, nightlife, and experience offers",
@@ -173,34 +180,31 @@ export default function MembershipPage() {
     setCustomerCity("");
   };
 
-  const canContinueToPayment =
+  const canContinueToConfirm =
     customerName.trim() &&
     customerEmail.trim() &&
     customerPhone.trim() &&
     customerCity.trim();
 
-  const completeOrder = () => {
+  const goToPaymentPage = () => {
     if (!selectedTier) return;
 
-    const membershipId = `GT-${selectedTier.name
+    const membershipId = `GM-${selectedTier.name
       .slice(0, 3)
       .toUpperCase()}-${Math.floor(100000 + Math.random() * 900000)}`;
 
     const params = new URLSearchParams({
       membershipId,
       plan: selectedTier.name,
-      amountPaid: String(selectedTier.price),
+      amount: String(selectedTier.price),
       memberName: customerName,
       email: customerEmail,
       phone: customerPhone,
       city: customerCity,
-      validity: "Lifetime Membership",
-      paymentId: `ORDER-${Date.now()}`,
-      demo: "true",
     });
 
     closeCheckout();
-    router.push(`/order-success?${params.toString()}`);
+    router.push(`/payment?${params.toString()}`);
   };
 
   return (
@@ -234,12 +238,11 @@ export default function MembershipPage() {
               Membership
             </h1>
             <p className="mx-auto mt-6 max-w-3xl text-base leading-relaxed text-muted-foreground md:text-lg">
-              Buy one premium Goa Trip membership card and unlock exceptional
-              value across hotels, restaurants, travel, nightlife, and curated
-              experiences in Goa.
+              Join GOA MOMENTS and unlock exceptional value across luxury stays,
+              restaurants, curated travel, nightlife, and unforgettable premium experiences in Goa.
             </p>
             <p className="mx-auto mt-4 max-w-3xl text-sm uppercase tracking-[0.28em] text-primary md:text-base">
-              Up to 60–80% Member Savings • Premium Access • Lifetime Value
+              Up to 10%–70% Member Savings • Premium Access • Lifetime Value
             </p>
             <motion.div
               initial={{ scaleX: 0 }}
@@ -260,14 +263,13 @@ export default function MembershipPage() {
             transition={{ duration: 0.8 }}
           >
             <span className="text-xs uppercase tracking-[0.3em] text-primary">
-              Why Goa Trip Membership
+              Why GOA MOMENTS Membership
             </span>
             <h2 className="mt-4 text-3xl font-light text-foreground md:text-4xl lg:text-5xl">
               One Card. <span className="text-primary">Many Premium Privileges.</span>
             </h2>
             <p className="mx-auto mt-8 max-w-3xl text-lg leading-relaxed text-muted-foreground">
-              Goa Trip is a premium membership platform designed for people who
-              want to explore Goa smarter, better, and in style.
+              GOA MOMENTS is a premium membership platform for people who want to explore Goa with more value, more comfort, and more exclusive access.
             </p>
 
             <div className="mt-12 grid gap-6 md:grid-cols-3">
@@ -277,7 +279,7 @@ export default function MembershipPage() {
                   Trusted Savings
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                  Unlock up to 60–80% discounts across selected partner venues in Goa.
+                  Unlock up to 10%–70% discounts across selected premium partner venues in Goa.
                 </p>
               </div>
               <div className="border border-border bg-card p-6">
@@ -286,7 +288,7 @@ export default function MembershipPage() {
                   Premium Access
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                  Get special offers, faster bookings, and premium privileges.
+                  Enjoy member-only privileges, faster reservations, and elevated experiences.
                 </p>
               </div>
               <div className="border border-border bg-card p-6">
@@ -295,7 +297,7 @@ export default function MembershipPage() {
                   Lifetime Value
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                  Choose a lifetime membership and keep enjoying Goa benefits.
+                  Invest once and continue enjoying Goa benefits with lasting value.
                 </p>
               </div>
             </div>
@@ -358,18 +360,18 @@ export default function MembershipPage() {
               How It Works
             </span>
             <h2 className="mt-4 text-3xl font-light text-foreground md:text-4xl">
-              Buy Once. Benefit For Years.
+              A Premium Journey From Start To Access
             </h2>
           </motion.div>
 
-          <div className="grid gap-8 md:grid-cols-3">
+          <div className="grid gap-8 md:grid-cols-4">
             {steps.map((step, index) => (
               <motion.div
                 key={step.number}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.2 }}
+                transition={{ duration: 0.6, delay: index * 0.15 }}
                 className="relative text-center"
               >
                 <span className="text-7xl font-light text-primary/20">{step.number}</span>
@@ -377,12 +379,6 @@ export default function MembershipPage() {
                   {step.title}
                 </h3>
                 <p className="mt-4 text-muted-foreground">{step.description}</p>
-                {index < steps.length - 1 && (
-                  <div
-                    className="absolute right-0 top-8 hidden h-px w-full bg-gradient-to-r from-primary/50 to-transparent md:block"
-                    style={{ transform: "translateX(50%)" }}
-                  />
-                )}
               </motion.div>
             ))}
           </div>
@@ -481,231 +477,239 @@ export default function MembershipPage() {
       </section>
 
       <AnimatePresence>
-  {selectedTier && (
-    <motion.div
-      className="fixed inset-0 z-[100] overflow-y-auto bg-black/70 px-4 py-6 backdrop-blur-sm"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-    >
-      <div className="flex min-h-full items-start justify-center md:items-center">
-        <motion.div
-          initial={{ opacity: 0, y: 24, scale: 0.98 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: 24, scale: 0.98 }}
-          transition={{ duration: 0.25 }}
-          className="relative my-4 w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-primary/30 bg-card shadow-[0_0_50px_rgba(0,0,0,0.5)]"
-        >
-          <button
-            onClick={closeCheckout}
-            className="absolute right-4 top-4 z-10 text-muted-foreground transition hover:text-foreground"
-            aria-label="Close checkout"
+        {selectedTier && (
+          <motion.div
+            className="fixed inset-0 z-[100] overflow-y-auto bg-black/70 px-4 py-6 backdrop-blur-sm"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
           >
-            <X className="h-5 w-5" />
-          </button>
-
-          <div className="border-b border-border p-6 md:p-8">
-            <p className="text-xs uppercase tracking-[0.3em] text-primary">
-              Secure Checkout
-            </p>
-            <h3 className="mt-3 text-2xl font-light text-foreground md:text-3xl">
-              {checkoutStep === 1 && `Order Details — ${selectedTier.name}`}
-              {checkoutStep === 2 && "Complete Order"}
-            </h3>
-
-            <div className="mt-6 flex items-center gap-3 text-xs uppercase tracking-widest">
-              <span
-                className={`rounded-full px-3 py-1 ${
-                  checkoutStep >= 1
-                    ? "bg-primary text-primary-foreground"
-                    : "border border-border text-muted-foreground"
-                }`}
+            <div className="flex min-h-full items-start justify-center md:items-center">
+              <motion.div
+                initial={{ opacity: 0, y: 24, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 24, scale: 0.98 }}
+                transition={{ duration: 0.25 }}
+                className="relative my-4 w-full max-w-3xl max-h-[90vh] overflow-y-auto border border-primary/30 bg-card shadow-[0_0_50px_rgba(0,0,0,0.5)]"
               >
-                1. Details
-              </span>
-              <span
-                className={`rounded-full px-3 py-1 ${
-                  checkoutStep >= 2
-                    ? "bg-primary text-primary-foreground"
-                    : "border border-border text-muted-foreground"
-                }`}
-              >
-                2. Complete
-              </span>
-            </div>
-          </div>
+                <button
+                  onClick={closeCheckout}
+                  className="absolute right-4 top-4 z-10 text-muted-foreground transition hover:text-foreground"
+                  aria-label="Close checkout"
+                >
+                  <X className="h-5 w-5" />
+                </button>
 
-          {checkoutStep === 1 && (
-            <div className="p-6 md:p-8">
-              <div className="grid gap-8 md:grid-cols-[1.1fr_0.9fr]">
-                <div>
-                  <div className="border border-border bg-background/40 p-5">
-                    <p className="text-xs uppercase tracking-[0.3em] text-primary">
-                      Selected Membership
-                    </p>
-                    <h4 className="mt-3 text-2xl font-light text-foreground">
-                      {selectedTier.name}
-                    </h4>
-                    <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                      {selectedTier.tagline}
-                    </p>
-
-                    <div className="mt-6 space-y-2 text-sm text-muted-foreground">
-                      <div className="flex items-center justify-between">
-                        <span>Membership Price</span>
-                        <span className="text-foreground">${selectedTier.price}</span>
-                      </div>
-                      <div className="flex items-center justify-between border-t border-border pt-3">
-                        <span className="font-medium text-foreground">Total</span>
-                        <span className="text-xl font-light text-primary">
-                          ${selectedTier.price}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="mt-6 rounded-sm border border-primary/20 bg-primary/5 p-4 text-sm leading-relaxed text-muted-foreground">
-                      Includes digital membership activation and lifetime access.
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  <div>
-                    <label className="mb-2 block text-sm text-foreground">
-                      Full Name
-                    </label>
-                    <input
-                      value={customerName}
-                      onChange={(e) => setCustomerName(e.target.value)}
-                      placeholder="Enter your full name"
-                      className="w-full border border-border bg-background px-4 py-3 text-foreground outline-none transition focus:border-primary"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="mb-2 block text-sm text-foreground">
-                      Email Address
-                    </label>
-                    <input
-                      type="email"
-                      value={customerEmail}
-                      onChange={(e) => setCustomerEmail(e.target.value)}
-                      placeholder="Enter your email"
-                      className="w-full border border-border bg-background px-4 py-3 text-foreground outline-none transition focus:border-primary"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="mb-2 block text-sm text-foreground">
-                      Phone Number
-                    </label>
-                    <input
-                      value={customerPhone}
-                      onChange={(e) => setCustomerPhone(e.target.value)}
-                      placeholder="Enter your phone number"
-                      className="w-full border border-border bg-background px-4 py-3 text-foreground outline-none transition focus:border-primary"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="mb-2 block text-sm text-foreground">
-                      City
-                    </label>
-                    <input
-                      value={customerCity}
-                      onChange={(e) => setCustomerCity(e.target.value)}
-                      placeholder="Enter your city"
-                      className="w-full border border-border bg-background px-4 py-3 text-foreground outline-none transition focus:border-primary"
-                    />
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={() => setCheckoutStep(2)}
-                    disabled={!canContinueToPayment}
-                    className="mt-2 w-full bg-primary px-5 py-4 text-sm uppercase tracking-widest text-primary-foreground transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
-                  >
-                    Continue
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {checkoutStep === 2 && (
-            <div className="p-6 md:p-8">
-              <div className="grid gap-8 md:grid-cols-[1fr_0.95fr]">
-                <div className="border border-border bg-background/40 p-5">
+                <div className="border-b border-border p-6 md:p-8">
                   <p className="text-xs uppercase tracking-[0.3em] text-primary">
-                    Order Summary
+                    Secure Checkout
                   </p>
-                  <div className="mt-5 space-y-3 text-sm text-muted-foreground">
-                    <div className="flex items-center justify-between">
-                      <span>Plan</span>
-                      <span className="text-foreground">{selectedTier.name}</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span>Name</span>
-                      <span className="text-foreground">{customerName}</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span>Email</span>
-                      <span className="text-foreground">{customerEmail}</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span>Phone</span>
-                      <span className="text-foreground">{customerPhone}</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span>City</span>
-                      <span className="text-foreground">{customerCity}</span>
-                    </div>
-                    <div className="flex items-center justify-between border-t border-border pt-3">
-                      <span className="font-medium text-foreground">Amount</span>
-                      <span className="text-xl font-light text-primary">
-                        ${selectedTier.price}
-                      </span>
-                    </div>
+                  <h3 className="mt-3 text-2xl font-light text-foreground md:text-3xl">
+                    {checkoutStep === 1 && `Order Details — ${selectedTier.name}`}
+                    {checkoutStep === 2 && "Confirm Order"}
+                  </h3>
+
+                  <div className="mt-6 flex flex-wrap items-center gap-3 text-[11px] uppercase tracking-widest">
+                    <span className="rounded-full bg-primary px-3 py-1 text-primary-foreground">
+                      1. Details
+                    </span>
+                    <span
+                      className={`rounded-full px-3 py-1 ${
+                        checkoutStep >= 2
+                          ? "bg-primary text-primary-foreground"
+                          : "border border-border text-muted-foreground"
+                      }`}
+                    >
+                      2. Confirm Order
+                    </span>
+                    <span className="rounded-full border border-border px-3 py-1 text-muted-foreground">
+                      3. Payment Method
+                    </span>
+                    <span className="rounded-full border border-border px-3 py-1 text-muted-foreground">
+                      4. Order Successful
+                    </span>
                   </div>
                 </div>
 
-                <div className="border border-border p-5">
-                  <p className="text-xs uppercase tracking-[0.3em] text-primary">
-                    Complete Order
-                  </p>
-                  <h4 className="mt-3 text-xl font-light text-foreground">
-                    Confirm Membership
-                  </h4>
-                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                    Review the details and continue to activate your membership.
-                    This keeps your current design and flow without Razorpay.
-                  </p>
+                {checkoutStep === 1 && (
+                  <div className="p-6 md:p-8">
+                    <div className="grid gap-8 md:grid-cols-[1.05fr_0.95fr]">
+                      <div>
+                        <div className="border border-border bg-background/40 p-5">
+                          <p className="text-xs uppercase tracking-[0.3em] text-primary">
+                            Selected Membership
+                          </p>
+                          <h4 className="mt-3 text-2xl font-light text-foreground">
+                            {selectedTier.name}
+                          </h4>
+                          <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                            {selectedTier.tagline}
+                          </p>
 
-                  <div className="mt-6 flex gap-3">
-                    <button
-                      type="button"
-                      onClick={() => setCheckoutStep(1)}
-                      className="w-1/2 border border-border px-4 py-4 text-sm uppercase tracking-widest text-foreground transition hover:border-primary hover:text-primary"
-                    >
-                      Back
-                    </button>
-                    <button
-                      type="button"
-                      onClick={completeOrder}
-                      className="w-1/2 bg-primary px-4 py-4 text-sm uppercase tracking-widest text-primary-foreground transition hover:bg-primary/90"
-                    >
-                      Complete Order
-                    </button>
+                          <div className="mt-6 space-y-2 text-sm text-muted-foreground">
+                            <div className="flex items-center justify-between">
+                              <span>Membership Price</span>
+                              <span className="text-foreground">${selectedTier.price}</span>
+                            </div>
+                            <div className="flex items-center justify-between border-t border-border pt-3">
+                              <span className="font-medium text-foreground">Total</span>
+                              <span className="text-xl font-light text-primary">
+                                ${selectedTier.price}
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className="mt-6 rounded-sm border border-primary/20 bg-primary/5 p-4 text-sm leading-relaxed text-muted-foreground">
+                            Includes premium digital activation and lifetime membership access.
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="space-y-4">
+                        <div>
+                          <label className="mb-2 block text-sm text-foreground">
+                            Full Name
+                          </label>
+                          <input
+                            value={customerName}
+                            onChange={(e) => setCustomerName(e.target.value)}
+                            placeholder="Enter your full name"
+                            className="w-full border border-border bg-background px-4 py-3 text-foreground outline-none transition focus:border-primary"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="mb-2 block text-sm text-foreground">
+                            Email Address
+                          </label>
+                          <input
+                            type="email"
+                            value={customerEmail}
+                            onChange={(e) => setCustomerEmail(e.target.value)}
+                            placeholder="Enter your email"
+                            className="w-full border border-border bg-background px-4 py-3 text-foreground outline-none transition focus:border-primary"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="mb-2 block text-sm text-foreground">
+                            Phone Number
+                          </label>
+                          <input
+                            value={customerPhone}
+                            onChange={(e) => setCustomerPhone(e.target.value)}
+                            placeholder="Enter your phone number"
+                            className="w-full border border-border bg-background px-4 py-3 text-foreground outline-none transition focus:border-primary"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="mb-2 block text-sm text-foreground">
+                            City
+                          </label>
+                          <input
+                            value={customerCity}
+                            onChange={(e) => setCustomerCity(e.target.value)}
+                            placeholder="Enter your city"
+                            className="w-full border border-border bg-background px-4 py-3 text-foreground outline-none transition focus:border-primary"
+                          />
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => setCheckoutStep(2)}
+                          disabled={!canContinueToConfirm}
+                          className="mt-2 w-full bg-primary px-5 py-4 text-sm uppercase tracking-widest text-primary-foreground transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
+                        >
+                          Continue
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
+                )}
+
+                {checkoutStep === 2 && (
+                  <div className="p-6 md:p-8">
+                    <div className="grid gap-8 md:grid-cols-[1fr_0.95fr]">
+                      <div className="border border-border bg-background/40 p-5">
+                        <p className="text-xs uppercase tracking-[0.3em] text-primary">
+                          Order Summary
+                        </p>
+                        <div className="mt-5 space-y-3 text-sm text-muted-foreground">
+                          <div className="flex items-center justify-between">
+                            <span>Plan</span>
+                            <span className="text-foreground">{selectedTier.name}</span>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <span>Name</span>
+                            <span className="text-foreground">{customerName}</span>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <span>Email</span>
+                            <span className="text-foreground">{customerEmail}</span>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <span>Phone</span>
+                            <span className="text-foreground">{customerPhone}</span>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <span>City</span>
+                            <span className="text-foreground">{customerCity}</span>
+                          </div>
+                          <div className="flex items-center justify-between border-t border-border pt-3">
+                            <span className="font-medium text-foreground">Amount</span>
+                            <span className="text-xl font-light text-primary">
+                              ${selectedTier.price}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="border border-primary/20 bg-gradient-to-b from-primary/5 to-transparent p-5">
+                        <p className="text-xs uppercase tracking-[0.3em] text-primary">
+                          Confirm Order
+                        </p>
+                        <h4 className="mt-3 text-xl font-light text-foreground">
+                          Ready To Continue
+                        </h4>
+                        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                          Review your membership details and continue to payment method selection.
+                        </p>
+
+                        <div className="mt-5 rounded-sm border border-primary/20 bg-background/30 p-4">
+                          <div className="flex items-center gap-3">
+                            <Sparkles className="h-5 w-5 text-primary" />
+                            <p className="text-sm text-foreground">
+                              You are one step away from premium Goa privileges.
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="mt-6 flex gap-3">
+                          <button
+                            type="button"
+                            onClick={() => setCheckoutStep(1)}
+                            className="w-1/2 border border-border px-4 py-4 text-sm uppercase tracking-widest text-foreground transition hover:border-primary hover:text-primary"
+                          >
+                            Back
+                          </button>
+                          <button
+                            type="button"
+                            onClick={goToPaymentPage}
+                            className="w-1/2 bg-primary px-4 py-4 text-sm uppercase tracking-widest text-primary-foreground transition hover:bg-primary/90"
+                          >
+                            Confirm Order
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </motion.div>
             </div>
-          )}
-        </motion.div>
-      </div>
-    </motion.div>
-  )}
-</AnimatePresence>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <Footer />
     </main>

@@ -25,7 +25,6 @@ export function Footer() {
     <footer className="border-t border-border bg-background">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 md:py-24">
         <div className="grid gap-8 sm:gap-12 md:grid-cols-2 lg:grid-cols-4">
-          {/* Brand */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -36,14 +35,14 @@ export function Footer() {
             <a href="/" className="mb-4 flex items-center gap-3 sm:mb-6">
               <Image
                 src="/images/logo.png"
-                alt="Goa Trip Logo"
+                alt="GOA MOMENTS Logo"
                 width={70}
                 height={70}
                 className="h-12 w-auto object-contain sm:h-14"
               />
               <div className="flex flex-col leading-tight">
                 <span className="text-base font-medium tracking-wider text-foreground sm:text-lg">
-                  GOA TRIP
+                  GOA MOMENTS
                 </span>
                 <span className="text-[8px] uppercase tracking-[0.15em] text-primary sm:text-[10px] sm:tracking-[0.2em]">
                   LUXURY LIVING
@@ -69,7 +68,6 @@ export function Footer() {
             </div>
           </motion.div>
 
-          {/* Quick Links */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -93,7 +91,6 @@ export function Footer() {
             </ul>
           </motion.div>
 
-          {/* Contact */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -121,13 +118,12 @@ export function Footer() {
               <li className="flex items-center gap-2 sm:gap-3">
                 <Mail className="h-4 w-4 shrink-0 text-primary" />
                 <span className="text-xs text-muted-foreground sm:text-sm">
-                  concierge@goaelite.com
+                  concierge@goamoments.com
                 </span>
               </li>
             </ul>
           </motion.div>
 
-          {/* Newsletter */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -153,7 +149,6 @@ export function Footer() {
           </motion.div>
         </div>
 
-        {/* Bottom Bar */}
         <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-border pt-6 sm:mt-16 sm:gap-4 sm:pt-8 md:flex-row">
           <p className="text-[10px] text-muted-foreground sm:text-xs">
             {t("footer.copyright")}

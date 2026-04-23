@@ -82,7 +82,7 @@ export default function AboutPage() {
             </h2>
             <p className="mx-auto mt-8 max-w-2xl text-lg leading-relaxed text-muted-foreground">
               Born from a passion for Goa&apos;s unparalleled beauty and a vision for exceptional service, 
-              Goa Elite was founded to bridge the gap between travelers and the extraordinary. 
+              GOA MOMENTS was founded to bridge the gap between travelers and the extraordinary. 
               We believe luxury should be effortless, authentic, and transformative.
             </p>
           </motion.div>
@@ -172,7 +172,7 @@ export default function AboutPage() {
           className="mx-auto max-w-2xl text-center"
         >
           <h2 className="text-3xl font-light text-foreground md:text-4xl">
-            Ready to Experience Goa Elite?
+            Ready to Experience Goa Moments?
           </h2>
           <p className="mt-4 text-muted-foreground">
             Join an exclusive community of discerning travelers.

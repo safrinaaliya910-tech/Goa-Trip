@@ -35,39 +35,32 @@ export function Navigation() {
         animate={{ y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
         className={`fixed left-0 right-0 top-0 z-50 transition-all duration-500 ${
-          isScrolled
-            ? "bg-background/90 backdrop-blur-md"
-            : "bg-transparent"
+          isScrolled ? "bg-background/90 backdrop-blur-md" : "bg-transparent"
         }`}
       >
         <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 sm:py-6">
-          
-          {/* Logo */}
           <a href="/" className="group flex items-center gap-3">
             <Image
               src="/images/logo.png"
-              alt="Goa Trip Logo"
+              alt="GOA MOMENTS Logo"
               width={100}
               height={100}
               className="h-10 w-auto object-contain"
             />
 
-            {/* 🔥 FIXED MOBILE TEXT (2 lines) */}
             <div className="flex flex-col leading-tight">
-              {/* Mobile (2 lines properly) */}
-              <div className="flex flex-col sm:hidden">
-                <span className="text-sm font-medium tracking-wider text-foreground">
-                  GOA TRIP
+              <div className="sm:hidden">
+                <span className="block text-sm font-medium tracking-wider text-foreground whitespace-nowrap">
+                  GOA MOMENTS
                 </span>
-                <span className="text-[9px] uppercase tracking-[0.2em] text-primary">
+                <span className="block text-[9px] uppercase tracking-[0.2em] text-primary whitespace-nowrap">
                   LUXURY LIVING
                 </span>
               </div>
 
-              {/* Desktop (unchanged) */}
               <div className="hidden sm:flex flex-col">
                 <span className="text-base font-medium tracking-wider text-foreground sm:text-lg">
-                  GOA TRIP
+                  GOA MOMENTS
                 </span>
                 <span className="text-[9px] uppercase tracking-[0.2em] text-primary">
                   LUXURY LIVING
@@ -76,7 +69,6 @@ export function Navigation() {
             </div>
           </a>
 
-          {/* Desktop Navigation */}
           <div className="hidden items-center gap-6 lg:flex xl:gap-10">
             {navLinks.map((link) => (
               <a
@@ -90,11 +82,10 @@ export function Navigation() {
             ))}
           </div>
 
-          {/* Desktop Controls */}
           <div className="hidden items-center gap-3 lg:flex">
             <LanguageSwitcher />
             <ThemeToggle />
-            <a 
+            <a
               href="/coming-soon"
               className="border border-primary bg-transparent px-4 py-2 text-xs uppercase tracking-widest text-primary transition-all duration-300 hover:bg-primary hover:text-primary-foreground xl:px-6"
             >
@@ -102,7 +93,6 @@ export function Navigation() {
             </a>
           </div>
 
-          {/* Mobile Controls */}
           <div className="flex items-center gap-2 lg:hidden">
             <LanguageSwitcher />
             <ThemeToggle />
@@ -121,7 +111,6 @@ export function Navigation() {
         </nav>
       </motion.header>
 
-      {/* Mobile Menu */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
@@ -146,6 +135,7 @@ export function Navigation() {
                   {link.label}
                 </motion.a>
               ))}
+
               <motion.a
                 href="/coming-soon"
                 initial={{ opacity: 0, y: 20 }}
