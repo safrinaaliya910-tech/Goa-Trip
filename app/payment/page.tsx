@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import {
@@ -12,11 +12,14 @@ import {
   CheckCircle2,
   ShieldCheck,
   ArrowRight,
+  Sparkles,
+  LockKeyhole,
 } from "lucide-react";
 
 declare global {
   interface Window {
     Razorpay: any;
+    paypal: any;
   }
 }
 
@@ -28,7 +31,10 @@ export default function PaymentPage() {
 
   const [method, setMethod] = useState<Method>("razorpay");
   const [loading, setLoading] = useState(false);
-  const [scriptLoaded, setScriptLoaded] = useState(false);
+  const [razorpayLoaded, setRazorpayLoaded] = useState(false);
+  const [paypalLoaded, setPaypalLoaded] = useState(false);
+
+  const paypalRef = useRef<HTMLDivElement | null>(null);
 
   const membershipId = params.get("membershipId") || `GM-${Date.now()}`;
   const plan = params.get("plan") || "Platinum";
@@ -42,7 +48,7 @@ export default function PaymentPage() {
     const existingScript = document.getElementById("razorpay-checkout-script");
 
     if (existingScript) {
-      setScriptLoaded(true);
+      setRazorpayLoaded(true);
       return;
     }
 
@@ -50,8 +56,28 @@ export default function PaymentPage() {
     script.id = "razorpay-checkout-script";
     script.src = "https://checkout.razorpay.com/v1/checkout.js";
     script.async = true;
-    script.onload = () => setScriptLoaded(true);
-    script.onerror = () => setScriptLoaded(false);
+    script.onload = () => setRazorpayLoaded(true);
+    script.onerror = () => setRazorpayLoaded(false);
+
+    document.body.appendChild(script);
+  }, []);
+
+  useEffect(() => {
+    const clientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
+    if (!clientId) return;
+
+    const existingScript = document.getElementById("paypal-sdk-script");
+    if (existingScript) {
+      setPaypalLoaded(true);
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.id = "paypal-sdk-script";
+    script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}&currency=USD&intent=capture`;
+    script.async = true;
+    script.onload = () => setPaypalLoaded(true);
+    script.onerror = () => setPaypalLoaded(false);
 
     document.body.appendChild(script);
   }, []);
@@ -62,6 +88,26 @@ export default function PaymentPage() {
     if (method === "paypal") return "PayPal";
     return "Crypto";
   }, [method]);
+
+  const paymentDescription = useMemo(() => {
+    if (method === "razorpay") {
+      return "Best for India payments with UPI, cards, and net banking.";
+    }
+    if (method === "stripe") {
+      return "Fast international card checkout with a clean payment experience.";
+    }
+    if (method === "paypal") {
+      return "Trusted wallet-based checkout for international buyers.";
+    }
+    return "Pay using BTC, ETH, USDT, or other supported digital assets.";
+  }, [method]);
+
+  const paymentButtonLabel = useMemo(() => {
+    if (method === "razorpay") return `Pay $${amount} with Razorpay`;
+    if (method === "stripe") return `Pay $${amount} with Stripe`;
+    if (method === "paypal") return `Pay $${amount} with PayPal`;
+    return `Continue with Crypto`;
+  }, [method, amount]);
 
   const goToSuccessPage = (paymentMethod: string, paymentId: string) => {
     const query = new URLSearchParams({
@@ -82,7 +128,7 @@ export default function PaymentPage() {
 
   const handleRazorpayPayment = async () => {
     try {
-      if (!scriptLoaded || !window.Razorpay) {
+      if (!razorpayLoaded || !window.Razorpay) {
         alert("Razorpay failed to load. Please refresh and try again.");
         return;
       }
@@ -149,6 +195,125 @@ export default function PaymentPage() {
     }
   };
 
+  const handleStripePayment = async () => {
+    try {
+      const response = await fetch("/api/stripe/create-session", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          amount: Number(amount),
+          plan,
+          membershipId,
+          memberName: name,
+          email,
+          phone,
+          city,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.url) {
+        throw new Error(data?.error || "Stripe session creation failed");
+      }
+
+      window.location.href = data.url;
+    } catch (error) {
+      console.error("Stripe payment failed:", error);
+      alert("Unable to start Stripe payment. Please try again.");
+      setLoading(false);
+    }
+  };
+
+  const handleCryptoPayment = async () => {
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1200));
+
+      const cryptoPaymentId = `CRYPTO-${Date.now()}`;
+      goToSuccessPage("crypto", cryptoPaymentId);
+    } catch (error) {
+      console.error("Crypto payment failed:", error);
+      alert("Unable to continue with crypto payment. Please try again.");
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (method !== "paypal") return;
+    if (!paypalLoaded || !window.paypal || !paypalRef.current) return;
+
+    paypalRef.current.innerHTML = "";
+
+    window.paypal
+      .Buttons({
+        style: {
+          layout: "vertical",
+          color: "gold",
+          shape: "rect",
+          label: "paypal",
+          height: 48,
+        },
+
+        createOrder: async () => {
+          const response = await fetch("/api/paypal/create-order", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              amount: Number(amount),
+              plan,
+              membershipId,
+              memberName: name,
+              email,
+              phone,
+              city,
+            }),
+          });
+
+          const data = await response.json();
+
+          if (!response.ok || !data.id) {
+            throw new Error(data?.error || "Unable to create PayPal order.");
+          }
+
+          return data.id;
+        },
+
+        onApprove: async (data: any) => {
+          const response = await fetch("/api/paypal/capture-order", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              orderID: data.orderID,
+            }),
+          });
+
+          const capture = await response.json();
+
+          if (!response.ok) {
+            throw new Error(capture?.error || "Unable to capture PayPal order.");
+          }
+
+          const paymentId =
+            capture?.purchase_units?.[0]?.payments?.captures?.[0]?.id ||
+            data.orderID;
+
+          goToSuccessPage("paypal", paymentId);
+        },
+
+        onError: (err: any) => {
+          console.error("PayPal error:", err);
+          alert("Unable to start PayPal payment. Please try again.");
+        },
+      })
+      .render(paypalRef.current);
+  }, [method, paypalLoaded, amount, plan, membershipId, name, email, phone, city]);
+
   const handlePayment = async () => {
     setLoading(true);
 
@@ -157,8 +322,20 @@ export default function PaymentPage() {
       return;
     }
 
-    await new Promise((resolve) => setTimeout(resolve, 1200));
-    goToSuccessPage(method, `ORDER-${Date.now()}`);
+    if (method === "stripe") {
+      await handleStripePayment();
+      return;
+    }
+
+    if (method === "paypal") {
+      setLoading(false);
+      return;
+    }
+
+    if (method === "crypto") {
+      await handleCryptoPayment();
+      return;
+    }
   };
 
   const methods = [
@@ -198,13 +375,12 @@ export default function PaymentPage() {
             <p className="text-xs uppercase tracking-[0.3em] text-primary">
               Payment Method
             </p>
-
             <h1 className="mt-4 text-4xl font-light text-foreground md:text-5xl">
               Secure Payment Experience
             </h1>
-
             <p className="mx-auto mt-5 max-w-3xl text-base leading-relaxed text-muted-foreground md:text-lg">
-              Select your preferred payment option and continue through a premium, secure checkout journey.
+              Select your preferred payment option and continue through a premium,
+              secure checkout journey.
             </p>
           </div>
 
@@ -223,7 +399,7 @@ export default function PaymentPage() {
             </span>
           </div>
 
-          <div className="mt-12 grid gap-8 md:grid-cols-[1.1fr_0.9fr]">
+          <div className="mt-12 grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
             <div className="border border-primary/30 bg-card p-6 shadow-[0_0_40px_rgba(212,175,55,0.08)]">
               <div className="flex items-center justify-between border-b border-border pb-4">
                 <div>
@@ -270,6 +446,16 @@ export default function PaymentPage() {
                   );
                 })}
               </div>
+
+              <div className="mt-6 rounded-sm border border-primary/20 bg-primary/5 p-4">
+                <div className="flex items-start gap-3">
+                  <LockKeyhole className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+                  <p className="text-sm leading-relaxed text-muted-foreground">
+                    All payments are routed through secure provider checkout and your
+                    membership is activated after successful payment.
+                  </p>
+                </div>
+              </div>
             </div>
 
             <div className="border border-border bg-card p-6 shadow-[0_0_40px_rgba(0,0,0,0.18)]">
@@ -277,8 +463,22 @@ export default function PaymentPage() {
                 Payment
               </p>
               <h2 className="mt-2 text-3xl font-light text-foreground">
-                Confirm & Continue
+                {paymentTitle} Checkout
               </h2>
+
+              <div className="mt-4 rounded-sm border border-primary/20 bg-primary/5 p-4">
+                <div className="flex items-start gap-3">
+                  <Sparkles className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+                  <div>
+                    <p className="text-sm font-medium text-foreground">
+                      Selected: {paymentTitle}
+                    </p>
+                    <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                      {paymentDescription}
+                    </p>
+                  </div>
+                </div>
+              </div>
 
               <div className="mt-8 space-y-4 text-sm text-muted-foreground">
                 <div className="flex justify-between gap-4">
@@ -317,21 +517,58 @@ export default function PaymentPage() {
                 </div>
               </div>
 
-              <div className="mt-6 rounded-sm border border-primary/20 bg-primary/5 p-4">
-                <p className="text-sm leading-relaxed text-muted-foreground">
-                  You are proceeding through a secure payment step to activate your GOA MOMENTS membership.
-                </p>
-              </div>
+              {method !== "paypal" && (
+                <button
+                  type="button"
+                  onClick={handlePayment}
+                  disabled={loading}
+                  className="mt-8 flex w-full items-center justify-center gap-2 bg-primary py-4 text-sm uppercase tracking-widest text-white transition hover:bg-primary/90 disabled:opacity-50"
+                >
+                  {loading ? "Processing..." : paymentButtonLabel}
+                  {!loading && <ArrowRight className="h-4 w-4" />}
+                </button>
+              )}
 
-              <button
-                type="button"
-                onClick={handlePayment}
-                disabled={loading}
-                className="mt-8 flex w-full items-center justify-center gap-2 bg-primary py-4 text-sm uppercase tracking-widest text-white transition hover:bg-primary/90 disabled:opacity-50"
-              >
-                {loading ? "Processing..." : "Proceed to Payment"}
-                {!loading && <ArrowRight className="h-4 w-4" />}
-              </button>
+              {method === "paypal" && (
+                <div className="mt-8">
+                  <div className="mb-4 flex items-center justify-between">
+                    <p className="text-sm uppercase tracking-[0.22em] text-primary">
+                      Complete Payment
+                    </p>
+                    <span className="text-sm text-muted-foreground">
+                      Total: <span className="text-foreground">${amount}</span>
+                    </span>
+                  </div>
+
+                  <div className="rounded-sm border border-primary/25 bg-primary/5 p-4">
+                    <p className="mb-4 text-sm leading-relaxed text-foreground">
+                      Continue with PayPal using the secure button below.
+                    </p>
+                    <div ref={paypalRef} />
+                  </div>
+                </div>
+              )}
+
+              {method === "crypto" && (
+                <div className="mt-8 rounded-sm border border-primary/25 bg-primary/5 p-4">
+                  <div className="mb-4 flex items-center justify-between">
+                    <p className="text-sm uppercase tracking-[0.22em] text-primary">
+                      Complete Payment
+                    </p>
+                    <span className="text-sm text-muted-foreground">
+                      Total: <span className="text-foreground">${amount}</span>
+                    </span>
+                  </div>
+
+                  <p className="mb-4 text-sm leading-relaxed text-foreground">
+                    Continue to generate your crypto payment and complete membership activation.
+                  </p>
+
+                  <div className="rounded-sm border border-border bg-background/40 p-4 text-sm text-muted-foreground">
+                    Supported currencies: BTC, ETH, USDT, USDC and other supported crypto assets.
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

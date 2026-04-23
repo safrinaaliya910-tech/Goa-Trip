@@ -1,12 +1,13 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import Image from "next/image";
-import { CheckCircle2, ShieldCheck } from "lucide-react";
+import { CheckCircle2, ShieldCheck, ArrowRight, Sparkles } from "lucide-react";
 
 export default function OrderSuccessPage() {
+  const router = useRouter();
   const searchParams = useSearchParams();
 
   const membershipId = searchParams.get("membershipId") || "GM-XXX-000000";
@@ -29,6 +30,22 @@ export default function OrderSuccessPage() {
     document.body.removeChild(link);
   };
 
+  const continueToProfile = () => {
+    const params = new URLSearchParams({
+      membershipId,
+      plan,
+      amountPaid,
+      memberName,
+      email,
+      phone,
+      city,
+      validity,
+      paymentMethod,
+    });
+
+    router.push(`/profile?${params.toString()}`);
+  };
+
   return (
     <main className="min-h-screen bg-background">
       <Navigation />
@@ -49,7 +66,8 @@ export default function OrderSuccessPage() {
             </h1>
 
             <p className="mx-auto mt-6 max-w-3xl text-lg leading-relaxed text-muted-foreground md:text-xl">
-              Welcome to GOA MOMENTS. Your membership has been activated successfully, and your card is now ready to download.
+              Welcome to GOA MOMENTS. Your membership has been activated successfully.
+              Your card, support access, and premium member journey are now ready.
             </p>
 
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3 text-[11px] uppercase tracking-widest">
@@ -64,6 +82,12 @@ export default function OrderSuccessPage() {
               </span>
               <span className="rounded-full bg-primary px-3 py-1 text-primary-foreground">
                 4. Order Successful
+              </span>
+              <span className="rounded-full border border-border px-3 py-1 text-muted-foreground">
+                5. Profile Setup
+              </span>
+              <span className="rounded-full border border-border px-3 py-1 text-muted-foreground">
+                6. Dashboard Access
               </span>
             </div>
           </div>
@@ -98,6 +122,22 @@ export default function OrderSuccessPage() {
                     priority
                     className="object-contain"
                   />
+                </div>
+              </div>
+
+              <div className="mt-6 rounded-sm border border-primary/20 bg-primary/5 p-5">
+                <div className="flex items-start gap-3">
+                  <Sparkles className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+                  <div>
+                    <p className="text-sm font-medium text-foreground">
+                      Your access is now active
+                    </p>
+                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                      You can now continue to your profile and unlock your personal
+                      GOA MOMENTS member dashboard, curated support guidance, and
+                      venue-based membership benefits.
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -160,7 +200,9 @@ export default function OrderSuccessPage() {
 
                 <div className="flex items-start justify-between gap-4">
                   <span>Status</span>
-                  <span className="text-right font-medium text-primary">Confirmed</span>
+                  <span className="text-right font-medium text-primary">
+                    Confirmed
+                  </span>
                 </div>
 
                 <div className="flex items-start justify-between gap-4 border-t border-border pt-5">
@@ -169,13 +211,24 @@ export default function OrderSuccessPage() {
                 </div>
               </div>
 
-              <button
-                type="button"
-                onClick={downloadCard}
-                className="mt-10 w-full bg-primary px-6 py-4 text-sm uppercase tracking-[0.22em] text-primary-foreground transition hover:bg-primary/90"
-              >
-                Download Membership Card
-              </button>
+              <div className="mt-10 space-y-4">
+                <button
+                  type="button"
+                  onClick={downloadCard}
+                  className="w-full bg-primary px-6 py-4 text-sm uppercase tracking-[0.22em] text-primary-foreground transition hover:bg-primary/90"
+                >
+                  Download Membership Card
+                </button>
+
+                <button
+                  type="button"
+                  onClick={continueToProfile}
+                  className="flex w-full items-center justify-center gap-2 border border-primary px-6 py-4 text-sm uppercase tracking-[0.22em] text-primary transition hover:bg-primary hover:text-primary-foreground"
+                >
+                  Get Access to Membership Dashboard
+                  <ArrowRight className="h-4 w-4" />
+                </button>
+              </div>
             </div>
           </div>
         </div>
