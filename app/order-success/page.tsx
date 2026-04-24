@@ -1,10 +1,12 @@
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
+import { useEffect, useRef } from "react";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import Image from "next/image";
 import { CheckCircle2, ShieldCheck, ArrowRight, Sparkles } from "lucide-react";
+
 
 export default function OrderSuccessPage() {
   const router = useRouter();
@@ -20,6 +22,46 @@ export default function OrderSuccessPage() {
   const validity = searchParams.get("validity") || "Lifetime Membership";
   const orderId = searchParams.get("paymentId") || `ORDER-${Date.now()}`;
   const paymentMethod = searchParams.get("paymentMethod") || "Secure Checkout";
+  const emailSentRef = useRef(false);
+
+useEffect(() => {
+  if (emailSentRef.current) return;
+  if (!email) return;
+
+  emailSentRef.current = true;
+
+  fetch("/api/send-membership-email", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      membershipId,
+      plan,
+      amountPaid,
+      memberName,
+      email,
+      phone,
+      city,
+      paymentId: orderId,
+      validity,
+      paymentMethod,
+    }),
+  }).catch((error) => {
+    console.error("Failed to send membership email:", error);
+  });
+}, [
+  membershipId,
+  plan,
+  amountPaid,
+  memberName,
+  email,
+  phone,
+  city,
+  orderId,
+  validity,
+  paymentMethod,
+]);
 
   const downloadCard = () => {
     const link = document.createElement("a");
@@ -220,14 +262,7 @@ export default function OrderSuccessPage() {
                   Download Membership Card
                 </button>
 
-                <button
-                  type="button"
-                  onClick={continueToProfile}
-                  className="flex w-full items-center justify-center gap-2 border border-primary px-6 py-4 text-sm uppercase tracking-[0.22em] text-primary transition hover:bg-primary hover:text-primary-foreground"
-                >
-                  Get Access to Membership Dashboard
-                  <ArrowRight className="h-4 w-4" />
-                </button>
+               
               </div>
             </div>
           </div>

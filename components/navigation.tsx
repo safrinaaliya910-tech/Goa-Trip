@@ -17,6 +17,7 @@ export function Navigation() {
     { label: t("nav.home"), href: "/" },
     { label: t("nav.about"), href: "/about" },
     { label: t("nav.membership"), href: "/membership" },
+    { label: "Membership Activities", href: "/membership-activities" },
     { label: t("nav.contact"), href: "/contact" },
   ];
 
@@ -50,15 +51,15 @@ export function Navigation() {
 
             <div className="flex flex-col leading-tight">
               <div className="sm:hidden">
-                <span className="block text-sm font-medium tracking-wider text-foreground whitespace-nowrap">
+                <span className="block whitespace-nowrap text-sm font-medium tracking-wider text-foreground">
                   GOA MOMENTS
                 </span>
-                <span className="block text-[9px] uppercase tracking-[0.2em] text-primary whitespace-nowrap">
+                <span className="block whitespace-nowrap text-[9px] uppercase tracking-[0.2em] text-primary">
                   LUXURY LIVING
                 </span>
               </div>
 
-              <div className="hidden sm:flex flex-col">
+              <div className="hidden flex-col sm:flex">
                 <span className="text-base font-medium tracking-wider text-foreground sm:text-lg">
                   GOA MOMENTS
                 </span>
@@ -69,12 +70,12 @@ export function Navigation() {
             </div>
           </a>
 
-          <div className="hidden items-center gap-6 lg:flex xl:gap-10">
+          <div className="hidden items-center gap-5 lg:flex xl:gap-8">
             {navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
-                className="group relative text-sm uppercase tracking-widest text-muted-foreground transition-colors hover:text-foreground"
+                className="group relative text-xs uppercase tracking-widest text-muted-foreground transition-colors hover:text-foreground xl:text-sm"
               >
                 {link.label}
                 <span className="absolute -bottom-1 left-0 h-px w-0 bg-primary transition-all duration-300 group-hover:w-full" />
@@ -130,7 +131,7 @@ export function Navigation() {
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 0.3, delay: index * 0.1 }}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-xl uppercase tracking-widest text-foreground transition-colors hover:text-primary sm:text-2xl"
+                  className="text-center text-lg uppercase tracking-widest text-foreground transition-colors hover:text-primary sm:text-2xl"
                 >
                   {link.label}
                 </motion.a>

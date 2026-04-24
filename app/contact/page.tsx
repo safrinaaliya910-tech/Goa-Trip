@@ -4,273 +4,299 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
-import { Mail, Phone, MapPin, Send } from "lucide-react";
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Send,
+  ShieldCheck,
+  Clock3,
+  ConciergeBell,
+  BadgeCheck,
+} from "lucide-react";
 
 const contactInfo = [
   {
+    icon: Phone,
+    label: "Direct Member Support",
+    value: "+91 98765 43210",
+    href: "tel:+919876543210",
+  },
+  {
     icon: Mail,
-    label: "Email",
+    label: "Concierge Email",
     value: "concierge@goamoments.com",
     href: "mailto:concierge@goamoments.com",
   },
   {
-    icon: Phone,
-    label: "Phone",
-    value: "+91 832 123 4567",
-    href: "tel:+918321234567",
-  },
-  {
     icon: MapPin,
-    label: "Location",
+    label: "Support Location",
     value: "Panjim, Goa, India",
     href: "#",
   },
 ];
 
+const supportPoints = [
+  "Membership guidance and plan-related support",
+  "Hotel, restaurant, taxi, and travel recommendations",
+  "Help understanding member benefits and venue savings",
+  "Support for curated Goa experiences and premium access",
+];
+
 export default function ContactPage() {
   return (
-    <main className="min-h-screen bg-background">
-      <Navigation />
+    <main className="relative min-h-screen overflow-hidden bg-background">
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute inset-0 bg-background" />
+        <div className="absolute left-1/2 top-[-120px] h-[420px] w-[800px] -translate-x-1/2 rounded-full bg-primary/10 blur-[120px]" />
+        <div className="absolute left-[-150px] top-[40%] h-[300px] w-[300px] rounded-full bg-primary/5 blur-[100px]" />
+        <div className="absolute right-[-150px] top-[58%] h-[300px] w-[300px] rounded-full bg-primary/5 blur-[100px]" />
+        <div className="absolute bottom-[-120px] left-1/2 h-[350px] w-[700px] -translate-x-1/2 rounded-full bg-primary/8 blur-[120px]" />
+      </div>
 
-      {/* Hero Section */}
-      <section className="relative h-[50vh] min-h-[400px] overflow-hidden">
-        <Image
-          src="/images/contact-hero.jpg"
-          alt="Luxury concierge interior"
-          fill
-          className="object-cover"
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/50 to-background" />
+      <div className="relative z-10">
+        <Navigation />
 
-        <div className="absolute inset-0 flex items-center justify-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.3 }}
-            className="px-6 text-center"
-          >
-            <motion.div
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
-              transition={{ duration: 0.8, delay: 0.5 }}
-              className="mx-auto mb-6 h-px w-24 bg-primary"
-            />
-            <h1 className="text-4xl font-light uppercase tracking-[0.2em] text-foreground md:text-6xl lg:text-7xl">
-              Contact
-            </h1>
-            <p className="mx-auto mt-6 max-w-xl text-lg text-muted-foreground">
-              Our concierge team is ready to assist you
-            </p>
-            <motion.div
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
-              transition={{ duration: 0.8, delay: 0.7 }}
-              className="mx-auto mt-6 h-px w-24 bg-primary"
-            />
-          </motion.div>
-        </div>
-      </section>
+        <section className="relative h-[48vh] min-h-[380px] overflow-hidden">
+          <Image
+            src="/images/contact-hero.jpg"
+            alt="GOA MOMENTS concierge support"
+            fill
+            className="object-cover opacity-65"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/65 via-background/72 to-background" />
 
-      {/* Contact Section */}
-      <section className="px-6 py-24 md:py-32">
-        <div className="mx-auto max-w-6xl">
-          <div className="grid gap-16 lg:grid-cols-2">
-            {/* Contact Info */}
+          <div className="relative flex h-full items-center justify-center px-6 text-center">
             <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
+              initial={{ opacity: 0, y: 26 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <span className="text-xs uppercase tracking-[0.3em] text-primary">
-                Get in Touch
-              </span>
-              <h2 className="mt-4 text-3xl font-light text-foreground md:text-4xl">
-                We&apos;re Here to <span className="text-primary">Assist</span>
-              </h2>
-              <p className="mt-6 leading-relaxed text-muted-foreground">
-                Whether you have questions about membership, need travel recommendations,
-                or want to plan a bespoke Goa experience, our dedicated concierge team
-                is available to help.
+              <p className="text-xs uppercase tracking-[0.38em] text-primary">
+                GOA MOMENTS SUPPORT
               </p>
 
-              <div className="mt-12 space-y-8">
-                {contactInfo.map((info, index) => (
-                  <motion.a
-                    key={info.label}
-                    href={info.href}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                    className="group flex items-center gap-6"
-                  >
-                    <div className="flex h-14 w-14 items-center justify-center border border-border transition-all duration-300 group-hover:border-primary">
-                      <info.icon className="h-6 w-6 text-primary" />
-                    </div>
-                    <div>
-                      <span className="text-xs uppercase tracking-widest text-muted-foreground">
-                        {info.label}
-                      </span>
-                      <p className="mt-1 text-lg text-foreground transition-colors group-hover:text-primary">
-                        {info.value}
-                      </p>
-                    </div>
-                  </motion.a>
-                ))}
-              </div>
+              <h1 className="mt-6 text-5xl font-light text-foreground md:text-7xl">
+                We’re Here to Support You
+              </h1>
 
-              <div className="mt-12">
-                <p className="text-sm text-muted-foreground">
-                  <span className="text-primary">Response Time:</span> Our team typically
-                  responds within 2-4 hours during business hours.
-                </p>
-              </div>
+              <p className="mx-auto mt-6 max-w-3xl text-lg leading-relaxed text-muted-foreground">
+                Whether you are buying a membership, planning your Goa experience,
+                or need help using your benefits, our concierge team is ready to
+                guide you with clear and reliable support.
+              </p>
             </motion.div>
+          </div>
+        </section>
 
-            {/* Contact Form */}
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-            >
-              <form className="border border-border bg-card p-8 md:p-12">
-                <h3 className="text-xl font-medium uppercase tracking-wider text-foreground">
-                  Send a Message
-                </h3>
-                <p className="mt-2 text-sm text-muted-foreground">
-                  Fill out the form below and we&apos;ll get back to you shortly.
+        <section className="relative px-6 py-14 md:py-20">
+          <div className="mx-auto max-w-7xl">
+            <div className="grid gap-12 lg:grid-cols-[0.95fr_1.05fr]">
+              <motion.div
+                initial={{ opacity: 0, x: -28 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7 }}
+              >
+                <p className="text-xs uppercase tracking-[0.3em] text-primary">
+                  Dedicated Assistance
                 </p>
 
-                <div className="mt-8 space-y-6">
-                  <div className="grid gap-6 md:grid-cols-2">
-                    <div>
-                      <label
-                        htmlFor="firstName"
-                        className="text-xs uppercase tracking-widest text-muted-foreground"
-                      >
-                        First Name
-                      </label>
-                      <input
-                        id="firstName"
-                        name="firstName"
-                        type="text"
-                        className="mt-2 w-full border-b border-border bg-transparent py-3 text-foreground outline-none transition-colors focus:border-primary"
-                        placeholder="John"
-                      />
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="lastName"
-                        className="text-xs uppercase tracking-widest text-muted-foreground"
-                      >
-                        Last Name
-                      </label>
-                      <input
-                        id="lastName"
-                        name="lastName"
-                        type="text"
-                        className="mt-2 w-full border-b border-border bg-transparent py-3 text-foreground outline-none transition-colors focus:border-primary"
-                        placeholder="Doe"
-                      />
-                    </div>
-                  </div>
+                <h2 className="mt-4 text-4xl font-light leading-tight text-foreground md:text-5xl">
+                  Real Support for Your Goa Journey
+                </h2>
 
-                  <div>
-                    <label
-                      htmlFor="email"
-                      className="text-xs uppercase tracking-widest text-muted-foreground"
+                <p className="mt-6 max-w-2xl leading-relaxed text-muted-foreground">
+                  GOA MOMENTS is built to make members feel supported before,
+                  during, and after their purchase. If you need help choosing the
+                  right membership, understanding benefits, finding better venues,
+                  or planning a premium Goa experience, our team is here to assist.
+                </p>
+
+                <div className="mt-8 rounded-sm border border-primary/20 bg-card/60 p-5">
+                  <div className="flex gap-3">
+                    <ShieldCheck className="mt-1 h-5 w-5 shrink-0 text-primary" />
+                    <p className="text-sm leading-relaxed text-muted-foreground">
+                      Our goal is simple: you should never feel confused after
+                      becoming a GOA MOMENTS member. You get access, guidance, and
+                      a trusted support point whenever you need help.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="mt-10 space-y-5">
+                  {contactInfo.map((info, index) => (
+                    <motion.a
+                      key={info.label}
+                      href={info.href}
+                      initial={{ opacity: 0, y: 18 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.45, delay: index * 0.08 }}
+                      className="group flex items-center gap-5 border border-border bg-card/50 p-5 transition hover:border-primary"
                     >
-                      Email Address
-                    </label>
+                      <div className="flex h-12 w-12 items-center justify-center border border-primary/25">
+                        <info.icon className="h-5 w-5 text-primary" />
+                      </div>
+                      <div>
+                        <p className="text-xs uppercase tracking-[0.22em] text-muted-foreground">
+                          {info.label}
+                        </p>
+                        <p className="mt-1 text-lg text-foreground transition group-hover:text-primary">
+                          {info.value}
+                        </p>
+                      </div>
+                    </motion.a>
+                  ))}
+                </div>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, x: 28 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7 }}
+                className="border border-border bg-card/60 p-7 md:p-10"
+              >
+                <p className="text-xs uppercase tracking-[0.3em] text-primary">
+                  Send a Message
+                </p>
+                <h3 className="mt-4 text-3xl font-light text-foreground">
+                  Tell Us What You Need
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                  Share your requirement and our team will respond with the right
+                  guidance. You can ask about membership, discounts, venue access,
+                  hotel support, taxi support, restaurants, nightlife, or curated
+                  experiences.
+                </p>
+
+                <form className="mt-8 space-y-6">
+                  <div className="grid gap-5 md:grid-cols-2">
                     <input
-                      id="email"
-                      name="email"
-                      type="email"
-                      className="mt-2 w-full border-b border-border bg-transparent py-3 text-foreground outline-none transition-colors focus:border-primary"
-                      placeholder="john@example.com"
+                      type="text"
+                      placeholder="First Name"
+                      aria-label="First Name"
+                      className="border-b border-border bg-transparent py-3 text-foreground outline-none transition focus:border-primary"
                     />
-                  </div>
-
-                  <div>
-                    <label
-                      htmlFor="phone"
-                      className="text-xs uppercase tracking-widest text-muted-foreground"
-                    >
-                      Phone Number
-                    </label>
                     <input
-                      id="phone"
-                      name="phone"
-                      type="tel"
-                      className="mt-2 w-full border-b border-border bg-transparent py-3 text-foreground outline-none transition-colors focus:border-primary"
-                      placeholder="+91 98765 43210"
+                      type="text"
+                      placeholder="Last Name"
+                      aria-label="Last Name"
+                      className="border-b border-border bg-transparent py-3 text-foreground outline-none transition focus:border-primary"
                     />
                   </div>
 
-                  <div>
-                    <label
-                      htmlFor="interest"
-                      className="text-xs uppercase tracking-widest text-muted-foreground"
-                    >
-                      Interest
-                    </label>
-                    <select
-                      id="interest"
-                      name="interest"
-                      className="mt-2 w-full border-b border-border bg-transparent py-3 text-foreground outline-none transition-colors focus:border-primary"
-                    >
-                      <option value="" className="bg-background">
-                        Select your interest
-                      </option>
-                      <option value="membership" className="bg-background">
-                        Membership Inquiry
-                      </option>
-                      <option value="travel" className="bg-background">
-                        Travel Planning
-                      </option>
-                      <option value="partnership" className="bg-background">
-                        Partnership
-                      </option>
-                      <option value="other" className="bg-background">
-                        Other
-                      </option>
-                    </select>
-                  </div>
+                  <input
+                    type="email"
+                    placeholder="Email Address"
+                    aria-label="Email Address"
+                    className="w-full border-b border-border bg-transparent py-3 text-foreground outline-none transition focus:border-primary"
+                  />
 
-                  <div>
-                    <label
-                      htmlFor="message"
-                      className="text-xs uppercase tracking-widest text-muted-foreground"
-                    >
-                      Message
-                    </label>
-                    <textarea
-                      id="message"
-                      name="message"
-                      rows={4}
-                      className="mt-2 w-full resize-none border-b border-border bg-transparent py-3 text-foreground outline-none transition-colors focus:border-primary"
-                      placeholder="Tell us about your inquiry..."
-                    />
-                  </div>
+                  <input
+                    type="tel"
+                    placeholder="Phone Number"
+                    aria-label="Phone Number"
+                    className="w-full border-b border-border bg-transparent py-3 text-foreground outline-none transition focus:border-primary"
+                  />
+
+                  <label htmlFor="supportType" className="sr-only">
+                    Support Type
+                  </label>
+                  <select
+                    id="supportType"
+                    name="supportType"
+                    className="w-full border-b border-border bg-transparent py-3 text-foreground outline-none transition focus:border-primary"
+                  >
+                    <option className="bg-background" value="">
+                      Select Support Type
+                    </option>
+                    <option className="bg-background" value="membership">
+                      Membership Inquiry
+                    </option>
+                    <option className="bg-background" value="benefits">
+                      Benefits / Discounts Support
+                    </option>
+                    <option className="bg-background" value="travel">
+                      Hotel / Taxi / Travel Guidance
+                    </option>
+                    <option className="bg-background" value="experience">
+                      Goa Experience Support
+                    </option>
+                  </select>
+
+                  <textarea
+                    rows={4}
+                    placeholder="Tell us about your requirement..."
+                    aria-label="Message"
+                    className="w-full resize-none border-b border-border bg-transparent py-3 text-foreground outline-none transition focus:border-primary"
+                  />
 
                   <button
                     type="submit"
-                    className="group flex w-full items-center justify-center gap-3 bg-primary py-4 text-sm uppercase tracking-widest text-primary-foreground transition-all duration-300 hover:bg-primary/90"
+                    className="group flex w-full items-center justify-center gap-3 bg-primary py-4 text-sm uppercase tracking-[0.22em] text-primary-foreground transition hover:bg-primary/90"
                   >
                     Send Message
-                    <Send className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    <Send className="h-4 w-4 transition group-hover:translate-x-1" />
                   </button>
-                </div>
-              </form>
-            </motion.div>
+                </form>
+              </motion.div>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <Footer />
+        <section className="relative px-6 pb-10">
+          <div className="mx-auto max-w-7xl border border-primary/20 bg-card/50 p-6 md:p-8">
+            <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr]">
+              <div>
+                <p className="text-xs uppercase tracking-[0.3em] text-primary">
+                  What We Help With
+                </p>
+                <h2 className="mt-4 text-3xl font-light text-foreground md:text-4xl">
+                  You Get More Than a Contact Form
+                </h2>
+                <p className="mt-5 text-sm leading-relaxed text-muted-foreground">
+                  When someone reaches GOA MOMENTS, they are not treated like a
+                  normal inquiry. Our support is designed to guide members clearly
+                  and help them feel confident about their Goa plans.
+                </p>
+              </div>
+
+              <div className="grid gap-4 md:grid-cols-2">
+                {supportPoints.map((point) => (
+                  <div
+                    key={point}
+                    className="flex gap-3 border border-border bg-background/30 p-4"
+                  >
+                    <BadgeCheck className="mt-1 h-4 w-4 shrink-0 text-primary" />
+                    <p className="text-sm leading-relaxed text-muted-foreground">
+                      {point}
+                    </p>
+                  </div>
+                ))}
+
+                <div className="flex gap-3 border border-border bg-background/30 p-4">
+                  <Clock3 className="mt-1 h-4 w-4 shrink-0 text-primary" />
+                  <p className="text-sm leading-relaxed text-muted-foreground">
+                    Average response time: within 2–4 hours during business hours.
+                  </p>
+                </div>
+
+                <div className="flex gap-3 border border-border bg-background/30 p-4">
+                  <ConciergeBell className="mt-1 h-4 w-4 shrink-0 text-primary" />
+                  <p className="text-sm leading-relaxed text-muted-foreground">
+                    Concierge-style support for a smoother Goa experience.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <Footer />
+      </div>
     </main>
   );
 }
