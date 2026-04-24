@@ -18,26 +18,25 @@ import {
   Star,
   Sparkles,
   Headphones,
+  LockKeyhole,
+  CreditCard,
 } from "lucide-react";
 
-const contactInfo = [
-  {
-    icon: Phone,
-    label: "Direct Member Support",
-    value: "+91 98765 43210",
-    href: "tel:+919876543210",
-  },
+const publicContactInfo = [
   {
     icon: Mail,
-    label: "Concierge Email",
-    value: "concierge@goamoments.com",
-    href: "mailto:concierge@goamoments.com",
+    label: "General Inquiry",
+    value: "coincierge@goamoments.com",
+  },
+  {
+    icon: Phone,
+    label: "Membership Questions",
+    value: "+91 98765 43210",
   },
   {
     icon: MapPin,
     label: "Support Location",
     value: "Panjim, Goa, India",
-    href: "#",
   },
 ];
 
@@ -52,17 +51,17 @@ const memberSupport = [
   {
     icon: Crown,
     title: "Gold Member Support",
-    text: "Gold members receive trusted support for hotel and travel guidance, helping them use their membership confidently and save better.",
+    text: "Gold members receive trusted support for hotel and travel guidance. It is ideal for members who want smart savings, simple access, and reliable help after purchase.",
   },
   {
     icon: Star,
     title: "Platinum Priority Support",
-    text: "Platinum members receive stronger support for hotels, restaurants, travel, accommodation, bars, clubs, and premium Goa experiences.",
+    text: "Platinum members receive stronger support for hotels, restaurants, travel, accommodation, bars, clubs, and premium Goa experiences with wider lifestyle assistance.",
   },
   {
     icon: Gem,
     title: "Diamond Elite Support",
-    text: "Diamond members receive the strongest GOA MOMENTS attention, high-priority guidance, and faster assistance for premium access wherever available.",
+    text: "Diamond members receive the strongest GOA MOMENTS support, high-priority guidance, faster assistance, and premium attention wherever member priority access is available.",
   },
 ];
 
@@ -105,9 +104,9 @@ export default function ContactPage() {
               </h1>
 
               <p className="mx-auto mt-6 max-w-3xl text-lg leading-relaxed text-muted-foreground">
-                Whether you are buying a membership, planning your Goa experience,
-                or need help using your benefits, our concierge team is ready to
-                guide you with clear and reliable support.
+                Whether you are exploring GOA MOMENTS, buying a membership, or
+                planning your Goa experience, our team is here to guide you with
+                clear and reliable support.
               </p>
             </motion.div>
           </div>
@@ -123,36 +122,35 @@ export default function ContactPage() {
                 transition={{ duration: 0.7 }}
               >
                 <p className="text-xs uppercase tracking-[0.3em] text-primary">
-                  Dedicated Assistance
+                  Public Assistance
                 </p>
 
                 <h2 className="mt-4 text-4xl font-light leading-tight text-foreground md:text-5xl">
-                  Real Support for Your Goa Journey
+                  General Support for Every Visitor
                 </h2>
 
                 <p className="mt-6 max-w-2xl leading-relaxed text-muted-foreground">
-                  GOA MOMENTS is built to make members feel supported before,
-                  during, and after their purchase. If you need help choosing the
-                  right membership, understanding benefits, finding better venues,
-                  or planning a premium Goa experience, our team is here to assist.
+                  This contact page is open for everyone. Even if you have not
+                  purchased a membership yet, you can ask questions about GOA
+                  MOMENTS, membership plans, benefits, discounts, venue access,
+                  support process, and how the card works.
                 </p>
 
                 <div className="mt-8 rounded-sm border border-primary/20 bg-card/60 p-5">
                   <div className="flex gap-3">
                     <ShieldCheck className="mt-1 h-5 w-5 shrink-0 text-primary" />
                     <p className="text-sm leading-relaxed text-muted-foreground">
-                      Our goal is simple: you should never feel confused after
-                      becoming a GOA MOMENTS member. You get access, guidance, and
-                      a trusted support point whenever you need help.
+                      Visitors can use the form on the right for general doubts.
+                      Paid members receive separate special contact access after
+                      membership activation.
                     </p>
                   </div>
                 </div>
 
                 <div className="mt-10 space-y-5">
-                  {contactInfo.map((info, index) => (
-                    <motion.a
+                  {publicContactInfo.map((info, index) => (
+                    <motion.div
                       key={info.label}
-                      href={info.href}
                       initial={{ opacity: 0, y: 18 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
@@ -170,7 +168,7 @@ export default function ContactPage() {
                           {info.value}
                         </p>
                       </div>
-                    </motion.a>
+                    </motion.div>
                   ))}
                 </div>
               </motion.div>
@@ -186,38 +184,81 @@ export default function ContactPage() {
                   Send a Message
                 </p>
                 <h3 className="mt-4 text-3xl font-light text-foreground">
-                  Tell Us What You Need
+                  Ask Anything About GOA MOMENTS
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                  Share your requirement and our team will respond with the right
-                  guidance. You can ask about membership, discounts, venue access,
-                  hotel support, taxi support, restaurants, nightlife, or curated
-                  experiences.
+                  This form is for all users — visitors, interested customers,
+                  and people who want to understand GOA MOMENTS before buying.
+                  Ask about plans, discounts, member access, hotels, taxi
+                  support, restaurants, nightlife, or curated experiences.
                 </p>
 
                 <form className="mt-8 space-y-6">
                   <div className="grid gap-5 md:grid-cols-2">
-                    <input type="text" placeholder="First Name" aria-label="First Name" className="border-b border-border bg-transparent py-3 text-foreground outline-none transition focus:border-primary" />
-                    <input type="text" placeholder="Last Name" aria-label="Last Name" className="border-b border-border bg-transparent py-3 text-foreground outline-none transition focus:border-primary" />
+                    <input
+                      type="text"
+                      placeholder="First Name"
+                      aria-label="First Name"
+                      className="border-b border-border bg-transparent py-3 text-foreground outline-none transition focus:border-primary"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Last Name"
+                      aria-label="Last Name"
+                      className="border-b border-border bg-transparent py-3 text-foreground outline-none transition focus:border-primary"
+                    />
                   </div>
 
-                  <input type="email" placeholder="Email Address" aria-label="Email Address" className="w-full border-b border-border bg-transparent py-3 text-foreground outline-none transition focus:border-primary" />
-                  <input type="tel" placeholder="Phone Number" aria-label="Phone Number" className="w-full border-b border-border bg-transparent py-3 text-foreground outline-none transition focus:border-primary" />
+                  <input
+                    type="email"
+                    placeholder="Email Address"
+                    aria-label="Email Address"
+                    className="w-full border-b border-border bg-transparent py-3 text-foreground outline-none transition focus:border-primary"
+                  />
+
+                  <input
+                    type="tel"
+                    placeholder="Phone Number"
+                    aria-label="Phone Number"
+                    className="w-full border-b border-border bg-transparent py-3 text-foreground outline-none transition focus:border-primary"
+                  />
 
                   <label htmlFor="supportType" className="sr-only">
                     Support Type
                   </label>
-                  <select id="supportType" name="supportType" className="w-full border-b border-border bg-transparent py-3 text-foreground outline-none transition focus:border-primary">
-                    <option className="bg-background" value="">Select Support Type</option>
-                    <option className="bg-background" value="membership">Membership Inquiry</option>
-                    <option className="bg-background" value="benefits">Benefits / Discounts Support</option>
-                    <option className="bg-background" value="travel">Hotel / Taxi / Travel Guidance</option>
-                    <option className="bg-background" value="experience">Goa Experience Support</option>
+                  <select
+                    id="supportType"
+                    name="supportType"
+                    className="w-full border-b border-border bg-transparent py-3 text-foreground outline-none transition focus:border-primary"
+                  >
+                    <option className="bg-background" value="">
+                      Select Support Type
+                    </option>
+                    <option className="bg-background" value="membership">
+                      Membership Inquiry
+                    </option>
+                    <option className="bg-background" value="benefits">
+                      Benefits / Discounts Support
+                    </option>
+                    <option className="bg-background" value="travel">
+                      Hotel / Taxi / Travel Guidance
+                    </option>
+                    <option className="bg-background" value="experience">
+                      Goa Experience Support
+                    </option>
                   </select>
 
-                  <textarea rows={4} placeholder="Tell us about your requirement..." aria-label="Message" className="w-full resize-none border-b border-border bg-transparent py-3 text-foreground outline-none transition focus:border-primary" />
+                  <textarea
+                    rows={4}
+                    placeholder="Tell us about your requirement..."
+                    aria-label="Message"
+                    className="w-full resize-none border-b border-border bg-transparent py-3 text-foreground outline-none transition focus:border-primary"
+                  />
 
-                  <button type="submit" className="group flex w-full items-center justify-center gap-3 bg-primary py-4 text-sm uppercase tracking-[0.22em] text-primary-foreground transition hover:bg-primary/90">
+                  <button
+                    type="submit"
+                    className="group flex w-full items-center justify-center gap-3 bg-primary py-4 text-sm uppercase tracking-[0.22em] text-primary-foreground transition hover:bg-primary/90"
+                  >
                     Send Message
                     <Send className="h-4 w-4 transition group-hover:translate-x-1" />
                   </button>
@@ -231,17 +272,18 @@ export default function ContactPage() {
           <div className="mx-auto max-w-7xl border border-primary/30 bg-[linear-gradient(135deg,rgba(212,175,55,0.14),rgba(0,0,0,0.65),rgba(212,175,55,0.06))] p-6 shadow-[0_0_70px_rgba(212,175,55,0.13)] md:p-10">
             <div className="text-center">
               <p className="text-xs uppercase tracking-[0.35em] text-primary">
-                Special Member Contact Access
+                Paid Member Contact Access
               </p>
               <h2 className="mx-auto mt-4 max-w-4xl text-4xl font-light leading-tight text-foreground md:text-5xl">
-                Membership Card Holders Receive{" "}
-                <span className="text-primary">Stronger Priority Support</span>
+                Special Support Opens{" "}
+                <span className="text-primary">After Membership Purchase</span>
               </h2>
               <p className="mx-auto mt-5 max-w-3xl text-sm leading-relaxed text-muted-foreground md:text-base">
-                Once a customer becomes a GOA MOMENTS member, they are not treated
-                like a normal visitor. Members receive special support contact
-                access, dedicated email assistance, and stronger guidance for
-                hotels, travel, dining, nightlife, and premium Goa experiences.
+                When a customer buys Gold, Platinum, or Diamond membership, they
+                provide their email and phone number during payment. GOA MOMENTS
+                uses that same registered email and phone number to identify the
+                member, confirm membership access, and provide special support
+                information privately.
               </p>
             </div>
 
@@ -266,47 +308,131 @@ export default function ContactPage() {
               ))}
             </div>
 
-          <div className="mt-10 grid gap-5 lg:grid-cols-2">
-  <div className="flex gap-4 border border-primary/25 bg-background/40 p-5">
-    <Headphones className="mt-1 h-6 w-6 shrink-0 text-primary" />
-    <div>
-      <p className="text-xs uppercase tracking-[0.28em] text-primary">
-        Special Member Phone Access
-      </p>
-      <p className="mt-2 text-lg text-foreground">
-        Available Only for Paid Members
-      </p>
-      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-        Membership card holders receive a private support contact after
-        purchase, giving them faster guidance and stronger assistance whenever
-        they need help.
-      </p>
-    </div>
-  </div>
+            <div className="mt-10 grid gap-5 lg:grid-cols-2">
+              <div className="flex gap-4 border border-primary/25 bg-background/40 p-5">
+                <Headphones className="mt-1 h-6 w-6 shrink-0 text-primary" />
+                <div>
+                  <p className="text-xs uppercase tracking-[0.28em] text-primary">
+                    Private Member Phone Access
+                  </p>
+                  <p className="mt-2 text-lg text-foreground">
+                    Shared Only After Payment Confirmation
+                  </p>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                    Paid members receive special contact access privately after
+                    activation. This keeps member support exclusive and prevents
+                    public misuse of premium support channels.
+                  </p>
+                </div>
+              </div>
 
-  <div className="flex gap-4 border border-primary/25 bg-background/40 p-5">
-    <Mail className="mt-1 h-6 w-6 shrink-0 text-primary" />
-    <div>
-      <p className="text-xs uppercase tracking-[0.28em] text-primary">
-        Special Member Email Access
-      </p>
-      <p className="mt-2 text-lg text-foreground">
-        Shared Only After Membership Activation
-      </p>
-      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-        Paid members receive dedicated email support for benefit guidance,
-        partner venue assistance, travel help, and premium GOA MOMENTS support.
-      </p>
-    </div>
-  </div>
-</div>
-            <div className="mt-8 flex gap-3 border border-primary/20 bg-primary/10 p-5">
-              <Sparkles className="mt-1 h-5 w-5 shrink-0 text-primary" />
-              <p className="text-sm leading-relaxed text-muted-foreground">
-                GOA MOMENTS membership is not only about discounts. It is about
-                feeling supported, guided, respected, and connected to better Goa
-                experiences whenever you need help.
-              </p>
+              <div className="flex gap-4 border border-primary/25 bg-background/40 p-5">
+                <Mail className="mt-1 h-6 w-6 shrink-0 text-primary" />
+                <div>
+                  <p className="text-xs uppercase tracking-[0.28em] text-primary">
+                    Registered Email & Phone Verification
+                  </p>
+                  <p className="mt-2 text-lg text-foreground">
+                    Support Uses Payment Details
+                  </p>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                    The email and phone number entered during payment become the
+                    member’s support identity. Using those details, the member
+                    can request benefit guidance, venue support, and membership
+                    information anytime.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-8 grid gap-5 lg:grid-cols-3">
+              <div className="flex gap-3 border border-primary/20 bg-primary/10 p-5">
+                <CreditCard className="mt-1 h-5 w-5 shrink-0 text-primary" />
+                <p className="text-sm leading-relaxed text-muted-foreground">
+                  After purchase, the member’s card plan, email, phone number,
+                  and membership ID help GOA MOMENTS identify and support them
+                  correctly.
+                </p>
+              </div>
+
+              <div className="flex gap-3 border border-primary/20 bg-primary/10 p-5">
+                <LockKeyhole className="mt-1 h-5 w-5 shrink-0 text-primary" />
+                <p className="text-sm leading-relaxed text-muted-foreground">
+                  Special phone and email support are not shown publicly. They
+                  are provided only to activated members for secure premium
+                  assistance.
+                </p>
+              </div>
+
+              <div className="flex gap-3 border border-primary/20 bg-primary/10 p-5">
+                <Sparkles className="mt-1 h-5 w-5 shrink-0 text-primary" />
+                <p className="text-sm leading-relaxed text-muted-foreground">
+                  Member support is lifetime-access oriented, helping card
+                  holders receive guidance, confidence, and premium assistance
+                  whenever needed.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+                <section className="relative px-6 pb-10">
+          <div className="mx-auto max-w-7xl border border-primary/40 bg-[linear-gradient(135deg,rgba(212,175,55,0.18),rgba(0,0,0,0.78),rgba(212,175,55,0.08))] p-6 shadow-[0_0_90px_rgba(212,175,55,0.18)] md:p-10">
+            <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+              <div>
+                <p className="text-xs uppercase tracking-[0.35em] text-primary">
+                  Contact Access Difference
+                </p>
+                <h2 className="mt-4 text-4xl font-light leading-tight text-foreground md:text-5xl">
+                  Same Contact Page.{" "}
+                  <span className="text-primary">Different Support Access.</span>
+                </h2>
+                <p className="mt-5 text-sm leading-relaxed text-muted-foreground md:text-base">
+                  Everyone can contact GOA MOMENTS for general enquiries. But
+                  special support information, priority guidance, and member-only
+                  assistance are provided only to customers who have purchased a
+                  GOA MOMENTS membership card.
+                </p>
+              </div>
+
+              <div className="grid gap-4 md:grid-cols-2">
+                <div className="border border-primary/25 bg-background/40 p-5">
+                  <Mail className="h-6 w-6 text-primary" />
+                  <h3 className="mt-4 text-2xl font-light text-foreground">
+                    General Enquiry Contact
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                    Non-members can contact us anytime to ask about membership
+                    plans, pricing, benefits, discounts, how GOA MOMENTS works,
+                    and general website-related doubts.
+                  </p>
+                </div>
+
+                <div className="border border-primary/25 bg-background/40 p-5">
+                  <LockKeyhole className="h-6 w-6 text-primary" />
+                  <h3 className="mt-4 text-2xl font-light text-foreground">
+                    Member-Only Support
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                    Only paid members receive special support details,
+                    priority information, private guidance, and membership-based
+                    assistance after their card is activated.
+                  </p>
+                </div>
+
+                <div className="border border-primary/25 bg-background/40 p-5 md:col-span-2">
+                  <ShieldCheck className="h-6 w-6 text-primary" />
+                  <h3 className="mt-4 text-2xl font-light text-foreground">
+                    Verified Through Payment Details
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                    The email address and phone number given during payment are
+                    used to identify the member. Based on those details, GOA
+                    MOMENTS provides lifetime membership support information,
+                    benefit guidance, and stronger assistance according to the
+                    purchased plan.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -322,15 +448,19 @@ export default function ContactPage() {
                   You Get More Than a Contact Form
                 </h2>
                 <p className="mt-5 text-sm leading-relaxed text-muted-foreground">
-                  When someone reaches GOA MOMENTS, they are not treated like a
-                  normal inquiry. Our support is designed to guide members clearly
-                  and help them feel confident about their Goa plans.
+                  Visitors can ask general questions through the public contact
+                  form. Paid members receive stronger, private support based on
+                  the email and phone number used while buying the membership
+                  card.
                 </p>
               </div>
 
               <div className="grid gap-4 md:grid-cols-2">
                 {supportPoints.map((point) => (
-                  <div key={point} className="flex gap-3 border border-border bg-background/30 p-4">
+                  <div
+                    key={point}
+                    className="flex gap-3 border border-border bg-background/30 p-4"
+                  >
                     <BadgeCheck className="mt-1 h-4 w-4 shrink-0 text-primary" />
                     <p className="text-sm leading-relaxed text-muted-foreground">
                       {point}
@@ -341,14 +471,16 @@ export default function ContactPage() {
                 <div className="flex gap-3 border border-border bg-background/30 p-4">
                   <Clock3 className="mt-1 h-4 w-4 shrink-0 text-primary" />
                   <p className="text-sm leading-relaxed text-muted-foreground">
-                    Average response time: within 2–4 hours during business hours.
+                    General inquiries are handled separately from paid member
+                    priority support.
                   </p>
                 </div>
 
                 <div className="flex gap-3 border border-border bg-background/30 p-4">
                   <ConciergeBell className="mt-1 h-4 w-4 shrink-0 text-primary" />
                   <p className="text-sm leading-relaxed text-muted-foreground">
-                    Concierge-style support for a smoother Goa experience.
+                    Paid members receive concierge-style support for a smoother
+                    Goa experience.
                   </p>
                 </div>
               </div>

@@ -27,6 +27,7 @@ import {
   Martini,
   Zap,
   Check,
+  LockKeyhole,
 } from "lucide-react";
 
 const supportPhone = "+91 98765 43210";
@@ -609,6 +610,7 @@ export default function MembershipActivitiesPage() {
           </div>
         </div>
       </section>
+      
       {/* SUPPORT BOX BEFORE REVIEWS - OLD STYLE */}
       <section className="relative px-4 py-16 sm:px-6 md:py-24">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(212,175,55,0.16),transparent_38%)]" />
@@ -666,6 +668,67 @@ export default function MembershipActivitiesPage() {
           </div>
         </div>
       </section>
+              <section className="relative px-6 pb-10">
+          <div className="mx-auto max-w-7xl border border-primary/40 bg-[linear-gradient(135deg,rgba(212,175,55,0.18),rgba(0,0,0,0.78),rgba(212,175,55,0.08))] p-6 shadow-[0_0_90px_rgba(212,175,55,0.18)] md:p-10">
+            <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+              <div>
+                <p className="text-xs uppercase tracking-[0.35em] text-primary">
+                  Contact Access Difference
+                </p>
+                <h2 className="mt-4 text-4xl font-light leading-tight text-foreground md:text-5xl">
+                  Same Contact Page.{" "}
+                  <span className="text-primary">Different Support Access.</span>
+                </h2>
+                <p className="mt-5 text-sm leading-relaxed text-muted-foreground md:text-base">
+                  Everyone can contact GOA MOMENTS for general enquiries. But
+                  special support information, priority guidance, and member-only
+                  assistance are provided only to customers who have purchased a
+                  GOA MOMENTS membership card.
+                </p>
+              </div>
+
+              <div className="grid gap-4 md:grid-cols-2">
+                <div className="border border-primary/25 bg-background/40 p-5">
+                  <Mail className="h-6 w-6 text-primary" />
+                  <h3 className="mt-4 text-2xl font-light text-foreground">
+                    General Enquiry Contact
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                    Non-members can contact us anytime to ask about membership
+                    plans, pricing, benefits, discounts, how GOA MOMENTS works,
+                    and general website-related doubts.
+                  </p>
+                </div>
+
+                <div className="border border-primary/25 bg-background/40 p-5">
+                  <LockKeyhole className="h-6 w-6 text-primary" />
+                  <h3 className="mt-4 text-2xl font-light text-foreground">
+                    Member-Only Support
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                    Only paid members receive special support details,
+                    priority information, private guidance, and membership-based
+                    assistance after their card is activated.
+                  </p>
+                </div>
+
+                <div className="border border-primary/25 bg-background/40 p-5 md:col-span-2">
+                  <ShieldCheck className="h-6 w-6 text-primary" />
+                  <h3 className="mt-4 text-2xl font-light text-foreground">
+                    Verified Through Payment Details
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                    The email address and phone number given during payment are
+                    used to identify the member. Based on those details, GOA
+                    MOMENTS provides lifetime membership support information,
+                    benefit guidance, and stronger assistance according to the
+                    purchased plan.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
             {/* REVIEWS */}
       <section className="relative px-4 py-16 sm:px-6 md:py-24">
         <div className="relative mx-auto max-w-7xl">
