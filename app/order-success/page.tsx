@@ -1,15 +1,13 @@
 "use client";
 
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import Image from "next/image";
-import { CheckCircle2, ShieldCheck, ArrowRight, Sparkles } from "lucide-react";
-
+import { CheckCircle2, ShieldCheck, Sparkles } from "lucide-react";
 
 export default function OrderSuccessPage() {
-  const router = useRouter();
   const searchParams = useSearchParams();
 
   const membershipId = searchParams.get("membershipId") || "GM-XXX-000000";
@@ -24,44 +22,44 @@ export default function OrderSuccessPage() {
   const paymentMethod = searchParams.get("paymentMethod") || "Secure Checkout";
   const emailSentRef = useRef(false);
 
-useEffect(() => {
-  if (emailSentRef.current) return;
-  if (!email) return;
+  useEffect(() => {
+    if (emailSentRef.current) return;
+    if (!email) return;
 
-  emailSentRef.current = true;
+    emailSentRef.current = true;
 
-  fetch("/api/send-membership-email", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      membershipId,
-      plan,
-      amountPaid,
-      memberName,
-      email,
-      phone,
-      city,
-      paymentId: orderId,
-      validity,
-      paymentMethod,
-    }),
-  }).catch((error) => {
-    console.error("Failed to send membership email:", error);
-  });
-}, [
-  membershipId,
-  plan,
-  amountPaid,
-  memberName,
-  email,
-  phone,
-  city,
-  orderId,
-  validity,
-  paymentMethod,
-]);
+    fetch("/api/send-membership-email", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        membershipId,
+        plan,
+        amountPaid,
+        memberName,
+        email,
+        phone,
+        city,
+        paymentId: orderId,
+        validity,
+        paymentMethod,
+      }),
+    }).catch((error) => {
+      console.error("Failed to send membership email:", error);
+    });
+  }, [
+    membershipId,
+    plan,
+    amountPaid,
+    memberName,
+    email,
+    phone,
+    city,
+    orderId,
+    validity,
+    paymentMethod,
+  ]);
 
   const downloadCard = () => {
     const link = document.createElement("a");
@@ -70,22 +68,6 @@ useEffect(() => {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-  };
-
-  const continueToProfile = () => {
-    const params = new URLSearchParams({
-      membershipId,
-      plan,
-      amountPaid,
-      memberName,
-      email,
-      phone,
-      city,
-      validity,
-      paymentMethod,
-    });
-
-    router.push(`/profile?${params.toString()}`);
   };
 
   return (
@@ -108,8 +90,9 @@ useEffect(() => {
             </h1>
 
             <p className="mx-auto mt-6 max-w-3xl text-lg leading-relaxed text-muted-foreground md:text-xl">
-              Welcome to GOA MOMENTS. Your membership has been activated successfully.
-              Your card, support access, and premium member journey are now ready.
+              Welcome to GOA MOMENTS. Your membership has been activated
+              successfully. Your card, support access, and premium member
+              benefits are now ready.
             </p>
 
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3 text-[11px] uppercase tracking-widest">
@@ -125,17 +108,11 @@ useEffect(() => {
               <span className="rounded-full bg-primary px-3 py-1 text-primary-foreground">
                 4. Order Successful
               </span>
-              <span className="rounded-full border border-border px-3 py-1 text-muted-foreground">
-                5. Profile Setup
-              </span>
-              <span className="rounded-full border border-border px-3 py-1 text-muted-foreground">
-                6. Dashboard Access
-              </span>
             </div>
           </div>
 
           <div className="mt-14 grid gap-8 lg:grid-cols-[1.15fr_0.85fr]">
-            <div className="border border-primary/30 bg-card p-4 md:p-6 shadow-[0_0_40px_rgba(212,175,55,0.10)]">
+            <div className="border border-primary/30 bg-card p-4 shadow-[0_0_40px_rgba(212,175,55,0.10)] md:p-6">
               <div className="flex items-center justify-between border-b border-border pb-4">
                 <div>
                   <p className="text-xs uppercase tracking-[0.25em] text-primary">
@@ -172,12 +149,12 @@ useEffect(() => {
                   <Sparkles className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
                   <div>
                     <p className="text-sm font-medium text-foreground">
-                      Your access is now active
+                      Your membership access is now active
                     </p>
                     <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                      You can now continue to your profile and unlock your personal
-                      GOA MOMENTS member dashboard, curated support guidance, and
-                      venue-based membership benefits.
+                      You can now use your GOA MOMENTS membership card for
+                      eligible venue-based benefits, premium support guidance,
+                      and member savings at selected partner locations.
                     </p>
                   </div>
                 </div>
@@ -195,7 +172,9 @@ useEffect(() => {
               <div className="mt-8 space-y-5 text-sm text-muted-foreground">
                 <div className="flex items-start justify-between gap-4">
                   <span>Membership ID</span>
-                  <span className="text-right text-foreground">{membershipId}</span>
+                  <span className="text-right text-foreground">
+                    {membershipId}
+                  </span>
                 </div>
 
                 <div className="flex items-start justify-between gap-4">
@@ -205,17 +184,23 @@ useEffect(() => {
 
                 <div className="flex items-start justify-between gap-4">
                   <span>Amount Paid</span>
-                  <span className="text-right text-foreground">${amountPaid}</span>
+                  <span className="text-right text-foreground">
+                    ${amountPaid}
+                  </span>
                 </div>
 
                 <div className="flex items-start justify-between gap-4">
                   <span>Member Name</span>
-                  <span className="text-right text-foreground">{memberName}</span>
+                  <span className="text-right text-foreground">
+                    {memberName}
+                  </span>
                 </div>
 
                 <div className="flex items-start justify-between gap-4">
                   <span>Email</span>
-                  <span className="break-all text-right text-foreground">{email}</span>
+                  <span className="break-all text-right text-foreground">
+                    {email}
+                  </span>
                 </div>
 
                 <div className="flex items-start justify-between gap-4">
@@ -230,14 +215,16 @@ useEffect(() => {
 
                 <div className="flex items-start justify-between gap-4">
                   <span>Payment Method</span>
-                  <span className="text-right text-foreground capitalize">
+                  <span className="text-right capitalize text-foreground">
                     {paymentMethod}
                   </span>
                 </div>
 
                 <div className="flex items-start justify-between gap-4">
                   <span>Order ID</span>
-                  <span className="break-all text-right text-foreground">{orderId}</span>
+                  <span className="break-all text-right text-foreground">
+                    {orderId}
+                  </span>
                 </div>
 
                 <div className="flex items-start justify-between gap-4">
@@ -249,11 +236,13 @@ useEffect(() => {
 
                 <div className="flex items-start justify-between gap-4 border-t border-border pt-5">
                   <span>Validity</span>
-                  <span className="text-right text-foreground">{validity}</span>
+                  <span className="text-right text-foreground">
+                    {validity}
+                  </span>
                 </div>
               </div>
 
-              <div className="mt-10 space-y-4">
+              <div className="mt-10">
                 <button
                   type="button"
                   onClick={downloadCard}
@@ -261,8 +250,6 @@ useEffect(() => {
                 >
                   Download Membership Card
                 </button>
-
-               
               </div>
             </div>
           </div>

@@ -13,6 +13,11 @@ import {
   Clock3,
   ConciergeBell,
   BadgeCheck,
+  Crown,
+  Gem,
+  Star,
+  Sparkles,
+  Headphones,
 } from "lucide-react";
 
 const contactInfo = [
@@ -41,6 +46,24 @@ const supportPoints = [
   "Hotel, restaurant, taxi, and travel recommendations",
   "Help understanding member benefits and venue savings",
   "Support for curated Goa experiences and premium access",
+];
+
+const memberSupport = [
+  {
+    icon: Crown,
+    title: "Gold Member Support",
+    text: "Gold members receive trusted support for hotel and travel guidance, helping them use their membership confidently and save better.",
+  },
+  {
+    icon: Star,
+    title: "Platinum Priority Support",
+    text: "Platinum members receive stronger support for hotels, restaurants, travel, accommodation, bars, clubs, and premium Goa experiences.",
+  },
+  {
+    icon: Gem,
+    title: "Diamond Elite Support",
+    text: "Diamond members receive the strongest GOA MOMENTS attention, high-priority guidance, and faster assistance for premium access wherever available.",
+  },
 ];
 
 export default function ContactPage() {
@@ -174,75 +197,116 @@ export default function ContactPage() {
 
                 <form className="mt-8 space-y-6">
                   <div className="grid gap-5 md:grid-cols-2">
-                    <input
-                      type="text"
-                      placeholder="First Name"
-                      aria-label="First Name"
-                      className="border-b border-border bg-transparent py-3 text-foreground outline-none transition focus:border-primary"
-                    />
-                    <input
-                      type="text"
-                      placeholder="Last Name"
-                      aria-label="Last Name"
-                      className="border-b border-border bg-transparent py-3 text-foreground outline-none transition focus:border-primary"
-                    />
+                    <input type="text" placeholder="First Name" aria-label="First Name" className="border-b border-border bg-transparent py-3 text-foreground outline-none transition focus:border-primary" />
+                    <input type="text" placeholder="Last Name" aria-label="Last Name" className="border-b border-border bg-transparent py-3 text-foreground outline-none transition focus:border-primary" />
                   </div>
 
-                  <input
-                    type="email"
-                    placeholder="Email Address"
-                    aria-label="Email Address"
-                    className="w-full border-b border-border bg-transparent py-3 text-foreground outline-none transition focus:border-primary"
-                  />
-
-                  <input
-                    type="tel"
-                    placeholder="Phone Number"
-                    aria-label="Phone Number"
-                    className="w-full border-b border-border bg-transparent py-3 text-foreground outline-none transition focus:border-primary"
-                  />
+                  <input type="email" placeholder="Email Address" aria-label="Email Address" className="w-full border-b border-border bg-transparent py-3 text-foreground outline-none transition focus:border-primary" />
+                  <input type="tel" placeholder="Phone Number" aria-label="Phone Number" className="w-full border-b border-border bg-transparent py-3 text-foreground outline-none transition focus:border-primary" />
 
                   <label htmlFor="supportType" className="sr-only">
                     Support Type
                   </label>
-                  <select
-                    id="supportType"
-                    name="supportType"
-                    className="w-full border-b border-border bg-transparent py-3 text-foreground outline-none transition focus:border-primary"
-                  >
-                    <option className="bg-background" value="">
-                      Select Support Type
-                    </option>
-                    <option className="bg-background" value="membership">
-                      Membership Inquiry
-                    </option>
-                    <option className="bg-background" value="benefits">
-                      Benefits / Discounts Support
-                    </option>
-                    <option className="bg-background" value="travel">
-                      Hotel / Taxi / Travel Guidance
-                    </option>
-                    <option className="bg-background" value="experience">
-                      Goa Experience Support
-                    </option>
+                  <select id="supportType" name="supportType" className="w-full border-b border-border bg-transparent py-3 text-foreground outline-none transition focus:border-primary">
+                    <option className="bg-background" value="">Select Support Type</option>
+                    <option className="bg-background" value="membership">Membership Inquiry</option>
+                    <option className="bg-background" value="benefits">Benefits / Discounts Support</option>
+                    <option className="bg-background" value="travel">Hotel / Taxi / Travel Guidance</option>
+                    <option className="bg-background" value="experience">Goa Experience Support</option>
                   </select>
 
-                  <textarea
-                    rows={4}
-                    placeholder="Tell us about your requirement..."
-                    aria-label="Message"
-                    className="w-full resize-none border-b border-border bg-transparent py-3 text-foreground outline-none transition focus:border-primary"
-                  />
+                  <textarea rows={4} placeholder="Tell us about your requirement..." aria-label="Message" className="w-full resize-none border-b border-border bg-transparent py-3 text-foreground outline-none transition focus:border-primary" />
 
-                  <button
-                    type="submit"
-                    className="group flex w-full items-center justify-center gap-3 bg-primary py-4 text-sm uppercase tracking-[0.22em] text-primary-foreground transition hover:bg-primary/90"
-                  >
+                  <button type="submit" className="group flex w-full items-center justify-center gap-3 bg-primary py-4 text-sm uppercase tracking-[0.22em] text-primary-foreground transition hover:bg-primary/90">
                     Send Message
                     <Send className="h-4 w-4 transition group-hover:translate-x-1" />
                   </button>
                 </form>
               </motion.div>
+            </div>
+          </div>
+        </section>
+
+        <section className="relative px-6 pb-10">
+          <div className="mx-auto max-w-7xl border border-primary/30 bg-[linear-gradient(135deg,rgba(212,175,55,0.14),rgba(0,0,0,0.65),rgba(212,175,55,0.06))] p-6 shadow-[0_0_70px_rgba(212,175,55,0.13)] md:p-10">
+            <div className="text-center">
+              <p className="text-xs uppercase tracking-[0.35em] text-primary">
+                Special Member Contact Access
+              </p>
+              <h2 className="mx-auto mt-4 max-w-4xl text-4xl font-light leading-tight text-foreground md:text-5xl">
+                Membership Card Holders Receive{" "}
+                <span className="text-primary">Stronger Priority Support</span>
+              </h2>
+              <p className="mx-auto mt-5 max-w-3xl text-sm leading-relaxed text-muted-foreground md:text-base">
+                Once a customer becomes a GOA MOMENTS member, they are not treated
+                like a normal visitor. Members receive special support contact
+                access, dedicated email assistance, and stronger guidance for
+                hotels, travel, dining, nightlife, and premium Goa experiences.
+              </p>
+            </div>
+
+            <div className="mt-10 grid gap-5 md:grid-cols-3">
+              {memberSupport.map((item, index) => (
+                <motion.div
+                  key={item.title}
+                  initial={{ opacity: 0, y: 22 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.45, delay: index * 0.08 }}
+                  className="border border-primary/25 bg-background/35 p-6"
+                >
+                  <item.icon className="h-9 w-9 text-primary" />
+                  <h3 className="mt-5 text-2xl font-light text-foreground">
+                    {item.title}
+                  </h3>
+                  <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+                    {item.text}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
+
+          <div className="mt-10 grid gap-5 lg:grid-cols-2">
+  <div className="flex gap-4 border border-primary/25 bg-background/40 p-5">
+    <Headphones className="mt-1 h-6 w-6 shrink-0 text-primary" />
+    <div>
+      <p className="text-xs uppercase tracking-[0.28em] text-primary">
+        Special Member Phone Access
+      </p>
+      <p className="mt-2 text-lg text-foreground">
+        Available Only for Paid Members
+      </p>
+      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+        Membership card holders receive a private support contact after
+        purchase, giving them faster guidance and stronger assistance whenever
+        they need help.
+      </p>
+    </div>
+  </div>
+
+  <div className="flex gap-4 border border-primary/25 bg-background/40 p-5">
+    <Mail className="mt-1 h-6 w-6 shrink-0 text-primary" />
+    <div>
+      <p className="text-xs uppercase tracking-[0.28em] text-primary">
+        Special Member Email Access
+      </p>
+      <p className="mt-2 text-lg text-foreground">
+        Shared Only After Membership Activation
+      </p>
+      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+        Paid members receive dedicated email support for benefit guidance,
+        partner venue assistance, travel help, and premium GOA MOMENTS support.
+      </p>
+    </div>
+  </div>
+</div>
+            <div className="mt-8 flex gap-3 border border-primary/20 bg-primary/10 p-5">
+              <Sparkles className="mt-1 h-5 w-5 shrink-0 text-primary" />
+              <p className="text-sm leading-relaxed text-muted-foreground">
+                GOA MOMENTS membership is not only about discounts. It is about
+                feeling supported, guided, respected, and connected to better Goa
+                experiences whenever you need help.
+              </p>
             </div>
           </div>
         </section>
@@ -266,10 +330,7 @@ export default function ContactPage() {
 
               <div className="grid gap-4 md:grid-cols-2">
                 {supportPoints.map((point) => (
-                  <div
-                    key={point}
-                    className="flex gap-3 border border-border bg-background/30 p-4"
-                  >
+                  <div key={point} className="flex gap-3 border border-border bg-background/30 p-4">
                     <BadgeCheck className="mt-1 h-4 w-4 shrink-0 text-primary" />
                     <p className="text-sm leading-relaxed text-muted-foreground">
                       {point}

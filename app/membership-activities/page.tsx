@@ -20,6 +20,13 @@ import {
   UtensilsCrossed,
   HelpCircle,
   ChevronDown,
+  Crown,
+  Gem,
+  Users,
+  Plane,
+  Martini,
+  Zap,
+  Check,
 } from "lucide-react";
 
 const supportPhone = "+91 98765 43210";
@@ -49,6 +56,69 @@ const benefits = [
     title: "Trusted Premium Guidance",
     description:
       "We help you discover suitable venues, better experiences, and premium choices instead of leaving you to search alone.",
+  },
+];
+
+const detailedMemberships = [
+  {
+    name: "Diamond Membership",
+    icon: Gem,
+    badge: "Highest Priority",
+    title: "The Most Powerful GOA MOMENTS Access",
+    description:
+      "Diamond is created for members who want the highest level of comfort, strongest support, and first preference wherever possible. This is the membership for people who do not want to wait, search, or compromise. Diamond members receive premium attention and stronger guidance across Goa experiences.",
+    access: "Up to 8 members can use the card accessibility",
+    support: "Strongest GOA MOMENTS support among all memberships",
+    highlight:
+      "Best for VIP travellers, premium families, luxury groups, business guests, and people who want top-class Goa treatment.",
+    points: [
+      "Discounts across hotels, restaurants, travel, accommodation, bars, clubs, nightlife, cafés, and selected premium venues",
+      "Up to 10%–70% savings at selected partner places",
+      "High priority and first preference wherever partner access allows",
+      "Strongest support for choosing places, planning experiences, and using membership benefits",
+      "Premium guidance so members feel confident, respected, and supported",
+      "Designed for people who want the best Goa lifestyle access without confusion",
+    ],
+  },
+  {
+    name: "Platinum Membership",
+    icon: Star,
+    badge: "Most Balanced",
+    title: "Bigger Access For Families, Groups & Regular Goa Visitors",
+    description:
+      "Platinum is a powerful membership for members who want more categories, better comfort, and wider Goa access. It gives more value than Gold and stronger support for people who want to enjoy hotels, restaurants, travel, accommodation, bars, clubs, and premium places with confidence.",
+    access: "Up to 8 members can use the card accessibility",
+    support: "Stronger support than Gold membership",
+    highlight:
+      "Best for families, groups, frequent visitors, premium travellers, and people who want wider Goa benefits.",
+    points: [
+      "Discounts at hotels, restaurants, travel partners, accommodation, bars, clubs, and selected lifestyle venues",
+      "Up to 10%–70% savings at selected partner places",
+      "Better category coverage than Gold membership",
+      "Premium support for choosing where to stay, dine, travel, and enjoy",
+      "A strong value membership for people who want more access without going to the highest tier",
+      "Perfect for members who visit Goa often and want reliable benefits every time",
+    ],
+  },
+  {
+    name: "Gold Membership",
+    icon: Crown,
+    badge: "Smart Entry",
+    title: "Smart Savings For Hotels & Travel",
+    description:
+      "Gold is the perfect starting membership for people who want to experience GOA MOMENTS benefits with smart savings and reliable support. It is simple, useful, and ideal for smaller groups who mainly need hotel and travel benefits.",
+    access: "Up to 4 members can use the card accessibility",
+    support: "Reliable GOA MOMENTS support included",
+    highlight:
+      "Best for couples, solo travellers, small families, and smart visitors who want premium savings.",
+    points: [
+      "Hotels and travel benefits included",
+      "Up to 10%–70% discounts at selected partners",
+      "Useful support for basic stay and travel guidance",
+      "Great entry-level membership for people starting their GOA MOMENTS journey",
+      "Perfect for small groups who want savings without complexity",
+      "A smart card for people who want value, comfort, and trusted guidance",
+    ],
   },
 ];
 
@@ -196,11 +266,10 @@ export default function MembershipActivitiesPage() {
         </div>
       </section>
 
-      {/* BLENDED BENEFITS SECTION */}
       <section id="benefits" className="relative px-4 py-16 sm:px-6 md:py-24">
-       <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(212,175,55,0.015)_32%,rgba(212,175,55,0.02)_52%,rgba(212,175,55,0.015)_72%,transparent)]" />
-<div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(212,175,55,0.02),transparent_50%)]" />
-<div className="absolute inset-0 bg-[radial-gradient(circle_at_left,rgba(212,175,55,0.015),transparent_40%),radial-gradient(circle_at_right,rgba(212,175,55,0.015),transparent_40%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(212,175,55,0.015)_32%,rgba(212,175,55,0.02)_52%,rgba(212,175,55,0.015)_72%,transparent)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(212,175,55,0.02),transparent_50%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_left,rgba(212,175,55,0.015),transparent_40%),radial-gradient(circle_at_right,rgba(212,175,55,0.015),transparent_40%)]" />
         <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/25 to-transparent" />
         <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
 
@@ -233,6 +302,171 @@ export default function MembershipActivitiesPage() {
                 </p>
               </motion.div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="relative px-4 py-16 sm:px-6 md:py-24">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(212,175,55,0.12),transparent_38%)]" />
+        <div className="relative mx-auto max-w-7xl">
+          <div className="mb-14 text-center">
+            <p className="text-xs uppercase tracking-[0.35em] text-primary">
+              Membership Accessibility
+            </p>
+            <h2 className="mx-auto mt-4 max-w-5xl text-4xl font-light leading-tight text-foreground md:text-6xl">
+              Every Card Gives Access.{" "}
+              <span className="text-primary">
+                Higher Cards Give More Power.
+              </span>
+            </h2>
+            <p className="mx-auto mt-6 max-w-4xl text-base leading-relaxed text-muted-foreground md:text-lg">
+              GOA MOMENTS is built to make members feel valued before, during,
+              and after every Goa experience. Choose Gold for smart value,
+              Platinum for wider access, or Diamond for the strongest priority
+              support and top facility treatment.
+            </p>
+          </div>
+
+          <div className="space-y-10">
+            {detailedMemberships.map((item, index) => (
+              <motion.div
+                key={item.name}
+                initial={{ opacity: 0, y: 28 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.65, delay: index * 0.1 }}
+                className={`relative overflow-hidden border p-6 backdrop-blur-md md:p-10 ${
+                  item.name.includes("Diamond")
+                    ? "border-primary bg-[linear-gradient(135deg,rgba(212,175,55,0.18),rgba(0,0,0,0.80),rgba(212,175,55,0.08))] shadow-[0_0_90px_rgba(212,175,55,0.20)]"
+                    : "border-primary/30 bg-card/75 shadow-[0_0_55px_rgba(212,175,55,0.08)]"
+                }`}
+              >
+                <div className="pointer-events-none absolute right-0 top-0 h-32 w-32 border-r border-t border-primary/40" />
+                <div className="pointer-events-none absolute bottom-0 left-0 h-32 w-32 border-b border-l border-primary/30" />
+
+                <div className="relative grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
+                  <div>
+                    <div className="flex flex-wrap items-center gap-4">
+                      <div className="flex h-16 w-16 items-center justify-center border border-primary/40 bg-primary/10">
+                        <item.icon className="h-8 w-8 text-primary" />
+                      </div>
+                      <span className="border border-primary/40 px-4 py-2 text-xs uppercase tracking-[0.28em] text-primary">
+                        {item.badge}
+                      </span>
+                    </div>
+
+                    <h3 className="mt-6 text-4xl font-light text-foreground md:text-5xl">
+                      {item.name}
+                    </h3>
+
+                    <h4 className="mt-4 text-2xl font-light text-primary">
+                      {item.title}
+                    </h4>
+
+                    <p className="mt-5 text-sm leading-relaxed text-muted-foreground md:text-base">
+                      {item.description}
+                    </p>
+
+                    <div className="mt-7 grid gap-4 sm:grid-cols-2">
+                      <div className="border border-primary/20 bg-background/35 p-4">
+                        <p className="text-xs uppercase tracking-[0.25em] text-primary">
+                          Member Access
+                        </p>
+                        <p className="mt-2 text-sm text-foreground">
+                          {item.access}
+                        </p>
+                      </div>
+                      <div className="border border-primary/20 bg-background/35 p-4">
+                        <p className="text-xs uppercase tracking-[0.25em] text-primary">
+                          Support Level
+                        </p>
+                        <p className="mt-2 text-sm text-foreground">
+                          {item.support}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="border border-primary/25 bg-background/35 p-5">
+                      <p className="text-xs uppercase tracking-[0.3em] text-primary">
+                        Why This Card Is Valuable
+                      </p>
+
+                      <ul className="mt-6 space-y-4">
+                        {item.points.map((point) => (
+                          <li
+                            key={point}
+                            className="flex items-start gap-3 text-sm leading-relaxed text-muted-foreground"
+                          >
+                            <Check className="mt-1 h-4 w-4 shrink-0 text-primary" />
+                            <span>{point}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <div className="mt-5 border-l-2 border-primary bg-primary/10 p-5">
+                      <p className="text-sm leading-relaxed text-foreground">
+                        <span className="text-primary">Best Choice:</span>{" "}
+                        {item.highlight}
+                      </p>
+                    </div>
+
+                    <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+                      <div className="flex flex-col items-center gap-2 border border-primary/20 bg-background/30 p-4 text-center">
+                        <Hotel className="h-5 w-5 text-primary" />
+                        <span className="text-[10px] uppercase tracking-widest text-muted-foreground">
+                          Hotels
+                        </span>
+                      </div>
+                      <div className="flex flex-col items-center gap-2 border border-primary/20 bg-background/30 p-4 text-center">
+                        {item.name.includes("Gold") ? (
+                          <Plane className="h-5 w-5 text-primary" />
+                        ) : (
+                          <UtensilsCrossed className="h-5 w-5 text-primary" />
+                        )}
+                        <span className="text-[10px] uppercase tracking-widest text-muted-foreground">
+                          {item.name.includes("Gold") ? "Travel" : "Dining"}
+                        </span>
+                      </div>
+                      <div className="flex flex-col items-center gap-2 border border-primary/20 bg-background/30 p-4 text-center">
+                        {item.name.includes("Gold") ? (
+                          <Users className="h-5 w-5 text-primary" />
+                        ) : (
+                          <Martini className="h-5 w-5 text-primary" />
+                        )}
+                        <span className="text-[10px] uppercase tracking-widest text-muted-foreground">
+                          {item.name.includes("Gold") ? "4 Members" : "Clubs"}
+                        </span>
+                      </div>
+                      <div className="flex flex-col items-center gap-2 border border-primary/20 bg-background/30 p-4 text-center">
+                        {item.name.includes("Diamond") ? (
+                          <Zap className="h-5 w-5 text-primary" />
+                        ) : (
+                          <ShieldCheck className="h-5 w-5 text-primary" />
+                        )}
+                        <span className="text-[10px] uppercase tracking-widest text-muted-foreground">
+                          {item.name.includes("Diamond")
+                            ? "High Priority"
+                            : "Support"}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          <div className="mt-12 text-center">
+            <a
+              href="/membership"
+              className="group inline-flex items-center gap-3 border border-primary bg-primary px-8 py-4 text-sm uppercase tracking-[0.22em] text-primary-foreground shadow-[0_0_35px_rgba(212,175,55,0.35)] transition hover:bg-primary/90"
+            >
+              Choose Your Membership
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </a>
           </div>
         </div>
       </section>
@@ -375,23 +609,13 @@ export default function MembershipActivitiesPage() {
           </div>
         </div>
       </section>
-
       {/* SUPPORT BOX BEFORE REVIEWS - OLD STYLE */}
       <section className="relative px-4 py-16 sm:px-6 md:py-24">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(212,175,55,0.16),transparent_38%)]" />
-        <div className="relative mx-auto max-w-7xl border border-primary/40 bg-[linear-gradient(135deg,rgba(212,175,55,0.18),rgba(0,0,0,0.72),rgba(212,175,55,0.10))] p-6 shadow-[0_0_100px_rgba(212,175,55,0.20)] backdrop-blur-md md:p-10">
-          <div className="pointer-events-none absolute left-0 top-0 h-24 w-24 border-l border-t border-primary/80" />
-          <div className="pointer-events-none absolute right-0 top-0 h-24 w-24 border-r border-t border-primary/80" />
-          <div className="pointer-events-none absolute bottom-0 left-0 h-24 w-24 border-b border-l border-primary/80" />
-          <div className="pointer-events-none absolute bottom-0 right-0 h-24 w-24 border-b border-r border-primary/80" />
 
+        <div className="relative mx-auto max-w-7xl border border-primary/40 bg-[linear-gradient(135deg,rgba(212,175,55,0.18),rgba(0,0,0,0.72),rgba(212,175,55,0.10))] p-6 shadow-[0_0_100px_rgba(212,175,55,0.20)] backdrop-blur-md md:p-10">
           <div className="relative grid gap-10 lg:grid-cols-[1fr_0.9fr] lg:items-center">
-            <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
+            <motion.div>
               <p className="text-xs uppercase tracking-[0.35em] text-primary">
                 Goa Moments Support
               </p>
@@ -402,19 +626,12 @@ export default function MembershipActivitiesPage() {
                 If a member needs help finding a hotel, arranging transport,
                 choosing a restaurant, planning an outing, or understanding how
                 to use the membership card, GOA MOMENTS support is there to
-                assist. This makes the membership feel strong, useful, and
-                trustworthy.
+                assist.
               </p>
             </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="space-y-5"
-            >
-              <div className="flex gap-4 border border-primary/30 bg-background/40 p-5 backdrop-blur-sm">
+            <div className="space-y-5">
+              <div className="flex gap-4 border border-primary/30 bg-background/40 p-5">
                 <Phone className="mt-1 h-5 w-5 shrink-0 text-primary" />
                 <div>
                   <p className="text-xs uppercase tracking-[0.28em] text-primary">
@@ -424,7 +641,7 @@ export default function MembershipActivitiesPage() {
                 </div>
               </div>
 
-              <div className="flex gap-4 border border-primary/30 bg-background/40 p-5 backdrop-blur-sm">
+              <div className="flex gap-4 border border-primary/30 bg-background/40 p-5">
                 <Mail className="mt-1 h-5 w-5 shrink-0 text-primary" />
                 <div>
                   <p className="text-xs uppercase tracking-[0.28em] text-primary">
@@ -434,7 +651,7 @@ export default function MembershipActivitiesPage() {
                 </div>
               </div>
 
-              <div className="flex gap-4 border border-primary/30 bg-background/40 p-5 backdrop-blur-sm">
+              <div className="flex gap-4 border border-primary/30 bg-background/40 p-5">
                 <MapPin className="mt-1 h-5 w-5 shrink-0 text-primary" />
                 <div>
                   <p className="text-xs uppercase tracking-[0.28em] text-primary">
@@ -445,12 +662,11 @@ export default function MembershipActivitiesPage() {
                   </p>
                 </div>
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
       </section>
-
-      {/* REVIEWS */}
+            {/* REVIEWS */}
       <section className="relative px-4 py-16 sm:px-6 md:py-24">
         <div className="relative mx-auto max-w-7xl">
           <div className="mb-12 text-center">
@@ -554,6 +770,7 @@ export default function MembershipActivitiesPage() {
         </div>
       </section>
 
+      {/* FINAL CTA */}
       <section className="relative px-4 pb-24 pt-10 sm:px-6 md:pb-32">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(212,175,55,0.14),transparent_34%)]" />
         <div className="relative mx-auto max-w-5xl border border-primary/35 bg-[linear-gradient(135deg,rgba(212,175,55,0.16),rgba(0,0,0,0.50),rgba(212,175,55,0.08))] p-8 text-center shadow-[0_0_90px_rgba(212,175,55,0.16)] backdrop-blur-md md:p-12">
@@ -584,6 +801,7 @@ export default function MembershipActivitiesPage() {
         </div>
       </section>
 
+     
       <Footer />
     </main>
   );

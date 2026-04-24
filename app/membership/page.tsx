@@ -16,6 +16,12 @@ import {
   CreditCard,
   BadgeCheck,
   Sparkles,
+  Users,
+  Hotel,
+  Plane,
+  Utensils,
+  Martini,
+  Zap,
 } from "lucide-react";
 
 type Tier = {
@@ -64,6 +70,55 @@ const benefits = [
       "Priority entry at selected nightlife venues",
       "Exclusive access to premium event offers",
       "Special entertainment and party partner discounts",
+    ],
+  },
+];
+
+const membershipPower = [
+  {
+    name: "Gold Membership",
+    icon: Crown,
+    members: "4 Members Access",
+    title: "Smart Savings For Hotels & Travel",
+    description:
+      "Gold is the perfect entry into GOA MOMENTS luxury access. Designed for smart travellers, couples, families, and small groups who want real value without compromising comfort.",
+    highlights: [
+      "Card accessibility for up to 4 members",
+      "Hotels and travel benefits included",
+      "Up to 10%–70% discounts at selected partners",
+      "Reliable GOA MOMENTS support whenever guidance is needed",
+      "Perfect for people who want premium savings with simple access",
+    ],
+  },
+  {
+    name: "Platinum Membership",
+    icon: Star,
+    members: "8 Members Access",
+    title: "Bigger Access Across Goa Lifestyle",
+    description:
+      "Platinum is made for members who want more freedom, more categories, and stronger support. From hotels to restaurants, travel, accommodation, bars, clubs, and premium venues, Platinum gives you a bigger GOA MOMENTS advantage.",
+    highlights: [
+      "Card accessibility for up to 8 members",
+      "Hotels, restaurants, travel, accommodation, bars, clubs, and more",
+      "Up to 10%–70% discounts at selected partner places",
+      "Stronger support than Gold membership",
+      "Best choice for families, groups, and regular Goa visitors",
+    ],
+  },
+  {
+    name: "Diamond Membership",
+    icon: Gem,
+    members: "8 Members Access",
+    title: "Elite Priority. Strongest Support. Maximum Prestige.",
+    description:
+      "Diamond is the highest GOA MOMENTS membership — created for members who want the best treatment, strongest support, and first preference wherever possible. Diamond members enjoy premium attention, elevated access, and a more powerful Goa experience.",
+    highlights: [
+      "Card accessibility for up to 8 members",
+      "Discounts across all major partner categories",
+      "Up to 10%–70% savings at selected premium places",
+      "Strongest GOA MOMENTS support among all plans",
+      "First preference and priority treatment at selected places",
+      "No unnecessary waiting wherever priority access is available",
     ],
   },
 ];
@@ -239,7 +294,8 @@ export default function MembershipPage() {
             </h1>
             <p className="mx-auto mt-6 max-w-3xl text-base leading-relaxed text-muted-foreground md:text-lg">
               Join GOA MOMENTS and unlock exceptional value across luxury stays,
-              restaurants, curated travel, nightlife, and unforgettable premium experiences in Goa.
+              restaurants, curated travel, nightlife, and unforgettable premium
+              experiences in Goa.
             </p>
             <p className="mx-auto mt-4 max-w-3xl text-sm uppercase tracking-[0.28em] text-primary md:text-base">
               Up to 10%–70% Member Savings • Premium Access • Lifetime Value
@@ -266,10 +322,13 @@ export default function MembershipPage() {
               Why GOA MOMENTS Membership
             </span>
             <h2 className="mt-4 text-3xl font-light text-foreground md:text-4xl lg:text-5xl">
-              One Card. <span className="text-primary">Many Premium Privileges.</span>
+              One Card.{" "}
+              <span className="text-primary">Many Premium Privileges.</span>
             </h2>
             <p className="mx-auto mt-8 max-w-3xl text-lg leading-relaxed text-muted-foreground">
-              GOA MOMENTS is a premium membership platform for people who want to explore Goa with more value, more comfort, and more exclusive access.
+              GOA MOMENTS is a premium membership platform for people who want
+              to explore Goa with more value, more comfort, and more exclusive
+              access.
             </p>
 
             <div className="mt-12 grid gap-6 md:grid-cols-3">
@@ -279,7 +338,8 @@ export default function MembershipPage() {
                   Trusted Savings
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                  Unlock up to 10%–70% discounts across selected premium partner venues in Goa.
+                  Unlock up to 10%–70% discounts across selected premium partner
+                  venues in Goa.
                 </p>
               </div>
               <div className="border border-border bg-card p-6">
@@ -288,7 +348,8 @@ export default function MembershipPage() {
                   Premium Access
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                  Enjoy member-only privileges, faster reservations, and elevated experiences.
+                  Enjoy member-only privileges, faster reservations, and
+                  elevated experiences.
                 </p>
               </div>
               <div className="border border-border bg-card p-6">
@@ -297,7 +358,8 @@ export default function MembershipPage() {
                   Lifetime Value
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                  Invest once and continue enjoying Goa benefits with lasting value.
+                  Invest once and continue enjoying Goa benefits with lasting
+                  value.
                 </p>
               </div>
             </div>
@@ -336,12 +398,147 @@ export default function MembershipPage() {
                 </h3>
                 <ul className="mt-6 space-y-3">
                   {benefit.items.map((item) => (
-                    <li key={item} className="flex items-start gap-3 text-muted-foreground">
+                    <li
+                      key={item}
+                      className="flex items-start gap-3 text-muted-foreground"
+                    >
                       <Check className="mt-1 h-4 w-4 shrink-0 text-primary" />
                       <span>{item}</span>
                     </li>
                   ))}
                 </ul>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="relative overflow-hidden px-6 py-24 md:py-32">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(212,175,55,0.10),transparent_42%)]" />
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+
+        <div className="relative mx-auto max-w-7xl">
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="mb-16 text-center"
+          >
+            <span className="text-xs uppercase tracking-[0.35em] text-primary">
+              Membership Power
+            </span>
+            <h2 className="mx-auto mt-4 max-w-4xl text-3xl font-light leading-tight text-foreground md:text-5xl">
+              Choose The Card That Matches Your{" "}
+              <span className="text-primary">Goa Lifestyle</span>
+            </h2>
+            <p className="mx-auto mt-6 max-w-3xl text-base leading-relaxed text-muted-foreground md:text-lg">
+              Every GOA MOMENTS card gives you status, savings, and support.
+              Gold gives smart access, Platinum gives wider lifestyle freedom,
+              and Diamond gives the highest priority treatment.
+            </p>
+          </motion.div>
+
+          <div className="grid gap-8 lg:grid-cols-3">
+            {membershipPower.map((card, index) => (
+              <motion.div
+                key={card.name}
+                initial={{ opacity: 0, y: 35 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.65, delay: index * 0.15 }}
+                className={`relative border bg-card/80 p-8 backdrop-blur-md transition-all duration-500 ${
+                  card.name.includes("Diamond")
+                    ? "border-primary shadow-[0_0_55px_rgba(212,175,55,0.18)]"
+                    : "border-border hover:border-primary/60"
+                }`}
+              >
+                {card.name.includes("Diamond") && (
+                  <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                    <span className="bg-primary px-4 py-1 text-xs uppercase tracking-widest text-primary-foreground">
+                      Highest Priority
+                    </span>
+                  </div>
+                )}
+
+                <div className="flex items-center justify-between">
+                  <card.icon className="h-11 w-11 text-primary" />
+                  <span className="border border-primary/30 px-3 py-1 text-[11px] uppercase tracking-widest text-primary">
+                    {card.members}
+                  </span>
+                </div>
+
+                <h3 className="mt-6 text-2xl font-light uppercase tracking-wider text-foreground">
+                  {card.name}
+                </h3>
+
+                <h4 className="mt-4 text-xl font-light text-primary">
+                  {card.title}
+                </h4>
+
+                <p className="mt-5 text-sm leading-relaxed text-muted-foreground">
+                  {card.description}
+                </p>
+
+                <ul className="mt-7 space-y-4">
+                  {card.highlights.map((item) => (
+                    <li
+                      key={item}
+                      className="flex items-start gap-3 text-sm leading-relaxed text-muted-foreground"
+                    >
+                      <Check className="mt-1 h-4 w-4 shrink-0 text-primary" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <div
+  className={`mt-8 grid gap-3 border-t border-border pt-6 ${
+    card.name.includes("Gold") ? "grid-cols-3" : "grid-cols-4"
+  }`}
+>
+  <div className="flex flex-col items-center gap-2 text-center">
+    <Hotel className="h-5 w-5 text-primary" />
+    <span className="text-[10px] uppercase tracking-widest text-muted-foreground">
+      Hotels
+    </span>
+  </div>
+
+  <div className="flex flex-col items-center gap-2 text-center">
+    {card.name.includes("Gold") ? (
+      <Plane className="h-5 w-5 text-primary" />
+    ) : (
+      <Utensils className="h-5 w-5 text-primary" />
+    )}
+    <span className="text-[10px] uppercase tracking-widest text-muted-foreground">
+      {card.name.includes("Gold") ? "Travel" : "Dining"}
+    </span>
+  </div>
+
+  {!card.name.includes("Gold") && (
+    <div className="flex flex-col items-center gap-2 text-center">
+      <Martini className="h-5 w-5 text-primary" />
+      <span className="text-[10px] uppercase tracking-widest text-muted-foreground">
+        Clubs
+      </span>
+    </div>
+  )}
+
+  <div className="flex flex-col items-center gap-2 text-center">
+    {card.name.includes("Diamond") ? (
+      <Zap className="h-5 w-5 text-primary" />
+    ) : (
+      <Users className="h-5 w-5 text-primary" />
+    )}
+    <span className="text-[10px] uppercase tracking-widest text-muted-foreground">
+      {card.name.includes("Gold")
+        ? "4 Users"
+        : card.name.includes("Diamond")
+        ? "High Priority"
+        : "8 Users"}
+    </span>
+  </div>
+</div>
               </motion.div>
             ))}
           </div>
@@ -374,11 +571,15 @@ export default function MembershipPage() {
                 transition={{ duration: 0.6, delay: index * 0.15 }}
                 className="relative text-center"
               >
-                <span className="text-7xl font-light text-primary/20">{step.number}</span>
+                <span className="text-7xl font-light text-primary/20">
+                  {step.number}
+                </span>
                 <h3 className="mt-2 text-xl font-medium uppercase tracking-wider text-foreground">
                   {step.title}
                 </h3>
-                <p className="mt-4 text-muted-foreground">{step.description}</p>
+                <p className="mt-4 text-muted-foreground">
+                  {step.description}
+                </p>
               </motion.div>
             ))}
           </div>
@@ -440,9 +641,13 @@ export default function MembershipPage() {
                 </p>
 
                 <div className="mt-6 text-center">
-                  <span className="text-sm text-muted-foreground">Lifetime membership price</span>
+                  <span className="text-sm text-muted-foreground">
+                    Lifetime membership price
+                  </span>
                   <div className="mt-2">
-                    <span className="text-4xl font-light text-primary">${tier.price}</span>
+                    <span className="text-4xl font-light text-primary">
+                      ${tier.price}
+                    </span>
                   </div>
                 </div>
 
@@ -452,7 +657,10 @@ export default function MembershipPage() {
 
                 <ul className="mt-8 space-y-4">
                   {tier.features.map((feature) => (
-                    <li key={feature} className="flex items-start gap-3 text-muted-foreground">
+                    <li
+                      key={feature}
+                      className="flex items-start gap-3 text-muted-foreground"
+                    >
                       <Check className="mt-1 h-4 w-4 shrink-0 text-primary" />
                       <span>{feature}</span>
                     </li>
@@ -490,7 +698,7 @@ export default function MembershipPage() {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 24, scale: 0.98 }}
                 transition={{ duration: 0.25 }}
-                className="relative my-4 w-full max-w-3xl max-h-[90vh] overflow-y-auto border border-primary/30 bg-card shadow-[0_0_50px_rgba(0,0,0,0.5)]"
+                className="relative my-4 max-h-[90vh] w-full max-w-3xl overflow-y-auto border border-primary/30 bg-card shadow-[0_0_50px_rgba(0,0,0,0.5)]"
               >
                 <button
                   onClick={closeCheckout}
@@ -505,7 +713,8 @@ export default function MembershipPage() {
                     Secure Checkout
                   </p>
                   <h3 className="mt-3 text-2xl font-light text-foreground md:text-3xl">
-                    {checkoutStep === 1 && `Order Details — ${selectedTier.name}`}
+                    {checkoutStep === 1 &&
+                      `Order Details — ${selectedTier.name}`}
                     {checkoutStep === 2 && "Confirm Order"}
                   </h3>
 
@@ -549,10 +758,14 @@ export default function MembershipPage() {
                           <div className="mt-6 space-y-2 text-sm text-muted-foreground">
                             <div className="flex items-center justify-between">
                               <span>Membership Price</span>
-                              <span className="text-foreground">${selectedTier.price}</span>
+                              <span className="text-foreground">
+                                ${selectedTier.price}
+                              </span>
                             </div>
                             <div className="flex items-center justify-between border-t border-border pt-3">
-                              <span className="font-medium text-foreground">Total</span>
+                              <span className="font-medium text-foreground">
+                                Total
+                              </span>
                               <span className="text-xl font-light text-primary">
                                 ${selectedTier.price}
                               </span>
@@ -560,7 +773,8 @@ export default function MembershipPage() {
                           </div>
 
                           <div className="mt-6 rounded-sm border border-primary/20 bg-primary/5 p-4 text-sm leading-relaxed text-muted-foreground">
-                            Includes premium digital activation and lifetime membership access.
+                            Includes premium digital activation and lifetime
+                            membership access.
                           </div>
                         </div>
                       </div>
@@ -638,26 +852,38 @@ export default function MembershipPage() {
                         <div className="mt-5 space-y-3 text-sm text-muted-foreground">
                           <div className="flex items-center justify-between">
                             <span>Plan</span>
-                            <span className="text-foreground">{selectedTier.name}</span>
+                            <span className="text-foreground">
+                              {selectedTier.name}
+                            </span>
                           </div>
                           <div className="flex items-center justify-between">
                             <span>Name</span>
-                            <span className="text-foreground">{customerName}</span>
+                            <span className="text-foreground">
+                              {customerName}
+                            </span>
                           </div>
                           <div className="flex items-center justify-between">
                             <span>Email</span>
-                            <span className="text-foreground">{customerEmail}</span>
+                            <span className="text-foreground">
+                              {customerEmail}
+                            </span>
                           </div>
                           <div className="flex items-center justify-between">
                             <span>Phone</span>
-                            <span className="text-foreground">{customerPhone}</span>
+                            <span className="text-foreground">
+                              {customerPhone}
+                            </span>
                           </div>
                           <div className="flex items-center justify-between">
                             <span>City</span>
-                            <span className="text-foreground">{customerCity}</span>
+                            <span className="text-foreground">
+                              {customerCity}
+                            </span>
                           </div>
                           <div className="flex items-center justify-between border-t border-border pt-3">
-                            <span className="font-medium text-foreground">Amount</span>
+                            <span className="font-medium text-foreground">
+                              Amount
+                            </span>
                             <span className="text-xl font-light text-primary">
                               ${selectedTier.price}
                             </span>
@@ -673,7 +899,8 @@ export default function MembershipPage() {
                           Ready To Continue
                         </h4>
                         <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                          Review your membership details and continue to payment method selection.
+                          Review your membership details and continue to payment
+                          method selection.
                         </p>
 
                         <div className="mt-5 rounded-sm border border-primary/20 bg-background/30 p-4">
