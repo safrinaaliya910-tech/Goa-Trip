@@ -16,6 +16,7 @@ export default function OrderSuccessPage() {
   const memberName = searchParams.get("memberName") || "Member";
   const email = searchParams.get("email") || "";
   const phone = searchParams.get("phone") || "";
+  const address = searchParams.get("address") || ""; // Extracted Address
   const city = searchParams.get("city") || "";
   const validity = searchParams.get("validity") || "Lifetime Membership";
   const orderId = searchParams.get("paymentId") || `ORDER-${Date.now()}`;
@@ -40,6 +41,7 @@ export default function OrderSuccessPage() {
         memberName,
         email,
         phone,
+        address, // Added Address to Email API Payload
         city,
         paymentId: orderId,
         validity,
@@ -55,6 +57,7 @@ export default function OrderSuccessPage() {
     memberName,
     email,
     phone,
+    address, // Added Address to Dependency Array
     city,
     orderId,
     validity,
@@ -206,6 +209,14 @@ export default function OrderSuccessPage() {
                 <div className="flex items-start justify-between gap-4">
                   <span>Phone</span>
                   <span className="text-right text-foreground">{phone}</span>
+                </div>
+
+                {/* Added Address UI Block Here */}
+                <div className="flex items-start justify-between gap-4">
+                  <span>Address</span>
+                  <span className="text-right text-foreground max-w-[60%] break-words">
+                    {address}
+                  </span>
                 </div>
 
                 <div className="flex items-start justify-between gap-4">

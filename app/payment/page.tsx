@@ -42,6 +42,8 @@ export default function PaymentPage() {
   const name = params.get("memberName") || "Member";
   const email = params.get("email") || "";
   const phone = params.get("phone") || "";
+  // Added address extraction
+  const address = params.get("address") || "";
   const city = params.get("city") || "";
 
   useEffect(() => {
@@ -117,6 +119,7 @@ export default function PaymentPage() {
       memberName: name,
       email,
       phone,
+      address, // Passing address to the success page URL
       city,
       paymentId,
       validity: "Lifetime Membership",
@@ -145,6 +148,7 @@ export default function PaymentPage() {
           name,
           email,
           phone,
+          address, // Sending address to API
           city,
         }),
       });
@@ -209,6 +213,7 @@ export default function PaymentPage() {
           memberName: name,
           email,
           phone,
+          address, // Sending address to API
           city,
         }),
       });
@@ -269,6 +274,7 @@ export default function PaymentPage() {
               memberName: name,
               email,
               phone,
+              address, // Sending address to API
               city,
             }),
           });
@@ -312,7 +318,7 @@ export default function PaymentPage() {
         },
       })
       .render(paypalRef.current);
-  }, [method, paypalLoaded, amount, plan, membershipId, name, email, phone, city]);
+  }, [method, paypalLoaded, amount, plan, membershipId, name, email, phone, address, city]);
 
   const handlePayment = async () => {
     setLoading(true);
@@ -499,6 +505,14 @@ export default function PaymentPage() {
                 <div className="flex justify-between gap-4">
                   <span>Phone</span>
                   <span className="text-right text-foreground">{phone}</span>
+                </div>
+
+                {/* Added Address to UI Summary */}
+                <div className="flex justify-between gap-4">
+                  <span>Address</span>
+                  <span className="max-w-[60%] break-words text-right text-foreground">
+                    {address}
+                  </span>
                 </div>
 
                 <div className="flex justify-between gap-4">

@@ -216,9 +216,12 @@ export default function MembershipPage() {
   const [selectedTier, setSelectedTier] = useState<Tier | null>(null);
   const [checkoutStep, setCheckoutStep] = useState<1 | 2>(1);
 
-  const [customerName, setCustomerName] = useState("");
+  // Split name and added address state
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [customerEmail, setCustomerEmail] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
+  const [customerAddress, setCustomerAddress] = useState("");
   const [customerCity, setCustomerCity] = useState("");
 
   const openCheckout = (tier: Tier) => {
@@ -229,17 +232,22 @@ export default function MembershipPage() {
   const closeCheckout = () => {
     setSelectedTier(null);
     setCheckoutStep(1);
-    setCustomerName("");
+    setFirstName("");
+    setLastName("");
     setCustomerEmail("");
     setCustomerPhone("");
+    setCustomerAddress("");
     setCustomerCity("");
   };
 
+  // Validate all mandatory fields
   const canContinueToConfirm =
-    customerName.trim() &&
-    customerEmail.trim() &&
-    customerPhone.trim() &&
-    customerCity.trim();
+    firstName.trim() !== "" &&
+    lastName.trim() !== "" &&
+    customerEmail.trim() !== "" &&
+    customerPhone.trim() !== "" &&
+    customerAddress.trim() !== "" &&
+    customerCity.trim() !== "";
 
   const goToPaymentPage = () => {
     if (!selectedTier) return;
@@ -252,9 +260,10 @@ export default function MembershipPage() {
       membershipId,
       plan: selectedTier.name,
       amount: String(selectedTier.price),
-      memberName: customerName,
+      memberName: `${firstName} ${lastName}`.trim(),
       email: customerEmail,
       phone: customerPhone,
+      address: customerAddress,
       city: customerCity,
     });
 
@@ -493,52 +502,52 @@ export default function MembershipPage() {
                 </ul>
 
                 <div
-  className={`mt-8 grid gap-3 border-t border-border pt-6 ${
-    card.name.includes("Gold") ? "grid-cols-3" : "grid-cols-4"
-  }`}
->
-  <div className="flex flex-col items-center gap-2 text-center">
-    <Hotel className="h-5 w-5 text-primary" />
-    <span className="text-[10px] uppercase tracking-widest text-muted-foreground">
-      Hotels
-    </span>
-  </div>
+                  className={`mt-8 grid gap-3 border-t border-border pt-6 ${
+                    card.name.includes("Gold") ? "grid-cols-3" : "grid-cols-4"
+                  }`}
+                >
+                  <div className="flex flex-col items-center gap-2 text-center">
+                    <Hotel className="h-5 w-5 text-primary" />
+                    <span className="text-[10px] uppercase tracking-widest text-muted-foreground">
+                      Hotels
+                    </span>
+                  </div>
 
-  <div className="flex flex-col items-center gap-2 text-center">
-    {card.name.includes("Gold") ? (
-      <Plane className="h-5 w-5 text-primary" />
-    ) : (
-      <Utensils className="h-5 w-5 text-primary" />
-    )}
-    <span className="text-[10px] uppercase tracking-widest text-muted-foreground">
-      {card.name.includes("Gold") ? "Travel" : "Dining"}
-    </span>
-  </div>
+                  <div className="flex flex-col items-center gap-2 text-center">
+                    {card.name.includes("Gold") ? (
+                      <Plane className="h-5 w-5 text-primary" />
+                    ) : (
+                      <Utensils className="h-5 w-5 text-primary" />
+                    )}
+                    <span className="text-[10px] uppercase tracking-widest text-muted-foreground">
+                      {card.name.includes("Gold") ? "Travel" : "Dining"}
+                    </span>
+                  </div>
 
-  {!card.name.includes("Gold") && (
-    <div className="flex flex-col items-center gap-2 text-center">
-      <Martini className="h-5 w-5 text-primary" />
-      <span className="text-[10px] uppercase tracking-widest text-muted-foreground">
-        Clubs
-      </span>
-    </div>
-  )}
+                  {!card.name.includes("Gold") && (
+                    <div className="flex flex-col items-center gap-2 text-center">
+                      <Martini className="h-5 w-5 text-primary" />
+                      <span className="text-[10px] uppercase tracking-widest text-muted-foreground">
+                        Clubs
+                      </span>
+                    </div>
+                  )}
 
-  <div className="flex flex-col items-center gap-2 text-center">
-    {card.name.includes("Diamond") ? (
-      <Zap className="h-5 w-5 text-primary" />
-    ) : (
-      <Users className="h-5 w-5 text-primary" />
-    )}
-    <span className="text-[10px] uppercase tracking-widest text-muted-foreground">
-      {card.name.includes("Gold")
-        ? "4 Users"
-        : card.name.includes("Diamond")
-        ? "High Priority"
-        : "8 Users"}
-    </span>
-  </div>
-</div>
+                  <div className="flex flex-col items-center gap-2 text-center">
+                    {card.name.includes("Diamond") ? (
+                      <Zap className="h-5 w-5 text-primary" />
+                    ) : (
+                      <Users className="h-5 w-5 text-primary" />
+                    )}
+                    <span className="text-[10px] uppercase tracking-widest text-muted-foreground">
+                      {card.name.includes("Gold")
+                        ? "4 Users"
+                        : card.name.includes("Diamond")
+                        ? "High Priority"
+                        : "8 Users"}
+                    </span>
+                  </div>
+                </div>
               </motion.div>
             ))}
           </div>
@@ -780,16 +789,30 @@ export default function MembershipPage() {
                       </div>
 
                       <div className="space-y-4">
-                        <div>
-                          <label className="mb-2 block text-sm text-foreground">
-                            Full Name
-                          </label>
-                          <input
-                            value={customerName}
-                            onChange={(e) => setCustomerName(e.target.value)}
-                            placeholder="Enter your full name"
-                            className="w-full border border-border bg-background px-4 py-3 text-foreground outline-none transition focus:border-primary"
-                          />
+                        {/* New Grid layout for First Name and Last Name */}
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <label className="mb-2 block text-sm text-foreground">
+                              First Name
+                            </label>
+                            <input
+                              value={firstName}
+                              onChange={(e) => setFirstName(e.target.value)}
+                              placeholder="First name"
+                              className="w-full border border-border bg-background px-4 py-3 text-foreground outline-none transition focus:border-primary"
+                            />
+                          </div>
+                          <div>
+                            <label className="mb-2 block text-sm text-foreground">
+                              Last Name
+                            </label>
+                            <input
+                              value={lastName}
+                              onChange={(e) => setLastName(e.target.value)}
+                              placeholder="Last name"
+                              className="w-full border border-border bg-background px-4 py-3 text-foreground outline-none transition focus:border-primary"
+                            />
+                          </div>
                         </div>
 
                         <div>
@@ -810,9 +833,26 @@ export default function MembershipPage() {
                             Phone Number
                           </label>
                           <input
+                            type="tel"
                             value={customerPhone}
-                            onChange={(e) => setCustomerPhone(e.target.value)}
+                            // Regex replace any non-digit character to ensure only numbers
+                            onChange={(e) =>
+                              setCustomerPhone(e.target.value.replace(/\D/g, ""))
+                            }
                             placeholder="Enter your phone number"
+                            className="w-full border border-border bg-background px-4 py-3 text-foreground outline-none transition focus:border-primary"
+                          />
+                        </div>
+
+                        {/* Newly added Address field */}
+                        <div>
+                          <label className="mb-2 block text-sm text-foreground">
+                            Address
+                          </label>
+                          <input
+                            value={customerAddress}
+                            onChange={(e) => setCustomerAddress(e.target.value)}
+                            placeholder="Enter your full address"
                             className="w-full border border-border bg-background px-4 py-3 text-foreground outline-none transition focus:border-primary"
                           />
                         </div>
@@ -859,7 +899,7 @@ export default function MembershipPage() {
                           <div className="flex items-center justify-between">
                             <span>Name</span>
                             <span className="text-foreground">
-                              {customerName}
+                              {firstName} {lastName}
                             </span>
                           </div>
                           <div className="flex items-center justify-between">
@@ -872,6 +912,13 @@ export default function MembershipPage() {
                             <span>Phone</span>
                             <span className="text-foreground">
                               {customerPhone}
+                            </span>
+                          </div>
+                          {/* Appended Address to the summary view */}
+                          <div className="flex items-center justify-between gap-4">
+                            <span>Address</span>
+                            <span className="text-foreground truncate max-w-[60%] text-right">
+                              {customerAddress}
                             </span>
                           </div>
                           <div className="flex items-center justify-between">

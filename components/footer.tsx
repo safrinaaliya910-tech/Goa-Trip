@@ -18,6 +18,7 @@ export function Footer() {
     { label: t("nav.home"), href: "/" },
     { label: t("nav.about"), href: "/about" },
     { label: t("nav.membership"), href: "/membership" },
+    { label: "Membership Activities", href: "/membership-activities" },
     { label: t("nav.contact"), href: "/contact" },
   ];
 
