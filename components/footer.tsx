@@ -24,8 +24,10 @@ export function Footer() {
 
   return (
     <footer className="border-t border-border bg-background">
-      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 md:py-24">
-        <div className="grid gap-8 sm:gap-12 md:grid-cols-2 lg:grid-cols-4">
+      <div className="mx-auto max-w-[1400px] px-4 py-12 sm:px-6 sm:py-16 md:py-24">
+        {/* Changed lg:grid-cols-5 to lg:grid-cols-6 to fit the new Legal section */}
+        <div className="grid gap-8 sm:gap-12 md:grid-cols-3 lg:grid-cols-6">
+          
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -69,6 +71,7 @@ export function Footer() {
             </div>
           </motion.div>
 
+          {/* Quick Links */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -92,6 +95,41 @@ export function Footer() {
             </ul>
           </motion.div>
 
+          {/* NEW: Legal Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.15 }}
+          >
+            <h4 className="mb-4 text-xs uppercase tracking-widest text-foreground sm:mb-6 sm:text-sm">
+              Legal
+            </h4>
+            <ul className="space-y-2 sm:space-y-3">
+              <li>
+                <a
+                  href="/terms"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs text-muted-foreground transition-colors hover:text-primary sm:text-sm"
+                >
+                  {t("footer.legal.terms") || "Terms of Service"}
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/privacy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs text-muted-foreground transition-colors hover:text-primary sm:text-sm"
+                >
+                  {t("footer.legal.privacy") || "Privacy Policy"}
+                </a>
+              </li>
+            </ul>
+          </motion.div>
+
+          {/* Contact Section */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -124,7 +162,9 @@ export function Footer() {
               </li>
             </ul>
           </motion.div>
+          
 
+          {/* Join Our Circle (Newsletter) */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -148,26 +188,78 @@ export function Footer() {
               </button>
             </div>
           </motion.div>
+
+          {/* Official Tourism Partners Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="lg:col-span-1"
+          >
+            <h4 className="mb-4 text-center font-serif text-[11px] uppercase tracking-[0.15em] text-[#C5A059] sm:mb-6 sm:text-xs">
+              Official Tourism Partners
+            </h4>
+            {/* Added Dark Golden Shining Outer Line (border + shadow) */}
+            <div className="flex w-full items-stretch justify-center gap-3 rounded-xl border border-[#C5A059] shadow-[0_0_15px_rgba(197,160,89,0.3)] bg-background/50 p-3 sm:p-4">
+              
+              {/* Left Side: Government of Goa */}
+              <div className="flex flex-1 flex-col items-center">
+                <div className="mb-3 flex h-10 w-full items-center justify-center sm:h-12">
+                  <Image
+                    src="/images/government_logo.png"
+                    alt="Government of Goa"
+                    width={40}
+                    height={40}
+                    className="h-full w-auto object-contain opacity-90 drop-shadow-md"
+                  />
+                </div>
+                <div className="flex w-full flex-col text-left">
+                  <span className="mb-1 font-serif text-[10px] text-white sm:text-[11px]">
+                    Government of Goa
+                  </span>
+                  <span className="text-[8px] leading-[1.5] text-white/60 sm:text-[9px]">
+                    Integrated with<br />
+                    Department of Tourism<br />
+                    Government of Goa
+                  </span>
+                </div>
+              </div>
+
+              {/* Vertical Divider */}
+              <div className="w-px bg-[#C5A059]/30" />
+
+              {/* Right Side: Goa Tourism */}
+              <div className="flex flex-1 flex-col items-center">
+                <div className="mb-3 flex h-10 w-full items-center justify-center sm:h-12">
+                  <Image
+                    src="/images/goa_tourism.png"
+                    alt="Goa Tourism"
+                    width={60}
+                    height={35}
+                    className="h-full w-auto object-contain opacity-90 drop-shadow-md"
+                  />
+                </div>
+                <div className="flex w-full flex-col text-left">
+                  <span className="mb-1 font-serif text-[10px] text-white sm:text-[11px]">
+                    Goa Tourism
+                  </span>
+                  <span className="text-[8px] leading-[1.5] text-white/60 sm:text-[9px]">
+                    Promoting Goa.<br />
+                    Inspiring the world.
+                  </span>
+                </div>
+              </div>
+
+            </div>
+          </motion.div>
         </div>
 
-        <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-border pt-6 sm:mt-16 sm:gap-4 sm:pt-8 md:flex-row">
-          <p className="text-[10px] text-muted-foreground sm:text-xs">
+        {/* Adjusted bottom strip since privacy/terms were moved */}
+        <div className="mt-12 flex flex-col items-center justify-center gap-3 border-t border-border pt-6 sm:mt-16 sm:pt-8">
+          <p className="text-center text-[10px] text-muted-foreground sm:text-xs">
             {t("footer.copyright")}
           </p>
-          <div className="flex gap-4 sm:gap-6">
-            <a
-              href="#"
-              className="text-[10px] text-muted-foreground transition-colors hover:text-primary sm:text-xs"
-            >
-              {t("footer.legal.privacy")}
-            </a>
-            <a
-              href="#"
-              className="text-[10px] text-muted-foreground transition-colors hover:text-primary sm:text-xs"
-            >
-              {t("footer.legal.terms")}
-            </a>
-          </div>
         </div>
       </div>
     </footer>
