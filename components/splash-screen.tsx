@@ -35,13 +35,13 @@ export function SplashScreen() {
           }}
           className="fixed inset-0 z-[9999] flex flex-col items-center justify-between bg-[#000000]"
         >
-          {/* Subtle Dark Gold Radial Glow - Lowered opacity so it doesn't wash out text */}
+         {/* Subtle Dark Gold Radial Glow - Matched perfectly to theme #C5A059 */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
             <motion.div 
               initial={{ opacity: 0, scale: 0.5 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 2, ease: "easeOut" }}
-              className="h-[40vh] w-[40vh] rounded-full bg-[#d4af37] opacity-[0.05] blur-[100px] sm:h-[60vh] sm:w-[60vh] sm:opacity-[0.04] sm:blur-[120px]" 
+              className="h-[40vh] w-[40vh] rounded-full bg-[#b68f24] opacity-[0.08] blur-[100px] sm:h-[60vh] sm:w-[60vh] sm:opacity-[0.07] sm:blur-[120px]" 
             />
           </div>
 
