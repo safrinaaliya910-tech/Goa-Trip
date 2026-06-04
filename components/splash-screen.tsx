@@ -124,7 +124,7 @@ export function SplashScreen() {
                 {/* Government of Goa */}
                 <div className="flex flex-col items-center gap-2">
                   <Image
-                    src="/images/government_logo.png"
+                    src="/images/government_logo_white.png"
                     alt="Government of Goa"
                     width={55}
                     height={55}

@@ -1,12 +1,36 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { ShieldCheck, Headphones } from "lucide-react";
 import { useTranslation } from "./providers";
+import { useTheme } from "next-themes";
 
 export function Hero() {
   const { t } = useTranslation();
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  // Prevent hydration errors by ensuring component is mounted before checking theme
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Determine theme values safely
+  const isDark = mounted && resolvedTheme === "dark";
+
+  const governmentLogo = isDark
+    ? "/images/government_logo_white.png"
+    : "/images/government_logo_black.png";
+
+  const textColor = isDark ? "text-white" : "text-foreground";
+  const subTextColor = isDark ? "text-white/60" : "text-muted-foreground";
+
+  // Prevent rendering theme-dependent UI until mounted to avoid flashing
+  if (!mounted) {
+    return null; 
+  }
 
   return (
     <>
@@ -25,7 +49,7 @@ export function Hero() {
             Your browser does not support the video tag.
           </video>
 
-          {/* Same luxury soft overlay */}
+          {/* Luxury soft overlay */}
           <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/35 to-background" />
           <div className="absolute inset-0 bg-gradient-to-r from-background/50 via-transparent to-background/50" />
         </div>
@@ -118,7 +142,7 @@ export function Hero() {
         </div>
       </section>
 
-      {/* NEW: Trust Banner Section (Integrated seamlessly below hero) */}
+      {/* Trust Banner Section */}
       <section className="relative z-20 w-full bg-background px-4 py-12 sm:px-6 sm:py-16">
         <div className="mx-auto max-w-[1400px]">
           <motion.div
@@ -126,22 +150,23 @@ export function Hero() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8 }}
-            /* Added Dark Golden Shining Outer Line (border + shadow) here */
-            className="flex flex-col gap-8 rounded-2xl border border-[#C5A059] shadow-[0_0_15px_rgba(197,160,89,0.3)] bg-[#0a0a0a] px-6 py-8 xl:flex-row xl:items-center xl:justify-between xl:gap-0 xl:px-8 2xl:px-12"
+            className="flex flex-col items-center gap-8 rounded-2xl border border-[#C5A059]/60 shadow-[0_4px_25px_rgba(197,160,89,0.15)] bg-card/90 backdrop-blur-sm px-6 py-10 text-card-foreground xl:flex-row xl:justify-between xl:px-12 xl:py-8"
           >
             
             {/* 1. Government of Goa */}
             <div className="flex items-center gap-4 xl:w-auto">
               <Image
-                src="/images/government_logo.png"
+                src={governmentLogo}
                 alt="Government of Goa"
                 width={65}
                 height={65}
                 className="h-14 w-auto object-contain drop-shadow-md"
               />
               <div className="flex flex-col pt-1">
-                <span className="font-serif text-[15px] tracking-wide text-white">Government of Goa</span>
-                <span className="mt-1 text-[11px] leading-[1.5] text-white/60">
+                <span className={`font-serif text-[15px] tracking-wide ${textColor}`}>
+                  Government of Goa
+                </span>
+                <span className={`mt-1 text-[11px] leading-[1.5] ${subTextColor}`}>
                   Officially Integrated<br />
                   with the Department of<br />
                   Tourism, Government of Goa
@@ -151,7 +176,7 @@ export function Hero() {
 
             {/* Divider */}
             <div className="hidden h-16 w-px bg-[#C5A059]/30 xl:block" />
-            <div className="h-px w-full bg-[#C5A059]/30 xl:hidden" />
+            <div className="h-px w-3/4 bg-[#C5A059]/30 xl:hidden" />
 
             {/* 2. Goa Tourism */}
             <div className="flex items-center gap-4 xl:w-auto">
@@ -163,8 +188,10 @@ export function Hero() {
                 className="h-10 w-auto object-contain drop-shadow-md"
               />
               <div className="flex flex-col pt-1">
-                <span className="font-serif text-[15px] uppercase tracking-wide text-white">Goa Tourism</span>
-                <span className="mt-1 text-[11px] leading-[1.5] text-white/60">
+                <span className={`font-serif text-[15px] uppercase tracking-wide ${textColor}`}>
+                  Goa Tourism
+                </span>
+                <span className={`mt-1 text-[11px] leading-[1.5] ${subTextColor}`}>
                   Official Tourism Partner<br />
                   Promoting Goa Worldwide
                 </span>
@@ -173,14 +200,16 @@ export function Hero() {
 
             {/* Divider */}
             <div className="hidden h-16 w-px bg-[#C5A059]/30 xl:block" />
-            <div className="h-px w-full bg-[#C5A059]/30 xl:hidden" />
+            <div className="h-px w-3/4 bg-[#C5A059]/30 xl:hidden" />
 
             {/* 3. Trusted & Secured */}
             <div className="flex items-center gap-4 xl:w-auto">
               <ShieldCheck className="h-10 w-10 text-[#C5A059]" strokeWidth={1.2} />
               <div className="flex flex-col pt-1">
-                <span className="font-serif text-[14px] tracking-wide text-white">Trusted & Secured</span>
-                <span className="mt-1 text-[11px] leading-[1.5] text-white/60">
+                <span className={`font-serif text-[14px] tracking-wide ${textColor}`}>
+                  Trusted & Secured
+                </span>
+                <span className={`mt-1 text-[11px] leading-[1.5] ${subTextColor}`}>
                   Government Integrated<br />
                   & Verified
                 </span>
@@ -189,28 +218,26 @@ export function Hero() {
 
             {/* Divider */}
             <div className="hidden h-16 w-px bg-[#C5A059]/30 xl:block" />
-            <div className="h-px w-full bg-[#C5A059]/30 xl:hidden" />
+            <div className="h-px w-3/4 bg-[#C5A059]/30 xl:hidden" />
 
-            {/* 4. Premium Experiences (Custom Wreath & Crown SVG) */}
+            {/* 4. Premium Experiences */}
             <div className="flex items-center gap-4 xl:w-auto">
               <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-[#C5A059]">
-                {/* Wreath Vines */}
                 <path d="M12 17C16.4183 17 20 13.4183 20 9" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
                 <path d="M12 17C7.58172 17 4 13.4183 4 9" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
-                {/* Crown */}
                 <path d="M8 4L9.5 6.5L12 3L14.5 6.5L16 4L15 8H9L8 4Z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round"/>
-                {/* Right Leaves */}
                 <path d="M18 11C19.5 10 20 9 20 9C20 9 19 9.5 18 11Z" fill="currentColor"/>
                 <path d="M16 13C17.5 12 18 11 18 11C18 11 17 11.5 16 13Z" fill="currentColor"/>
                 <path d="M14 15C15.5 14 16 13 16 13C16 13 15 13.5 14 15Z" fill="currentColor"/>
-                {/* Left Leaves */}
                 <path d="M6 11C4.5 10 4 9 4 9C4 9 5 9.5 6 11Z" fill="currentColor"/>
                 <path d="M8 13C6.5 12 6 11 6 11C6 11 7 11.5 8 13Z" fill="currentColor"/>
                 <path d="M10 15C8.5 14 8 13 8 13C8 13 9 13.5 10 15Z" fill="currentColor"/>
               </svg>
               <div className="flex flex-col pt-1">
-                <span className="font-serif text-[14px] leading-tight tracking-wide text-white">Premium<br />Experiences</span>
-                <span className="mt-1 text-[11px] leading-[1.5] text-white/60">
+                <span className={`font-serif text-[14px] leading-tight tracking-wide ${textColor}`}>
+                  Premium<br />Experiences
+                </span>
+                <span className={`mt-1 text-[11px] leading-[1.5] ${subTextColor}`}>
                   Curated for Members
                 </span>
               </div>
@@ -218,14 +245,16 @@ export function Hero() {
 
             {/* Divider */}
             <div className="hidden h-16 w-px bg-[#C5A059]/30 xl:block" />
-            <div className="h-px w-full bg-[#C5A059]/30 xl:hidden" />
+            <div className="h-px w-3/4 bg-[#C5A059]/30 xl:hidden" />
 
             {/* 5. 24x7 Concierge */}
             <div className="flex items-center gap-4 xl:w-auto">
               <Headphones className="h-10 w-10 text-[#C5A059]" strokeWidth={1.2} />
               <div className="flex flex-col pt-1">
-                <span className="font-serif text-[14px] tracking-wide text-white">24x7 Concierge</span>
-                <span className="mt-1 text-[11px] leading-[1.5] text-white/60">
+                <span className={`font-serif text-[14px] tracking-wide ${textColor}`}>
+                  24x7 Concierge
+                </span>
+                <span className={`mt-1 text-[11px] leading-[1.5] ${subTextColor}`}>
                   Personalized<br />
                   Assistance
                 </span>

@@ -1,9 +1,11 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { Instagram, Facebook, Twitter, Mail, Phone, MapPin } from "lucide-react";
 import { useTranslation } from "./providers";
+import { useTheme } from "next-themes";
 
 const socialLinks = [
   { icon: Instagram, href: "#", label: "Instagram" },
@@ -13,6 +15,13 @@ const socialLinks = [
 
 export function Footer() {
   const { t } = useTranslation();
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  // Prevent hydration errors by ensuring component is mounted before checking theme
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const quickLinks = [
     { label: t("nav.home"), href: "/" },
@@ -22,10 +31,25 @@ export function Footer() {
     { label: t("nav.contact"), href: "/contact" },
   ];
 
+  // Determine theme values safely
+  const isDark = mounted && resolvedTheme === "dark";
+
+  const governmentLogo = isDark
+    ? "/images/government_logo_white.png"
+    : "/images/government_logo_black.png";
+
+  const textColor = isDark ? "text-white" : "text-foreground";
+  const subTextColor = isDark ? "text-white/60" : "text-muted-foreground";
+
+  // Prevent rendering theme-dependent UI until mounted
+  if (!mounted) {
+    return null;
+  }
+
   return (
     <footer className="border-t border-border bg-background">
       <div className="mx-auto max-w-[1400px] px-4 py-12 sm:px-6 sm:py-16 md:py-24">
-        {/* Changed lg:grid-cols-5 to lg:grid-cols-6 to fit the new Legal section */}
+        {/* Grid layout */}
         <div className="grid gap-8 sm:gap-12 md:grid-cols-3 lg:grid-cols-6">
           
           <motion.div
@@ -95,7 +119,7 @@ export function Footer() {
             </ul>
           </motion.div>
 
-          {/* NEW: Legal Section */}
+          {/* Legal Section */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -163,7 +187,6 @@ export function Footer() {
             </ul>
           </motion.div>
           
-
           {/* Join Our Circle (Newsletter) */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -200,25 +223,25 @@ export function Footer() {
             <h4 className="mb-4 text-center font-serif text-[11px] uppercase tracking-[0.15em] text-[#C5A059] sm:mb-6 sm:text-xs">
               Official Tourism Partners
             </h4>
-            {/* Added Dark Golden Shining Outer Line (border + shadow) */}
             <div className="flex w-full items-stretch justify-center gap-3 rounded-xl border border-[#C5A059] shadow-[0_0_15px_rgba(197,160,89,0.3)] bg-background/50 p-3 sm:p-4">
               
               {/* Left Side: Government of Goa */}
               <div className="flex flex-1 flex-col items-center">
                 <div className="mb-3 flex h-10 w-full items-center justify-center sm:h-12">
                   <Image
-                    src="/images/government_logo.png"
+                    src={governmentLogo}
                     alt="Government of Goa"
                     width={40}
                     height={40}
+                    key={resolvedTheme}
                     className="h-full w-auto object-contain opacity-90 drop-shadow-md"
                   />
                 </div>
                 <div className="flex w-full flex-col text-left">
-                  <span className="mb-1 font-serif text-[10px] text-white sm:text-[11px]">
+                  <span className={`mb-1 font-serif text-[10px] sm:text-[11px] ${textColor}`}>
                     Government of Goa
                   </span>
-                  <span className="text-[8px] leading-[1.5] text-white/60 sm:text-[9px]">
+                  <span className={`text-[8px] leading-[1.5] sm:text-[9px] ${subTextColor}`}>
                     Integrated with<br />
                     Department of Tourism<br />
                     Government of Goa
@@ -241,10 +264,10 @@ export function Footer() {
                   />
                 </div>
                 <div className="flex w-full flex-col text-left">
-                  <span className="mb-1 font-serif text-[10px] text-white sm:text-[11px]">
+                  <span className={`mb-1 font-serif text-[10px] sm:text-[11px] ${textColor}`}>
                     Goa Tourism
                   </span>
-                  <span className="text-[8px] leading-[1.5] text-white/60 sm:text-[9px]">
+                  <span className={`text-[8px] leading-[1.5] sm:text-[9px] ${subTextColor}`}>
                     Promoting Goa.<br />
                     Inspiring the world.
                   </span>
@@ -255,7 +278,6 @@ export function Footer() {
           </motion.div>
         </div>
 
-        {/* Adjusted bottom strip since privacy/terms were moved */}
         <div className="mt-12 flex flex-col items-center justify-center gap-3 border-t border-border pt-6 sm:mt-16 sm:pt-8">
           <p className="text-center text-[10px] text-muted-foreground sm:text-xs">
             {t("footer.copyright")}

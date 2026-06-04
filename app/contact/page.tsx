@@ -269,7 +269,8 @@ export default function ContactPage() {
         </section>
 
         <section className="relative px-6 pb-10">
-          <div className="mx-auto max-w-7xl border border-primary/30 bg-[linear-gradient(135deg,rgba(212,175,55,0.14),rgba(0,0,0,0.65),rgba(212,175,55,0.06))] p-6 shadow-[0_0_70px_rgba(212,175,55,0.13)] md:p-10">
+          {/* UPDATED BOX 1: Special Support Opens */}
+          <div className="mx-auto max-w-7xl border border-primary/30 bg-card/90 dark:bg-[linear-gradient(135deg,rgba(212,175,55,0.14),rgba(0,0,0,0.65),rgba(212,175,55,0.06))] p-6 shadow-[0_0_70px_rgba(212,175,55,0.13)] md:p-10">
             <div className="text-center">
               <p className="text-xs uppercase tracking-[0.35em] text-primary">
                 Paid Member Contact Access
@@ -375,8 +376,10 @@ export default function ContactPage() {
             </div>
           </div>
         </section>
-                <section className="relative px-6 pb-10">
-          <div className="mx-auto max-w-7xl border border-primary/40 bg-[linear-gradient(135deg,rgba(212,175,55,0.18),rgba(0,0,0,0.78),rgba(212,175,55,0.08))] p-6 shadow-[0_0_90px_rgba(212,175,55,0.18)] md:p-10">
+
+        <section className="relative px-6 pb-10">
+          {/* UPDATED BOX 2: Contact Access Difference */}
+          <div className="mx-auto max-w-7xl border border-primary/40 bg-card/90 dark:bg-[linear-gradient(135deg,rgba(212,175,55,0.18),rgba(0,0,0,0.78),rgba(212,175,55,0.08))] p-6 shadow-[0_0_90px_rgba(212,175,55,0.18)] md:p-10">
             <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
               <div>
                 <p className="text-xs uppercase tracking-[0.35em] text-primary">
