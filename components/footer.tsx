@@ -34,10 +34,6 @@ export function Footer() {
   // Determine theme values safely
   const isDark = mounted && resolvedTheme === "dark";
 
-  const governmentLogo = isDark
-    ? "/images/government_logo_white.png"
-    : "/images/government_logo_black.png";
-
   const textColor = isDark ? "text-white" : "text-foreground";
   const subTextColor = isDark ? "text-white/60" : "text-muted-foreground";
 
@@ -225,34 +221,7 @@ export function Footer() {
             </h4>
             <div className="flex w-full items-stretch justify-center gap-3 rounded-xl border border-[#C5A059] shadow-[0_0_15px_rgba(197,160,89,0.3)] bg-background/50 p-3 sm:p-4">
               
-              {/* Left Side: Government of Goa */}
-              <div className="flex flex-1 flex-col items-center">
-                <div className="mb-3 flex h-10 w-full items-center justify-center sm:h-12">
-                  <Image
-                    src={governmentLogo}
-                    alt="Government of Goa"
-                    width={40}
-                    height={40}
-                    key={resolvedTheme}
-                    className="h-full w-auto object-contain opacity-90 drop-shadow-md"
-                  />
-                </div>
-                <div className="flex w-full flex-col text-left">
-                  <span className={`mb-1 font-serif text-[10px] sm:text-[11px] ${textColor}`}>
-                    Government of Goa
-                  </span>
-                  <span className={`text-[8px] leading-[1.5] sm:text-[9px] ${subTextColor}`}>
-                    Integrated with<br />
-                    Department of Tourism<br />
-                    Government of Goa
-                  </span>
-                </div>
-              </div>
-
-              {/* Vertical Divider */}
-              <div className="w-px bg-[#C5A059]/30" />
-
-              {/* Right Side: Goa Tourism */}
+              {/* Goa Tourism */}
               <div className="flex flex-1 flex-col items-center">
                 <div className="mb-3 flex h-10 w-full items-center justify-center sm:h-12">
                   <Image
@@ -263,7 +232,7 @@ export function Footer() {
                     className="h-full w-auto object-contain opacity-90 drop-shadow-md"
                   />
                 </div>
-                <div className="flex w-full flex-col text-left">
+                <div className="flex w-full flex-col text-center">
                   <span className={`mb-1 font-serif text-[10px] sm:text-[11px] ${textColor}`}>
                     Goa Tourism
                   </span>

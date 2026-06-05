@@ -21,17 +21,13 @@ export function Navigation() {
     { label: "Membership Activities", href: "/membership-activities" },
     { label: t("nav.contact"), href: "/contact" },
   ];
+  
   const { resolvedTheme } = useTheme();
 
-const governmentLogo =
-  resolvedTheme === "dark"
-    ? "/images/government_logo_white.png"
-    : "/images/government_logo_black.png";
-
-    const partnerTextColor =
-  resolvedTheme === "dark"
-    ? "text-white/90"
-    : "text-black/80";
+  const partnerTextColor =
+    resolvedTheme === "dark" 
+      ? "text-white/90" 
+      : "text-black/80";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -168,23 +164,6 @@ const governmentLogo =
 
               {/* LARGER Logos Area */}
               <div className="flex items-center gap-1">
-                {/* Government of Goa Logo - Increased h-12 to h-16 (approx 64px tall) */}
-                <div className="flex flex-col items-center justify-center">
-                  <Image
-  src={governmentLogo}
-  alt="Government of Goa"
-  width={70}
-  height={70}
-  className="h-16 w-auto object-contain drop-shadow-md"
-  key={resolvedTheme}
-/>
-                 <span
-  className={`mt-1.5 text-[10px] font-medium tracking-wide ${partnerTextColor}`}
->
-  Government of Goa
-</span>
-                </div>
-
                 {/* Goa Tourism Logo - Increased h-12 to h-16 (approx 64px tall) */}
                 <div className="flex flex-col items-center justify-center">
                   <Image
@@ -195,10 +174,10 @@ const governmentLogo =
                     className="h-16 w-auto object-contain drop-shadow-md"
                   />
                   <span
-  className={`mt-1.5 text-[10px] font-medium tracking-wide ${partnerTextColor}`}
->
-  Goa Tourism
-</span>
+                    className={`mt-1.5 text-[10px] font-medium tracking-wide ${partnerTextColor}`}
+                  >
+                    Goa Tourism
+                  </span>
                 </div>
               </div>
               
@@ -280,22 +259,6 @@ const governmentLogo =
                 {/* Larger Mobile Logos */}
                 <div className="flex items-center justify-center gap-10">
                   <div className="flex flex-col items-center gap-1.5">
-                   <Image
-  src={governmentLogo}
-  alt="Government of Goa"
-  width={60}
-  height={60}
-  className="h-14 w-auto object-contain"
-  key={resolvedTheme}
-/>
-                    <span
-  className={`text-center text-[9px] font-medium tracking-wide ${partnerTextColor}`}
->
-  Government<br/>of Goa
-</span>
-                  </div>
-
-                  <div className="flex flex-col items-center gap-1.5">
                     <Image 
                       src="/images/goa_tourism.png" 
                       alt="Goa Tourism" 
@@ -304,10 +267,10 @@ const governmentLogo =
                       className="h-14 w-auto object-contain" 
                     />
                     <span
-  className={`text-center text-[9px] font-medium tracking-wide ${partnerTextColor}`}
->
-  Goa<br/>Tourism
-</span>
+                      className={`text-center text-[9px] font-medium tracking-wide ${partnerTextColor}`}
+                    >
+                      Goa<br/>Tourism
+                    </span>
                   </div>
                 </div>
               </motion.div>
