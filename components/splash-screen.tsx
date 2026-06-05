@@ -6,22 +6,38 @@ import { motion, AnimatePresence } from "framer-motion";
 
 export function SplashScreen() {
   const [isVisible, setIsVisible] = useState(true);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    // Prevent scrolling while splash screen is active
-    document.body.style.overflow = "hidden";
+    setIsMounted(true);
+    
+    // Check if the user has already seen the splash screen in this session
+    const hasSeenSplash = sessionStorage.getItem("hasSeenSplash");
 
-    // Increased duration to 4.5 seconds for professional, cinematic pacing
-    const timer = setTimeout(() => {
+    if (hasSeenSplash) {
+      // If they have, immediately hide it
       setIsVisible(false);
-      document.body.style.overflow = "unset";
-    }, 4500);
+    } else {
+      // Prevent scrolling while splash screen is active
+      document.body.style.overflow = "hidden";
 
-    return () => {
-      clearTimeout(timer);
-      document.body.style.overflow = "unset";
-    };
+      // Increased duration to 4.5 seconds for professional, cinematic pacing
+      const timer = setTimeout(() => {
+        setIsVisible(false);
+        // Save to session storage so it doesn't run again on navigation
+        sessionStorage.setItem("hasSeenSplash", "true");
+        document.body.style.overflow = "unset";
+      }, 4500);
+
+      return () => {
+        clearTimeout(timer);
+        document.body.style.overflow = "unset";
+      };
+    }
   }, []);
+
+  // Prevent hydration flash by waiting until the component is mounted
+  if (!isMounted) return null;
 
   return (
     <AnimatePresence>
@@ -89,69 +105,50 @@ export function SplashScreen() {
             transition={{ duration: 1, delay: 2.2, ease: "easeOut" }}
             className="relative z-10 flex flex-1 flex-col justify-end pb-12 sm:pb-16"
           >
-            <div className="flex flex-col items-center gap-6">
-              {/* Bolder Partner Header */}
-              <span className="font-serif text-[10px] font-bold uppercase tracking-[0.3em] text-[#d4af37] drop-shadow-md sm:text-[11px]">
-                Official Tourism Partners
-              </span>
+            <div className="flex items-center justify-center gap-6 sm:gap-10">
               
-              <div className="flex items-end gap-6 sm:gap-12">
-                
-                {/* Shield SVG */}
-                <div className="flex flex-col items-center gap-2">
-                  <svg width="24" height="30" viewBox="0 0 36 44" fill="none" xmlns="http://www.w3.org/2000/svg" className="drop-shadow-[0_2px_10px_rgba(212,175,55,0.3)] mb-1">
-                    <defs>
-                      <linearGradient id="shieldGradSplash" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#8a6125" />
-                        <stop offset="50%" stopColor="#d4af37" />
-                        <stop offset="100%" stopColor="#5c3f13" />
-                      </linearGradient>
-                      <linearGradient id="shieldInnerGradSplash" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stopColor="#f6d365" />
-                        <stop offset="100%" stopColor="#b38222" />
-                      </linearGradient>
-                    </defs>
-                    <path d="M18 0L36 8V21C36 31.5 28.5 41 18 44C7.5 41 0 31.5 0 21V8L18 0Z" fill="url(#shieldGradSplash)" />
-                    <path d="M18 2.5L33.5 9.5V21C33.5 29.5 27 38 18 40.5C9 38 2.5 29.5 2.5 21V9.5L18 2.5Z" fill="url(#shieldInnerGradSplash)" />
-                    <path d="M11 21L15.5 26L25 15" stroke="#231709" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                  {/* Invisible spacer to perfectly align the shield with the text below the logos */}
-                  <span className="text-[10px] opacity-0 leading-tight">Spacer<br/>Text</span>
-                </div>
-
-                <div className="mb-[26px] h-10 w-px bg-white/20" />
-
-                {/* Government of Goa */}
-                <div className="flex flex-col items-center gap-2">
-                  <Image
-                    src="/images/government_logo_white.png"
-                    alt="Government of Goa"
-                    width={55}
-                    height={55}
-                    className="h-12 w-auto object-contain drop-shadow-[0_2px_10px_rgba(255,255,255,0.1)] sm:h-14"
-                  />
-                  <span className="text-center text-[10px] font-medium leading-tight tracking-wide text-white/90 drop-shadow-md">
-                    Government<br/>of Goa
+              {/* Shield Badge + Official Tourism Partner Text */}
+              <div className="flex items-center gap-3">
+                <svg width="24" height="30" viewBox="0 0 36 44" fill="none" xmlns="http://www.w3.org/2000/svg" className="drop-shadow-[0_2px_10px_rgba(212,175,55,0.3)]">
+                  <defs>
+                    <linearGradient id="shieldGradSplash" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#8a6125" />
+                      <stop offset="50%" stopColor="#d4af37" />
+                      <stop offset="100%" stopColor="#5c3f13" />
+                    </linearGradient>
+                    <linearGradient id="shieldInnerGradSplash" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" stopColor="#f6d365" />
+                      <stop offset="100%" stopColor="#b38222" />
+                    </linearGradient>
+                  </defs>
+                  <path d="M18 0L36 8V21C36 31.5 28.5 41 18 44C7.5 41 0 31.5 0 21V8L18 0Z" fill="url(#shieldGradSplash)" />
+                  <path d="M18 2.5L33.5 9.5V21C33.5 29.5 27 38 18 40.5C9 38 2.5 29.5 2.5 21V9.5L18 2.5Z" fill="url(#shieldInnerGradSplash)" />
+                  <path d="M11 21L15.5 26L25 15" stroke="#231709" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                <div className="flex flex-col justify-center text-left font-serif">
+                  <span className="mb-[2px] text-[10px] font-bold uppercase tracking-[0.25em] text-[#d4af37] drop-shadow-md sm:text-[11px]">
+                    Official
+                  </span>
+                  <span className="text-[12px] font-bold uppercase tracking-[0.05em] text-[#d4af37] drop-shadow-md sm:text-[13px]">
+                    Tourism Partner
                   </span>
                 </div>
-
-                <div className="mb-[26px] h-10 w-px bg-white/20" />
-
-                {/* Goa Tourism */}
-                <div className="flex flex-col items-center gap-2">
-                  <Image
-                    src="/images/goa_tourism.png"
-                    alt="Goa Tourism"
-                    width={90}
-                    height={50}
-                    className="h-12 w-auto object-contain drop-shadow-[0_2px_10px_rgba(255,255,255,0.1)] sm:h-14"
-                  />
-                  <span className="text-center text-[10px] font-medium leading-tight tracking-wide text-white/90 drop-shadow-md">
-                    Goa<br/>Tourism
-                  </span>
-                </div>
-
               </div>
+
+              {/* Goa Tourism Logo */}
+              <div className="flex flex-col items-center gap-1.5">
+                <Image
+                  src="/images/goa_tourism.png"
+                  alt="Goa Tourism"
+                  width={90}
+                  height={50}
+                  className="h-10 w-auto object-contain drop-shadow-[0_2px_10px_rgba(255,255,255,0.1)] sm:h-12"
+                />
+                <span className="text-center text-[9px] font-medium leading-tight tracking-wide text-white/90 drop-shadow-md sm:text-[10px]">
+                  Goa<br/>Tourism
+                </span>
+              </div>
+
             </div>
           </motion.div>
           
