@@ -16,7 +16,7 @@ export default function OrderSuccessPage() {
   const memberName = searchParams.get("memberName") || "Member";
   const email = searchParams.get("email") || "";
   const phone = searchParams.get("phone") || "";
-  const address = searchParams.get("address") || ""; // Extracted Address
+  const address = searchParams.get("address") || ""; 
   const city = searchParams.get("city") || "";
   const validity = searchParams.get("validity") || "Lifetime Membership";
   const orderId = searchParams.get("paymentId") || `ORDER-${Date.now()}`;
@@ -29,27 +29,60 @@ export default function OrderSuccessPage() {
 
     emailSentRef.current = true;
 
-    fetch("/api/send-membership-email", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        membershipId,
-        plan,
-        amountPaid,
-        memberName,
-        email,
-        phone,
-        address, // Added Address to Email API Payload
-        city,
-        paymentId: orderId,
-        validity,
-        paymentMethod,
-      }),
-    }).catch((error) => {
-      console.error("Failed to send membership email:", error);
-    });
+    // We wrap the fetches in an async function to force them to run in order
+    const runAutomations = async () => {
+      // --- 1. FORCE DATABASE SAVE FIRST ---
+      try {
+        await fetch("/api/save-member", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            membershipId,
+            plan,
+            amountPaid,
+            memberName,
+            email,
+            phone,
+            address,
+            city,
+            paymentId: orderId,
+            paymentMethod,
+          }),
+        });
+      } catch (error) {
+        console.error("Failed to save member to database:", error);
+      }
+
+      // --- 2. SEND WELCOME EMAIL SECOND ---
+      try {
+        await fetch("/api/send-membership-email", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            membershipId,
+            plan,
+            amountPaid,
+            memberName,
+            email,
+            phone,
+            address, 
+            city,
+            paymentId: orderId,
+            validity,
+            paymentMethod,
+          }),
+        });
+      } catch (error) {
+        console.error("Failed to send membership email:", error);
+      }
+    };
+
+    runAutomations();
+
   }, [
     membershipId,
     plan,
@@ -57,7 +90,7 @@ export default function OrderSuccessPage() {
     memberName,
     email,
     phone,
-    address, // Added Address to Dependency Array
+    address, 
     city,
     orderId,
     validity,
