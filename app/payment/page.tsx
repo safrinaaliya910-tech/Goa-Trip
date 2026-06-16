@@ -8,7 +8,8 @@ import {
   CreditCard,
   Landmark,
   Wallet,
-  Bitcoin,
+  Smartphone,
+  QrCode,
   CheckCircle2,
   ShieldCheck,
   ArrowRight,
@@ -23,7 +24,7 @@ declare global {
   }
 }
 
-type Method = "razorpay" | "stripe" | "paypal" | "crypto";
+type Method = "razorpay" | "stripe" | "paypal" | "gpay" | "paytm";
 
 export default function PaymentPage() {
   const router = useRouter();
@@ -42,7 +43,6 @@ export default function PaymentPage() {
   const name = params.get("memberName") || "Member";
   const email = params.get("email") || "";
   const phone = params.get("phone") || "";
-  // Added address extraction
   const address = params.get("address") || "";
   const city = params.get("city") || "";
 
@@ -88,7 +88,8 @@ export default function PaymentPage() {
     if (method === "razorpay") return "Razorpay";
     if (method === "stripe") return "Stripe";
     if (method === "paypal") return "PayPal";
-    return "Crypto";
+    if (method === "gpay") return "Google Pay";
+    return "Paytm";
   }, [method]);
 
   const paymentDescription = useMemo(() => {
@@ -101,14 +102,18 @@ export default function PaymentPage() {
     if (method === "paypal") {
       return "Trusted wallet-based checkout for international buyers.";
     }
-    return "Pay using BTC, ETH, USDT, or other supported digital assets.";
+    if (method === "gpay") {
+      return "Fast and secure checkout using your GPay UPI.";
+    }
+    return "Pay directly using your Paytm Wallet or linked bank account.";
   }, [method]);
 
   const paymentButtonLabel = useMemo(() => {
     if (method === "razorpay") return `Pay $${amount} with Razorpay`;
     if (method === "stripe") return `Pay $${amount} with Stripe`;
     if (method === "paypal") return `Pay $${amount} with PayPal`;
-    return `Continue with Crypto`;
+    if (method === "gpay") return `Pay $${amount} with GPay`;
+    return `Pay $${amount} with Paytm`;
   }, [method, amount]);
 
   const goToSuccessPage = (paymentMethod: string, paymentId: string) => {
@@ -119,7 +124,7 @@ export default function PaymentPage() {
       memberName: name,
       email,
       phone,
-      address, // Passing address to the success page URL
+      address,
       city,
       paymentId,
       validity: "Lifetime Membership",
@@ -138,24 +143,11 @@ export default function PaymentPage() {
 
       const response = await fetch("/api/razorpay", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          amount,
-          membershipId,
-          plan,
-          name,
-          email,
-          phone,
-          address, // Sending address to API
-          city,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount, membershipId, plan, name, email, phone, address, city }),
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to create Razorpay order");
-      }
+      if (!response.ok) throw new Error("Failed to create Razorpay order");
 
       const order = await response.json();
 
@@ -170,24 +162,10 @@ export default function PaymentPage() {
         handler: function (response: any) {
           goToSuccessPage("razorpay", response.razorpay_payment_id);
         },
-        prefill: {
-          name,
-          email,
-          contact: phone,
-        },
-        notes: {
-          membershipId,
-          plan,
-          city,
-        },
-        theme: {
-          color: "#d4af37",
-        },
-        modal: {
-          ondismiss: function () {
-            setLoading(false);
-          },
-        },
+        prefill: { name, email, contact: phone },
+        notes: { membershipId, plan, city },
+        theme: { color: "#d4af37" },
+        modal: { ondismiss: function () { setLoading(false); } },
       };
 
       const razorpay = new window.Razorpay(options);
@@ -203,26 +181,12 @@ export default function PaymentPage() {
     try {
       const response = await fetch("/api/stripe/create-session", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          amount: Number(amount),
-          plan,
-          membershipId,
-          memberName: name,
-          email,
-          phone,
-          address, // Sending address to API
-          city,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount: Number(amount), plan, membershipId, memberName: name, email, phone, address, city }),
       });
 
       const data = await response.json();
-
-      if (!response.ok || !data.url) {
-        throw new Error(data?.error || "Stripe session creation failed");
-      }
+      if (!response.ok || !data.url) throw new Error(data?.error || "Stripe session creation failed");
 
       window.location.href = data.url;
     } catch (error) {
@@ -232,15 +196,40 @@ export default function PaymentPage() {
     }
   };
 
-  const handleCryptoPayment = async () => {
+  const handleGPayPayment = async () => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1200));
+      const response = await fetch("/api/gpay", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount, membershipId, plan, name, email, phone, address, city }),
+      });
 
-      const cryptoPaymentId = `CRYPTO-${Date.now()}`;
-      goToSuccessPage("crypto", cryptoPaymentId);
+      const data = await response.json();
+      if (!response.ok || !data.success) throw new Error(data?.error || "GPay initialization failed");
+
+      goToSuccessPage("gpay", data.id);
     } catch (error) {
-      console.error("Crypto payment failed:", error);
-      alert("Unable to continue with crypto payment. Please try again.");
+      console.error("GPay payment failed:", error);
+      alert("Unable to continue with GPay. Please try again.");
+      setLoading(false);
+    }
+  };
+
+  const handlePaytmPayment = async () => {
+    try {
+      const response = await fetch("/api/paytm", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount, membershipId, plan, name, email, phone, address, city }),
+      });
+
+      const data = await response.json();
+      if (!response.ok || !data.success) throw new Error(data?.error || "Paytm initialization failed");
+
+      goToSuccessPage("paytm", data.id);
+    } catch (error) {
+      console.error("Paytm payment failed:", error);
+      alert("Unable to continue with Paytm. Please try again.");
       setLoading(false);
     }
   };
@@ -253,65 +242,29 @@ export default function PaymentPage() {
 
     window.paypal
       .Buttons({
-        style: {
-          layout: "vertical",
-          color: "gold",
-          shape: "rect",
-          label: "paypal",
-          height: 48,
-        },
-
+        style: { layout: "vertical", color: "gold", shape: "rect", label: "paypal", height: 48 },
         createOrder: async () => {
           const response = await fetch("/api/paypal/create-order", {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              amount: Number(amount),
-              plan,
-              membershipId,
-              memberName: name,
-              email,
-              phone,
-              address, // Sending address to API
-              city,
-            }),
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ amount: Number(amount), plan, membershipId, memberName: name, email, phone, address, city }),
           });
-
           const data = await response.json();
-
-          if (!response.ok || !data.id) {
-            throw new Error(data?.error || "Unable to create PayPal order.");
-          }
-
+          if (!response.ok || !data.id) throw new Error(data?.error || "Unable to create PayPal order.");
           return data.id;
         },
-
         onApprove: async (data: any) => {
           const response = await fetch("/api/paypal/capture-order", {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              orderID: data.orderID,
-            }),
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ orderID: data.orderID }),
           });
-
           const capture = await response.json();
-
-          if (!response.ok) {
-            throw new Error(capture?.error || "Unable to capture PayPal order.");
-          }
-
-          const paymentId =
-            capture?.purchase_units?.[0]?.payments?.captures?.[0]?.id ||
-            data.orderID;
-
+          if (!response.ok) throw new Error(capture?.error || "Unable to capture PayPal order.");
+          
+          const paymentId = capture?.purchase_units?.[0]?.payments?.captures?.[0]?.id || data.orderID;
           goToSuccessPage("paypal", paymentId);
         },
-
         onError: (err: any) => {
           console.error("PayPal error:", err);
           alert("Unable to start PayPal payment. Please try again.");
@@ -323,52 +276,19 @@ export default function PaymentPage() {
   const handlePayment = async () => {
     setLoading(true);
 
-    if (method === "razorpay") {
-      await handleRazorpayPayment();
-      return;
-    }
-
-    if (method === "stripe") {
-      await handleStripePayment();
-      return;
-    }
-
-    if (method === "paypal") {
-      setLoading(false);
-      return;
-    }
-
-    if (method === "crypto") {
-      await handleCryptoPayment();
-      return;
-    }
+    if (method === "razorpay") await handleRazorpayPayment();
+    else if (method === "stripe") await handleStripePayment();
+    else if (method === "gpay") await handleGPayPayment();
+    else if (method === "paytm") await handlePaytmPayment();
+    else if (method === "paypal") setLoading(false); 
   };
 
   const methods = [
-    {
-      key: "razorpay" as Method,
-      title: "Razorpay",
-      desc: "UPI, cards, and net banking for India",
-      icon: Landmark,
-    },
-    {
-      key: "stripe" as Method,
-      title: "Stripe",
-      desc: "International debit and credit cards",
-      icon: CreditCard,
-    },
-    {
-      key: "paypal" as Method,
-      title: "PayPal",
-      desc: "Fast wallet-based international checkout",
-      icon: Wallet,
-    },
-    {
-      key: "crypto" as Method,
-      title: "Crypto",
-      desc: "BTC, ETH, USDT and other digital payments",
-      icon: Bitcoin,
-    },
+    { key: "razorpay" as Method, title: "Razorpay", desc: "UPI, cards, and net banking for India", icon: Landmark },
+    { key: "stripe" as Method, title: "Stripe", desc: "International debit and credit cards", icon: CreditCard },
+    { key: "paypal" as Method, title: "PayPal", desc: "Fast wallet-based international checkout", icon: Wallet },
+    { key: "gpay" as Method, title: "Google Pay", desc: "Fast and secure checkout using your GPay UPI", icon: Smartphone },
+    { key: "paytm" as Method, title: "Paytm", desc: "Pay directly using your Paytm Wallet or linked bank", icon: QrCode },
   ];
 
   return (
@@ -378,43 +298,26 @@ export default function PaymentPage() {
       <section className="px-6 py-16 md:py-24">
         <div className="mx-auto max-w-6xl">
           <div className="text-center">
-            <p className="text-xs uppercase tracking-[0.3em] text-primary">
-              Payment Method
-            </p>
-            <h1 className="mt-4 text-4xl font-light text-foreground md:text-5xl">
-              Secure Payment Experience
-            </h1>
+            <p className="text-xs uppercase tracking-[0.3em] text-primary">Payment Method</p>
+            <h1 className="mt-4 text-4xl font-light text-foreground md:text-5xl">Secure Payment Experience</h1>
             <p className="mx-auto mt-5 max-w-3xl text-base leading-relaxed text-muted-foreground md:text-lg">
-              Select your preferred payment option and continue through a premium,
-              secure checkout journey.
+              Select your preferred payment option and continue through a premium, secure checkout journey.
             </p>
           </div>
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3 text-[11px] uppercase tracking-widest">
-            <span className="rounded-full border border-border px-3 py-1 text-muted-foreground">
-              1. Details
-            </span>
-            <span className="rounded-full border border-border px-3 py-1 text-muted-foreground">
-              2. Confirm Order
-            </span>
-            <span className="rounded-full bg-primary px-3 py-1 text-primary-foreground">
-              3. Payment Method
-            </span>
-            <span className="rounded-full border border-border px-3 py-1 text-muted-foreground">
-              4. Order Successful
-            </span>
+            <span className="rounded-full border border-border px-3 py-1 text-muted-foreground">1. Details</span>
+            <span className="rounded-full border border-border px-3 py-1 text-muted-foreground">2. Confirm Order</span>
+            <span className="rounded-full bg-primary px-3 py-1 text-primary-foreground">3. Payment Method</span>
+            <span className="rounded-full border border-border px-3 py-1 text-muted-foreground">4. Order Successful</span>
           </div>
 
           <div className="mt-12 grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
             <div className="border border-primary/30 bg-card p-6 shadow-[0_0_40px_rgba(212,175,55,0.08)]">
               <div className="flex items-center justify-between border-b border-border pb-4">
                 <div>
-                  <p className="text-xs uppercase tracking-widest text-primary">
-                    Payment Options
-                  </p>
-                  <h2 className="mt-2 text-2xl font-light text-foreground">
-                    Choose How You Want To Pay
-                  </h2>
+                  <p className="text-xs uppercase tracking-widest text-primary">Payment Options</p>
+                  <h2 className="mt-2 text-2xl font-light text-foreground">Choose How You Want To Pay</h2>
                 </div>
                 <ShieldCheck className="h-6 w-6 text-primary" />
               </div>
@@ -430,9 +333,7 @@ export default function PaymentPage() {
                       type="button"
                       onClick={() => setMethod(m.key)}
                       className={`flex w-full items-center justify-between border p-5 text-left transition ${
-                        active
-                          ? "border-primary bg-primary/10 shadow-[0_0_25px_rgba(212,175,55,0.08)]"
-                          : "border-border hover:border-primary/50"
+                        active ? "border-primary bg-primary/10 shadow-[0_0_25px_rgba(212,175,55,0.08)]" : "border-border hover:border-primary/50"
                       }`}
                     >
                       <div className="flex items-center gap-4">
@@ -441,12 +342,9 @@ export default function PaymentPage() {
                         </div>
                         <div>
                           <p className="text-lg text-foreground">{m.title}</p>
-                          <p className="mt-1 text-sm text-muted-foreground">
-                            {m.desc}
-                          </p>
+                          <p className="mt-1 text-sm text-muted-foreground">{m.desc}</p>
                         </div>
                       </div>
-
                       {active && <CheckCircle2 className="h-5 w-5 text-primary" />}
                     </button>
                   );
@@ -457,74 +355,34 @@ export default function PaymentPage() {
                 <div className="flex items-start gap-3">
                   <LockKeyhole className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
                   <p className="text-sm leading-relaxed text-muted-foreground">
-                    All payments are routed through secure provider checkout and your
-                    membership is activated after successful payment.
+                    All payments are routed through secure provider checkout and your membership is activated after successful payment.
                   </p>
                 </div>
               </div>
             </div>
 
             <div className="border border-border bg-card p-6 shadow-[0_0_40px_rgba(0,0,0,0.18)]">
-              <p className="text-xs uppercase tracking-widest text-primary">
-                Payment
-              </p>
-              <h2 className="mt-2 text-3xl font-light text-foreground">
-                {paymentTitle} Checkout
-              </h2>
+              <p className="text-xs uppercase tracking-widest text-primary">Payment</p>
+              <h2 className="mt-2 text-3xl font-light text-foreground">{paymentTitle} Checkout</h2>
 
               <div className="mt-4 rounded-sm border border-primary/20 bg-primary/5 p-4">
                 <div className="flex items-start gap-3">
                   <Sparkles className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
                   <div>
-                    <p className="text-sm font-medium text-foreground">
-                      Selected: {paymentTitle}
-                    </p>
-                    <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-                      {paymentDescription}
-                    </p>
+                    <p className="text-sm font-medium text-foreground">Selected: {paymentTitle}</p>
+                    <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{paymentDescription}</p>
                   </div>
                 </div>
               </div>
 
               <div className="mt-8 space-y-4 text-sm text-muted-foreground">
-                <div className="flex justify-between gap-4">
-                  <span>Membership Plan</span>
-                  <span className="text-right text-foreground">{plan}</span>
-                </div>
-
-                <div className="flex justify-between gap-4">
-                  <span>Member Name</span>
-                  <span className="text-right text-foreground">{name}</span>
-                </div>
-
-                <div className="flex justify-between gap-4">
-                  <span>Email</span>
-                  <span className="break-all text-right text-foreground">{email}</span>
-                </div>
-
-                <div className="flex justify-between gap-4">
-                  <span>Phone</span>
-                  <span className="text-right text-foreground">{phone}</span>
-                </div>
-
-                {/* Added Address to UI Summary */}
-                <div className="flex justify-between gap-4">
-                  <span>Address</span>
-                  <span className="max-w-[60%] break-words text-right text-foreground">
-                    {address}
-                  </span>
-                </div>
-
-                <div className="flex justify-between gap-4">
-                  <span>City</span>
-                  <span className="text-right text-foreground">{city}</span>
-                </div>
-
-                <div className="flex justify-between gap-4">
-                  <span>Selected Method</span>
-                  <span className="text-right text-foreground">{paymentTitle}</span>
-                </div>
-
+                <div className="flex justify-between gap-4"><span>Membership Plan</span><span className="text-right text-foreground">{plan}</span></div>
+                <div className="flex justify-between gap-4"><span>Member Name</span><span className="text-right text-foreground">{name}</span></div>
+                <div className="flex justify-between gap-4"><span>Email</span><span className="break-all text-right text-foreground">{email}</span></div>
+                <div className="flex justify-between gap-4"><span>Phone</span><span className="text-right text-foreground">{phone}</span></div>
+                <div className="flex justify-between gap-4"><span>Address</span><span className="max-w-[60%] break-words text-right text-foreground">{address}</span></div>
+                <div className="flex justify-between gap-4"><span>City</span><span className="text-right text-foreground">{city}</span></div>
+                <div className="flex justify-between gap-4"><span>Selected Method</span><span className="text-right text-foreground">{paymentTitle}</span></div>
                 <div className="flex justify-between gap-4 border-t border-border pt-5">
                   <span className="font-medium text-foreground">Amount</span>
                   <span className="text-2xl font-light text-primary">${amount}</span>
@@ -546,40 +404,12 @@ export default function PaymentPage() {
               {method === "paypal" && (
                 <div className="mt-8">
                   <div className="mb-4 flex items-center justify-between">
-                    <p className="text-sm uppercase tracking-[0.22em] text-primary">
-                      Complete Payment
-                    </p>
-                    <span className="text-sm text-muted-foreground">
-                      Total: <span className="text-foreground">${amount}</span>
-                    </span>
+                    <p className="text-sm uppercase tracking-[0.22em] text-primary">Complete Payment</p>
+                    <span className="text-sm text-muted-foreground">Total: <span className="text-foreground">${amount}</span></span>
                   </div>
-
                   <div className="rounded-sm border border-primary/25 bg-primary/5 p-4">
-                    <p className="mb-4 text-sm leading-relaxed text-foreground">
-                      Continue with PayPal using the secure button below.
-                    </p>
+                    <p className="mb-4 text-sm leading-relaxed text-foreground">Continue with PayPal using the secure button below.</p>
                     <div ref={paypalRef} />
-                  </div>
-                </div>
-              )}
-
-              {method === "crypto" && (
-                <div className="mt-8 rounded-sm border border-primary/25 bg-primary/5 p-4">
-                  <div className="mb-4 flex items-center justify-between">
-                    <p className="text-sm uppercase tracking-[0.22em] text-primary">
-                      Complete Payment
-                    </p>
-                    <span className="text-sm text-muted-foreground">
-                      Total: <span className="text-foreground">${amount}</span>
-                    </span>
-                  </div>
-
-                  <p className="mb-4 text-sm leading-relaxed text-foreground">
-                    Continue to generate your crypto payment and complete membership activation.
-                  </p>
-
-                  <div className="rounded-sm border border-border bg-background/40 p-4 text-sm text-muted-foreground">
-                    Supported currencies: BTC, ETH, USDT, USDC and other supported crypto assets.
                   </div>
                 </div>
               )}
@@ -587,7 +417,6 @@ export default function PaymentPage() {
           </div>
         </div>
       </section>
-
       <Footer />
     </main>
   );
