@@ -4,67 +4,61 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { useTranslation } from "./providers";
 
-const experienceKeys = [
-  {
-    key: "beach",
-    image: "/images/hero-beach.jpg",
-    subtitle: "Private Beach Access",
-    title: "Golden Shores",
-    description:
-      "Exclusive sunrise and sunset experiences at Goa’s most pristine beaches.",
-  },
-  {
-    key: "nightlife",
-    image: "/images/nightlife.jpg",
-    subtitle: "Elite Nightlife",
-    title: "After Dark",
-    description:
-      "Skip the lines and access VIP-style nightlife experiences across Goa.",
-  },
-  {
-    key: "casino",
-    image: "/images/casino.jpg",
-    subtitle: "VIP Casino Privileges",
-    title: "High Stakes",
-    description:
-      "Private tables, dedicated hosts, and premium casino experiences.",
-  },
-  {
-    key: "yacht",
-    image: "/images/yacht.jpg",
-    subtitle: "Private Yacht Charters",
-    title: "Ocean Voyages",
-    description:
-      "Sail into the sunset with luxury yacht experiences and curated service.",
-  },
-  {
-    key: "parasailing",
-    image: "/images/parasailing.png",
-    subtitle: "Sky Adventure",
-    title: "Parasailing",
-    description:
-      "Soar above Goa’s coastline with breathtaking golden-hour ocean views.",
-  },
-  {
-    key: "scuba",
-    image: "/images/scuba.png",
-    subtitle: "Ocean Discovery",
-    title: "Scuba Diving",
-    description:
-      "Explore underwater beauty, marine life, and unforgettable blue-water moments.",
-  },
-  {
-    key: "scooter",
-    image: "/images/scooter.png",
-    subtitle: "High Speed Waters",
-    title: "Water Scooter Ride",
-    description:
-      "Feel the thrill of speed across Goa’s golden waters with a premium ride.",
-  },
-];
-
 export function Experiences() {
   const { t } = useTranslation();
+
+  // Array moved inside the component so translation hook works
+  const experienceKeys = [
+    {
+      key: "beach",
+      image: "/images/hero-beach.jpg",
+      subtitle: t("experiences.items.beach.subtitle"),
+      title: t("experiences.items.beach.title"),
+      description: t("experiences.items.beach.description"),
+    },
+    {
+      key: "nightlife",
+      image: "/images/nightlife.jpg",
+      subtitle: t("experiences.items.nightlife.subtitle"),
+      title: t("experiences.items.nightlife.title"),
+      description: t("experiences.items.nightlife.description"),
+    },
+    {
+      key: "casino",
+      image: "/images/casino.jpg",
+      subtitle: t("experiences.items.casino.subtitle"),
+      title: t("experiences.items.casino.title"),
+      description: t("experiences.items.casino.description"),
+    },
+    {
+      key: "yacht",
+      image: "/images/yacht.jpg",
+      subtitle: t("experiences.items.yacht.subtitle"),
+      title: t("experiences.items.yacht.title"),
+      description: t("experiences.items.yacht.description"),
+    },
+    {
+      key: "parasailing",
+      image: "/images/parasailing.png",
+      subtitle: t("experiences.items.parasailing.subtitle"),
+      title: t("experiences.items.parasailing.title"),
+      description: t("experiences.items.parasailing.description"),
+    },
+    {
+      key: "scuba",
+      image: "/images/scuba.png",
+      subtitle: t("experiences.items.scuba.subtitle"),
+      title: t("experiences.items.scuba.title"),
+      description: t("experiences.items.scuba.description"),
+    },
+    {
+      key: "scooter",
+      image: "/images/scooter.png",
+      subtitle: t("experiences.items.scooter.subtitle"),
+      title: t("experiences.items.scooter.title"),
+      description: t("experiences.items.scooter.description"),
+    },
+  ];
 
   return (
     <section id="experiences" className="bg-background py-14 sm:py-20 md:py-24">
@@ -96,8 +90,7 @@ export function Experiences() {
 
         <div className="grid gap-4 sm:gap-6 md:grid-cols-2">
           {experienceKeys.map((exp, index) => {
-            // Check if this is the very last item AND the total number of items is odd
-            const isLastOddItem = 
+            const isLastOddItem =
               index === experienceKeys.length - 1 && experienceKeys.length % 2 !== 0;
 
             return (
@@ -144,7 +137,7 @@ export function Experiences() {
 
                     <div className="flex items-center gap-2 text-primary opacity-0 transition-all duration-500 group-hover:opacity-100">
                       <span className="text-[10px] uppercase tracking-widest sm:text-xs">
-                        Discover
+                        {t("experiences.discover")}
                       </span>
                       <div className="h-px w-6 bg-primary transition-all duration-500 group-hover:w-10 sm:w-8 sm:group-hover:w-12" />
                     </div>

@@ -4,23 +4,27 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
-
-const values = [
-  {
-    title: "Excellence",
-    description: "We curate only the finest experiences, ensuring every moment exceeds expectations.",
-  },
-  {
-    title: "Exclusivity",
-    description: "Access to private venues, reserved tables, and experiences money alone cannot buy.",
-  },
-  {
-    title: "Authenticity",
-    description: "Genuine connections with Goa's most prestigious establishments and hidden gems.",
-  },
-];
+import { useTranslation } from "@/components/providers";
 
 export default function AboutPage() {
+  const { t } = useTranslation();
+
+  // Values structure mapped directly to translation keys
+  const values = [
+    {
+      title: t("about.values.excellence.title"),
+      description: t("about.values.excellence.description"),
+    },
+    {
+      title: t("about.values.exclusivity.title"),
+      description: t("about.values.exclusivity.description"),
+    },
+    {
+      title: t("about.values.authenticity.title"),
+      description: t("about.values.authenticity.description"),
+    },
+  ];
+
   return (
     <main className="min-h-screen bg-background">
       <Navigation />
@@ -50,7 +54,7 @@ export default function AboutPage() {
               className="mx-auto mb-6 h-px w-24 bg-primary"
             />
             <h1 className="text-4xl font-light uppercase tracking-[0.2em] text-foreground md:text-6xl lg:text-7xl">
-              Our Story
+              {t("about.heroTitle")}
             </h1>
             <motion.div
               initial={{ scaleX: 0 }}
@@ -73,17 +77,15 @@ export default function AboutPage() {
             className="text-center"
           >
             <span className="text-xs uppercase tracking-[0.3em] text-primary">
-              Who We Are
+              {t("about.whoWeAre")}
             </span>
             <h2 className="mt-4 text-3xl font-light leading-relaxed text-foreground md:text-4xl lg:text-5xl">
-              We don&apos;t plan trips.
+              {t("about.missionTitle1")}
               <br />
-              <span className="text-primary">We create unforgettable experiences.</span>
+              <span className="text-primary">{t("about.missionTitle2")}</span>
             </h2>
             <p className="mx-auto mt-8 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-              Born from a passion for Goa&apos;s unparalleled beauty and a vision for exceptional service, 
-              GOA MOMENTS was founded to bridge the gap between travelers and the extraordinary. 
-              We believe luxury should be effortless, authentic, and transformative.
+              {t("about.missionDesc")}
             </p>
           </motion.div>
         </div>
@@ -100,10 +102,10 @@ export default function AboutPage() {
             className="mb-16 text-center"
           >
             <span className="text-xs uppercase tracking-[0.3em] text-primary">
-              Our Values
+              {t("about.ourValues")}
             </span>
             <h2 className="mt-4 text-3xl font-light text-foreground md:text-4xl">
-              The Pillars of Excellence
+              {t("about.pillarsTitle")}
             </h2>
           </motion.div>
 
@@ -146,17 +148,15 @@ export default function AboutPage() {
             className="text-center"
           >
             <span className="text-xs uppercase tracking-[0.3em] text-primary">
-              Our Vision
+              {t("about.ourVision")}
             </span>
             <h2 className="mt-4 text-3xl font-light text-foreground md:text-4xl lg:text-5xl">
-              To make every traveler feel like
-              <span className="text-primary"> royalty</span>
+              {t("about.visionTitle1")}{" "}
+              <span className="text-primary">{t("about.visionTitle2")}</span>
             </h2>
             <div className="mx-auto mt-8 h-px w-32 bg-gradient-to-r from-transparent via-primary to-transparent" />
             <p className="mt-8 text-lg leading-relaxed text-muted-foreground">
-              We envision a world where extraordinary experiences are accessible to those who 
-              seek them. Where every sunset, every meal, every moment in Goa becomes a cherished 
-              memory that lasts a lifetime.
+              {t("about.visionDesc")}
             </p>
           </motion.div>
         </div>
@@ -172,23 +172,23 @@ export default function AboutPage() {
           className="mx-auto max-w-2xl text-center"
         >
           <h2 className="text-3xl font-light text-foreground md:text-4xl">
-            Ready to Experience Goa Moments?
+            {t("about.ctaTitle")}
           </h2>
           <p className="mt-4 text-muted-foreground">
-            Join an exclusive community of discerning travelers.
+            {t("about.ctaDesc")}
           </p>
           <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <a
               href="/membership"
               className="group relative overflow-hidden border border-primary bg-primary px-8 py-4 text-sm uppercase tracking-widest text-primary-foreground transition-all duration-300 hover:bg-primary/90"
             >
-              View Membership
+              {t("about.ctaBtn1")}
             </a>
             <a
               href="/contact"
               className="border border-border px-8 py-4 text-sm uppercase tracking-widest text-foreground transition-all duration-300 hover:border-primary hover:text-primary"
             >
-              Contact Us
+              {t("about.ctaBtn2")}
             </a>
           </div>
         </motion.div>

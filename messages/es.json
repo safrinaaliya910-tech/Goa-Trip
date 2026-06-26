@@ -3,20 +3,24 @@
     "home": "Inicio",
     "about": "Nosotros",
     "membership": "Membresía",
+    "membershipActivities": "Actividades de Membresía",
     "contact": "Contacto",
     "joinNow": "Únete Ahora"
   },
   "hero": {
+    "pretitle": "Membresía Exclusiva",
     "title1": "Experimenta Goa",
     "title2": "Como la Realeza",
     "subtitle": "Estancias de lujo, acceso exclusivo y experiencias inolvidables — todo con una membresía.",
     "cta1": "Acceso Anticipado",
-    "cta2": "Explorar Membresía"
+    "cta2": "Explorar Membresía",
+    "scroll": "Desplázate"
   },
   "experiences": {
     "badge": "Experiencias Curadas",
     "title": "Un Mundo de Privilegios",
     "subtitle": "Desde playas prístinas hasta casinos de alto nivel, cada momento está diseñado para quienes no esperan menos que lo extraordinario.",
+    "discover": "Descubrir",
     "items": {
       "beach": {
         "title": "Costas Doradas",
@@ -26,167 +30,630 @@
       "nightlife": {
         "title": "Después del Anochecer",
         "subtitle": "Vida Nocturna de Élite",
-        "description": "Sáltate las filas. Acceso a áreas VIP en los clubes más exclusivos de Goa."
+        "description": "Sáltate las filas y accede a experiencias de vida nocturna estilo VIP en todo Goa."
       },
       "casino": {
         "title": "Altas Apuestas",
         "subtitle": "Privilegios VIP de Casino",
-        "description": "Mesas privadas, anfitriones dedicados y champán ilimitado en casinos de lujo."
+        "description": "Mesas privadas, anfitriones dedicados y experiencias de casino premium."
       },
       "yacht": {
         "title": "Viajes Oceánicos",
         "subtitle": "Alquiler de Yates Privados",
-        "description": "Navega hacia el atardecer a bordo de yates de lujo con tripulación y chef personal."
+        "description": "Navega hacia el atardecer con experiencias en yates de lujo y servicio curado."
+      },
+      "parasailing": {
+        "title": "Parasailing",
+        "subtitle": "Aventura en el Cielo",
+        "description": "Vuela sobre la costa de Goa con impresionantes vistas del océano en la hora dorada."
+      },
+      "scuba": {
+        "title": "Buceo",
+        "subtitle": "Descubrimiento del Océano",
+        "description": "Explora la belleza submarina, la vida marina y momentos inolvidables en aguas azules."
+      },
+      "scooter": {
+        "title": "Paseo en Moto Acuática",
+        "subtitle": "Aguas de Alta Velocidad",
+        "description": "Siente la emoción de la velocidad en las aguas doradas de Goa con un paseo premium."
       }
-    }
-  },
-  "about": {
-    "badge": "Sobre Nosotros",
-    "title": "El Arte de Vivir Exclusivo",
-    "subtitle": "Curamos experiencias extraordinarias para quienes buscan el pináculo del lujo en Goa.",
-    "mission": {
-      "title": "Nuestra Misión",
-      "description": "Redefinir la vida de lujo en Goa proporcionando acceso sin igual a las mejores experiencias, lugares y servicios que la región tiene para ofrecer."
-    },
-    "vision": {
-      "title": "Nuestra Visión",
-      "description": "Convertirnos en la membresía de estilo de vida más prestigiosa de la India, estableciendo nuevos estándares de exclusividad y servicio personalizado."
-    },
-    "values": {
-      "title": "Nuestros Valores",
-      "description": "La excelencia, la discreción y la atención al detalle guían todo lo que hacemos."
-    },
-    "stats": {
-      "members": "Miembros de Élite",
-      "partners": "Lugares Asociados",
-      "experiences": "Experiencias Curadas",
-      "concierge": "Conserje 24/7"
     }
   },
   "membership": {
-    "badge": "Niveles de Membresía",
-    "title": "Elige Tu Nivel de Lujo",
-    "subtitle": "Selecciona la membresía que coincida con tu estilo de vida.",
-    "benefits": {
-      "title": "Beneficios de Miembro",
-      "subtitle": "Cada membresía incluye acceso a nuestras instalaciones y servicios de clase mundial.",
-      "concierge": {
-        "title": "Conserje 24/7",
-        "description": "Asistencia personal las 24 horas"
+    "heroTitle": "Membresía",
+    "heroSubtitle": "Únete a GOA MOMENTS y accede a un valor excepcional en estadías de lujo, restaurantes, viajes seleccionados, vida nocturna y experiencias premium inolvidables en Goa.",
+    "heroTagline": "Hasta 10%–70% de Ahorro para Miembros • Acceso Premium • Valor de Por Vida",
+    "whyTitle": "Por Qué la Membresía GOA MOMENTS",
+    "oneCard": "Una Tarjeta.",
+    "premiumPrivileges": "Muchos Privilegios Premium.",
+    "whyDesc": "GOA MOMENTS es una plataforma de membresía premium para personas que desean explorar Goa con más valor, más comodidad y un acceso más exclusivo.",
+    "features": {
+      "savings": {
+        "title": "Ahorros Confiables",
+        "desc": "Desbloquea entre un 10% y un 70% de descuento en exclusivos establecimientos asociados en Goa."
       },
-      "beach": {
-        "title": "Acceso a Playas",
-        "description": "Cabañas privadas en playas premium"
+      "access": {
+        "title": "Acceso Premium",
+        "desc": "Disfruta de privilegios exclusivos para miembros, reservas más rápidas y experiencias de nivel superior."
       },
-      "dining": {
-        "title": "Alta Cocina",
-        "description": "Mesas reservadas en los mejores restaurantes"
-      },
-      "events": {
-        "title": "Eventos Exclusivos",
-        "description": "Reuniones solo por invitación"
-      },
-      "yacht": {
-        "title": "Alquiler de Yates",
-        "description": "Experiencias de yate privado con descuento"
-      },
-      "spa": {
-        "title": "Spa y Bienestar",
-        "description": "Tratamientos de spa de cortesía"
+      "value": {
+        "title": "Valor de Por Vida",
+        "desc": "Invierte una vez y sigue disfrutando de los beneficios de Goa con un valor duradero."
       }
     },
-    "process": {
-      "title": "Proceso de Solicitud Simple",
-      "step1": {
-        "title": "Solicita en Línea",
-        "description": "Envía tu solicitud con datos básicos"
+    "benefits": {
+      "title": "Beneficios de Miembro",
+      "subtitle": "Mayores Ahorros. Mejores Experiencias. Más Goa.",
+      "hotels": {
+        "category": "Hotels & Resorts",
+        "item1": "Hasta un 10-70% de ahorro en estadías asociadas seleccionadas",
+        "item2": "Reservas prioritarias durante la temporada alta",
+        "item3": "Mejoras de habitación y beneficios de salida tardía",
+        "item4": "Paquetes de resort especiales solo para miembros"
       },
-      "step2": {
-        "title": "Verificación",
-        "description": "Nuestro equipo revisa tu solicitud"
+      "dining": {
+        "category": "Restaurantes & Gastronomía",
+        "item1": "Descuentos exclusivos en restaurantes premium",
+        "item2": "Mesas reservadas en establecimientos asociados",
+        "item3": "Beneficios de bienvenida de cortesía en ubicaciones selectas",
+        "item4": "Ofertas gastronómicas especiales para parejas, familias y grupos"
       },
-      "step3": {
-        "title": "Bienvenida",
-        "description": "Recibe tu tarjeta de membresía y beneficios"
+      "travel": {
+        "category": "Viajes & Experiencias",
+        "item1": "Precios especiales en taxis, alquileres, cruceros y actividades",
+        "item2": "Acceso con descuento a experiencias seleccionadas en Goa",
+        "item3": "Soporte de reserva más rápido a través de asistencia premium",
+        "item4": "Ofertas de viajes estacionales disponibles solo para miembros"
+      },
+      "nightlife": {
+        "category": "Vida Nocturna & Entretenimiento",
+        "item1": "Privilegios de miembro en clubes, salones y eventos",
+        "item2": "Entrada prioritaria en lugares nocturnos seleccionados",
+        "item3": "Acceso exclusivo a ofertas de eventos premium",
+        "item4": "Descuentos especiales con socios de entretenimiento y fiestas"
       }
+    },
+    "power": {
+      "sectionTitle": "Poder de la Membresía",
+      "heading": "Elige la Tarjeta Que Coincida Con Tu",
+      "headingGold": "Estilo de Vida en Goa",
+      "subheading": "Cada tarjeta de GOA MOMENTS te otorga estatus, ahorros y soporte. Oro ofrece un acceso inteligente, Platino brinda mayor libertad de estilo de vida y Diamante otorga el trato de la más alta prioridad.",
+      "priorityTag": "Máxima Prioridad",
+      "gold": {
+        "name": "Membresía Oro",
+        "members": "Acceso para 4 Miembros",
+        "title": "Ahorro Inteligente para Hoteles y Viajes",
+        "description": "Oro es la entrada perfecta al acceso de lujo. Diseñada para viajeros inteligentes, parejas y grupos pequeños que desean un valor real sin comprometer la comodidad.",
+        "h1": "Accesibilidad de tarjeta para hasta 4 miembros",
+        "h2": "Beneficios de hoteles y viajes incluidos",
+        "h3": "Hasta un 10%–70% de descuento en socios seleccionados",
+        "h4": "Soporte confiable de GOA MOMENTS cada vez que se necesite orientación",
+        "h5": "Perfecto para personas que desean ahorros premium con un acceso simple"
+      },
+      "platinum": {
+        "name": "Membresía Platino",
+        "members": "Acceso para 8 Miembros",
+        "title": "Mayor Acceso en el Estilo de Vida de Goa",
+        "description": "Platino está hecha para miembros que desean más libertad, más categorías y un soporte más sólido. Desde hoteles hasta restaurantes, viajes y lugares premium.",
+        "h1": "Accesibilidad de tarjeta para hasta 8 miembros",
+        "h2": "Hoteles, restaurantes, viajes, alojamiento, clubes y más",
+        "h3": "Hasta un 10%–70% de descuento en lugares asociados seleccionados",
+        "h4": "Soporte más sólido que la membresía Oro",
+        "h5": "La mejor opción para familias, grupos y visitantes regulares de Goa"
+      },
+      "diamond": {
+        "name": "Membresía Diamante",
+        "members": "Acceso para 8 Miembros",
+        "title": "Prioridad de Élite. El Soporte Más Sólido. Máximo Prestigio.",
+        "description": "Diamante es la membresía más alta de GOA MOMENTS, creada para miembros que desean el mejor trato, el soporte más sólido y primera preferencia donde sea posible.",
+        "h1": "Accesibilidad de tarjeta para hasta 8 miembros",
+        "h2": "Descuentos en todas las principales categorías de socios",
+        "h3": "Hasta un 10%–70% de ahorro en ubicaciones premium seleccionadas",
+        "h4": "El soporte de GOA MOMENTS más sólido entre todos los planes",
+        "h5": "Primera preferencia y trato prioritario en lugares seleccionados",
+        "h6": "Sin esperas innecesarias donde el acceso prioritario esté disponible"
+      },
+      "labels": {
+        "hotels": "Hoteles",
+        "travel": "Viajes",
+        "dining": "Gastronomía",
+        "clubs": "Clubes",
+        "u4": "4 Usuarios",
+        "u8": "8 Usuarios",
+        "hp": "Alta Prioridad"
+      }
+    },
+    "steps": {
+      "sectionTitle": "Cómo Funciona",
+      "heading": "Un Viaje Premium Desde el Inicio Hasta el Acceso",
+      "s1": { "title": "Elige Tu Membresía", "desc": "Selecciona la tarjeta GOA MOMENTS que se adapte a tu estilo de vida, presupuesto y estilo de viaje." },
+      "s2": { "title": "Confirma Tu Pedido", "desc": "Revisa los detalles de tu pedido y confirma tu membresía con total confianza." },
+      "s3": { "title": "Selecciona Método de Pago", "desc": "Elige tu opción de pago preferida y continúa a través de una experiencia de pago segura." },
+      "s4": { "title": "Disfruta de los Privilegios", "desc": "Usa tu tarjeta en Goa y desbloquea beneficios premium, descuentos y acceso exclusivo." }
+    },
+    "plans": {
+      "sectionTitle": "Elige Tu Nivel",
+      "heading": "Planes de Membresía",
+      "popularTag": "Más Popular",
+      "priceLabel": "Precio de membresía de por vida",
+      "btnLabel": "Obtener"
     },
     "tiers": {
       "gold": {
-        "name": "Oro",
-        "price": "₹2,50,000",
-        "period": "/año",
-        "features": ["Acceso privado a playas", "Reserva prioritaria en restaurantes", "Entrada VIP al casino", "Eventos curados mensuales", "Soporte de conserje 24/7"]
+        "tagline": "Perfecto para viajeros inteligentes que desean acceso premium a Goa al mejor valor.",
+        "idealFor": "Ideal para parejas, viajeros solitarios y visitantes frecuentes de fin de semana.",
+        "f1": "Acceso a hoteles, restaurantes y socios de viaje seleccionados",
+        "f2": "Hasta un 10%–70% de descuento en establecimientos participantes",
+        "f3": "Soporte para reservas prioritarias",
+        "f4": "Ofertas especiales de temporada para miembros",
+        "f5": "Tarjeta de membresía digital",
+        "f6": "Acceso a la membresía de por vida"
       },
       "platinum": {
-        "name": "Platino",
-        "price": "₹5,00,000",
-        "period": "/año",
-        "popular": "Más Popular",
-        "features": ["Todos los beneficios Oro", "Descuentos en alquiler de yates", "Traslados en helicóptero", "Gerente de estilo de vida personal", "Acceso exclusivo a villas", "Mejoras en hoteles asociados"]
+        "tagline": "Nuestra membresía más popular para experiencias premium y mayores ahorros.",
+        "idealFor": "Ideal para familias, viajeros premium y visitantes regulares de Goa.",
+        "f1": "Red de socios más amplia en todo Goa",
+        "f2": "Hasta un 10%–70% de descuento en establecimientos participantes",
+        "f3": "Reserva prioritaria y soporte premium",
+        "f4": "Acceso especial a experiencias seleccionadas",
+        "f5": "Privilegios mejorados en gastronomía, estadías y viajes",
+        "f6": "Tarjeta de membresía digital",
+        "f7": "Acceso a la membresía de por vida"
       },
       "diamond": {
-        "name": "Diamante",
-        "price": "₹12,00,000",
-        "period": "/año",
-        "features": ["Todos los beneficios Platino", "Acceso ilimitado a yates", "Coordinación de jet privado", "Creación de experiencias a medida", "Red global de socios", "Membresía familiar incluida", "Oportunidades de inversión"]
+        "tagline": "La tarjeta de élite definitiva para ahorros de alto valor y trato de miembro de primer nivel.",
+        "idealFor": "Ideal para viajeros de lujo, clientes VIP y quienes desean lo mejor de Goa.",
+        "f1": "Acceso premium en las categorías de socios principales",
+        "f2": "Hasta un 10%–70% de descuento en establecimientos participantes",
+        "f3": "Asistencia prioritaria estilo conserje",
+        "f4": "Privilegios de estadía y gastronomía de lujo de alto valor",
+        "f5": "Ofertas premium en eventos, vida nocturna y experiencias",
+        "f6": "Tarjeta de membresía digital",
+        "f7": "Acceso a la membresía de por vida"
       }
     },
-    "select": "Seleccionar Plan",
-    "currentPlan": "Plan Actual"
-  },
-  "contact": {
-    "badge": "Contáctanos",
-    "title": "Conéctate Con Nosotros",
-    "subtitle": "Nuestro equipo de conserje está disponible las 24 horas para ayudar con consultas y solicitudes de membresía.",
-    "form": {
-      "name": "Nombre Completo",
-      "email": "Correo Electrónico",
-      "phone": "Número de Teléfono",
-      "interest": "Área de Interés",
-      "interests": {
-        "membership": "Consulta de Membresía",
-        "events": "Eventos Privados",
-        "partnerships": "Asociaciones",
-        "other": "Otro"
+    "checkout": {
+      "secureTitle": "Pago Seguro",
+      "step1Heading": "Detalles del Pedido",
+      "step2Heading": "Confirmar Pedido",
+      "indicator1": "Detalles",
+      "indicator2": "Confirmar Pedido",
+      "indicator3": "Método de Pago",
+      "indicator4": "Pedido Exitoso",
+      "selectedTitle": "Membresía Seleccionada",
+      "priceLabel": "Precio de la Membresía",
+      "totalLabel": "Total",
+      "infoNote": "Incluye activación digital premium y acceso a la membresía de por vida.",
+      "form": {
+        "firstName": "Nombre",
+        "lastName": "Apellido",
+        "email": "Correo Electrónico",
+        "phone": "Número de Teléfono",
+        "address": "Dirección",
+        "city": "Ciudad"
       },
-      "message": "Tu Mensaje",
-      "submit": "Enviar Mensaje",
-      "sending": "Enviando..."
-    },
-    "info": {
-      "visit": {
-        "title": "Visítanos",
-        "line1": "El Lounge Goa Elite",
-        "line2": "Candolim Beach Road",
-        "line3": "Norte de Goa, India 403515"
+      "btnContinue": "Continuar",
+      "summary": {
+        "title": "Resumen del Pedido",
+        "plan": "Plan",
+        "name": "Nombre",
+        "email": "Email",
+        "phone": "Teléfono",
+        "address": "Dirección",
+        "city": "Ciudad",
+        "amount": "Monto"
       },
-      "call": {
-        "title": "Llámanos",
-        "line1": "+91 832 XXX XXXX",
-        "line2": "Lun-Dom: 24 Horas"
-      },
-      "email": {
-        "title": "Escríbenos",
-        "line1": "concierge@goaelite.com",
-        "line2": "membership@goaelite.com"
+      "confirm": {
+        "title": "Confirmar Pedido",
+        "heading": "Listo para Continuar",
+        "desc": "Revisa los detalles de tu membresía y continúa con la selección del método de pago.",
+        "sparkNote": "Estás a un paso de los privilegios premium de Goa.",
+        "btnBack": "Atrás",
+        "btnConfirm": "Confirmar Pedido"
       }
     }
   },
-  "comingSoon": {
-    "badge": "Próximamente",
-    "title": "Algo Extraordinario Te Espera",
-    "subtitle": "Estamos creando una experiencia digna de tus expectativas. Sé el primero en saber cuando lancemos.",
+  "dashboard": {
+    "defaultName": "Miembro",
+    "defaultPlan": "Membresía",
+    "defaultCity": "Visitante de Goa",
+    "defaultValidity": "Membresía de Por Vida",
+    "hero": {
+      "pretitle": "Panel de Miembros",
+      "title1": "Bienvenido a",
+      "title2": "GOA MOMENTS",
+      "subtitle": "Tu membresía ya está activa. Ahora tienes acceso a tus beneficios de miembro, soporte premium y una experiencia dedicada de GOA MOMENTS diseñada para ayudarte a disfrutar de Goa con más valor, más comodidad y más confianza.",
+      "tags": {
+        "t1": "10%–70% de Ahorro para Miembros",
+        "t2": "Acceso a Soporte Premium",
+        "t3": "Orientación de Estilo de Vida en Goa"
+      }
+    },
+    "card": {
+      "pretitle": "Tu Tarjeta de Membresía",
+      "titleSuffix": "Acceso a la Membresía"
+    },
+    "profile": {
+      "title": "Perfil del Miembro",
+      "fields": {
+        "name": "Nombre",
+        "email": "Email",
+        "phone": "Teléfono",
+        "city": "Ciudad",
+        "membershipId": "ID de Membresía",
+        "plan": "Plan",
+        "amountPaid": "Monto Pagado",
+        "validity": "Validez"
+      }
+    },
+    "support": {
+      "pretitle": "Soporte Goa Moments",
+      "title": "Cuentas Con Un Soporte Sólido",
+      "desc": "Tu membresía no es solo una tarjeta. Es tu conexión directa con el soporte de GOA MOMENTS. Si necesitas orientación para taxis, hoteles, restaurantes, vida nocturna, planificación de viajes o las mejores opciones de lugares, nuestro equipo está aquí para ayudarte.",
+      "contact": {
+        "phoneLabel": "Teléfono de Soporte",
+        "emailLabel": "Correo de Soporte",
+        "conciergeLabel": "Correo del Conserje",
+        "assistanceLabel": "Asistencia al Miembro",
+        "assistanceDesc": "Soporte para estadías, transporte, restaurantes, viajes y recomendaciones premium en Goa"
+      }
+    },
+    "premium": {
+      "pretitle": "Orientación Personalizada",
+      "title": "Mejores Opciones, No Solo Descuentos",
+      "desc": "GOA MOMENTS ayuda a los miembros a descubrir opciones que realmente se adaptan a sus necesidades — desde estadías premium hasta gastronomía, viajes locales y experiencias curadas."
+    },
+    "feeling": {
+      "title": "10%–70% de ahorro basado en el establecimiento",
+      "desc": "Los niveles de descuento dependen del lugar, la categoría, la disponibilidad y los horarios. Si no estás seguro de dónde tu tarjeta ofrece el mejor valor, el soporte de GOA MOMENTS puede guiarte."
+    },
+    "services": {
+      "pretitle": "Nuestros Servicios",
+      "title": "Cómo GOA MOMENTS Soporta Tu Viaje",
+      "desc": "Nuestro rol es ayudar a los miembros a tomar mejores decisiones en todo Goa — ya sea comodidad en el viaje, el hotel adecuado, un mejor restaurante o simplemente saber a quién contactar cuando se necesita ayuda.",
+      "s1": {
+        "title": "Asistencia en Taxis & Viajes",
+        "desc": "¿Necesitas recogida en el aeropuerto, transporte local, planificación de viajes diarios o sugerencias de traslados premium? El soporte de GOA MOMENTS ayuda a los miembros a moverse por Goa con mayor comodidad y mejores opciones."
+      },
+      "s2": {
+        "title": "Orientación en Hoteles & Estadías",
+        "desc": "Desde resorts de primer nivel hasta opciones de estadía adecuadas para miembros, nuestro equipo puede guiarte hacia lugares que se adapten a tu estado de ánimo, presupuesto y estilo de viaje."
+      },
+      "s3": {
+        "title": "Soporte en Restaurantes & Gastronomía",
+        "desc": "¿Buscas lugares para brunch, cenas premium, restaurantes familiares, cenas románticas o lugares de celebración? Te ayudamos a encontrar opciones que coincidan con la experiencia que deseas."
+      },
+      "s4": {
+        "title": "Experiencias & Ayuda de Conserjería",
+        "desc": "Ya sea que necesites ideas para la vida nocturna, salidas curadas, sugerencias de ocio o recomendaciones de estilo de vida premium, GOA MOMENTS está aquí para respaldar tu experiencia general en Goa."
+      }
+    },
+    "promise": {
+      "pretitle": "Promesa al Miembro",
+      "title": "Soporte Sólido. Acceso Premium. Mejor Goa.",
+      "desc": "Tu membresía de GOA MOMENTS no se trata solo de dónde ahorras. Se trata de con cuánta confianza experimentas Goa. Ya sea que necesites ayuda con un taxi, un hotel, un restaurante, un lugar de estilo de vida o una mejor recomendación, nuestro equipo está aquí para apoyarte.",
+      "btnPhone": "Llamar a Soporte al Miembro",
+      "btnEmail": "Email de Soporte",
+      "btnConcierge": "Contactar al Conserje"
+    },
+    "reviews": {
+      "r1": {
+        "title": "Miembros de Fin de Semana",
+        "text": "La mejor parte no fue solo el descuento, sino el soporte. Pedimos sugerencias de restaurantes y estadías, y GOA MOMENTS hizo que todo el viaje se sintiera más fácil y exclusivo."
+      },
+      "r2": {
+        "title": "Viajero Frecuente de Goa",
+        "text": "Se sintió como tener un contacto de soporte premium local. Desde la orientación en restaurantes hasta la ayuda en viajes, la membresía brindó un valor real más allá de las ofertas."
+      },
+      "r3": {
+        "title": "Miembro de Estilo de Vida",
+        "text": "La experiencia se siente curada. No solo compras una tarjeta — sientes que tienes acceso, dirección y a alguien que te ayuda a elegir los lugares correctos."
+      }
+    }
+  },
+  "activities": {
+    "hero": {
+      "pretitle": "Actividades de Membresía",
+      "title1": "Experimenta Goa Con",
+      "title2": "Acceso de Miembro Premium",
+      "subtitle": "GOA MOMENTS es más que una tarjeta de membresía. Es tu sistema de soporte premium para el estilo de vida en Goa — diseñado para ahorros, acceso, comodidad, orientación y experiencias inolvidables.",
+      "btnBuy": "Comprar Membresía",
+      "btnExplore": "Explorar Beneficios"
+    },
+    "benefits": {
+      "pretitle": "Por Qué los Miembros Nos Eligen",
+      "title": "Beneficios Que Hacen Mejor a Goa",
+      "b1": { "title": "10%–70% de Ahorro en Lugares", "desc": "Disfruta de ahorros exclusivos para miembros en hoteles seleccionados, restaurantes, clubes nocturnos, cafeterías, socios de viaje y lugares de estilo de vida en Goa." },
+      "b2": { "title": "Accesibilidad de Por Vida", "desc": "GOA MOMENTS está diseñada como una membresía de estilo de vida a largo plazo, brindándote acceso continuo a soporte premium y orientación orientada al miembro." },
+      "b3": { "title": "Soporte Sólido GOA MOMENTS", "desc": "Desde planificar dónde hospedarte hasta elegir dónde cenar, nuestro soporte ayuda a los miembros a tomar mejores decisiones con total confianza." },
+      "b4": { "title": "Orientación Premium Confiable", "desc": "Te ayudamos a descubrir lugares adecuados, mejores experiencias y opciones premium en lugar de dejarte buscar por tu cuenta." }
+    },
+    "access": {
+      "pretitle": "Accesibilidad de la Membresía",
+      "title1": "Cada Tarjeta Otorga Acceso.",
+      "title2": "Las Tarjetas Más Altas Dan Más Poder.",
+      "subtitle": "GOA MOMENTS está construida para hacer que los miembros se sientan valorados antes, durante y después de cada experiencia en Goa. Elige Oro para un valor inteligente, Platino para un acceso más amplio, o Diamante para el soporte prioritario más sólido y un trato de primer nivel.",
+      "memberAccessLabel": "Acceso de Miembro",
+      "supportLevelLabel": "Nivel de Soporte",
+      "whyValuableLabel": "Por Qué Esta Tarjeta Es Valiosa",
+      "bestChoiceLabel": "La Mejor Opción:",
+      "icons": {
+        "hotels": "Hoteles",
+        "travel": "Viajes",
+        "dining": "Gastronomía",
+        "u4": "4 Miembros",
+        "clubs": "Clubes",
+        "hp": "Alta Prioridad",
+        "support": "Soporte"
+      },
+      "btnChoose": "Elige Tu Membresía"
+    },
+    "memberships": {
+      "diamond": {
+        "name": "Membresía Diamante",
+        "badge": "Máxima Prioridad",
+        "title": "El Acceso GOA MOMENTS Más Poderoso",
+        "desc": "Diamante está creada para miembros que desean el más alto nivel de comodidad, el soporte más sólido y primera preferencia donde sea posible. Esta es la membresía para personas que no quieren esperar, buscar ni comprometerse.",
+        "access": "Hasta 8 miembros pueden usar la accesibilidad de la tarjeta",
+        "support": "El soporte de GOA MOMENTS más sólido entre todas las membresías",
+        "highlight": "Ideal para viajeros VIP, familias premium, grupos de lujo, huéspedes de negocios y personas que desean un trato de primera clase en Goa.",
+        "p1": "Descuentos en hoteles, restaurantes, viajes, alojamiento, bares, clubes, vida nocturna, cafeterías y lugares premium seleccionados",
+        "p2": "Hasta un 10%–70% de ahorro en ubicaciones asociadas seleccionadas",
+        "p3": "Alta prioridad y primera preferencia siempre que el acceso de los socios lo permita",
+        "p4": "Soporte más sólido para elegir lugares, planificar experiencias y usar los beneficios de la membresía",
+        "p5": "Orientación premium para que los miembros se sientan seguros, respetados y apoyados",
+        "p6": "Diseñada para personas que desean el mejor acceso al estilo de vida de Goa sin confusiones"
+      },
+      "platinum": {
+        "name": "Membresía Platino",
+        "badge": "La Más Equilibrada",
+        "title": "Mayor Acceso para Familias, Grupos y Visitantes Regulares",
+        "desc": "Platino es una membresía poderosa para miembros que desean más categorías, mejor comodidad y un acceso más amplio a Goa. Ofrece más valor que Oro y un soporte más sólido para disfrutar de hoteles, restaurantes, viajes y lugares premium con confianza.",
+        "access": "Hasta 8 miembros pueden usar la accesibilidad de la tarjeta",
+        "support": "Soporte más sólido que la membresía Oro",
+        "highlight": "Ideal para familias, grupos, visitantes frecuentes, viajeros premium y personas que desean beneficios más amplios en Goa.",
+        "p1": "Descuentos en hoteles, restaurantes, socios de viaje, alojamiento, bares, clubes y lugares de estilo de vida seleccionados",
+        "p2": "Hasta un 10%–70% de ahorro en ubicaciones asociadas seleccionadas",
+        "p3": "Mejor cobertura de categorías que la membresía Oro",
+        "p4": "Soporte premium para elegir dónde hospedarse, cenar, viajar y disfrutar",
+        "p5": "Una membresía de gran valor para personas que desean más acceso sin tener que ir al nivel más alto",
+        "p6": "Perfecto para miembros que visitan Goa a menudo y desean beneficios confiables cada vez"
+      },
+      "gold": {
+        "name": "Membresía Oro",
+        "badge": "Entrada Inteligente",
+        "title": "Ahorro Inteligente para Hoteles y Viajes",
+        "desc": "Oro es la membresía de inicio perfecta para personas que desean experimentar los beneficios de GOA MOMENTS con ahorros inteligentes y soporte confiable. Es simple, útil e ideal para grupos más pequeños que necesitan principalmente beneficios de hotel y viaje.",
+        "access": "Hasta 4 miembros pueden usar la accesibilidad de la tarjeta",
+        "support": "Soporte confiable de GOA MOMENTS incluido",
+        "highlight": "Ideal para parejas, viajeros solitarios, familias pequeñas y visitantes inteligentes que desean ahorros premium.",
+        "p1": "Beneficios de hoteles y viajes incluidos",
+        "p2": "Hasta un 10%–70% de descuento en socios seleccionados",
+        "p3": "Soporte útil para orientación básica de estadía y viaje",
+        "p4": "Excelente membresía de nivel de entrada para personas que comienzan su viaje en GOA MOMENTS",
+        "p5": "Perfecto para grupos pequeños que desean ahorros sin complejidad",
+        "p6": "Una tarjeta inteligente para personas que desean valor, comodidad y orientación confiable"
+      }
+    },
+    "venues": {
+      "v1": "Hoteles & Resorts de Lujo",
+      "v2": "Clubes de Playa",
+      "v3": "Restaurantes Premium",
+      "v4": "Lugares de Vida Nocturna",
+      "v5": "Asistencia en Viajes & Taxis",
+      "v6": "Experiencias Curadas en Goa"
+    },
+    "reviews": {
+      "pretitle": "Reseñas de Miembros",
+      "title": "Lo Que la Gente Siente Por GOA MOMENTS",
+      "r1": { "text": "GOA MOMENTS hizo que mi viaje a Goa se sintiera premium. El soporte de la membresía me ayudó a elegir mejores lugares y ahorrar más." },
+      "r2": { "text": "Se sintió como tener un guía local de lujo. Los descuentos son buenos, pero el soporte es lo que realmente la hace valiosa." },
+      "r3": { "text": "La membresía se siente elegante, útil y confiable. Perfecta para personas que desean mejores experiencias en Goa." }
+    },
+    "discounts": {
+      "pretitle": "Descuentos del 10%–70%",
+      "title": "Ahorra Más en Lugares Premium Seleccionados",
+      "desc": "Los miembros pueden desbloquear ahorros del 10% al 70% según el lugar, la categoría, el horario, la disponibilidad y la oferta del socio. GOA MOMENTS te ayuda a comprender dónde tu membresía otorga el mejor valor."
+    },
+    "premium": {
+      "pretitle": "Estilo de Vida Premium",
+      "title": "Goa Se Siente Mejor Cuando Sabes A Dónde Ir",
+      "desc": "Nuestra membresía ayuda a los usuarios a disfrutar de mejores lugares, mejor soporte y mayor confianza mientras exploran Goa."
+    },
+    "lifetime": {
+      "pretitle": "Accesibilidad de Por Vida",
+      "title": "Una Membresía. Valor a Largo Plazo.",
+      "desc": "Tu membresía te mantiene conectado al soporte de GOA MOMENTS, la orientación premium y el acceso curado al estilo de vida de Goa."
+    },
+    "support": {
+      "pretitle": "Soporte Sólido",
+      "title": "Estamos Con Cada Miembro",
+      "desc": "GOA MOMENTS está creada para hacer que cada miembro se sienta apoyado, valorado y seguro. Ya sea que necesites ayuda para elegir hoteles, restaurantes, actividades, opciones de taxi, vida nocturna o experiencias premium, nuestro soporte te da dirección."
+    },
+    "faqs": {
+      "pretitle": "Preguntas Frecuentes de Soporte",
+      "title": "Preguntas Que la Gente Hace Antes de Unirse",
+      "q1": {
+        "q": "¿Cómo apoya GOA MOMENTS a los miembos?",
+        "a": "GOA MOMENTS ayuda a los miembros con sugerencias de hoteles, orientación en restaurantes, asistencia en taxis y viajes, recomendaciones de vida nocturna y planificación de experiencias premium en Goa."
+      },
+      "q2": {
+        "q": "¿Puedo obtener ayuda después de comprar la membresía?",
+        "a": "Sí. Después de comprar la membresía, los miembros pueden contactar al soporte de GOA MOMENTS para obtener orientación sobre dónde usar la membresía y cómo obtener un mejor valor en los lugares seleccionados."
+      },
+      "q3": {
+        "q": "¿Los descuentos están disponibles en todo Goa?",
+        "a": "Los descuentos están disponibles solo en lugares asociados seleccionados y pueden variar según el establecimiento, la categoría, el horario, la disponibilidad y las condiciones de la oferta."
+      },
+      "q4": {
+        "q": "¿Qué tipo de descuentos pueden obtener los miembros?",
+        "a": "Los miembros pueden acceder a beneficios seleccionados basados en el establecimiento que van desde el 10% hasta el 70%, dependiendo del socio comercial y de la oferta activa de la membresía."
+      },
+      "q5": {
+        "q": "¿GOA MOMENTS es solo una tarjeta de descuento?",
+        "a": "No. GOA MOMENTS está diseñada como una membresía de estilo de vida premium con ahorros, orientación, soporte estilo conserje y recomendaciones curadas de Goa."
+      },
+      "q6": {
+        "q": "¿Por qué debería comprar la membresía?",
+        "a": "La membresía te ayuda a ahorrar dinero, descubrir mejores lugares, evitar confusiones y disfrutar de Goa con un soporte más sólido por parte del equipo de GOA MOMENTS."
+      }
+    },
+    "cta": {
+      "pretitle": "Conviértete en Miembro",
+      "title": "Elige la Membresía Oro, Diamante o Platino",
+      "desc": "Comienza tu viaje con GOA MOMENTS hoy y desbloquea soporte premium, ahorros en establecimientos, orientación de estilo de vida y una mejor manera de experimentar Goa.",
+      "btn": "Comprar Membresía"
+    }
+  },
+  "about": {
+    "heroTitle": "Nuestra Historia",
+    "whoWeAre": "Quiénes Somos",
+    "missionTitle1": "Nosotros no planificamos viajes.",
+    "missionTitle2": "Creamos experiencias inolvidables.",
+    "missionDesc": "Nacida de la pasión por la belleza inigualable de Goa y una visión de servicio excepcional, GOA MOMENTS se fundó para cerrar la brecha entre los viajeros y lo extraordinario. Creemos que el lujo debe ser sin esfuerzo, auténtico y transformador.",
+    "ourValues": "Nuestros Valores",
+    "pillarsTitle": "Los Pilares de la Excelencia",
+    "values": {
+      "excellence": {
+        "title": "Excelencia",
+        "description": "Curamos solo las mejores experiencias, asegurando que cada momento supere las expectativas."
+      },
+      "exclusivity": {
+        "title": "Exclusividad",
+        "description": "Acceso a lugares privados, mesas reservadas y experiencias que el dinero por sí solo no puede comprar."
+      },
+      "authenticity": {
+        "title": "Autenticidad",
+        "description": "Conexiones genuinas con los establecimientos más prestigiosos y las joyas ocultas de Goa."
+      }
+    },
+    "ourVision": "Our Vision",
+    "visionTitle1": "Para hacer que cada viajero se sienta como",
+    "visionTitle2": "de la realeza",
+    "visionDesc": "Visualizamos un mundo donde las experiencias extraordinarias sean accesibles para quienes las buscan. Donde cada atardecer, cada comida, cada momento en Goa se convierta en un recuerdo preciado que dure toda la vida.",
+    "ctaTitle": "¿Listo para Vivir Goa Moments?",
+    "ctaDesc": "Únete a una comunidad exclusiva de viajeros exigentes.",
+    "ctaBtn1": "Ver Membresía",
+    "ctaBtn2": "Contáctanos"
+  },
+  "contact": {
+    "hero": {
+      "pretitle": "SOPORTE GOA MOMENTS",
+      "title": "Estamos Aquí Para Ayudarte",
+      "subtitle": "Ya sea que estés explorando GOA MOMENTS, comprando una membresía o planificando tu experiencia en Goa, nuestro equipo está aquí para guiarte con un soporte claro y confiable."
+    },
+    "public": {
+      "pretitle": "Asistencia Pública",
+      "title": "Soporte General para Cada Visitante",
+      "desc": "Esta página de contacto está abierta para todos. Incluso si aún no has comprado una membresía, puedes hacer preguntas sobre GOA MOMENTS, planes de membresía, beneficios, descuentos, acceso a lugares, proceso de soporte y cómo funciona la tarjeta.",
+      "note": "Los visitantes pueden usar el formulario de la derecha para dudas generales. Los miembros pagados reciben un acceso de contacto especial y privado después de la activación de la membresía.",
+      "info": {
+        "i1": { "label": "Consulta General" },
+        "i2": { "label": "Preguntas de Membresía" },
+        "i3": { "label": "Ubicación de Soporte", "value": "Panjim, Goa, India" }
+      }
+    },
     "form": {
-      "placeholder": "Ingresa tu correo",
-      "submit": "Notifícame",
-      "submitting": "Uniéndose..."
+      "pretitle": "Enviar un Mensaje",
+      "title": "Pregunta Cualquier Cosa Sobre GOA MOMENTS",
+      "desc": "Este formulario es para todos los usuarios: visitantes, clientes interesados y personas que desean entender GOA MOMENTS antes de comprar. Pregunta sobre planes, descuentos, acceso de miembros, hoteles, soporte de taxis, restaurantes, vida nocturna o experiencias curadas.",
+      "firstName": "Nombre",
+      "lastName": "Apellido",
+      "email": "Correo Electrónico",
+      "phone": "Número de Teléfono",
+      "supportType": "Tipo de Soporte",
+      "options": {
+        "default": "Selecciona el Tipo de Soporte",
+        "membership": "Consulta de Membresía",
+        "benefits": "Soporte de Beneficios / Descuentos",
+        "travel": "Orientación de Hoteles / Taxis / Viajes",
+        "experience": "Soporte de Experiencias en Goa"
+      },
+      "message": "Cuéntanos sobre tus requerimientos...",
+      "submit": "Enviar Mensaje"
     },
+    "private": {
+      "pretitle": "Acceso de Contacto para Miembros Pagados",
+      "title1": "El Soporte Especial se Abre",
+      "title2": "Después de Comprar la Membresía",
+      "desc": "Cuando un cliente compra la membresía Oro, Platino o Diamante, proporciona su correo electrónico y número de teléfono durante el pago. GOA MOMENTS utiliza ese mismo correo y teléfono registrado para identificar al miembro, confirmar el acceso a la membresía y proporcionar información de soporte especial de forma privada.",
+      "support": {
+        "gold": {
+          "title": "Soporte para Miembros Oro",
+          "desc": "Los miembros Oro reciben soporte confiable para orientación de hoteles y viajes. Es ideal para miembros que desean ahorros inteligentes, acceso simple y ayuda confiable después de la compra."
+        },
+        "platinum": {
+          "title": "Soporte Prioritario Platino",
+          "desc": "Los miembros Platino reciben un soporte más sólido para hoteles, restaurantes, viajes, alojamiento, bares, clubes y experiencias premium en Goa con una asistencia de estilo de vida más amplia."
+        },
+        "diamond": {
+          "title": "Soporte Élite Diamante",
+          "desc": "Los miembros Diamante reciben el soporte de GOA MOMENTS más sólido, orientación de alta prioridad, asistencia más rápida y atención premium dondequiera que el acceso prioritario para miembros esté disponible."
+        }
+      },
+      "features": {
+        "phone": {
+          "title": "Acceso Telefónico Privado para Miembros",
+          "subtitle": "Compartido Solo Después de la Confirmación del Pago",
+          "desc": "Los miembros pagados reciben acceso de contacto especial de forma privada después de la activación. Esto mantiene el soporte a miembros exclusivo y evita el mal uso público de los canales de soporte premium."
+        },
+        "verification": {
+          "title": "Verificación de Correo y Teléfono Registrados",
+          "subtitle": "Soporte Utiliza los Detalles de Pago",
+          "desc": "El correo electrónico y el número de teléfono ingresados durante el pago se convierten en la identidad de soporte del miembro. Con esos detalles, el miembro puede solicitar orientación sobre beneficios, soporte de lugares y información de membresía en cualquier momento."
+        },
+        "cards": {
+          "c1": "Después de la compra, el plan de la tarjeta del miembro, el correo electrónico, el número de teléfono y el ID de membresía ayudan a GOA MOMENTS a identificarlo y apoyarlo correctamente.",
+          "c2": "El soporte especial por teléfono y correo electrónico no se muestra públicamente. Se proporciona solo a los miembros activados para una asistencia premium segura.",
+          "c3": "El soporte al miembro está orientado al acceso de por vida, lo que ayuda a los titulares de la tarjeta a recibir orientación, confianza y asistencia premium siempre que sea necesario."
+        }
+      }
+    },
+    "difference": {
+      "pretitle": "Diferencia de Acceso al Contacto",
+      "title1": "Misma Página de Contacto.",
+      "title2": "Diferente Acceso de Soporte.",
+      "desc": "Cualquiera puede contactar a GOA MOMENTS para consultas generales. Pero la información de soporte especial, la orientación prioritaria y la asistencia exclusiva para miembros se proporcionan solo a los clientes que han comprado una tarjeta de membresía de GOA MOMENTS.",
+      "general": {
+        "title": "Contacto para Consultas Generales",
+        "desc": "Los no miembros pueden contactarnos en cualquier momento para preguntar sobre planes de membresía, precios, beneficios, descuentos, cómo funciona GOA MOMENTS y dudas generales relacionadas con el sitio web."
+      },
+      "memberOnly": {
+        "title": "Soporte Exclusivo para Miembros",
+        "desc": "Solo los miembros pagados reciben detalles de soporte especiales, información prioritaria, orientación privada y asistencia basada en la membresía después de que se activa su tarjeta."
+      },
+      "verified": {
+        "title": "Verificado a Través de los Detalles de Pago",
+        "desc": "El correo electrónico y el número de teléfono proporcionados durante el pago se utilizan para identificar al miembro. Con base en esos detalles, GOA MOMENTS brinda soporte de membresía de por vida, orientación sobre beneficios y una asistencia más sólida de acuerdo con el plan adquirido."
+      }
+    },
+    "help": {
+      "pretitle": "En Qué Ayudamos",
+      "title": "Obtienes Más Que Un Formulario de Contacto",
+      "desc": "Los visitantes pueden hacer preguntas generales a través del formulario de contacto público. Los miembros pagados reciben un soporte privado más sólido basado en el correo electrónico y el número de teléfono utilizados al comprar la tarjeta de membresía.",
+      "points": {
+        "p1": "Orientación de membresía y soporte relacionado con el plan",
+        "p2": "Recomendaciones de hoteles, restaurantes, taxis y viajes",
+        "p3": "Ayuda para comprender los beneficios de los miembros y los ahorros en los lugares",
+        "p4": "Soporte para experiencias curadas en Goa y acceso premium"
+      },
+      "extra1": "Las consultas generales se manejan por separado del soporte prioritario para miembros pagados.",
+      "extra2": "Los miembros pagados reciben soporte estilo conserje para una experiencia más fluida en Goa."
+    }
+  },
+  "comingSoon": {
+    "weAre": "Estamos",
+    "launchingSoon": "Próximamente",
+    "subtitle": "La exclusiva membresía de Goa está en camino. Los miembros iniciales obtienen acceso prioritario a las experiencias más codiciadas del paraíso.",
+    "emailPlaceholder": "Ingresa tu correo",
+    "btnNotify": "Notifícame",
+    "spamDisclaimer": "Sé el primero en saberlo. Sin spam, nunca.",
     "features": {
-      "exclusive": "Ofertas Exclusivas de Lanzamiento",
-      "priority": "Acceso Prioritario",
-      "updates": "Actualizaciones Internas"
+      "f1": "Acceso VIP",
+      "f2": "Lugares Exclusivos",
+      "f3": "Servicio de Conserjería"
     },
-    "back": "Volver al Inicio"
+    "btnBack": "Volver al Inicio"
   },
   "footer": {
     "description": "El pináculo del estilo de vida de lujo en Goa. Acceso exclusivo a experiencias, lugares y servicios premium para miembros exigentes.",

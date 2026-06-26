@@ -72,7 +72,7 @@ export function Hero() {
               transition={{ duration: 0.8, delay: 0.5 }}
               className="mb-5 text-[11px] uppercase tracking-[0.22em] text-primary sm:mb-4 sm:text-sm sm:tracking-[0.3em]"
             >
-              Exclusive Membership
+              {t("hero.pretitle")}
             </motion.p>
 
             <motion.h1
@@ -130,7 +130,7 @@ export function Hero() {
               className="flex flex-col items-center gap-2"
             >
               <span className="text-[10px] uppercase tracking-widest text-muted-foreground sm:text-xs">
-                Scroll
+                {t("hero.scroll")}
               </span>
               <div className="h-8 w-px bg-gradient-to-b from-primary to-transparent sm:h-12" />
             </motion.div>

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link"; // <-- Added Next.js Link
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { useTranslation } from "./providers";
@@ -18,7 +19,7 @@ export function Navigation() {
     { label: t("nav.home"), href: "/" },
     { label: t("nav.about"), href: "/about" },
     { label: t("nav.membership"), href: "/membership" },
-    { label: "Membership Activities", href: "/membership-activities" },
+    { label: t("nav.membershipActivities"), href: "/membership-activities" }, // <-- Fixed hardcoded text
     { label: t("nav.contact"), href: "/contact" },
   ];
   
@@ -47,9 +48,9 @@ export function Navigation() {
           isScrolled ? "bg-background/95 backdrop-blur-md pb-2" : "bg-transparent pb-2"
         }`}
       >
-        {/* Main Navigation Bar */}
         <nav className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-4 sm:px-6 sm:py-5">
-          <a href="/" className="group flex items-center gap-3">
+          {/* Use Link instead of a tag for the Logo */}
+          <Link href="/" className="group flex items-center gap-3">
             <Image
               src="/images/logo.png"
               alt="GOA MOMENTS Logo"
@@ -78,30 +79,32 @@ export function Navigation() {
                 </span>
               </div>
             </div>
-          </a>
+          </Link>
 
           <div className="hidden items-center gap-5 lg:flex xl:gap-8">
             {navLinks.map((link) => (
-              <a
+              /* Use Link instead of a tag for desktop navigation */
+              <Link
                 key={link.href}
                 href={link.href}
                 className="group relative text-xs uppercase tracking-widest text-muted-foreground transition-colors hover:text-foreground xl:text-sm"
               >
                 {link.label}
                 <span className="absolute -bottom-1 left-0 h-px w-0 bg-[#C5A059] transition-all duration-300 group-hover:w-full" />
-              </a>
+              </Link>
             ))}
           </div>
 
           <div className="hidden items-center gap-3 lg:flex">
             <LanguageSwitcher />
             <ThemeToggle />
-            <a
+            {/* Use Link instead of a tag for Join Now button */}
+            <Link
               href="/coming-soon"
               className="border border-[#C5A059] bg-transparent px-4 py-2 text-xs uppercase tracking-widest text-[#C5A059] transition-all duration-300 hover:bg-[#C5A059] hover:text-black xl:px-6"
             >
               {t("nav.joinNow")}
-            </a>
+            </Link>
           </div>
 
           <div className="flex items-center gap-2 lg:hidden">
@@ -121,16 +124,11 @@ export function Navigation() {
           </div>
         </nav>
 
-        {/* Secondary Navigation / Partner Bar */}
+        {/* Secondary Navigation / Partner Bar (Unchanged) */}
         <div className="hidden w-full lg:block">
           <div className="mx-auto flex w-full max-w-7xl items-center justify-end px-4 sm:px-6">
-            
-            {/* Tourism Partners Section */}
             <div className="flex items-center">
-              
-              {/* SMALLER Badge & Text */}
               <div className="flex items-center gap-3 pr-2">
-                {/* 3D Metallic Gold Shield SVG - Reduced width/height to make it smaller */}
                 <svg width="24" height="30" viewBox="0 0 36 44" fill="none" xmlns="http://www.w3.org/2000/svg" className="drop-shadow-md">
                   <defs>
                     <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -149,7 +147,6 @@ export function Navigation() {
                 </svg>
 
                 <div className="flex flex-col justify-center font-serif">
-                  {/* Slightly reduced text size to match smaller badge */}
                   <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-[#d4af37] mb-[2px]">
                     Official
                   </span>
@@ -159,30 +156,17 @@ export function Navigation() {
                 </div>
               </div>
 
-              {/* Vertical Divider */}
               <div className="mx-3 h-14 w-px bg-white/20" />
 
-              {/* LARGER Logos Area */}
               <div className="flex items-center gap-1">
-                {/* Goa Tourism Logo - Increased h-12 to h-16 (approx 64px tall) */}
                 <div className="flex flex-col items-center justify-center">
-                  <Image
-                    src="/images/goa_tourism.png"
-                    alt="Goa Tourism"
-                    width={120}
-                    height={70}
-                    className="h-16 w-auto object-contain drop-shadow-md"
-                  />
-                  <span
-                    className={`mt-1.5 text-[10px] font-medium tracking-wide ${partnerTextColor}`}
-                  >
+                  <Image src="/images/goa_tourism.png" alt="Goa Tourism" width={120} height={70} className="h-16 w-auto object-contain drop-shadow-md" />
+                  <span className={`mt-1.5 text-[10px] font-medium tracking-wide ${partnerTextColor}`}>
                     Goa Tourism
                   </span>
                 </div>
               </div>
-              
             </div>
-
           </div>
         </div>
       </motion.header>
@@ -198,33 +182,34 @@ export function Navigation() {
           >
             <div className="flex min-h-screen flex-col items-center justify-center gap-6 px-6 sm:gap-8">
               {navLinks.map((link, index) => (
+                /* Use Link instead of a tag for mobile navigation */
+                <Link key={link.href} href={link.href} passHref legacyBehavior>
+                  <motion.a
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.3, delay: index * 0.1 }}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="text-center text-lg uppercase tracking-widest text-foreground transition-colors hover:text-[#C5A059] sm:text-2xl"
+                  >
+                    {link.label}
+                  </motion.a>
+                </Link>
+              ))}
+
+              <Link href="/coming-soon" passHref legacyBehavior>
                 <motion.a
-                  key={link.href}
-                  href={link.href}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.3, delay: index * 0.1 }}
+                  transition={{ duration: 0.3, delay: 0.4 }}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-center text-lg uppercase tracking-widest text-foreground transition-colors hover:text-[#C5A059] sm:text-2xl"
+                  className="mt-4 border border-[#C5A059] px-6 py-3 text-sm uppercase tracking-widest text-[#C5A059] transition-all duration-300 hover:bg-[#C5A059] hover:text-black sm:px-8"
                 >
-                  {link.label}
+                  {t("nav.joinNow")}
                 </motion.a>
-              ))}
+              </Link>
 
-              <motion.a
-                href="/coming-soon"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.3, delay: 0.4 }}
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="mt-4 border border-[#C5A059] px-6 py-3 text-sm uppercase tracking-widest text-[#C5A059] transition-all duration-300 hover:bg-[#C5A059] hover:text-black sm:px-8"
-              >
-                {t("nav.joinNow")}
-              </motion.a>
-
-              {/* Mobile Partner Section */}
               <motion.div 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -232,7 +217,6 @@ export function Navigation() {
                 className="mt-8 flex w-full max-w-[340px] flex-col items-center gap-6 border-t border-white/10 pt-8"
               >
                 <div className="flex items-center gap-3">
-                  {/* Smaller Mobile SVG */}
                   <svg width="20" height="25" viewBox="0 0 36 44" fill="none" xmlns="http://www.w3.org/2000/svg" className="drop-shadow-md">
                     <defs>
                       <linearGradient id="shieldGradMob" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -256,21 +240,10 @@ export function Navigation() {
                   </div>
                 </div>
 
-                {/* Larger Mobile Logos */}
                 <div className="flex items-center justify-center gap-10">
                   <div className="flex flex-col items-center gap-1.5">
-                    <Image 
-                      src="/images/goa_tourism.png" 
-                      alt="Goa Tourism" 
-                      width={100} 
-                      height={60} 
-                      className="h-14 w-auto object-contain" 
-                    />
-                    <span
-                      className={`text-center text-[9px] font-medium tracking-wide ${partnerTextColor}`}
-                    >
-                      Goa<br/>Tourism
-                    </span>
+                    <Image src="/images/goa_tourism.png" alt="Goa Tourism" width={100} height={60} className="h-14 w-auto object-contain" />
+                    <span className={`text-center text-[9px] font-medium tracking-wide ${partnerTextColor}`}>Goa<br/>Tourism</span>
                   </div>
                 </div>
               </motion.div>

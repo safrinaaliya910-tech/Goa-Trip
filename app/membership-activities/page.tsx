@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
+import { useTranslation } from "@/components/providers";
 import {
   ArrowRight,
   BadgeCheck,
@@ -33,155 +34,123 @@ import {
 const supportPhone = "+91 98765 43210";
 const supportEmail = "support@goamoments.com";
 
-const benefits = [
-  {
-    icon: TicketPercent,
-    title: "10%–70% Venue Savings",
-    description:
-      "Enjoy member-only savings at selected hotels, restaurants, nightlife spots, cafés, travel partners, and curated lifestyle venues across Goa.",
-  },
-  {
-    icon: BadgeCheck,
-    title: "Lifetime Accessibility",
-    description:
-      "GOA MOMENTS is designed as a long-term lifestyle membership, giving you continued access to premium support and member-first guidance.",
-  },
-  {
-    icon: ConciergeBell,
-    title: "Strong GOA MOMENTS Support",
-    description:
-      "From planning where to stay to choosing where to dine, our support helps members make better decisions with confidence.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Trusted Premium Guidance",
-    description:
-      "We help you discover suitable venues, better experiences, and premium choices instead of leaving you to search alone.",
-  },
-];
-
-const detailedMemberships = [
-  {
-    name: "Diamond Membership",
-    icon: Gem,
-    badge: "Highest Priority",
-    title: "The Most Powerful GOA MOMENTS Access",
-    description:
-      "Diamond is created for members who want the highest level of comfort, strongest support, and first preference wherever possible. This is the membership for people who do not want to wait, search, or compromise. Diamond members receive premium attention and stronger guidance across Goa experiences.",
-    access: "Up to 8 members can use the card accessibility",
-    support: "Strongest GOA MOMENTS support among all memberships",
-    highlight:
-      "Best for VIP travellers, premium families, luxury groups, business guests, and people who want top-class Goa treatment.",
-    points: [
-      "Discounts across hotels, restaurants, travel, accommodation, bars, clubs, nightlife, cafés, and selected premium venues",
-      "Up to 10%–70% savings at selected partner places",
-      "High priority and first preference wherever partner access allows",
-      "Strongest support for choosing places, planning experiences, and using membership benefits",
-      "Premium guidance so members feel confident, respected, and supported",
-      "Designed for people who want the best Goa lifestyle access without confusion",
-    ],
-  },
-  {
-    name: "Platinum Membership",
-    icon: Star,
-    badge: "Most Balanced",
-    title: "Bigger Access For Families, Groups & Regular Goa Visitors",
-    description:
-      "Platinum is a powerful membership for members who want more categories, better comfort, and wider Goa access. It gives more value than Gold and stronger support for people who want to enjoy hotels, restaurants, travel, accommodation, bars, clubs, and premium places with confidence.",
-    access: "Up to 8 members can use the card accessibility",
-    support: "Stronger support than Gold membership",
-    highlight:
-      "Best for families, groups, frequent visitors, premium travellers, and people who want wider Goa benefits.",
-    points: [
-      "Discounts at hotels, restaurants, travel partners, accommodation, bars, clubs, and selected lifestyle venues",
-      "Up to 10%–70% savings at selected partner places",
-      "Better category coverage than Gold membership",
-      "Premium support for choosing where to stay, dine, travel, and enjoy",
-      "A strong value membership for people who want more access without going to the highest tier",
-      "Perfect for members who visit Goa often and want reliable benefits every time",
-    ],
-  },
-  {
-    name: "Gold Membership",
-    icon: Crown,
-    badge: "Smart Entry",
-    title: "Smart Savings For Hotels & Travel",
-    description:
-      "Gold is the perfect starting membership for people who want to experience GOA MOMENTS benefits with smart savings and reliable support. It is simple, useful, and ideal for smaller groups who mainly need hotel and travel benefits.",
-    access: "Up to 4 members can use the card accessibility",
-    support: "Reliable GOA MOMENTS support included",
-    highlight:
-      "Best for couples, solo travellers, small families, and smart visitors who want premium savings.",
-    points: [
-      "Hotels and travel benefits included",
-      "Up to 10%–70% discounts at selected partners",
-      "Useful support for basic stay and travel guidance",
-      "Great entry-level membership for people starting their GOA MOMENTS journey",
-      "Perfect for small groups who want savings without complexity",
-      "A smart card for people who want value, comfort, and trusted guidance",
-    ],
-  },
-];
-
-const venues = [
-  "Luxury Hotels & Resorts",
-  "Beach Clubs",
-  "Premium Restaurants",
-  "Nightlife Venues",
-  "Travel & Taxi Assistance",
-  "Curated Goa Experiences",
-];
-
-const reviews = [
-  {
-    name: "Aarav Mehta",
-    text: "GOA MOMENTS made my Goa trip feel premium. The membership support helped me choose better places and save more.",
-  },
-  {
-    name: "Rhea Fernandes",
-    text: "It felt like having a luxury local guide. The discounts are good, but the support is what makes it truly valuable.",
-  },
-  {
-    name: "Naina Joseph",
-    text: "The membership feels classy, useful, and reliable. Perfect for people who want better Goa experiences.",
-  },
-];
-
-const faqs = [
-  {
-    question: "How does GOA MOMENTS support members?",
-    answer:
-      "GOA MOMENTS helps members with hotel suggestions, restaurant guidance, taxi and travel assistance, nightlife recommendations, and premium Goa experience planning.",
-  },
-  {
-    question: "Can I get help after buying the membership?",
-    answer:
-      "Yes. After buying the membership, members can contact GOA MOMENTS support for guidance on where to use the membership and how to get better value across selected venues.",
-  },
-  {
-    question: "Are discounts available everywhere in Goa?",
-    answer:
-      "Discounts are available only at selected partner venues and may vary based on venue, category, timing, availability, and offer conditions.",
-  },
-  {
-    question: "What kind of discounts can members get?",
-    answer:
-      "Members can access selected venue-based benefits ranging from 10% to 70%, depending on the partner venue and active membership offer.",
-  },
-  {
-    question: "Is GOA MOMENTS only a discount card?",
-    answer:
-      "No. GOA MOMENTS is designed as a premium lifestyle membership with savings, guidance, concierge-style support, and curated Goa recommendations.",
-  },
-  {
-    question: "Why should I buy the membership?",
-    answer:
-      "The membership helps you save money, discover better places, avoid confusion, and enjoy Goa with stronger support from the GOA MOMENTS team.",
-  },
-];
-
 export default function MembershipActivitiesPage() {
+  const { t } = useTranslation();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  // Moved arrays inside the component to access the translation hook
+  const benefits = [
+    {
+      icon: TicketPercent,
+      title: t("activities.benefits.b1.title"),
+      description: t("activities.benefits.b1.desc"),
+    },
+    {
+      icon: BadgeCheck,
+      title: t("activities.benefits.b2.title"),
+      description: t("activities.benefits.b2.desc"),
+    },
+    {
+      icon: ConciergeBell,
+      title: t("activities.benefits.b3.title"),
+      description: t("activities.benefits.b3.desc"),
+    },
+    {
+      icon: ShieldCheck,
+      title: t("activities.benefits.b4.title"),
+      description: t("activities.benefits.b4.desc"),
+    },
+  ];
+
+  const detailedMemberships = [
+    {
+      name: t("activities.memberships.diamond.name"),
+      icon: Gem,
+      badge: t("activities.memberships.diamond.badge"),
+      title: t("activities.memberships.diamond.title"),
+      description: t("activities.memberships.diamond.desc"),
+      access: t("activities.memberships.diamond.access"),
+      support: t("activities.memberships.diamond.support"),
+      highlight: t("activities.memberships.diamond.highlight"),
+      points: [
+        t("activities.memberships.diamond.p1"),
+        t("activities.memberships.diamond.p2"),
+        t("activities.memberships.diamond.p3"),
+        t("activities.memberships.diamond.p4"),
+        t("activities.memberships.diamond.p5"),
+        t("activities.memberships.diamond.p6"),
+      ],
+    },
+    {
+      name: t("activities.memberships.platinum.name"),
+      icon: Star,
+      badge: t("activities.memberships.platinum.badge"),
+      title: t("activities.memberships.platinum.title"),
+      description: t("activities.memberships.platinum.desc"),
+      access: t("activities.memberships.platinum.access"),
+      support: t("activities.memberships.platinum.support"),
+      highlight: t("activities.memberships.platinum.highlight"),
+      points: [
+        t("activities.memberships.platinum.p1"),
+        t("activities.memberships.platinum.p2"),
+        t("activities.memberships.platinum.p3"),
+        t("activities.memberships.platinum.p4"),
+        t("activities.memberships.platinum.p5"),
+        t("activities.memberships.platinum.p6"),
+      ],
+    },
+    {
+      name: t("activities.memberships.gold.name"),
+      icon: Crown,
+      badge: t("activities.memberships.gold.badge"),
+      title: t("activities.memberships.gold.title"),
+      description: t("activities.memberships.gold.desc"),
+      access: t("activities.memberships.gold.access"),
+      support: t("activities.memberships.gold.support"),
+      highlight: t("activities.memberships.gold.highlight"),
+      points: [
+        t("activities.memberships.gold.p1"),
+        t("activities.memberships.gold.p2"),
+        t("activities.memberships.gold.p3"),
+        t("activities.memberships.gold.p4"),
+        t("activities.memberships.gold.p5"),
+        t("activities.memberships.gold.p6"),
+      ],
+    },
+  ];
+
+  const venues = [
+    t("activities.venues.v1"),
+    t("activities.venues.v2"),
+    t("activities.venues.v3"),
+    t("activities.venues.v4"),
+    t("activities.venues.v5"),
+    t("activities.venues.v6"),
+  ];
+
+  const reviews = [
+    {
+      name: "Aarav Mehta",
+      text: t("activities.reviews.r1.text"),
+    },
+    {
+      name: "Rhea Fernandes",
+      text: t("activities.reviews.r2.text"),
+    },
+    {
+      name: "Naina Joseph",
+      text: t("activities.reviews.r3.text"),
+    },
+  ];
+
+  const faqs = [
+    { question: t("activities.faqs.q1.q"), answer: t("activities.faqs.q1.a") },
+    { question: t("activities.faqs.q2.q"), answer: t("activities.faqs.q2.a") },
+    { question: t("activities.faqs.q3.q"), answer: t("activities.faqs.q3.a") },
+    { question: t("activities.faqs.q4.q"), answer: t("activities.faqs.q4.a") },
+    { question: t("activities.faqs.q5.q"), answer: t("activities.faqs.q5.a") },
+    { question: t("activities.faqs.q6.q"), answer: t("activities.faqs.q6.a") },
+  ];
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-background">
@@ -218,7 +187,7 @@ export default function MembershipActivitiesPage() {
             transition={{ duration: 0.7 }}
             className="text-xs uppercase tracking-[0.38em] text-primary"
           >
-            Membership Activities
+            {t("activities.hero.pretitle")}
           </motion.p>
 
           <motion.h1
@@ -227,9 +196,9 @@ export default function MembershipActivitiesPage() {
             transition={{ duration: 0.7, delay: 0.1 }}
             className="mx-auto mt-6 max-w-5xl text-4xl font-light leading-tight text-foreground md:text-6xl xl:text-7xl"
           >
-            Experience Goa With{" "}
+            {t("activities.hero.title1")}{" "}
             <span className="text-primary drop-shadow-[0_0_30px_rgba(212,175,55,0.45)]">
-              Premium Member Access
+              {t("activities.hero.title2")}
             </span>
           </motion.h1>
 
@@ -239,9 +208,7 @@ export default function MembershipActivitiesPage() {
             transition={{ duration: 0.7, delay: 0.2 }}
             className="mx-auto mt-6 max-w-3xl text-base leading-relaxed text-muted-foreground md:text-xl"
           >
-            GOA MOMENTS is more than a membership card. It is your premium Goa
-            lifestyle support system — built for savings, access, comfort,
-            guidance, and unforgettable experiences.
+            {t("activities.hero.subtitle")}
           </motion.p>
 
           <motion.div
@@ -254,14 +221,14 @@ export default function MembershipActivitiesPage() {
               href="/membership"
               className="group flex items-center gap-3 border border-primary bg-primary px-8 py-4 text-sm uppercase tracking-[0.22em] text-primary-foreground shadow-[0_0_35px_rgba(212,175,55,0.35)] transition hover:bg-primary/90"
             >
-              Buy Membership
+              {t("activities.hero.btnBuy")}
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </a>
             <a
               href="#benefits"
               className="border border-primary/30 bg-background/30 px-8 py-4 text-sm uppercase tracking-[0.22em] text-foreground backdrop-blur-sm transition hover:border-primary hover:text-primary"
             >
-              Explore Benefits
+              {t("activities.hero.btnExplore")}
             </a>
           </motion.div>
         </div>
@@ -277,17 +244,17 @@ export default function MembershipActivitiesPage() {
         <div className="relative mx-auto max-w-7xl">
           <div className="mb-12 text-center">
             <p className="text-xs uppercase tracking-[0.3em] text-primary">
-              Why Members Choose Us
+              {t("activities.benefits.pretitle")}
             </p>
             <h2 className="mt-4 text-4xl font-light text-foreground md:text-5xl">
-              Benefits That Make Goa Better
+              {t("activities.benefits.title")}
             </h2>
           </div>
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             {benefits.map((benefit, index) => (
               <motion.div
-                key={benefit.title}
+                key={index}
                 initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -312,32 +279,29 @@ export default function MembershipActivitiesPage() {
         <div className="relative mx-auto max-w-7xl">
           <div className="mb-14 text-center">
             <p className="text-xs uppercase tracking-[0.35em] text-primary">
-              Membership Accessibility
+              {t("activities.access.pretitle")}
             </p>
             <h2 className="mx-auto mt-4 max-w-5xl text-4xl font-light leading-tight text-foreground md:text-6xl">
-              Every Card Gives Access.{" "}
+              {t("activities.access.title1")}{" "}
               <span className="text-primary">
-                Higher Cards Give More Power.
+                {t("activities.access.title2")}
               </span>
             </h2>
             <p className="mx-auto mt-6 max-w-4xl text-base leading-relaxed text-muted-foreground md:text-lg">
-              GOA MOMENTS is built to make members feel valued before, during,
-              and after every Goa experience. Choose Gold for smart value,
-              Platinum for wider access, or Diamond for the strongest priority
-              support and top facility treatment.
+              {t("activities.access.subtitle")}
             </p>
           </div>
 
           <div className="space-y-10">
             {detailedMemberships.map((item, index) => (
               <motion.div
-                key={item.name}
+                key={index}
                 initial={{ opacity: 0, y: 28 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.65, delay: index * 0.1 }}
                 className={`relative overflow-hidden border p-6 backdrop-blur-md md:p-10 ${
-                  item.name.includes("Diamond")
+                  item.name.includes(t("activities.memberships.diamond.name"))
                     ? "border-primary bg-card/90 dark:bg-[linear-gradient(135deg,rgba(212,175,55,0.18),rgba(0,0,0,0.80),rgba(212,175,55,0.08))] shadow-[0_0_90px_rgba(212,175,55,0.20)]"
                     : "border-primary/30 bg-card/75 shadow-[0_0_55px_rgba(212,175,55,0.08)]"
                 }`}
@@ -371,7 +335,7 @@ export default function MembershipActivitiesPage() {
                     <div className="mt-7 grid gap-4 sm:grid-cols-2">
                       <div className="border border-primary/20 bg-background/35 p-4">
                         <p className="text-xs uppercase tracking-[0.25em] text-primary">
-                          Member Access
+                          {t("activities.access.memberAccessLabel")}
                         </p>
                         <p className="mt-2 text-sm text-foreground">
                           {item.access}
@@ -379,7 +343,7 @@ export default function MembershipActivitiesPage() {
                       </div>
                       <div className="border border-primary/20 bg-background/35 p-4">
                         <p className="text-xs uppercase tracking-[0.25em] text-primary">
-                          Support Level
+                          {t("activities.access.supportLevelLabel")}
                         </p>
                         <p className="mt-2 text-sm text-foreground">
                           {item.support}
@@ -391,13 +355,13 @@ export default function MembershipActivitiesPage() {
                   <div>
                     <div className="border border-primary/25 bg-background/35 p-5">
                       <p className="text-xs uppercase tracking-[0.3em] text-primary">
-                        Why This Card Is Valuable
+                        {t("activities.access.whyValuableLabel")}
                       </p>
 
                       <ul className="mt-6 space-y-4">
-                        {item.points.map((point) => (
+                        {item.points.map((point, idx) => (
                           <li
-                            key={point}
+                            key={idx}
                             className="flex items-start gap-3 text-sm leading-relaxed text-muted-foreground"
                           >
                             <Check className="mt-1 h-4 w-4 shrink-0 text-primary" />
@@ -409,7 +373,7 @@ export default function MembershipActivitiesPage() {
 
                     <div className="mt-5 border-l-2 border-primary bg-primary/10 p-5">
                       <p className="text-sm leading-relaxed text-foreground">
-                        <span className="text-primary">Best Choice:</span>{" "}
+                        <span className="text-primary">{t("activities.access.bestChoiceLabel")} </span>
                         {item.highlight}
                       </p>
                     </div>
@@ -418,39 +382,39 @@ export default function MembershipActivitiesPage() {
                       <div className="flex flex-col items-center gap-2 border border-primary/20 bg-background/30 p-4 text-center">
                         <Hotel className="h-5 w-5 text-primary" />
                         <span className="text-[10px] uppercase tracking-widest text-muted-foreground">
-                          Hotels
+                          {t("activities.access.icons.hotels")}
                         </span>
                       </div>
                       <div className="flex flex-col items-center gap-2 border border-primary/20 bg-background/30 p-4 text-center">
-                        {item.name.includes("Gold") ? (
+                        {item.name.includes(t("activities.memberships.gold.name")) ? (
                           <Plane className="h-5 w-5 text-primary" />
                         ) : (
                           <UtensilsCrossed className="h-5 w-5 text-primary" />
                         )}
                         <span className="text-[10px] uppercase tracking-widest text-muted-foreground">
-                          {item.name.includes("Gold") ? "Travel" : "Dining"}
+                          {item.name.includes(t("activities.memberships.gold.name")) ? t("activities.access.icons.travel") : t("activities.access.icons.dining")}
                         </span>
                       </div>
                       <div className="flex flex-col items-center gap-2 border border-primary/20 bg-background/30 p-4 text-center">
-                        {item.name.includes("Gold") ? (
+                        {item.name.includes(t("activities.memberships.gold.name")) ? (
                           <Users className="h-5 w-5 text-primary" />
                         ) : (
                           <Martini className="h-5 w-5 text-primary" />
                         )}
                         <span className="text-[10px] uppercase tracking-widest text-muted-foreground">
-                          {item.name.includes("Gold") ? "4 Members" : "Clubs"}
+                          {item.name.includes(t("activities.memberships.gold.name")) ? t("activities.access.icons.u4") : t("activities.access.icons.clubs")}
                         </span>
                       </div>
                       <div className="flex flex-col items-center gap-2 border border-primary/20 bg-background/30 p-4 text-center">
-                        {item.name.includes("Diamond") ? (
+                        {item.name.includes(t("activities.memberships.diamond.name")) ? (
                           <Zap className="h-5 w-5 text-primary" />
                         ) : (
                           <ShieldCheck className="h-5 w-5 text-primary" />
                         )}
                         <span className="text-[10px] uppercase tracking-widest text-muted-foreground">
-                          {item.name.includes("Diamond")
-                            ? "High Priority"
-                            : "Support"}
+                          {item.name.includes(t("activities.memberships.diamond.name"))
+                            ? t("activities.access.icons.hp")
+                            : t("activities.access.icons.support")}
                         </span>
                       </div>
                     </div>
@@ -465,7 +429,7 @@ export default function MembershipActivitiesPage() {
               href="/membership"
               className="group inline-flex items-center gap-3 border border-primary bg-primary px-8 py-4 text-sm uppercase tracking-[0.22em] text-primary-foreground shadow-[0_0_35px_rgba(212,175,55,0.35)] transition hover:bg-primary/90"
             >
-              Choose Your Membership
+              {t("activities.access.btnChoose")}
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </a>
           </div>
@@ -483,21 +447,19 @@ export default function MembershipActivitiesPage() {
               className="border border-primary/35 bg-card/90 dark:bg-[linear-gradient(135deg,rgba(212,175,55,0.16),rgba(0,0,0,0.55),rgba(212,175,55,0.08))] p-6 shadow-[0_0_80px_rgba(212,175,55,0.16)] backdrop-blur-md md:p-8"
             >
               <p className="text-xs uppercase tracking-[0.3em] text-primary">
-                10%–70% Discounts
+                {t("activities.discounts.pretitle")}
               </p>
               <h2 className="mt-4 text-4xl font-light text-foreground md:text-5xl">
-                Save More at Selected Premium Venues
+                {t("activities.discounts.title")}
               </h2>
               <p className="mt-5 text-sm leading-relaxed text-muted-foreground md:text-base">
-                Members can unlock 10% to 70% savings depending on the venue,
-                category, timing, availability, and partner offer. GOA MOMENTS
-                helps you understand where your membership gives the best value.
+                {t("activities.discounts.desc")}
               </p>
 
               <div className="mt-8 grid gap-4 sm:grid-cols-2">
-                {venues.map((venue) => (
+                {venues.map((venue, idx) => (
                   <div
-                    key={venue}
+                    key={idx}
                     className="flex items-center gap-3 border border-primary/20 bg-background/35 p-4 backdrop-blur-sm"
                   >
                     <Sparkles className="h-4 w-4 shrink-0 text-primary" />
@@ -527,14 +489,13 @@ export default function MembershipActivitiesPage() {
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(212,175,55,0.30),transparent_30%)]" />
                 <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
                   <p className="text-xs uppercase tracking-[0.3em] text-primary">
-                    Premium Lifestyle
+                    {t("activities.premium.pretitle")}
                   </p>
                   <h3 className="mt-3 text-3xl font-light text-foreground md:text-4xl">
-                    Goa Feels Better When You Know Where to Go
+                    {t("activities.premium.title")}
                   </h3>
                   <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-                    Our membership helps users enjoy better venues, better
-                    support, and better confidence while exploring Goa.
+                    {t("activities.premium.desc")}
                   </p>
                 </div>
               </div>
@@ -559,14 +520,13 @@ export default function MembershipActivitiesPage() {
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,rgba(212,175,55,0.30),transparent_30%)]" />
                 <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
                   <p className="text-xs uppercase tracking-[0.3em] text-primary">
-                    Lifetime Accessibility
+                    {t("activities.lifetime.pretitle")}
                   </p>
                   <h3 className="mt-3 text-3xl font-light text-foreground">
-                    One Membership. Long-Term Value.
+                    {t("activities.lifetime.title")}
                   </h3>
                   <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-                    Your membership keeps you connected to GOA MOMENTS support,
-                    premium guidance, and curated Goa lifestyle access.
+                    {t("activities.lifetime.desc")}
                   </p>
                 </div>
               </div>
@@ -574,35 +534,32 @@ export default function MembershipActivitiesPage() {
 
             <div className="border border-primary/30 bg-card/75 p-6 shadow-[0_0_60px_rgba(212,175,55,0.12)] backdrop-blur-md md:p-8">
               <p className="text-xs uppercase tracking-[0.3em] text-primary">
-                Strong Support
+                {t("activities.support.pretitle")}
               </p>
               <h2 className="mt-4 text-4xl font-light text-foreground">
-                We Stand With Every Member
+                {t("activities.support.title")}
               </h2>
               <p className="mt-5 text-sm leading-relaxed text-muted-foreground md:text-base">
-                GOA MOMENTS is created to make every member feel supported,
-                valued, and confident. Whether you need help choosing hotels,
-                restaurants, activities, taxi options, nightlife, or premium
-                experiences, our support gives you direction.
+                {t("activities.support.desc")}
               </p>
 
               <div className="mt-8 space-y-4">
                 <div className="flex gap-3 border border-primary/20 bg-background/35 p-4">
                   <Hotel className="h-5 w-5 shrink-0 text-primary" />
                   <p className="text-sm text-muted-foreground">
-                    Stay guidance for premium and comfortable Goa experiences.
+                    {t("activities.support.features.f1")}
                   </p>
                 </div>
                 <div className="flex gap-3 border border-primary/20 bg-background/35 p-4">
                   <UtensilsCrossed className="h-5 w-5 shrink-0 text-primary" />
                   <p className="text-sm text-muted-foreground">
-                    Restaurant, dining, celebration, and nightlife suggestions.
+                    {t("activities.support.features.f2")}
                   </p>
                 </div>
                 <div className="flex gap-3 border border-primary/20 bg-background/35 p-4">
                   <ConciergeBell className="h-5 w-5 shrink-0 text-primary" />
                   <p className="text-sm text-muted-foreground">
-                    Dedicated support to help you choose the right places.
+                    {t("activities.support.features.f3")}
                   </p>
                 </div>
               </div>
@@ -610,143 +567,22 @@ export default function MembershipActivitiesPage() {
           </div>
         </div>
       </section>
-      
-      {/* SUPPORT BOX BEFORE REVIEWS - OLD STYLE */}
-      <section className="relative px-4 py-16 sm:px-6 md:py-24">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(212,175,55,0.16),transparent_38%)]" />
 
-        <div className="relative mx-auto max-w-7xl border border-primary/40 bg-card/90 dark:bg-[linear-gradient(135deg,rgba(212,175,55,0.18),rgba(0,0,0,0.72),rgba(212,175,55,0.10))] p-6 shadow-[0_0_100px_rgba(212,175,55,0.20)] backdrop-blur-md md:p-10">
-          <div className="relative grid gap-10 lg:grid-cols-[1fr_0.9fr] lg:items-center">
-            <motion.div>
-              <p className="text-xs uppercase tracking-[0.35em] text-primary">
-                Goa Moments Support
-              </p>
-              <h2 className="mt-5 text-4xl font-light leading-tight text-foreground md:text-5xl">
-                Members Are Never Left Alone
-              </h2>
-              <p className="mt-6 max-w-3xl text-sm leading-relaxed text-muted-foreground md:text-base">
-                If a member needs help finding a hotel, arranging transport,
-                choosing a restaurant, planning an outing, or understanding how
-                to use the membership card, GOA MOMENTS support is there to
-                assist.
-              </p>
-            </motion.div>
-
-            <div className="space-y-5">
-              <div className="flex gap-4 border border-primary/30 bg-background/40 p-5">
-                <Phone className="mt-1 h-5 w-5 shrink-0 text-primary" />
-                <div>
-                  <p className="text-xs uppercase tracking-[0.28em] text-primary">
-                    Support Phone
-                  </p>
-                  <p className="mt-2 text-foreground">{supportPhone}</p>
-                </div>
-              </div>
-
-              <div className="flex gap-4 border border-primary/30 bg-background/40 p-5">
-                <Mail className="mt-1 h-5 w-5 shrink-0 text-primary" />
-                <div>
-                  <p className="text-xs uppercase tracking-[0.28em] text-primary">
-                    Email Support
-                  </p>
-                  <p className="mt-2 text-foreground">{supportEmail}</p>
-                </div>
-              </div>
-
-              <div className="flex gap-4 border border-primary/30 bg-background/40 p-5">
-                <MapPin className="mt-1 h-5 w-5 shrink-0 text-primary" />
-                <div>
-                  <p className="text-xs uppercase tracking-[0.28em] text-primary">
-                    Support Scope
-                  </p>
-                  <p className="mt-2 text-foreground">
-                    Hotels, taxis, dining, travel, nightlife, and experiences
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      
-      <section className="relative px-6 pb-10">
-        <div className="mx-auto max-w-7xl border border-primary/40 bg-card/90 dark:bg-[linear-gradient(135deg,rgba(212,175,55,0.18),rgba(0,0,0,0.78),rgba(212,175,55,0.08))] p-6 shadow-[0_0_90px_rgba(212,175,55,0.18)] md:p-10">
-          <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
-            <div>
-              <p className="text-xs uppercase tracking-[0.35em] text-primary">
-                Contact Access Difference
-              </p>
-              <h2 className="mt-4 text-4xl font-light leading-tight text-foreground md:text-5xl">
-                Same Contact Page.{" "}
-                <span className="text-primary">Different Support Access.</span>
-              </h2>
-              <p className="mt-5 text-sm leading-relaxed text-muted-foreground md:text-base">
-                Everyone can contact GOA MOMENTS for general enquiries. But
-                special support information, priority guidance, and member-only
-                assistance are provided only to customers who have purchased a
-                GOA MOMENTS membership card.
-              </p>
-            </div>
-
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="border border-primary/25 bg-background/40 p-5">
-                <Mail className="h-6 w-6 text-primary" />
-                <h3 className="mt-4 text-2xl font-light text-foreground">
-                  General Enquiry Contact
-                </h3>
-                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                  Non-members can contact us anytime to ask about membership
-                  plans, pricing, benefits, discounts, how GOA MOMENTS works,
-                  and general website-related doubts.
-                </p>
-              </div>
-
-              <div className="border border-primary/25 bg-background/40 p-5">
-                <LockKeyhole className="h-6 w-6 text-primary" />
-                <h3 className="mt-4 text-2xl font-light text-foreground">
-                  Member-Only Support
-                </h3>
-                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                  Only paid members receive special support details,
-                  priority information, private guidance, and membership-based
-                  assistance after their card is activated.
-                </p>
-              </div>
-
-              <div className="border border-primary/25 bg-background/40 p-5 md:col-span-2">
-                <ShieldCheck className="h-6 w-6 text-primary" />
-                <h3 className="mt-4 text-2xl font-light text-foreground">
-                  Verified Through Payment Details
-                </h3>
-                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                  The email address and phone number given during payment are
-                  used to identify the member. Based on those details, GOA
-                  MOMENTS provides lifetime membership support information,
-                  benefit guidance, and stronger assistance according to the
-                  purchased plan.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      
-      {/* REVIEWS */}
       <section className="relative px-4 py-16 sm:px-6 md:py-24">
         <div className="relative mx-auto max-w-7xl">
           <div className="mb-12 text-center">
             <p className="text-xs uppercase tracking-[0.3em] text-primary">
-              Member Reviews
+              {t("activities.reviews.pretitle")}
             </p>
             <h2 className="mt-4 text-4xl font-light text-foreground md:text-5xl">
-              What People Feel About GOA MOMENTS
+              {t("activities.reviews.title")}
             </h2>
           </div>
 
           <div className="grid gap-6 md:grid-cols-3">
             {reviews.map((review, index) => (
               <motion.div
-                key={review.name}
+                key={index}
                 initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -770,16 +606,15 @@ export default function MembershipActivitiesPage() {
         </div>
       </section>
 
-      {/* FAQ SECTION AFTER REVIEWS */}
       <section className="relative px-4 py-16 sm:px-6 md:py-24">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(212,175,55,0.12),transparent_36%)]" />
         <div className="relative mx-auto max-w-5xl">
           <div className="mb-12 text-center">
             <p className="text-xs uppercase tracking-[0.3em] text-primary">
-              Member Support FAQs
+              {t("activities.faqs.pretitle")}
             </p>
             <h2 className="mt-4 text-4xl font-light text-foreground md:text-5xl">
-              Questions People Ask Before Joining
+              {t("activities.faqs.title")}
             </h2>
           </div>
 
@@ -789,7 +624,7 @@ export default function MembershipActivitiesPage() {
 
               return (
                 <motion.div
-                  key={faq.question}
+                  key={index}
                   initial={{ opacity: 0, y: 24 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
@@ -807,7 +642,6 @@ export default function MembershipActivitiesPage() {
                         {faq.question}
                       </span>
                     </div>
-
                     <ChevronDown
                       className={`h-5 w-5 shrink-0 text-primary transition-transform duration-300 ${
                         isOpen ? "rotate-180" : ""
@@ -835,7 +669,6 @@ export default function MembershipActivitiesPage() {
         </div>
       </section>
 
-      {/* FINAL CTA */}
       <section className="relative px-4 pb-24 pt-10 sm:px-6 md:pb-32">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(212,175,55,0.14),transparent_34%)]" />
         <div className="relative mx-auto max-w-5xl border border-primary/35 bg-card/90 dark:bg-[linear-gradient(135deg,rgba(212,175,55,0.16),rgba(0,0,0,0.50),rgba(212,175,55,0.08))] p-8 text-center shadow-[0_0_90px_rgba(212,175,55,0.16)] backdrop-blur-md md:p-12">
@@ -845,22 +678,20 @@ export default function MembershipActivitiesPage() {
           <div className="pointer-events-none absolute bottom-0 right-0 h-20 w-20 border-b border-r border-primary/70" />
 
           <p className="text-xs uppercase tracking-[0.3em] text-primary">
-            Become a Member
+            {t("activities.cta.pretitle")}
           </p>
           <h2 className="mt-4 text-4xl font-light text-foreground md:text-5xl">
-            Choose Gold, Diamond, or Platinum Membership
+            {t("activities.cta.title")}
           </h2>
           <p className="mx-auto mt-5 max-w-3xl text-sm leading-relaxed text-muted-foreground md:text-base">
-            Start your GOA MOMENTS journey today and unlock premium support,
-            venue savings, lifestyle guidance, and a better way to experience
-            Goa.
+            {t("activities.cta.desc")}
           </p>
 
           <a
             href="/membership"
             className="group mt-8 inline-flex items-center gap-3 border border-primary bg-primary px-8 py-4 text-sm uppercase tracking-[0.22em] text-primary-foreground shadow-[0_0_35px_rgba(212,175,55,0.35)] transition hover:bg-primary/90"
           >
-            Buy Membership
+            {t("activities.cta.btn")}
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
           </a>
         </div>
