@@ -19,13 +19,15 @@ export function Hero() {
 
   // Determine theme values safely
   const isDark = mounted && resolvedTheme === "dark";
-
   const textColor = isDark ? "text-white" : "text-foreground";
   const subTextColor = isDark ? "text-white/60" : "text-muted-foreground";
 
+  // Theme-based Startup Logo
+  const startupLogo = isDark ? "/images/startup_logo_black.png" : "/images/startup_logo_white.png";
+
   // Prevent rendering theme-dependent UI until mounted to avoid flashing
   if (!mounted) {
-    return null; 
+    return null;
   }
 
   return (
@@ -148,15 +150,14 @@ export function Hero() {
             transition={{ duration: 0.8 }}
             className="flex flex-col items-center gap-8 rounded-2xl border border-[#C5A059]/60 shadow-[0_4px_25px_rgba(197,160,89,0.15)] bg-card/90 backdrop-blur-sm px-6 py-10 text-card-foreground xl:flex-row xl:justify-between xl:px-12 xl:py-8"
           >
-            
-            {/* 1. Goa Tourism */}
+            {/* 1. Goa Tourism (Enlarged) */}
             <div className="flex items-center gap-4 xl:w-auto">
               <Image
                 src="/images/goa_tourism.png"
                 alt="Goa Tourism"
-                width={95}
-                height={55}
-                className="h-10 w-auto object-contain drop-shadow-md"
+                width={130}
+                height={75}
+                className="h-14 w-auto object-contain drop-shadow-md sm:h-16"
               />
               <div className="flex flex-col pt-1">
                 <span className={`font-serif text-[15px] uppercase tracking-wide ${textColor}`}>
@@ -173,7 +174,25 @@ export function Hero() {
             <div className="hidden h-16 w-px bg-[#C5A059]/30 xl:block" />
             <div className="h-px w-3/4 bg-[#C5A059]/30 xl:hidden" />
 
-            {/* 2. Trusted & Secured */}
+            {/* 2. Startup India (Enlarged with DPIIT Caption under it) */}
+            <div className="flex flex-col items-center justify-center gap-2 xl:w-auto text-center">
+              <Image
+                src={startupLogo}
+                alt="Startup India"
+                width={190}
+                height={75}
+                className="h-14 w-auto object-contain drop-shadow-md sm:h-16"
+              />
+              <span className={`text-[11px] font-medium tracking-wide uppercase text-[#C5A059] ${subTextColor}`}>
+                Recognized by DPIIT
+              </span>
+            </div>
+
+            {/* Divider */}
+            <div className="hidden h-16 w-px bg-[#C5A059]/30 xl:block" />
+            <div className="h-px w-3/4 bg-[#C5A059]/30 xl:hidden" />
+
+            {/* 3. Trusted & Secured */}
             <div className="flex items-center gap-4 xl:w-auto">
               <ShieldCheck className="h-10 w-10 text-[#C5A059]" strokeWidth={1.2} />
               <div className="flex flex-col pt-1">
@@ -191,18 +210,25 @@ export function Hero() {
             <div className="hidden h-16 w-px bg-[#C5A059]/30 xl:block" />
             <div className="h-px w-3/4 bg-[#C5A059]/30 xl:hidden" />
 
-            {/* 3. Premium Experiences */}
+            {/* 4. Premium Experiences */}
             <div className="flex items-center gap-4 xl:w-auto">
-              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-[#C5A059]">
-                <path d="M12 17C16.4183 17 20 13.4183 20 9" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
-                <path d="M12 17C7.58172 17 4 13.4183 4 9" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
-                <path d="M8 4L9.5 6.5L12 3L14.5 6.5L16 4L15 8H9L8 4Z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round"/>
-                <path d="M18 11C19.5 10 20 9 20 9C20 9 19 9.5 18 11Z" fill="currentColor"/>
-                <path d="M16 13C17.5 12 18 11 18 11C18 11 17 11.5 16 13Z" fill="currentColor"/>
-                <path d="M14 15C15.5 14 16 13 16 13C16 13 15 13.5 14 15Z" fill="currentColor"/>
-                <path d="M6 11C4.5 10 4 9 4 9C4 9 5 9.5 6 11Z" fill="currentColor"/>
-                <path d="M8 13C6.5 12 6 11 6 11C6 11 7 11.5 8 13Z" fill="currentColor"/>
-                <path d="M10 15C8.5 14 8 13 8 13C8 13 9 13.5 10 15Z" fill="currentColor"/>
+              <svg
+                width="40"
+                height="40"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                className="text-[#C5A059]"
+              >
+                <path d="M12 17C16.4183 17 20 13.4183 20 9" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+                <path d="M12 17C7.58172 17 4 13.4183 4 9" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+                <path d="M8 4L9.5 6.5L12 3L14.5 6.5L16 4L15 8H9L8 4Z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round" />
+                <path d="M18 11C19.5 10 20 9 20 9C20 9 19 9.5 18 11Z" fill="currentColor" />
+                <path d="M16 13C17.5 12 18 11 18 11C18 11 17 11.5 16 13Z" fill="currentColor" />
+                <path d="M14 15C15.5 14 16 13 16 13C16 13 15 13.5 14 15Z" fill="currentColor" />
+                <path d="M6 11C4.5 10 4 9 4 9C4 9 5 9.5 6 11Z" fill="currentColor" />
+                <path d="M8 13C6.5 12 6 11 6 11C6 11 7 11.5 8 13Z" fill="currentColor" />
+                <path d="M10 15C8.5 14 8 13 8 13C8 13 9 13.5 10 15Z" fill="currentColor" />
               </svg>
               <div className="flex flex-col pt-1">
                 <span className={`font-serif text-[14px] leading-tight tracking-wide ${textColor}`}>
@@ -218,7 +244,7 @@ export function Hero() {
             <div className="hidden h-16 w-px bg-[#C5A059]/30 xl:block" />
             <div className="h-px w-3/4 bg-[#C5A059]/30 xl:hidden" />
 
-            {/* 4. 24x7 Concierge */}
+            {/* 5. 24x7 Concierge */}
             <div className="flex items-center gap-4 xl:w-auto">
               <Headphones className="h-10 w-10 text-[#C5A059]" strokeWidth={1.2} />
               <div className="flex flex-col pt-1">
@@ -231,7 +257,6 @@ export function Hero() {
                 </span>
               </div>
             </div>
-
           </motion.div>
         </div>
       </section>

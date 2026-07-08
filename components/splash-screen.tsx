@@ -13,14 +13,12 @@ export function SplashScreen() {
     
     // Check if the user has already seen the splash screen in this session
     const hasSeenSplash = sessionStorage.getItem("hasSeenSplash");
-
     if (hasSeenSplash) {
-      // If they have, immediately hide it
       setIsVisible(false);
     } else {
       // Prevent scrolling while splash screen is active
       document.body.style.overflow = "hidden";
-
+      
       // Increased duration to 4.5 seconds for professional, cinematic pacing
       const timer = setTimeout(() => {
         setIsVisible(false);
@@ -45,19 +43,19 @@ export function SplashScreen() {
         <motion.div
           key="splash"
           initial={{ opacity: 1 }}
-          exit={{ 
-            opacity: 0, 
-            transition: { duration: 1, ease: "easeInOut" } 
+          exit={{
+            opacity: 0,
+            transition: { duration: 1, ease: "easeInOut" }
           }}
           className="fixed inset-0 z-[9999] flex flex-col items-center justify-between bg-[#000000]"
         >
-         {/* Subtle Dark Gold Radial Glow - Matched perfectly to theme #C5A059 */}
+          {/* Subtle Dark Gold Radial Glow Matched perfectly to theme #C5A059 */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.5 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 2, ease: "easeOut" }}
-              className="h-[40vh] w-[40vh] rounded-full bg-[#b68f24] opacity-[0.08] blur-[100px] sm:h-[60vh] sm:w-[60vh] sm:opacity-[0.07] sm:blur-[120px]" 
+              className="h-[40vh] w-[40vh] rounded-full bg-[#b68f24] opacity-[0.08] blur-[100px] sm:h-[60vh] sm:w-[60vh] sm:opacity-[0.07] sm:blur-[120px]"
             />
           </div>
 
@@ -98,7 +96,7 @@ export function SplashScreen() {
             </motion.div>
           </div>
 
-          {/* Bottom: Official Partners */}
+          {/* Bottom: Official Partners & Recognitions */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -106,10 +104,16 @@ export function SplashScreen() {
             className="relative z-10 flex flex-1 flex-col justify-end pb-12 sm:pb-16"
           >
             <div className="flex items-center justify-center gap-6 sm:gap-10">
-              
               {/* Shield Badge + Official Tourism Partner Text */}
               <div className="flex items-center gap-3">
-                <svg width="24" height="30" viewBox="0 0 36 44" fill="none" xmlns="http://www.w3.org/2000/svg" className="drop-shadow-[0_2px_10px_rgba(212,175,55,0.3)]">
+                <svg
+                  width="28"
+                  height="34"
+                  viewBox="0 0 36 44"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="drop-shadow-[0_2px_10px_rgba(212,175,55,0.3)]"
+                >
                   <defs>
                     <linearGradient id="shieldGradSplash" x1="0%" y1="0%" x2="100%" y2="100%">
                       <stop offset="0%" stopColor="#8a6125" />
@@ -125,7 +129,7 @@ export function SplashScreen() {
                   <path d="M18 2.5L33.5 9.5V21C33.5 29.5 27 38 18 40.5C9 38 2.5 29.5 2.5 21V9.5L18 2.5Z" fill="url(#shieldInnerGradSplash)" />
                   <path d="M11 21L15.5 26L25 15" stroke="#231709" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
-                <div className="flex flex-col justify-center text-left font-serif">
+                <div className="flex flex-col justify-center text-left">
                   <span className="mb-[2px] text-[10px] font-bold uppercase tracking-[0.25em] text-[#d4af37] drop-shadow-md sm:text-[11px]">
                     Official
                   </span>
@@ -135,23 +139,38 @@ export function SplashScreen() {
                 </div>
               </div>
 
-              {/* Goa Tourism Logo */}
+              {/* Goa Tourism Logo (Enlarged) */}
               <div className="flex flex-col items-center gap-1.5">
                 <Image
                   src="/images/goa_tourism.png"
                   alt="Goa Tourism"
-                  width={90}
-                  height={50}
-                  className="h-10 w-auto object-contain drop-shadow-[0_2px_10px_rgba(255,255,255,0.1)] sm:h-12"
+                  width={130}
+                  height={75}
+                  className="h-14 w-auto object-contain drop-shadow-[0_2px_10px_rgba(255,255,255,0.1)] sm:h-16"
                 />
-                <span className="text-center text-[9px] font-medium leading-tight tracking-wide text-white/90 drop-shadow-md sm:text-[10px]">
-                  Goa<br/>Tourism
+                <span className="text-center text-[10px] font-medium leading-tight tracking-wide text-white/90 drop-shadow-md sm:text-[11px]">
+                  Goa<br />Tourism
                 </span>
               </div>
 
+              {/* Divider */}
+              <div className="h-12 w-px bg-[#d4af37]/30 sm:h-14" />
+
+              {/* Startup India Logo (Enlarged + New Caption) */}
+              <div className="flex flex-col items-center gap-1.5">
+                <Image
+                  src="/images/startup_logo_black.png"
+                  alt="Startup India"
+                  width={160}
+                  height={70}
+                  className="h-14 w-auto object-contain drop-shadow-[0_2px_10px_rgba(255,255,255,0.1)] sm:h-16"
+                />
+                <span className="text-center text-[10px] font-medium leading-tight tracking-wide text-white/90 drop-shadow-md sm:text-[11px]">
+                  Recognized by DPIIT
+                </span>
+              </div>
             </div>
           </motion.div>
-          
         </motion.div>
       )}
     </AnimatePresence>

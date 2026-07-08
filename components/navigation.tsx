@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import Link from "next/link"; // <-- Added Next.js Link
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { useTranslation } from "./providers";
@@ -19,7 +19,7 @@ export function Navigation() {
     { label: t("nav.home"), href: "/" },
     { label: t("nav.about"), href: "/about" },
     { label: t("nav.membership"), href: "/membership" },
-    { label: t("nav.membershipActivities"), href: "/membership-activities" }, // <-- Fixed hardcoded text
+    { label: t("nav.membershipActivities"), href: "/membership-activities" },
     { label: t("nav.contact"), href: "/contact" },
   ];
   
@@ -29,6 +29,11 @@ export function Navigation() {
     resolvedTheme === "dark" 
       ? "text-white/90" 
       : "text-black/80";
+
+  const startupLogo = 
+    resolvedTheme === "dark" 
+      ? "/images/startup_logo_black.png" 
+      : "/images/startup_logo_white.png";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -49,14 +54,14 @@ export function Navigation() {
         }`}
       >
         <nav className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-4 sm:px-6 sm:py-5">
-          {/* Use Link instead of a tag for the Logo */}
           <Link href="/" className="group flex items-center gap-3">
+            {/* Main Logo Enlarged */}
             <Image
               src="/images/logo.png"
               alt="GOA MOMENTS Logo"
-              width={100}
-              height={100}
-              className="h-10 w-auto object-contain"
+              width={140}
+              height={140}
+              className="h-14 w-auto object-contain"
               priority
             />
 
@@ -83,7 +88,6 @@ export function Navigation() {
 
           <div className="hidden items-center gap-5 lg:flex xl:gap-8">
             {navLinks.map((link) => (
-              /* Use Link instead of a tag for desktop navigation */
               <Link
                 key={link.href}
                 href={link.href}
@@ -98,7 +102,6 @@ export function Navigation() {
           <div className="hidden items-center gap-3 lg:flex">
             <LanguageSwitcher />
             <ThemeToggle />
-            {/* Use Link instead of a tag for Join Now button */}
             <Link
               href="/coming-soon"
               className="border border-[#C5A059] bg-transparent px-4 py-2 text-xs uppercase tracking-widest text-[#C5A059] transition-all duration-300 hover:bg-[#C5A059] hover:text-black xl:px-6"
@@ -124,12 +127,12 @@ export function Navigation() {
           </div>
         </nav>
 
-        {/* Secondary Navigation / Partner Bar (Unchanged) */}
+        {/* Secondary Navigation / Partner Bar */}
         <div className="hidden w-full lg:block">
           <div className="mx-auto flex w-full max-w-7xl items-center justify-end px-4 sm:px-6">
             <div className="flex items-center">
               <div className="flex items-center gap-3 pr-2">
-                <svg width="24" height="30" viewBox="0 0 36 44" fill="none" xmlns="http://www.w3.org/2000/svg" className="drop-shadow-md">
+                <svg width="28" height="34" viewBox="0 0 36 44" fill="none" xmlns="http://www.w3.org/2000/svg" className="drop-shadow-md">
                   <defs>
                     <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                       <stop offset="0%" stopColor="#8a6125" />
@@ -158,14 +161,28 @@ export function Navigation() {
 
               <div className="mx-3 h-14 w-px bg-white/20" />
 
+              {/* Goa Tourism Logo Enlarged */}
               <div className="flex items-center gap-1">
                 <div className="flex flex-col items-center justify-center">
-                  <Image src="/images/goa_tourism.png" alt="Goa Tourism" width={120} height={70} className="h-16 w-auto object-contain drop-shadow-md" />
+                  <Image src="/images/goa_tourism.png" alt="Goa Tourism" width={160} height={90} className="h-20 w-auto object-contain drop-shadow-md" />
                   <span className={`mt-1.5 text-[10px] font-medium tracking-wide ${partnerTextColor}`}>
                     Goa Tourism
                   </span>
                 </div>
               </div>
+
+              <div className="mx-3 h-14 w-px bg-white/20" />
+
+              {/* Startup India Logo Enlarged */}
+              <div className="flex items-center gap-1">
+                <div className="flex flex-col items-center justify-center">
+                  <Image src={startupLogo} alt="Startup India" width={160} height={90} className="h-20 w-auto object-contain drop-shadow-md" />
+                  <span className={`mt-1.5 text-[10px] font-medium tracking-wide ${partnerTextColor}`}>
+                    Startup India
+                  </span>
+                </div>
+              </div>
+
             </div>
           </div>
         </div>
@@ -182,7 +199,6 @@ export function Navigation() {
           >
             <div className="flex min-h-screen flex-col items-center justify-center gap-6 px-6 sm:gap-8">
               {navLinks.map((link, index) => (
-                /* Use Link instead of a tag for mobile navigation */
                 <Link key={link.href} href={link.href} passHref legacyBehavior>
                   <motion.a
                     initial={{ opacity: 0, y: 20 }}
@@ -217,7 +233,7 @@ export function Navigation() {
                 className="mt-8 flex w-full max-w-[340px] flex-col items-center gap-6 border-t border-white/10 pt-8"
               >
                 <div className="flex items-center gap-3">
-                  <svg width="20" height="25" viewBox="0 0 36 44" fill="none" xmlns="http://www.w3.org/2000/svg" className="drop-shadow-md">
+                  <svg width="24" height="29" viewBox="0 0 36 44" fill="none" xmlns="http://www.w3.org/2000/svg" className="drop-shadow-md">
                     <defs>
                       <linearGradient id="shieldGradMob" x1="0%" y1="0%" x2="100%" y2="100%">
                         <stop offset="0%" stopColor="#8a6125" />
@@ -241,9 +257,16 @@ export function Navigation() {
                 </div>
 
                 <div className="flex items-center justify-center gap-10">
+                  {/* Goa Tourism Mobile Logo Enlarged */}
                   <div className="flex flex-col items-center gap-1.5">
-                    <Image src="/images/goa_tourism.png" alt="Goa Tourism" width={100} height={60} className="h-14 w-auto object-contain" />
+                    <Image src="/images/goa_tourism.png" alt="Goa Tourism" width={120} height={70} className="h-18 w-auto object-contain" />
                     <span className={`text-center text-[9px] font-medium tracking-wide ${partnerTextColor}`}>Goa<br/>Tourism</span>
+                  </div>
+
+                  {/* Startup India Mobile Logo Enlarged */}
+                  <div className="flex flex-col items-center gap-1.5">
+                    <Image src={startupLogo} alt="Startup India" width={120} height={70} className="h-18 w-auto object-contain" />
+                    <span className={`text-center text-[9px] font-medium tracking-wide ${partnerTextColor}`}>Startup<br/>India</span>
                   </div>
                 </div>
               </motion.div>

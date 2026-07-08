@@ -612,7 +612,12 @@ export default function MembershipPage() {
                 transition={{ duration: 0.25 }}
                 className="relative my-4 max-h-[90vh] w-full max-w-3xl overflow-y-auto border border-primary/30 bg-card shadow-[0_0_50px_rgba(0,0,0,0.5)]"
               >
-                <button onClick={closeCheckout} className="absolute right-4 top-4 z-10 text-muted-foreground transition hover:text-foreground">
+                <button 
+  onClick={closeCheckout} 
+  aria-label="Close checkout"
+  title="Close"
+  className="absolute right-4 top-4 z-10 text-muted-foreground transition hover:text-foreground"
+>
                   <X className="h-5 w-5" />
                 </button>
 
