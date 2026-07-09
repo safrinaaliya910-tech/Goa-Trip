@@ -204,15 +204,36 @@ export default function PaymentPage() {
 
   const handleStripePayment = async () => {
     try {
+      setLoading(true);
       const response = await fetch("/api/stripe/create-session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ amount: Number(amount), plan, membershipId, memberName: name, email, phone, address, city }),
       });
-
+      
       const data = await response.json();
       if (!response.ok || !data.url) throw new Error(data?.error || "Stripe session creation failed");
 
+      // CRITICAL FIX: Save user to database before redirecting to Stripe Checkout
+      await fetch("/api/save-member", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          membershipId,
+          plan,
+          amountPaid: amount,
+          memberName: name,
+          email,
+          phone,
+          address,
+          city,
+          paymentId: data.id || `STRIPE-${Date.now()}`, // Uses Stripe session ID or a fallback
+          paymentMethod: "stripe",
+          status: "pending" 
+        }),
+      });
+
+      // Redirects to Stripe's secure payment page
       window.location.href = data.url;
     } catch (error) {
       console.error("Stripe payment failed:", error);
@@ -223,14 +244,34 @@ export default function PaymentPage() {
 
   const handleGPayPayment = async () => {
     try {
+      setLoading(true);
       const response = await fetch("/api/gpay", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ amount, membershipId, plan, name, email, phone, address, city }),
       });
-
+      
       const data = await response.json();
       if (!response.ok || !data.success) throw new Error(data?.error || "GPay initialization failed");
+
+      // CRITICAL FIX: Save user to database before going to success page!
+      await fetch("/api/save-member", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          membershipId,
+          plan,
+          amountPaid: amount,
+          memberName: name,
+          email,
+          phone,
+          address,
+          city,
+          paymentId: data.id, 
+          paymentMethod: "gpay",
+          status: "pending" 
+        }),
+      });
 
       goToSuccessPage("gpay", data.id);
     } catch (error) {
@@ -242,14 +283,34 @@ export default function PaymentPage() {
 
   const handlePaytmPayment = async () => {
     try {
+      setLoading(true);
       const response = await fetch("/api/paytm", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ amount, membershipId, plan, name, email, phone, address, city }),
       });
-
+      
       const data = await response.json();
       if (!response.ok || !data.success) throw new Error(data?.error || "Paytm initialization failed");
+
+      // CRITICAL FIX: Save user to database before going to success page!
+      await fetch("/api/save-member", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          membershipId,
+          plan,
+          amountPaid: amount,
+          memberName: name,
+          email,
+          phone,
+          address,
+          city,
+          paymentId: data.id, 
+          paymentMethod: "paytm",
+          status: "pending" 
+        }),
+      });
 
       goToSuccessPage("paytm", data.id);
     } catch (error) {
