@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import {
@@ -20,11 +20,10 @@ import {
 declare global {
   interface Window {
     Razorpay: any;
-    paypal: any;
   }
 }
 
-type Method = "razorpay" | "stripe" | "paypal" | "gpay" | "paytm";
+type Method = "razorpay" | "stripe" | "skydo" | "gpay" | "paytm";
 
 export default function PaymentPage() {
   const router = useRouter();
@@ -33,9 +32,6 @@ export default function PaymentPage() {
   const [method, setMethod] = useState<Method>("razorpay");
   const [loading, setLoading] = useState(false);
   const [razorpayLoaded, setRazorpayLoaded] = useState(false);
-  const [paypalLoaded, setPaypalLoaded] = useState(false);
-
-  const paypalRef = useRef<HTMLDivElement | null>(null);
 
   const membershipId = params.get("membershipId") || `GM-${Date.now()}`;
   const plan = params.get("plan") || "Platinum";
@@ -48,46 +44,23 @@ export default function PaymentPage() {
 
   useEffect(() => {
     const existingScript = document.getElementById("razorpay-checkout-script");
-
     if (existingScript) {
       setRazorpayLoaded(true);
       return;
     }
-
     const script = document.createElement("script");
     script.id = "razorpay-checkout-script";
     script.src = "https://checkout.razorpay.com/v1/checkout.js";
     script.async = true;
     script.onload = () => setRazorpayLoaded(true);
     script.onerror = () => setRazorpayLoaded(false);
-
-    document.body.appendChild(script);
-  }, []);
-
-  useEffect(() => {
-    const clientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
-    if (!clientId) return;
-
-    const existingScript = document.getElementById("paypal-sdk-script");
-    if (existingScript) {
-      setPaypalLoaded(true);
-      return;
-    }
-
-    const script = document.createElement("script");
-    script.id = "paypal-sdk-script";
-    script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}&currency=USD&intent=capture`;
-    script.async = true;
-    script.onload = () => setPaypalLoaded(true);
-    script.onerror = () => setPaypalLoaded(false);
-
     document.body.appendChild(script);
   }, []);
 
   const paymentTitle = useMemo(() => {
     if (method === "razorpay") return "Razorpay";
     if (method === "stripe") return "Stripe";
-    if (method === "paypal") return "PayPal";
+    if (method === "skydo") return "Skydo";
     if (method === "gpay") return "Google Pay";
     return "Paytm";
   }, [method]);
@@ -99,8 +72,8 @@ export default function PaymentPage() {
     if (method === "stripe") {
       return "Fast international card checkout with a clean payment experience.";
     }
-    if (method === "paypal") {
-      return "Trusted wallet-based checkout for international buyers.";
+    if (method === "skydo") {
+      return "Secure international B2B and direct payments.";
     }
     if (method === "gpay") {
       return "Fast and secure checkout using your GPay UPI.";
@@ -109,11 +82,11 @@ export default function PaymentPage() {
   }, [method]);
 
   const paymentButtonLabel = useMemo(() => {
-    if (method === "razorpay") return `Pay $${amount} with Razorpay`;
-    if (method === "stripe") return `Pay $${amount} with Stripe`;
-    if (method === "paypal") return `Pay $${amount} with PayPal`;
-    if (method === "gpay") return `Pay $${amount} with GPay`;
-    return `Pay $${amount} with Paytm`;
+    if (method === "razorpay") return `Pay ₹${amount} with Razorpay`;
+    if (method === "stripe") return `Pay ₹${amount} with Stripe`;
+    if (method === "skydo") return `Pay ₹${amount} with Skydo`;
+    if (method === "gpay") return `Pay ₹${amount} with GPay`;
+    return `Pay ₹${amount} with Paytm`;
   }, [method, amount]);
 
   const goToSuccessPage = (paymentMethod: string, paymentId: string) => {
@@ -130,7 +103,6 @@ export default function PaymentPage() {
       validity: "Lifetime Membership",
       paymentMethod,
     });
-
     router.push(`/order-success?${query.toString()}`);
   };
 
@@ -141,9 +113,6 @@ export default function PaymentPage() {
         return;
       }
 
-      setLoading(true);
-
-      // 1. Create the Razorpay Order
       const response = await fetch("/api/razorpay", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -153,8 +122,6 @@ export default function PaymentPage() {
       if (!response.ok) throw new Error("Failed to create Razorpay order");
       const order = await response.json();
 
-      // 2. CRITICAL UI LOGIC: Save user to database as "pending" BEFORE opening the payment window.
-      // We pass order.id so the Webhook can securely find this exact user in the background.
       await fetch("/api/save-member", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -167,13 +134,12 @@ export default function PaymentPage() {
           phone,
           address,
           city,
-          paymentId: order.id, // Saving the razorpay_order_id here
+          paymentId: order.id,
           paymentMethod: "razorpay",
-          status: "pending"    // Staging for the app OTP flow
+          status: "pending"
         }),
       });
 
-      // 3. Open the Razorpay Checkout Popup
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         amount: order.amount,
@@ -183,7 +149,6 @@ export default function PaymentPage() {
         image: "/images/logo.png",
         order_id: order.id,
         handler: function (response: any) {
-          // Only redirect after successful frontend payment verification
           goToSuccessPage("razorpay", response.razorpay_payment_id);
         },
         prefill: { name, email, contact: phone },
@@ -194,7 +159,6 @@ export default function PaymentPage() {
 
       const razorpay = new window.Razorpay(options);
       razorpay.open();
-
     } catch (error) {
       console.error("Razorpay payment failed:", error);
       alert("Unable to start payment. Please try again.");
@@ -204,7 +168,6 @@ export default function PaymentPage() {
 
   const handleStripePayment = async () => {
     try {
-      setLoading(true);
       const response = await fetch("/api/stripe/create-session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -214,7 +177,6 @@ export default function PaymentPage() {
       const data = await response.json();
       if (!response.ok || !data.url) throw new Error(data?.error || "Stripe session creation failed");
 
-      // CRITICAL FIX: Save user to database before redirecting to Stripe Checkout
       await fetch("/api/save-member", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -227,13 +189,12 @@ export default function PaymentPage() {
           phone,
           address,
           city,
-          paymentId: data.id || `STRIPE-${Date.now()}`, // Uses Stripe session ID or a fallback
+          paymentId: data.id || `STRIPE-${Date.now()}`,
           paymentMethod: "stripe",
           status: "pending" 
         }),
       });
 
-      // Redirects to Stripe's secure payment page
       window.location.href = data.url;
     } catch (error) {
       console.error("Stripe payment failed:", error);
@@ -242,9 +203,45 @@ export default function PaymentPage() {
     }
   };
 
+  const handleSkydoPayment = async () => {
+    try {
+      const response = await fetch("/api/skydo/create-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount, membershipId, plan, name, email, phone, address, city }),
+      });
+      
+      const data = await response.json();
+      if (!response.ok || !data.url) throw new Error(data?.error || "Skydo session creation failed");
+
+      await fetch("/api/save-member", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          membershipId,
+          plan,
+          amountPaid: amount,
+          memberName: name,
+          email,
+          phone,
+          address,
+          city,
+          paymentId: data.id || `SKYDO-${Date.now()}`, 
+          paymentMethod: "skydo",
+          status: "pending" 
+        }),
+      });
+
+      window.location.href = data.url;
+    } catch (error) {
+      console.error("Skydo payment failed:", error);
+      alert("Unable to start Skydo payment. Please try again.");
+      setLoading(false);
+    }
+  };
+
   const handleGPayPayment = async () => {
     try {
-      setLoading(true);
       const response = await fetch("/api/gpay", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -254,7 +251,6 @@ export default function PaymentPage() {
       const data = await response.json();
       if (!response.ok || !data.success) throw new Error(data?.error || "GPay initialization failed");
 
-      // CRITICAL FIX: Save user to database before going to success page!
       await fetch("/api/save-member", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -283,7 +279,6 @@ export default function PaymentPage() {
 
   const handlePaytmPayment = async () => {
     try {
-      setLoading(true);
       const response = await fetch("/api/paytm", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -293,7 +288,6 @@ export default function PaymentPage() {
       const data = await response.json();
       if (!response.ok || !data.success) throw new Error(data?.error || "Paytm initialization failed");
 
-      // CRITICAL FIX: Save user to database before going to success page!
       await fetch("/api/save-member", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -320,59 +314,19 @@ export default function PaymentPage() {
     }
   };
 
-  useEffect(() => {
-    if (method !== "paypal") return;
-    if (!paypalLoaded || !window.paypal || !paypalRef.current) return;
-
-    paypalRef.current.innerHTML = "";
-
-    window.paypal
-      .Buttons({
-        style: { layout: "vertical", color: "gold", shape: "rect", label: "paypal", height: 48 },
-        createOrder: async () => {
-          const response = await fetch("/api/paypal/create-order", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ amount: Number(amount), plan, membershipId, memberName: name, email, phone, address, city }),
-          });
-          const data = await response.json();
-          if (!response.ok || !data.id) throw new Error(data?.error || "Unable to create PayPal order.");
-          return data.id;
-        },
-        onApprove: async (data: any) => {
-          const response = await fetch("/api/paypal/capture-order", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ orderID: data.orderID }),
-          });
-          const capture = await response.json();
-          if (!response.ok) throw new Error(capture?.error || "Unable to capture PayPal order.");
-          
-          const paymentId = capture?.purchase_units?.[0]?.payments?.captures?.[0]?.id || data.orderID;
-          goToSuccessPage("paypal", paymentId);
-        },
-        onError: (err: any) => {
-          console.error("PayPal error:", err);
-          alert("Unable to start PayPal payment. Please try again.");
-        },
-      })
-      .render(paypalRef.current);
-  }, [method, paypalLoaded, amount, plan, membershipId, name, email, phone, address, city]);
-
   const handlePayment = async () => {
     setLoading(true);
-
     if (method === "razorpay") await handleRazorpayPayment();
     else if (method === "stripe") await handleStripePayment();
+    else if (method === "skydo") await handleSkydoPayment();
     else if (method === "gpay") await handleGPayPayment();
     else if (method === "paytm") await handlePaytmPayment();
-    else if (method === "paypal") setLoading(false); 
   };
 
   const methods = [
     { key: "razorpay" as Method, title: "Razorpay", desc: "UPI, cards, and net banking for India", icon: Landmark },
     { key: "stripe" as Method, title: "Stripe", desc: "International debit and credit cards", icon: CreditCard },
-    { key: "paypal" as Method, title: "PayPal", desc: "Fast wallet-based international checkout", icon: Wallet },
+    { key: "skydo" as Method, title: "Skydo", desc: "Secure international B2B payments", icon: Wallet },
     { key: "gpay" as Method, title: "Google Pay", desc: "Fast and secure checkout using your GPay UPI", icon: Smartphone },
     { key: "paytm" as Method, title: "Paytm", desc: "Pay directly using your Paytm Wallet or linked bank", icon: QrCode },
   ];
@@ -380,7 +334,6 @@ export default function PaymentPage() {
   return (
     <main className="min-h-screen bg-background">
       <Navigation />
-
       <section className="px-6 py-16 md:py-24">
         <div className="mx-auto max-w-6xl">
           <div className="text-center">
@@ -390,14 +343,12 @@ export default function PaymentPage() {
               Select your preferred payment option and continue through a premium, secure checkout journey.
             </p>
           </div>
-
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3 text-[11px] uppercase tracking-widest">
             <span className="rounded-full border border-border px-3 py-1 text-muted-foreground">1. Details</span>
             <span className="rounded-full border border-border px-3 py-1 text-muted-foreground">2. Confirm Order</span>
             <span className="rounded-full bg-primary px-3 py-1 text-primary-foreground">3. Payment Method</span>
             <span className="rounded-full border border-border px-3 py-1 text-muted-foreground">4. Order Successful</span>
           </div>
-
           <div className="mt-12 grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
             <div className="border border-primary/30 bg-card p-6 shadow-[0_0_40px_rgba(212,175,55,0.08)]">
               <div className="flex items-center justify-between border-b border-border pb-4">
@@ -407,12 +358,10 @@ export default function PaymentPage() {
                 </div>
                 <ShieldCheck className="h-6 w-6 text-primary" />
               </div>
-
               <div className="mt-6 space-y-4">
                 {methods.map((m) => {
                   const Icon = m.icon;
                   const active = method === m.key;
-
                   return (
                     <button
                       key={m.key}
@@ -436,7 +385,6 @@ export default function PaymentPage() {
                   );
                 })}
               </div>
-
               <div className="mt-6 rounded-sm border border-primary/20 bg-primary/5 p-4">
                 <div className="flex items-start gap-3">
                   <LockKeyhole className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
@@ -446,11 +394,9 @@ export default function PaymentPage() {
                 </div>
               </div>
             </div>
-
             <div className="border border-border bg-card p-6 shadow-[0_0_40px_rgba(0,0,0,0.18)]">
               <p className="text-xs uppercase tracking-widest text-primary">Payment</p>
               <h2 className="mt-2 text-3xl font-light text-foreground">{paymentTitle} Checkout</h2>
-
               <div className="mt-4 rounded-sm border border-primary/20 bg-primary/5 p-4">
                 <div className="flex items-start gap-3">
                   <Sparkles className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
@@ -460,7 +406,6 @@ export default function PaymentPage() {
                   </div>
                 </div>
               </div>
-
               <div className="mt-8 space-y-4 text-sm text-muted-foreground">
                 <div className="flex justify-between gap-4"><span>Membership Plan</span><span className="text-right text-foreground">{plan}</span></div>
                 <div className="flex justify-between gap-4"><span>Member Name</span><span className="text-right text-foreground">{name}</span></div>
@@ -471,34 +416,20 @@ export default function PaymentPage() {
                 <div className="flex justify-between gap-4"><span>Selected Method</span><span className="text-right text-foreground">{paymentTitle}</span></div>
                 <div className="flex justify-between gap-4 border-t border-border pt-5">
                   <span className="font-medium text-foreground">Amount</span>
-                  <span className="text-2xl font-light text-primary">${amount}</span>
+                  <span className="text-2xl font-light text-primary">₹{amount}</span>
                 </div>
               </div>
+              
+              <button
+                type="button"
+                onClick={handlePayment}
+                disabled={loading}
+                className="mt-8 flex w-full items-center justify-center gap-2 bg-primary py-4 text-sm uppercase tracking-widest text-white transition hover:bg-primary/90 disabled:opacity-50"
+              >
+                {loading ? "Processing..." : paymentButtonLabel}
+                {!loading && <ArrowRight className="h-4 w-4" />}
+              </button>
 
-              {method !== "paypal" && (
-                <button
-                  type="button"
-                  onClick={handlePayment}
-                  disabled={loading}
-                  className="mt-8 flex w-full items-center justify-center gap-2 bg-primary py-4 text-sm uppercase tracking-widest text-white transition hover:bg-primary/90 disabled:opacity-50"
-                >
-                  {loading ? "Processing..." : paymentButtonLabel}
-                  {!loading && <ArrowRight className="h-4 w-4" />}
-                </button>
-              )}
-
-              {method === "paypal" && (
-                <div className="mt-8">
-                  <div className="mb-4 flex items-center justify-between">
-                    <p className="text-sm uppercase tracking-[0.22em] text-primary">Complete Payment</p>
-                    <span className="text-sm text-muted-foreground">Total: <span className="text-foreground">${amount}</span></span>
-                  </div>
-                  <div className="rounded-sm border border-primary/25 bg-primary/5 p-4">
-                    <p className="mb-4 text-sm leading-relaxed text-foreground">Continue with PayPal using the secure button below.</p>
-                    <div ref={paypalRef} />
-                  </div>
-                </div>
-              )}
             </div>
           </div>
         </div>
