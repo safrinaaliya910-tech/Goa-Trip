@@ -9,31 +9,33 @@ import { CheckCircle2, ShieldCheck, Sparkles } from "lucide-react";
 
 export default function OrderSuccessPage() {
   const searchParams = useSearchParams();
-
   const membershipId = searchParams.get("membershipId") || "GM-XXX-000000";
   const plan = searchParams.get("plan") || "Membership";
   const amountPaid = searchParams.get("amountPaid") || "0";
   const memberName = searchParams.get("memberName") || "Member";
   const email = searchParams.get("email") || "";
   const phone = searchParams.get("phone") || "";
-  const address = searchParams.get("address") || ""; 
+  const address = searchParams.get("address") || "";
   const city = searchParams.get("city") || "";
   const validity = searchParams.get("validity") || "Lifetime Membership";
   const orderId = searchParams.get("paymentId") || `ORDER-${Date.now()}`;
   const paymentMethod = searchParams.get("paymentMethod") || "Secure Checkout";
+
   const emailSentRef = useRef(false);
 
   useEffect(() => {
     if (emailSentRef.current) return;
     if (!email) return;
-
     emailSentRef.current = true;
 
     // We wrap the fetches in an async function to force them to run in order
     const runAutomations = async () => {
-      // --- 1. FORCE DATABASE SAVE FIRST ---
+      // 1. DATABASE SAVE REMOVED FROM HERE
+      // (It is securely handled by payment page and webhook)
+
+      // 2. SEND WELCOME EMAIL
       try {
-        await fetch("/api/save-member", {
+        await fetch("/api/send-membership-email", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -48,30 +50,6 @@ export default function OrderSuccessPage() {
             address,
             city,
             paymentId: orderId,
-            paymentMethod,
-          }),
-        });
-      } catch (error) {
-        console.error("Failed to save member to database:", error);
-      }
-
-      // --- 2. SEND WELCOME EMAIL SECOND ---
-      try {
-        await fetch("/api/send-membership-email", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            membershipId,
-            plan,
-            amountPaid,
-            memberName,
-            email,
-            phone,
-            address, 
-            city,
-            paymentId: orderId,
             validity,
             paymentMethod,
           }),
@@ -82,7 +60,6 @@ export default function OrderSuccessPage() {
     };
 
     runAutomations();
-
   }, [
     membershipId,
     plan,
@@ -90,7 +67,7 @@ export default function OrderSuccessPage() {
     memberName,
     email,
     phone,
-    address, 
+    address,
     city,
     orderId,
     validity,
@@ -109,28 +86,23 @@ export default function OrderSuccessPage() {
   return (
     <main className="min-h-screen bg-background">
       <Navigation />
-
       <section className="px-4 py-16 sm:px-6 md:py-24">
         <div className="mx-auto max-w-6xl">
           <div className="text-center">
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-primary/30 bg-primary/10">
               <CheckCircle2 className="h-8 w-8 text-primary" />
             </div>
-
             <p className="mt-6 text-xs uppercase tracking-[0.35em] text-primary">
               Order Confirmed
             </p>
-
             <h1 className="mt-5 text-5xl font-light text-foreground md:text-6xl lg:text-7xl">
               Order Successful
             </h1>
-
             <p className="mx-auto mt-6 max-w-3xl text-lg leading-relaxed text-muted-foreground md:text-xl">
               Welcome to GOA MOMENTS. Your membership has been activated
-              successfully. Your card, support access, and premium member
-              benefits are now ready.
+              successfully. Your card, support access, and premium benefits are
+              now ready.
             </p>
-
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3 text-[11px] uppercase tracking-widest">
               <span className="rounded-full border border-border px-3 py-1 text-muted-foreground">
                 1. Details
@@ -146,7 +118,6 @@ export default function OrderSuccessPage() {
               </span>
             </div>
           </div>
-
           <div className="mt-14 grid gap-8 lg:grid-cols-[1.15fr_0.85fr]">
             <div className="border border-primary/30 bg-card p-4 shadow-[0_0_40px_rgba(212,175,55,0.10)] md:p-6">
               <div className="flex items-center justify-between border-b border-border pb-4">
@@ -158,7 +129,6 @@ export default function OrderSuccessPage() {
                     {plan} Membership
                   </p>
                 </div>
-
                 <button
                   type="button"
                   onClick={downloadCard}
@@ -167,7 +137,6 @@ export default function OrderSuccessPage() {
                   Download Card
                 </button>
               </div>
-
               <div className="mt-6 flex min-h-72 items-center justify-center bg-black/40 p-4 md:min-h-96">
                 <div className="relative h-56 w-full max-w-[700px] md:h-[380px]">
                   <Image
@@ -179,7 +148,6 @@ export default function OrderSuccessPage() {
                   />
                 </div>
               </div>
-
               <div className="mt-6 rounded-sm border border-primary/20 bg-primary/5 p-5">
                 <div className="flex items-start gap-3">
                   <Sparkles className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
@@ -196,7 +164,6 @@ export default function OrderSuccessPage() {
                 </div>
               </div>
             </div>
-
             <div className="border border-border bg-card p-6 md:p-8">
               <div className="flex items-center justify-between">
                 <h2 className="text-3xl font-light text-foreground">
@@ -204,7 +171,6 @@ export default function OrderSuccessPage() {
                 </h2>
                 <ShieldCheck className="h-6 w-6 text-primary" />
               </div>
-
               <div className="mt-8 space-y-5 text-sm text-muted-foreground">
                 <div className="flex items-start justify-between gap-4">
                   <span>Membership ID</span>
@@ -212,72 +178,58 @@ export default function OrderSuccessPage() {
                     {membershipId}
                   </span>
                 </div>
-
                 <div className="flex items-start justify-between gap-4">
                   <span>Plan</span>
                   <span className="text-right text-foreground">{plan}</span>
                 </div>
-
                 <div className="flex items-start justify-between gap-4">
                   <span>Amount Paid</span>
                   <span className="text-right text-foreground">
-                    ${amountPaid}
+                    ₹{amountPaid}
                   </span>
                 </div>
-
                 <div className="flex items-start justify-between gap-4">
                   <span>Member Name</span>
                   <span className="text-right text-foreground">
                     {memberName}
                   </span>
                 </div>
-
                 <div className="flex items-start justify-between gap-4">
                   <span>Email</span>
                   <span className="break-all text-right text-foreground">
                     {email}
                   </span>
                 </div>
-
                 <div className="flex items-start justify-between gap-4">
                   <span>Phone</span>
                   <span className="text-right text-foreground">{phone}</span>
                 </div>
-
-                {/* Added Address UI Block Here */}
                 <div className="flex items-start justify-between gap-4">
                   <span>Address</span>
-                  <span className="text-right text-foreground max-w-[60%] break-words">
+                  <span className="max-w-[60%] break-words text-right text-foreground">
                     {address}
                   </span>
                 </div>
-
                 <div className="flex items-start justify-between gap-4">
                   <span>City</span>
                   <span className="text-right text-foreground">{city}</span>
                 </div>
-
                 <div className="flex items-start justify-between gap-4">
                   <span>Payment Method</span>
                   <span className="text-right capitalize text-foreground">
                     {paymentMethod}
                   </span>
                 </div>
-
                 <div className="flex items-start justify-between gap-4">
                   <span>Order ID</span>
                   <span className="break-all text-right text-foreground">
                     {orderId}
                   </span>
                 </div>
-
-                <div className="flex items-start justify-between gap-4">
+                <div className="flex items-start justify-between gap-4 text-primary">
                   <span>Status</span>
-                  <span className="text-right font-medium text-primary">
-                    Confirmed
-                  </span>
+                  <span className="text-right font-medium">Confirmed</span>
                 </div>
-
                 <div className="flex items-start justify-between gap-4 border-t border-border pt-5">
                   <span>Validity</span>
                   <span className="text-right text-foreground">
@@ -285,7 +237,6 @@ export default function OrderSuccessPage() {
                   </span>
                 </div>
               </div>
-
               <div className="mt-10">
                 <button
                   type="button"
@@ -299,7 +250,6 @@ export default function OrderSuccessPage() {
           </div>
         </div>
       </section>
-
       <Footer />
     </main>
   );

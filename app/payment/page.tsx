@@ -141,6 +141,9 @@ export default function PaymentPage() {
         return;
       }
 
+      setLoading(true);
+
+      // 1. Create the Razorpay Order
       const response = await fetch("/api/razorpay", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -148,9 +151,29 @@ export default function PaymentPage() {
       });
 
       if (!response.ok) throw new Error("Failed to create Razorpay order");
-
       const order = await response.json();
 
+      // 2. CRITICAL UI LOGIC: Save user to database as "pending" BEFORE opening the payment window.
+      // We pass order.id so the Webhook can securely find this exact user in the background.
+      await fetch("/api/save-member", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          membershipId,
+          plan,
+          amountPaid: amount,
+          memberName: name,
+          email,
+          phone,
+          address,
+          city,
+          paymentId: order.id, // Saving the razorpay_order_id here
+          paymentMethod: "razorpay",
+          status: "pending"    // Staging for the app OTP flow
+        }),
+      });
+
+      // 3. Open the Razorpay Checkout Popup
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         amount: order.amount,
@@ -160,6 +183,7 @@ export default function PaymentPage() {
         image: "/images/logo.png",
         order_id: order.id,
         handler: function (response: any) {
+          // Only redirect after successful frontend payment verification
           goToSuccessPage("razorpay", response.razorpay_payment_id);
         },
         prefill: { name, email, contact: phone },
@@ -170,6 +194,7 @@ export default function PaymentPage() {
 
       const razorpay = new window.Razorpay(options);
       razorpay.open();
+
     } catch (error) {
       console.error("Razorpay payment failed:", error);
       alert("Unable to start payment. Please try again.");
