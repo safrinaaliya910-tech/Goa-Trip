@@ -1,3 +1,4 @@
+// Forcing folder restructure commit
 import { NextRequest, NextResponse } from "next/server";
 import { createHmac } from "crypto";
 import { createClient } from "@supabase/supabase-js";
