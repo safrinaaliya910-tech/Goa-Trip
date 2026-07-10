@@ -8,8 +8,6 @@ import {
   CreditCard,
   Landmark,
   Wallet,
-  Smartphone,
-  QrCode,
   CheckCircle2,
   ShieldCheck,
   ArrowRight,
@@ -23,7 +21,7 @@ declare global {
   }
 }
 
-type Method = "razorpay" | "stripe" | "skydo" | "gpay" | "paytm";
+type Method = "razorpay" | "stripe" | "skydo";
 
 export default function PaymentPage() {
   const router = useRouter();
@@ -60,33 +58,23 @@ export default function PaymentPage() {
   const paymentTitle = useMemo(() => {
     if (method === "razorpay") return "Razorpay";
     if (method === "stripe") return "Stripe";
-    if (method === "skydo") return "Skydo";
-    if (method === "gpay") return "Google Pay";
-    return "Paytm";
+    return "Skydo";
   }, [method]);
 
   const paymentDescription = useMemo(() => {
     if (method === "razorpay") {
-      return "Best for India payments with UPI, cards, and net banking.";
+      return "Best for India payments with UPI, GPay, Paytm, cards, and net banking.";
     }
     if (method === "stripe") {
       return "Fast international card checkout with a clean payment experience.";
     }
-    if (method === "skydo") {
-      return "Secure international B2B and direct payments.";
-    }
-    if (method === "gpay") {
-      return "Fast and secure checkout using your GPay UPI.";
-    }
-    return "Pay directly using your Paytm Wallet or linked bank account.";
+    return "Secure international B2B and direct payments.";
   }, [method]);
 
   const paymentButtonLabel = useMemo(() => {
     if (method === "razorpay") return `Pay ₹${amount} with Razorpay`;
     if (method === "stripe") return `Pay ₹${amount} with Stripe`;
-    if (method === "skydo") return `Pay ₹${amount} with Skydo`;
-    if (method === "gpay") return `Pay ₹${amount} with GPay`;
-    return `Pay ₹${amount} with Paytm`;
+    return `Pay ₹${amount} with Skydo`;
   }, [method, amount]);
 
   const goToSuccessPage = (paymentMethod: string, paymentId: string) => {
@@ -240,95 +228,17 @@ export default function PaymentPage() {
     }
   };
 
-  const handleGPayPayment = async () => {
-    try {
-      const response = await fetch("/api/gpay", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount, membershipId, plan, name, email, phone, address, city }),
-      });
-      
-      const data = await response.json();
-      if (!response.ok || !data.success) throw new Error(data?.error || "GPay initialization failed");
-
-      await fetch("/api/save-member", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          membershipId,
-          plan,
-          amountPaid: amount,
-          memberName: name,
-          email,
-          phone,
-          address,
-          city,
-          paymentId: data.id, 
-          paymentMethod: "gpay",
-          status: "pending" 
-        }),
-      });
-
-      goToSuccessPage("gpay", data.id);
-    } catch (error) {
-      console.error("GPay payment failed:", error);
-      alert("Unable to continue with GPay. Please try again.");
-      setLoading(false);
-    }
-  };
-
-  const handlePaytmPayment = async () => {
-    try {
-      const response = await fetch("/api/paytm", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount, membershipId, plan, name, email, phone, address, city }),
-      });
-      
-      const data = await response.json();
-      if (!response.ok || !data.success) throw new Error(data?.error || "Paytm initialization failed");
-
-      await fetch("/api/save-member", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          membershipId,
-          plan,
-          amountPaid: amount,
-          memberName: name,
-          email,
-          phone,
-          address,
-          city,
-          paymentId: data.id, 
-          paymentMethod: "paytm",
-          status: "pending" 
-        }),
-      });
-
-      goToSuccessPage("paytm", data.id);
-    } catch (error) {
-      console.error("Paytm payment failed:", error);
-      alert("Unable to continue with Paytm. Please try again.");
-      setLoading(false);
-    }
-  };
-
   const handlePayment = async () => {
     setLoading(true);
     if (method === "razorpay") await handleRazorpayPayment();
     else if (method === "stripe") await handleStripePayment();
     else if (method === "skydo") await handleSkydoPayment();
-    else if (method === "gpay") await handleGPayPayment();
-    else if (method === "paytm") await handlePaytmPayment();
   };
 
   const methods = [
-    { key: "razorpay" as Method, title: "Razorpay", desc: "UPI, cards, and net banking for India", icon: Landmark },
+    { key: "razorpay" as Method, title: "Razorpay", desc: "UPI, GPay, Paytm, cards, and net banking", icon: Landmark },
     { key: "stripe" as Method, title: "Stripe", desc: "International debit and credit cards", icon: CreditCard },
     { key: "skydo" as Method, title: "Skydo", desc: "Secure international B2B payments", icon: Wallet },
-    { key: "gpay" as Method, title: "Google Pay", desc: "Fast and secure checkout using your GPay UPI", icon: Smartphone },
-    { key: "paytm" as Method, title: "Paytm", desc: "Pay directly using your Paytm Wallet or linked bank", icon: QrCode },
   ];
 
   return (
