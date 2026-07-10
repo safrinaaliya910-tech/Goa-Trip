@@ -14,7 +14,8 @@ export function LanguageSwitcher() {
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 rounded border border-border bg-card px-3 py-2 text-sm text-foreground transition-colors hover:border-primary"
+        
+        className="flex items-center gap-1.5 rounded bg-transparent px-2 py-1.5 text-sm text-foreground transition-colors hover:bg-foreground/10 hover:text-primary"
       >
         <Globe className="h-4 w-4 text-primary" />
         <span className="hidden sm:inline">{localeNames[locale]}</span>
@@ -28,6 +29,7 @@ export function LanguageSwitcher() {
               className="fixed inset-0 z-40"
               onClick={() => setIsOpen(false)}
             />
+            {/* The dropdown menu keeps bg-card so the list remains readable */}
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}

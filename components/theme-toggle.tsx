@@ -14,8 +14,8 @@ export function ThemeToggle() {
 
   if (!mounted) {
     return (
-      <div className="flex h-10 w-10 items-center justify-center rounded border border-border bg-card">
-        <div className="h-5 w-5" />
+      <div className="flex h-8 w-8 items-center justify-center rounded bg-transparent">
+        <div className="h-4 w-4" />
       </div>
     );
   }
@@ -25,17 +25,18 @@ export function ThemeToggle() {
   return (
     <button
       onClick={() => setTheme(isDark ? "light" : "dark")}
-      className="relative flex h-10 w-10 items-center justify-center rounded border border-border bg-card text-foreground transition-all duration-300 hover:border-primary hover:text-primary hover:shadow-[0_0_15px_rgba(212,175,55,0.3)]"
+      
+      className="relative flex h-8 w-8 items-center justify-center rounded bg-transparent text-foreground transition-all duration-300 hover:bg-foreground/10 hover:text-primary"
       aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
     >
-      <div className="relative h-5 w-5">
+      <div className="relative h-4 w-4">
         <Sun 
-          className={`absolute inset-0 h-5 w-5 transition-all duration-300 ${
+          className={`absolute inset-0 h-4 w-4 transition-all duration-300 ${
             isDark ? "rotate-90 scale-0 opacity-0" : "rotate-0 scale-100 opacity-100"
           }`} 
         />
         <Moon 
-          className={`absolute inset-0 h-5 w-5 transition-all duration-300 ${
+          className={`absolute inset-0 h-4 w-4 transition-all duration-300 ${
             isDark ? "rotate-0 scale-100 opacity-100" : "-rotate-90 scale-0 opacity-0"
           }`} 
         />

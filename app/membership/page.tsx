@@ -17,12 +17,6 @@ import {
   CreditCard,
   BadgeCheck,
   Sparkles,
-  Users,
-  Hotel,
-  Plane,
-  Utensils,
-  Martini,
-  Zap,
 } from "lucide-react";
 
 type Tier = {
@@ -85,52 +79,6 @@ export default function MembershipPage() {
         t("membership.benefits.nightlife.item2"),
         t("membership.benefits.nightlife.item3"),
         t("membership.benefits.nightlife.item4"),
-      ],
-    },
-  ];
-
-  const membershipPower = [
-    {
-      name: t("membership.power.gold.name"),
-      icon: Crown,
-      members: t("membership.power.gold.members"),
-      title: t("membership.power.gold.title"),
-      description: t("membership.power.gold.description"),
-      highlights: [
-        t("membership.power.gold.h1"),
-        t("membership.power.gold.h2"),
-        t("membership.power.gold.h3"),
-        t("membership.power.gold.h4"),
-        t("membership.power.gold.h5"),
-      ],
-    },
-    {
-      name: t("membership.power.platinum.name"),
-      icon: Star,
-      members: t("membership.power.platinum.members"),
-      title: t("membership.power.platinum.title"),
-      description: t("membership.power.platinum.description"),
-      highlights: [
-        t("membership.power.platinum.h1"),
-        t("membership.power.platinum.h2"),
-        t("membership.power.platinum.h3"),
-        t("membership.power.platinum.h4"),
-        t("membership.power.platinum.h5"),
-      ],
-    },
-    {
-      name: t("membership.power.diamond.name"),
-      icon: Gem,
-      members: t("membership.power.diamond.members"),
-      title: t("membership.power.diamond.title"),
-      description: t("membership.power.diamond.description"),
-      highlights: [
-        t("membership.power.diamond.h1"),
-        t("membership.power.diamond.h2"),
-        t("membership.power.diamond.h3"),
-        t("membership.power.diamond.h4"),
-        t("membership.power.diamond.h5"),
-        t("membership.power.diamond.h6"),
       ],
     },
   ];
@@ -335,7 +283,8 @@ export default function MembershipPage() {
                     {t("membership.plans.priceLabel")}
                   </span>
                   <div className="mt-2">
-                    <span className="text-4xl font-light text-primary">₹{tier.price}</span>
+                    {/* FIX: Changed ₹ to $ */}
+                    <span className="text-4xl font-light text-primary">${tier.price}</span>
                   </div>
                 </div>
                 <p className="mt-6 border-t border-border pt-6 text-sm leading-relaxed text-muted-foreground">
@@ -444,10 +393,10 @@ export default function MembershipPage() {
                   {benefit.category}
                 </h3>
                 <ul className="mt-6 space-y-3">
-                  {benefit.items.map((item) => (
-                    <li key={item} className="flex items-start gap-3 text-muted-foreground">
+                  {benefits.map((item) => (
+                    <li key={item.category} className="flex items-start gap-3 text-muted-foreground">
                       <Check className="mt-1 h-4 w-4 shrink-0 text-primary" />
-                      <span>{item}</span>
+                      <span>{item.category}</span>
                     </li>
                   ))}
                 </ul>
@@ -457,114 +406,7 @@ export default function MembershipPage() {
         </div>
       </section>
 
-      {/* --- 5. POWER SECTION --- */}
-      <section className="relative overflow-hidden px-6 py-24 md:py-32">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(212,175,55,0.10),transparent_42%)]" />
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
-        <div className="relative mx-auto max-w-7xl">
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="mb-16 text-center"
-          >
-            <span className="text-xs uppercase tracking-[0.35em] text-primary">
-              {t("membership.power.sectionTitle")}
-            </span>
-            <h2 className="mx-auto mt-4 max-w-4xl text-3xl font-light leading-tight text-foreground md:text-5xl">
-              {t("membership.power.heading")}{" "}
-              <span className="text-primary">{t("membership.power.headingGold")}</span>
-            </h2>
-            <p className="mx-auto mt-6 max-w-3xl text-base leading-relaxed text-muted-foreground md:text-lg">
-              {t("membership.power.subheading")}
-            </p>
-          </motion.div>
-          <div className="grid gap-8 lg:grid-cols-3">
-            {membershipPower.map((card, index) => (
-              <motion.div
-                key={card.name}
-                initial={{ opacity: 0, y: 35 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.65, delay: index * 0.15 }}
-                className={`relative border bg-card/80 p-8 backdrop-blur-md transition-all duration-500 ${
-                  card.name.includes("Diamond") || card.name.includes("डायमंड")
-                    ? "border-primary shadow-[0_0_55px_rgba(212,175,55,0.18)]"
-                    : "border-border hover:border-primary/60"
-                }`}
-              >
-                {(card.name.includes("Diamond") || card.name.includes("डायमंड")) && (
-                  <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                    <span className="bg-primary px-4 py-1 text-xs uppercase tracking-widest text-primary-foreground">
-                      {t("membership.power.priorityTag")}
-                    </span>
-                  </div>
-                )}
-                <div className="flex items-center justify-between">
-                  <card.icon className="h-11 w-11 text-primary" />
-                  <span className="border border-primary/30 px-3 py-1 text-[11px] uppercase tracking-widest text-primary">
-                    {card.members}
-                  </span>
-                </div>
-                <h3 className="mt-6 text-2xl font-light uppercase tracking-wider text-foreground">
-                  {card.name}
-                </h3>
-                <h4 className="mt-4 text-xl font-light text-primary">{card.title}</h4>
-                <p className="mt-5 text-sm leading-relaxed text-muted-foreground">
-                  {card.description}
-                </p>
-                <ul className="mt-7 space-y-4">
-                  {card.highlights.map((item) => (
-                    <li key={item} className="flex items-start gap-3 text-sm leading-relaxed text-muted-foreground">
-                      <Check className="mt-1 h-4 w-4 shrink-0 text-primary" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-                <div className={`mt-8 grid gap-3 border-t border-border pt-6 ${index === 0 ? "grid-cols-3" : "grid-cols-4"}`}>
-                  <div className="flex flex-col items-center gap-2 text-center">
-                    <Hotel className="h-5 w-5 text-primary" />
-                    <span className="text-[10px] uppercase tracking-widest text-muted-foreground">
-                      {t("membership.power.labels.hotels")}
-                    </span>
-                  </div>
-                  <div className="flex flex-col items-center gap-2 text-center">
-                    {index === 0 ? (
-                      <Plane className="h-5 w-5 text-primary" />
-                    ) : (
-                      <Utensils className="h-5 w-5 text-primary" />
-                    )}
-                    <span className="text-[10px] uppercase tracking-widest text-muted-foreground">
-                      {index === 0 ? t("membership.power.labels.travel") : t("membership.power.labels.dining")}
-                    </span>
-                  </div>
-                  {index !== 0 && (
-                    <div className="flex flex-col items-center gap-2 text-center">
-                      <Martini className="h-5 w-5 text-primary" />
-                      <span className="text-[10px] uppercase tracking-widest text-muted-foreground">
-                        {t("membership.power.labels.clubs")}
-                      </span>
-                    </div>
-                  )}
-                  <div className="flex flex-col items-center gap-2 text-center">
-                    {index === 2 ? (
-                      <Zap className="h-5 w-5 text-primary" />
-                    ) : (
-                      <Users className="h-5 w-5 text-primary" />
-                    )}
-                    <span className="text-[10px] uppercase tracking-widest text-muted-foreground">
-                      {index === 0 ? t("membership.power.labels.u4") : index === 2 ? t("membership.power.labels.hp") : t("membership.power.labels.u8")}
-                    </span>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* --- 6. STEPS SECTION --- */}
+      {/* --- 5. STEPS SECTION --- */}
       <section className="px-6 py-24 md:py-32">
         <div className="mx-auto max-w-6xl">
           <motion.div
@@ -626,6 +468,8 @@ export default function MembershipPage() {
                 >
                   <X className="h-5 w-5" />
                 </button>
+                
+                {/* MODAL HEADER */}
                 <div className="border-b border-border p-6 md:p-8">
                   <p className="text-xs uppercase tracking-[0.3em] text-primary">
                     {t("membership.checkout.secureTitle")}
@@ -635,25 +479,26 @@ export default function MembershipPage() {
                     {checkoutStep === 2 && t("membership.checkout.step2Heading")}
                   </h3>
                   <div className="mt-6 flex flex-wrap items-center gap-3 text-[11px] uppercase tracking-widest">
-                    <span className="rounded-full bg-primary px-3 py-1 text-primary-foreground">
+                    <span className="rounded-full bg-primary px-3 py-1 text-primary-foreground font-[Arial,sans-serif] font-bold">
                       1. {t("membership.checkout.indicator1")}
                     </span>
                     <span
-                      className={`rounded-full px-3 py-1 ${
+                      className={`rounded-full px-3 py-1 font-[Arial,sans-serif] font-bold ${
                         checkoutStep >= 2 ? "bg-primary text-primary-foreground" : "border border-border text-muted-foreground"
                       }`}
                     >
                       2. {t("membership.checkout.indicator2")}
                     </span>
-                    <span className="rounded-full border border-border px-3 py-1 text-muted-foreground">
+                    <span className="rounded-full border border-border px-3 py-1 text-muted-foreground font-[Arial,sans-serif] font-bold">
                       3. {t("membership.checkout.indicator3")}
                     </span>
-                    <span className="rounded-full border border-border px-3 py-1 text-muted-foreground">
+                    <span className="rounded-full border border-border px-3 py-1 text-muted-foreground font-[Arial,sans-serif] font-bold">
                       4. {t("membership.checkout.indicator4")}
                     </span>
                   </div>
                 </div>
 
+                {/* STEP 1: ORDER DETAILS */}
                 {checkoutStep === 1 && (
                   <div className="p-6 md:p-8">
                     <div className="grid gap-8 md:grid-cols-[1.05fr_0.95fr]">
@@ -662,20 +507,33 @@ export default function MembershipPage() {
                           <p className="text-xs uppercase tracking-[0.3em] text-primary">
                             {t("membership.checkout.selectedTitle")}
                           </p>
-                          <h4 className="mt-3 text-2xl font-light text-foreground">{selectedTier.name}</h4>
+                          
+                          {/* FIX: Cleaner Bold Font */}
+                          <h4 className="mt-3 font-[Arial,sans-serif] text-xl font-bold tracking-wider text-foreground">
+                            {selectedTier.name}
+                          </h4>
+                          
                           <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
                             {selectedTier.tagline}
                           </p>
-                          <div className="mt-6 space-y-2 text-sm text-muted-foreground">
+                          <div className="mt-6 space-y-3 text-sm">
                             <div className="flex items-center justify-between">
-                              <span>{t("membership.checkout.priceLabel")}</span>
-                              <span className="text-foreground">₹{selectedTier.price}</span>
+                              <span className="font-[Arial,sans-serif] text-xs font-bold uppercase tracking-widest text-muted-foreground">
+                                {t("membership.checkout.priceLabel")}
+                              </span>
+                              {/* FIX: Changed ₹ to $ and adjusted size */}
+                              <span className="font-[Arial,sans-serif] text-lg font-bold tracking-wider text-foreground">
+                                ${selectedTier.price}
+                              </span>
                             </div>
-                            <div className="flex items-center justify-between border-t border-border pt-3">
-                              <span className="font-medium text-foreground">
+                            <div className="flex items-center justify-between border-t border-border pt-4">
+                              <span className="font-[Arial,sans-serif] text-sm font-bold uppercase tracking-widest text-foreground">
                                 {t("membership.checkout.totalLabel")}
                               </span>
-                              <span className="text-xl font-light text-primary">₹{selectedTier.price}</span>
+                              {/* FIX: Changed ₹ to $ and adjusted size */}
+                              <span className="font-[Arial,sans-serif] text-2xl font-bold tracking-wider text-primary">
+                                ${selectedTier.price}
+                              </span>
                             </div>
                           </div>
                           <div className="mt-6 rounded-sm border border-primary/20 bg-primary/5 p-4 text-sm leading-relaxed text-muted-foreground">
@@ -687,31 +545,32 @@ export default function MembershipPage() {
                       <div className="space-y-4">
                         <div className="grid grid-cols-2 gap-4">
                           <div>
-                            <label className="mb-2 block text-sm text-foreground">
+                            <label className="mb-2 block font-[Arial,sans-serif] text-xs font-bold uppercase tracking-widest text-muted-foreground">
                               {t("membership.checkout.form.firstName")}
                             </label>
+                            {/* FIX: Removed font-bold from inputs for cleaner typing */}
                             <input
                               value={firstName}
                               onChange={(e) => setFirstName(e.target.value)}
                               placeholder="First name"
-                              className="w-full border border-border bg-background px-4 py-3 text-foreground outline-none transition focus:border-primary"
+                              className="w-full border border-border bg-background px-4 py-3 font-[Arial,sans-serif] text-sm text-foreground outline-none transition focus:border-primary placeholder:font-normal placeholder:tracking-normal"
                             />
                           </div>
                           <div>
-                            <label className="mb-2 block text-sm text-foreground">
+                            <label className="mb-2 block font-[Arial,sans-serif] text-xs font-bold uppercase tracking-widest text-muted-foreground">
                               {t("membership.checkout.form.lastName")}
                             </label>
                             <input
                               value={lastName}
                               onChange={(e) => setLastName(e.target.value)}
                               placeholder="Last name"
-                              className="w-full border border-border bg-background px-4 py-3 text-foreground outline-none transition focus:border-primary"
+                              className="w-full border border-border bg-background px-4 py-3 font-[Arial,sans-serif] text-sm text-foreground outline-none transition focus:border-primary placeholder:font-normal placeholder:tracking-normal"
                             />
                           </div>
                         </div>
 
                         <div>
-                          <label className="mb-2 block text-sm text-foreground">
+                          <label className="mb-2 block font-[Arial,sans-serif] text-xs font-bold uppercase tracking-widest text-muted-foreground">
                             {t("membership.checkout.form.email")}
                           </label>
                           <input
@@ -719,12 +578,12 @@ export default function MembershipPage() {
                             value={customerEmail}
                             onChange={(e) => setCustomerEmail(e.target.value)}
                             placeholder="Enter your email"
-                            className="w-full border border-border bg-background px-4 py-3 text-foreground outline-none transition focus:border-primary"
+                            className="w-full border border-border bg-background px-4 py-3 font-[Arial,sans-serif] text-sm text-foreground outline-none transition focus:border-primary placeholder:font-normal placeholder:tracking-normal"
                           />
                         </div>
 
                         <div>
-                          <label className="mb-2 block text-sm text-foreground">
+                          <label className="mb-2 block font-[Arial,sans-serif] text-xs font-bold uppercase tracking-widest text-muted-foreground">
                             {t("membership.checkout.form.phone")}
                           </label>
                           <input
@@ -732,31 +591,31 @@ export default function MembershipPage() {
                             value={customerPhone}
                             onChange={(e) => setCustomerPhone(e.target.value.replace(/\D/g, ""))}
                             placeholder="Enter your phone number"
-                            className="w-full border border-border bg-background px-4 py-3 text-foreground outline-none transition focus:border-primary"
+                            className="w-full border border-border bg-background px-4 py-3 font-[Arial,sans-serif] text-sm text-foreground outline-none transition focus:border-primary placeholder:font-normal placeholder:tracking-normal"
                           />
                         </div>
 
                         <div>
-                          <label className="mb-2 block text-sm text-foreground">
+                          <label className="mb-2 block font-[Arial,sans-serif] text-xs font-bold uppercase tracking-widest text-muted-foreground">
                             {t("membership.checkout.form.address")}
                           </label>
                           <input
                             value={customerAddress}
                             onChange={(e) => setCustomerAddress(e.target.value)}
                             placeholder="Enter your full address"
-                            className="w-full border border-border bg-background px-4 py-3 text-foreground outline-none transition focus:border-primary"
+                            className="w-full border border-border bg-background px-4 py-3 font-[Arial,sans-serif] text-sm text-foreground outline-none transition focus:border-primary placeholder:font-normal placeholder:tracking-normal"
                           />
                         </div>
 
                         <div>
-                          <label className="mb-2 block text-sm text-foreground">
+                          <label className="mb-2 block font-[Arial,sans-serif] text-xs font-bold uppercase tracking-widest text-muted-foreground">
                             {t("membership.checkout.form.city")}
                           </label>
                           <input
                             value={customerCity}
                             onChange={(e) => setCustomerCity(e.target.value)}
                             placeholder="Enter your city"
-                            className="w-full border border-border bg-background px-4 py-3 text-foreground outline-none transition focus:border-primary"
+                            className="w-full border border-border bg-background px-4 py-3 font-[Arial,sans-serif] text-sm text-foreground outline-none transition focus:border-primary placeholder:font-normal placeholder:tracking-normal"
                           />
                         </div>
 
@@ -764,7 +623,7 @@ export default function MembershipPage() {
                           type="button"
                           onClick={() => setCheckoutStep(2)}
                           disabled={!canContinueToConfirm}
-                          className="mt-2 w-full bg-primary px-5 py-4 text-sm uppercase tracking-widest text-primary-foreground transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
+                          className="mt-2 w-full bg-primary px-5 py-4 font-[Arial,sans-serif] text-[13px] font-bold uppercase tracking-widest text-primary-foreground transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
                         >
                           {t("membership.checkout.btnContinue")}
                         </button>
@@ -773,6 +632,7 @@ export default function MembershipPage() {
                   </div>
                 )}
 
+                {/* STEP 2: CONFIRM ORDER */}
                 {checkoutStep === 2 && (
                   <div className="p-6 md:p-8">
                     <div className="grid gap-8 md:grid-cols-[1fr_0.95fr]">
@@ -780,40 +640,71 @@ export default function MembershipPage() {
                         <p className="text-xs uppercase tracking-[0.3em] text-primary">
                           {t("membership.checkout.summary.title")}
                         </p>
-                        <div className="mt-5 space-y-3 text-sm text-muted-foreground">
-                          <div className="flex items-center justify-between">
-                            <span>{t("membership.checkout.summary.plan")}</span>
-                            <span className="text-foreground">{selectedTier.name}</span>
+                        <div className="mt-6 space-y-5">
+                          {/* FIX: Cleaner, perfectly aligned summary rows */}
+                          <div className="flex items-center justify-between gap-4 border-b border-border pb-3">
+                            <span className="font-[Arial,sans-serif] text-[12px] font-bold uppercase tracking-widest text-muted-foreground">
+                              {t("membership.checkout.summary.plan")}
+                            </span>
+                            <span className="font-[Arial,sans-serif] text-sm font-bold tracking-wide text-foreground uppercase text-right">
+                              {selectedTier.name}
+                            </span>
                           </div>
-                          <div className="flex items-center justify-between">
-                            <span>{t("membership.checkout.summary.name")}</span>
-                            <span className="text-foreground">
+                          
+                          <div className="flex items-center justify-between gap-4 border-b border-border pb-3">
+                            <span className="font-[Arial,sans-serif] text-[12px] font-bold uppercase tracking-widest text-muted-foreground">
+                              {t("membership.checkout.summary.name")}
+                            </span>
+                            <span className="font-[Arial,sans-serif] text-sm font-bold tracking-wide text-foreground uppercase text-right">
                               {firstName} {lastName}
                             </span>
                           </div>
-                          <div className="flex items-center justify-between">
-                            <span>{t("membership.checkout.summary.email")}</span>
-                            <span className="text-foreground">{customerEmail}</span>
+                          
+                          <div className="flex items-center justify-between gap-4 border-b border-border pb-3">
+                            <span className="font-[Arial,sans-serif] text-[12px] font-bold uppercase tracking-widest text-muted-foreground">
+                              {t("membership.checkout.summary.email")}
+                            </span>
+                            {/* FIX: Reduced text size to text-sm and added text-right so email stays aligned */}
+                            <span className="font-[Arial,sans-serif] text-sm font-bold tracking-wide text-foreground text-right">
+                              {customerEmail}
+                            </span>
                           </div>
-                          <div className="flex items-center justify-between">
-                            <span>{t("membership.checkout.summary.phone")}</span>
-                            <span className="text-foreground">{customerPhone}</span>
+                          
+                          <div className="flex items-center justify-between gap-4 border-b border-border pb-3">
+                            <span className="font-[Arial,sans-serif] text-[12px] font-bold uppercase tracking-widest text-muted-foreground">
+                              {t("membership.checkout.summary.phone")}
+                            </span>
+                            <span className="font-[Arial,sans-serif] text-sm font-bold tracking-wide text-foreground text-right">
+                              {customerPhone}
+                            </span>
                           </div>
-                          <div className="flex items-center justify-between gap-4">
-                            <span>{t("membership.checkout.summary.address")}</span>
-                            <span className="max-w-[60%] truncate text-right text-foreground">
+                          
+                          <div className="flex items-start justify-between gap-4 border-b border-border pb-3">
+                            <span className="font-[Arial,sans-serif] text-[12px] font-bold uppercase tracking-widest text-muted-foreground pt-1">
+                              {t("membership.checkout.summary.address")}
+                            </span>
+                            <span className="max-w-[50%] truncate text-right font-[Arial,sans-serif] text-sm font-bold tracking-wide text-foreground capitalize">
                               {customerAddress}
                             </span>
                           </div>
-                          <div className="flex items-center justify-between">
-                            <span>{t("membership.checkout.summary.city")}</span>
-                            <span className="text-foreground">{customerCity}</span>
+                          
+                          <div className="flex items-center justify-between gap-4 border-b border-border pb-3">
+                            <span className="font-[Arial,sans-serif] text-[12px] font-bold uppercase tracking-widest text-muted-foreground">
+                              {t("membership.checkout.summary.city")}
+                            </span>
+                            <span className="font-[Arial,sans-serif] text-sm font-bold tracking-wide text-foreground uppercase text-right">
+                              {customerCity}
+                            </span>
                           </div>
-                          <div className="flex items-center justify-between border-t border-border pt-3">
-                            <span className="font-medium text-foreground">
+                          
+                          <div className="flex items-center justify-between pt-2">
+                            <span className="font-[Arial,sans-serif] text-sm font-bold uppercase tracking-widest text-foreground">
                               {t("membership.checkout.summary.amount")}
                             </span>
-                            <span className="text-xl font-light text-primary">₹{selectedTier.price}</span>
+                            {/* FIX: Changed ₹ to $ */}
+                            <span className="font-[Arial,sans-serif] text-2xl font-bold tracking-wider text-primary">
+                              ${selectedTier.price}
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -837,18 +728,18 @@ export default function MembershipPage() {
                           </div>
                         </div>
 
-                        <div className="mt-6 flex gap-3">
+                        <div className="mt-8 flex gap-3">
                           <button
                             type="button"
                             onClick={() => setCheckoutStep(1)}
-                            className="w-1/2 border border-border px-4 py-4 text-sm uppercase tracking-widest text-foreground transition hover:border-primary hover:text-primary"
+                            className="w-1/2 border border-border px-4 py-4 font-[Arial,sans-serif] text-[13px] font-bold uppercase tracking-widest text-foreground transition hover:border-primary hover:text-primary"
                           >
                             {t("membership.checkout.confirm.btnBack")}
                           </button>
                           <button
                             type="button"
                             onClick={goToPaymentPage}
-                            className="w-1/2 bg-primary px-4 py-4 text-sm uppercase tracking-widest text-primary-foreground transition hover:bg-primary/90"
+                            className="w-1/2 bg-primary px-4 py-4 font-[Arial,sans-serif] text-[13px] font-bold uppercase tracking-widest text-primary-foreground transition hover:bg-primary/90"
                           >
                             {t("membership.checkout.confirm.btnConfirm")}
                           </button>
