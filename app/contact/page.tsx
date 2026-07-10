@@ -31,12 +31,12 @@ export default function ContactPage() {
     {
       icon: Mail,
       label: t("contact.public.info.i1.label"),
-      value: "coincierge@goamoments.com",
+      value: "goamoments.com@gmail.com",
     },
     {
       icon: Phone,
       label: t("contact.public.info.i2.label"),
-      value: "+91 98765 43210",
+      value: "+91 88079 65030",
     },
     {
       icon: MapPin,

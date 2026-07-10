@@ -2,12 +2,12 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 import { useTranslation } from "./providers";
 
 export function Experiences() {
   const { t } = useTranslation();
 
-  // Array moved inside the component so translation hook works
   const experienceKeys = [
     {
       key: "beach",
@@ -63,13 +63,25 @@ export function Experiences() {
   return (
     <section id="experiences" className="bg-background py-14 sm:py-20 md:py-24">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
+        
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="mb-10 text-center sm:mb-14 md:mb-16"
+          className="mb-10 flex flex-col items-center text-center sm:mb-14 md:mb-16"
         >
+          {/* --- TOP LOGO (Significantly Enlarged) --- */}
+          <Link href="/membership" className="mb-8 inline-block transition-transform duration-500 hover:scale-105">
+            <Image 
+              src="/images/membership-logo.png" 
+              alt="Goa Moments Membership" 
+              width={500} 
+              height={250} 
+              className="h-28 w-auto object-contain drop-shadow-2xl sm:h-40 md:h-48"
+            />
+          </Link>
+
           <p className="mb-3 text-xs uppercase tracking-[0.2em] text-primary sm:mb-4 sm:text-sm sm:tracking-[0.3em]">
             {t("experiences.badge")}
           </p>
@@ -149,6 +161,26 @@ export function Experiences() {
             );
           })}
         </div>
+
+        {/* --- BOTTOM LOGO (Significantly Enlarged) --- */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="mt-14 flex justify-center sm:mt-20"
+        >
+          <Link href="/membership" className="inline-block transition-transform duration-500 hover:scale-105">
+            <Image 
+              src="/images/membership-logo.png" 
+              alt="Goa Moments Membership" 
+              width={500} 
+              height={250} 
+              className="h-32 w-auto object-contain drop-shadow-2xl sm:h-44 md:h-52"
+            />
+          </Link>
+        </motion.div>
+
       </div>
     </section>
   );

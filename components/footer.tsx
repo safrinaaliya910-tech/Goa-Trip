@@ -159,21 +159,21 @@ export function Footer() {
               <li className="flex items-start gap-2 sm:gap-3">
                 <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
                 <span className="text-xs text-muted-foreground sm:text-sm">
-                  {t("contact.info.visit.line1")}
+                  {t("Panji")}
                   <br />
-                  {t("contact.info.visit.line2")}
+                  {t("Goa, India")}
                 </span>
               </li>
               <li className="flex items-center gap-2 sm:gap-3">
                 <Phone className="h-4 w-4 shrink-0 text-primary" />
                 <span className="text-xs text-muted-foreground sm:text-sm">
-                  +91 832 XXX XXXX
+                  +91 88079 65030
                 </span>
               </li>
               <li className="flex items-center gap-2 sm:gap-3">
                 <Mail className="h-4 w-4 shrink-0 text-primary" />
                 <span className="text-xs text-muted-foreground sm:text-sm">
-                  concierge@goamoments.com
+                  goamoments.com@gmail.com
                 </span>
               </li>
             </ul>
