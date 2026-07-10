@@ -16,6 +16,7 @@ export async function POST(req: Request) {
       paymentId,
       validity,
       paymentMethod,
+      cardImage, // <-- NEW: Receiving the generated image from the frontend
     } = body;
 
     if (!email) {
@@ -26,19 +27,33 @@ export async function POST(req: Request) {
     }
 
     const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
-  port: Number(process.env.SMTP_PORT),
-  secure: true,
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASSWORD,
-  },
-});
+      host: process.env.SMTP_HOST,
+      port: Number(process.env.SMTP_PORT),
+      secure: true,
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASSWORD,
+      },
+    });
+
+    // Handle the Base64 image attachment safely
+    const attachments = [];
+    if (cardImage) {
+      // Split the "data:image/jpeg;base64,..." string to get just the raw image data
+      const base64Data = cardImage.split("base64,")[1];
+      attachments.push({
+        filename: `${membershipId}-${plan.toLowerCase()}-card.jpg`,
+        content: base64Data,
+        encoding: "base64",
+      });
+    }
+
     await transporter.sendMail({
       from: '"GOA MOMENTS" <support@goamoments.com>',
-      replyTo: 'support@goamoments.com',
+      replyTo: "support@goamoments.com",
       to: email,
       subject: `Welcome to GOA MOMENTS — ${plan} Membership Activated`,
+      attachments: attachments, // <-- NEW: Attaching the card!
       html: `
 <!DOCTYPE html>
 <html>
@@ -97,7 +112,7 @@ export async function POST(req: Request) {
                         </tr>
                         <tr>
                           <td style="padding:8px 0;color:#a99f8b;">Amount Paid</td>
-                          <td align="right" style="padding:8px 0;color:#d4af37;font-weight:bold;">$${amountPaid}</td>
+                          <td align="right" style="padding:8px 0;color:#d4af37;font-weight:bold;">₹${amountPaid}</td>
                         </tr>
                         <tr>
                           <td style="padding:8px 0;color:#a99f8b;">Payment Method</td>
@@ -182,8 +197,7 @@ export async function POST(req: Request) {
               <td style="padding:0 34px 30px;">
                 <div style="padding:22px;border-left:3px solid #d4af37;background:#080808;">
                   <p style="margin:0;font-size:15px;line-height:1.8;color:#d8d2c7;">
-                    Keep your Membership ID safe. Use it whenever you contact GOA MOMENTS support
-                    for membership assistance, partner venue guidance, or premium Goa recommendations.
+                    <strong>Your Digital Card is Attached!</strong> Please find your personalized ${plan} membership card attached to this email. Keep your Membership ID safe. Use it whenever you contact GOA MOMENTS support.
                   </p>
                 </div>
               </td>

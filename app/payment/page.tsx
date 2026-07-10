@@ -242,32 +242,48 @@ export default function PaymentPage() {
   ];
 
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen bg-[#FDFBF7]">
       <Navigation />
-      <section className="px-6 py-16 md:py-24">
+      
+      {/* PERFECT NAVBAR CLEARANCE */}
+      <section className="relative z-10 px-6 pt-[220px] lg:pt-[260px] pb-16 md:pb-24">
         <div className="mx-auto max-w-6xl">
+          
           <div className="text-center">
-            <p className="text-xs uppercase tracking-[0.3em] text-primary">Payment Method</p>
-            <h1 className="mt-4 text-4xl font-light text-foreground md:text-5xl">Secure Payment Experience</h1>
-            <p className="mx-auto mt-5 max-w-3xl text-base leading-relaxed text-muted-foreground md:text-lg">
+            <p className="font-serif text-xs uppercase tracking-[0.3em] text-[#D4AF37] font-bold">
+              Payment Method
+            </p>
+            <h1 className="mt-4 font-serif text-4xl font-bold text-black md:text-5xl">
+              Secure Payment Experience
+            </h1>
+            <p className="mx-auto mt-5 max-w-3xl font-serif text-base leading-relaxed text-gray-700 md:text-lg">
               Select your preferred payment option and continue through a premium, secure checkout journey.
             </p>
           </div>
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-3 text-[11px] uppercase tracking-widest">
-            <span className="rounded-full border border-border px-3 py-1 text-muted-foreground">1. Details</span>
-            <span className="rounded-full border border-border px-3 py-1 text-muted-foreground">2. Confirm Order</span>
-            <span className="rounded-full bg-primary px-3 py-1 text-primary-foreground">3. Payment Method</span>
-            <span className="rounded-full border border-border px-3 py-1 text-muted-foreground">4. Order Successful</span>
+
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3 font-serif text-[11px] uppercase tracking-widest">
+            <span className="rounded-full border border-gray-300 bg-white px-4 py-1.5 font-bold text-gray-500 shadow-sm">1. Details</span>
+            <span className="rounded-full border border-gray-300 bg-white px-4 py-1.5 font-bold text-gray-500 shadow-sm">2. Confirm Order</span>
+            <span className="rounded-full border-[#D4AF37] bg-[#D4AF37] px-4 py-1.5 font-bold text-white shadow-md">3. Payment Method</span>
+            <span className="rounded-full border border-gray-300 bg-white px-4 py-1.5 font-bold text-gray-500 shadow-sm">4. Order Successful</span>
           </div>
+
           <div className="mt-12 grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
-            <div className="border border-primary/30 bg-card p-6 shadow-[0_0_40px_rgba(212,175,55,0.08)]">
-              <div className="flex items-center justify-between border-b border-border pb-4">
+            
+            {/* LEFT CARD */}
+            <div className="rounded-xl border border-[#D4AF37]/30 bg-white p-6 shadow-[0_15px_40px_rgba(212,175,55,0.1)]">
+              <div className="flex items-center justify-between border-b border-gray-200 pb-4">
                 <div>
-                  <p className="text-xs uppercase tracking-widest text-primary">Payment Options</p>
-                  <h2 className="mt-2 text-2xl font-light text-foreground">Choose How You Want To Pay</h2>
+                  <p className="font-serif text-xs font-bold uppercase tracking-widest text-[#D4AF37]">
+                    Payment Options
+                  </p>
+                  <h2 className="mt-2 font-serif text-2xl font-bold text-black">
+                    Choose How You Want To Pay
+                  </h2>
                 </div>
-                <ShieldCheck className="h-6 w-6 text-primary" />
+                <ShieldCheck className="h-7 w-7 text-[#D4AF37]" />
               </div>
+
               <div className="mt-6 space-y-4">
                 {methods.map((m) => {
                   const Icon = m.icon;
@@ -277,67 +293,125 @@ export default function PaymentPage() {
                       key={m.key}
                       type="button"
                       onClick={() => setMethod(m.key)}
-                      className={`flex w-full items-center justify-between border p-5 text-left transition ${
-                        active ? "border-primary bg-primary/10 shadow-[0_0_25px_rgba(212,175,55,0.08)]" : "border-border hover:border-primary/50"
+                      className={`flex w-full items-center justify-between rounded-lg border p-5 text-left transition-all duration-300 ${
+                        active 
+                        ? "border-[#D4AF37] bg-[#D4AF37]/10 shadow-[0_5px_15px_rgba(212,175,55,0.15)]" 
+                        : "border-gray-200 bg-gray-50 hover:border-[#D4AF37]/50 hover:bg-white"
                       }`}
                     >
                       <div className="flex items-center gap-4">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-full border border-primary/20 bg-primary/5">
-                          <Icon className="h-5 w-5 text-primary" />
+                        <div className={`flex h-12 w-12 items-center justify-center rounded-full border ${active ? 'border-[#D4AF37] bg-white' : 'border-gray-300 bg-white'}`}>
+                          <Icon className={`h-5 w-5 ${active ? 'text-[#D4AF37]' : 'text-gray-500'}`} />
                         </div>
                         <div>
-                          <p className="text-lg text-foreground">{m.title}</p>
-                          <p className="mt-1 text-sm text-muted-foreground">{m.desc}</p>
+                          {/* INLINE FONT STYLE APPLIED TO OVERRIDE GLOBALS */}
+                          <p 
+                            className={`text-lg tracking-wide ${active ? 'text-black' : 'text-gray-800'}`}
+                            style={{ fontFamily: 'Arial, Helvetica, sans-serif', fontWeight: active ? 900 : 700 }}
+                          >
+                            {m.title}
+                          </p>
+                          <p className="mt-1 font-serif text-sm font-medium text-gray-600">
+                            {m.desc}
+                          </p>
                         </div>
                       </div>
-                      {active && <CheckCircle2 className="h-5 w-5 text-primary" />}
+                      {active && <CheckCircle2 className="h-6 w-6 text-[#D4AF37]" />}
                     </button>
                   );
                 })}
               </div>
-              <div className="mt-6 rounded-sm border border-primary/20 bg-primary/5 p-4">
+
+              <div className="mt-6 rounded-lg border border-[#D4AF37]/30 bg-[#D4AF37]/10 p-4">
                 <div className="flex items-start gap-3">
-                  <LockKeyhole className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
-                  <p className="text-sm leading-relaxed text-muted-foreground">
+                  <LockKeyhole className="mt-0.5 h-5 w-5 shrink-0 text-[#D4AF37]" />
+                  <p className="font-serif text-sm font-semibold leading-relaxed text-gray-800">
                     All payments are routed through secure provider checkout and your membership is activated after successful payment.
                   </p>
                 </div>
               </div>
             </div>
-            <div className="border border-border bg-card p-6 shadow-[0_0_40px_rgba(0,0,0,0.18)]">
-              <p className="text-xs uppercase tracking-widest text-primary">Payment</p>
-              <h2 className="mt-2 text-3xl font-light text-foreground">{paymentTitle} Checkout</h2>
-              <div className="mt-4 rounded-sm border border-primary/20 bg-primary/5 p-4">
+
+            {/* RIGHT CARD: CHECKOUT SUMMARY */}
+            <div className="rounded-xl border border-[#D4AF37]/30 bg-white p-6 shadow-[0_15px_40px_rgba(212,175,55,0.1)] md:p-8">
+              <p className="font-serif text-xs font-bold uppercase tracking-widest text-[#D4AF37]">
+                Payment
+              </p>
+              <h2 className="mt-2 font-serif text-3xl font-bold text-black">
+                {paymentTitle} Checkout
+              </h2>
+
+              <div className="mt-5 rounded-lg border border-[#D4AF37]/30 bg-[#D4AF37]/10 p-4">
                 <div className="flex items-start gap-3">
-                  <Sparkles className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+                  <Sparkles className="mt-0.5 h-5 w-5 shrink-0 text-[#D4AF37]" />
                   <div>
-                    <p className="text-sm font-medium text-foreground">Selected: {paymentTitle}</p>
-                    <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{paymentDescription}</p>
+                    <p 
+                      className="text-[15px] text-black tracking-wide"
+                      style={{ fontFamily: 'Arial, Helvetica, sans-serif', fontWeight: 900 }}
+                    >
+                      Selected: {paymentTitle}
+                    </p>
+                    <p className="mt-1 font-serif text-sm font-medium leading-relaxed text-gray-800">
+                      {paymentDescription}
+                    </p>
                   </div>
                 </div>
               </div>
-              <div className="mt-8 space-y-4 text-sm text-muted-foreground">
-                <div className="flex justify-between gap-4"><span>Membership Plan</span><span className="text-right text-foreground">{plan}</span></div>
-                <div className="flex justify-between gap-4"><span>Member Name</span><span className="text-right text-foreground">{name}</span></div>
-                <div className="flex justify-between gap-4"><span>Email</span><span className="break-all text-right text-foreground">{email}</span></div>
-                <div className="flex justify-between gap-4"><span>Phone</span><span className="text-right text-foreground">{phone}</span></div>
-                <div className="flex justify-between gap-4"><span>Address</span><span className="max-w-[60%] break-words text-right text-foreground">{address}</span></div>
-                <div className="flex justify-between gap-4"><span>City</span><span className="text-right text-foreground">{city}</span></div>
-                <div className="flex justify-between gap-4"><span>Selected Method</span><span className="text-right text-foreground">{paymentTitle}</span></div>
-                <div className="flex justify-between gap-4 border-t border-border pt-5">
-                  <span className="font-medium text-foreground">Amount</span>
-                  <span className="text-2xl font-light text-primary">₹{amount}</span>
+
+              {/* ALL DYNAMIC DATA PROTECTED BY INLINE STYLES FOR PERFECT READABILITY */}
+              <div className="mt-8 space-y-6">
+                
+                <div className="flex items-center justify-between gap-4 border-b border-gray-100 pb-3">
+                  <span className="font-serif text-[12px] font-bold tracking-widest text-gray-500 uppercase">Membership Plan</span>
+                  <span className="text-base text-black tracking-wider" style={{ fontFamily: 'Arial, Helvetica, sans-serif', fontWeight: 900 }}>{plan}</span>
                 </div>
+                
+                <div className="flex items-center justify-between gap-4 border-b border-gray-100 pb-3">
+                  <span className="font-serif text-[12px] font-bold tracking-widest text-gray-500 uppercase">Member Name</span>
+                  <span className="text-base text-black tracking-wider uppercase" style={{ fontFamily: 'Arial, Helvetica, sans-serif', fontWeight: 900 }}>{name}</span>
+                </div>
+                
+                <div className="flex items-center justify-between gap-4 border-b border-gray-100 pb-3">
+                  <span className="font-serif text-[12px] font-bold tracking-widest text-gray-500 uppercase">Email</span>
+                  <span className="break-all text-[15px] text-black tracking-wider" style={{ fontFamily: 'Arial, Helvetica, sans-serif', fontWeight: 900 }}>{email}</span>
+                </div>
+                
+                <div className="flex items-center justify-between gap-4 border-b border-gray-100 pb-3">
+                  <span className="font-serif text-[12px] font-bold tracking-widest text-gray-500 uppercase">Phone</span>
+                  <span className="text-base text-black tracking-wider" style={{ fontFamily: 'Arial, Helvetica, sans-serif', fontWeight: 900 }}>{phone}</span>
+                </div>
+                
+                <div className="flex items-start justify-between gap-4 border-b border-gray-100 pb-3">
+                  <span className="font-serif text-[12px] font-bold tracking-widest text-gray-500 uppercase pt-1">Address</span>
+                  <span className="max-w-[60%] break-words text-right text-[15px] text-black tracking-wider capitalize" style={{ fontFamily: 'Arial, Helvetica, sans-serif', fontWeight: 900 }}>{address}</span>
+                </div>
+                
+                <div className="flex items-center justify-between gap-4 border-b border-gray-100 pb-3">
+                  <span className="font-serif text-[12px] font-bold tracking-widest text-gray-500 uppercase">City</span>
+                  <span className="text-base text-black tracking-wider uppercase" style={{ fontFamily: 'Arial, Helvetica, sans-serif', fontWeight: 900 }}>{city}</span>
+                </div>
+                
+                <div className="flex items-center justify-between gap-4 pb-2">
+                  <span className="font-serif text-[12px] font-bold tracking-widest text-gray-500 uppercase">Selected Method</span>
+                  <span className="text-base text-[#D4AF37] tracking-wider" style={{ fontFamily: 'Arial, Helvetica, sans-serif', fontWeight: 900 }}>{paymentTitle}</span>
+                </div>
+                
+                <div className="flex items-center justify-between gap-4 rounded-lg bg-gray-50 p-4 border border-gray-200">
+                  <span className="font-serif text-sm font-bold tracking-widest text-black uppercase">Total Amount</span>
+                  <span className="text-3xl text-[#D4AF37] tracking-wider" style={{ fontFamily: 'Arial, Helvetica, sans-serif', fontWeight: 900 }}>₹{amount}</span>
+                </div>
+
               </div>
               
               <button
                 type="button"
                 onClick={handlePayment}
                 disabled={loading}
-                className="mt-8 flex w-full items-center justify-center gap-2 bg-primary py-4 text-sm uppercase tracking-widest text-white transition hover:bg-primary/90 disabled:opacity-50"
+                className="mt-8 flex w-full items-center justify-center gap-3 rounded-md bg-[#D4AF37] py-4 text-[15px] uppercase tracking-widest text-white shadow-[0_4px_14px_rgba(212,175,55,0.4)] transition-all hover:bg-[#c29b2b] hover:shadow-[0_6px_20px_rgba(212,175,55,0.6)] disabled:opacity-50"
+                style={{ fontFamily: 'Arial, Helvetica, sans-serif', fontWeight: 900 }}
               >
-                {loading ? "Processing..." : paymentButtonLabel}
-                {!loading && <ArrowRight className="h-4 w-4" />}
+                {loading ? "Processing Securely..." : paymentButtonLabel}
+                {!loading && <ArrowRight className="h-5 w-5" />}
               </button>
 
             </div>

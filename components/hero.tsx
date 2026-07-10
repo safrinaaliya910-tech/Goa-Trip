@@ -12,20 +12,16 @@ export function Hero() {
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
-  // Prevent hydration errors by ensuring component is mounted before checking theme
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // Determine theme values safely
   const isDark = mounted && resolvedTheme === "dark";
   const textColor = isDark ? "text-white" : "text-foreground";
   const subTextColor = isDark ? "text-white/60" : "text-muted-foreground";
 
-  // Theme-based Startup Logo
   const startupLogo = isDark ? "/images/startup_logo_black.png" : "/images/startup_logo_white.png";
 
-  // Prevent rendering theme-dependent UI until mounted to avoid flashing
   if (!mounted) {
     return null;
   }
@@ -47,7 +43,6 @@ export function Hero() {
             Your browser does not support the video tag.
           </video>
 
-          {/* Luxury soft overlay */}
           <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/35 to-background" />
           <div className="absolute inset-0 bg-gradient-to-r from-background/50 via-transparent to-background/50" />
         </div>
@@ -60,7 +55,6 @@ export function Hero() {
             transition={{ duration: 1, ease: "easeOut" }}
             className="w-full max-w-4xl -translate-y-3 sm:translate-y-0"
           >
-            {/* Decorative Line */}
             <motion.div
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
@@ -103,18 +97,12 @@ export function Hero() {
               transition={{ duration: 0.8, delay: 1.2 }}
               className="mb-40 flex flex-col items-center gap-4 sm:mb-0 sm:flex-row sm:justify-center sm:gap-4"
             >
-              <a
-                href="/coming-soon"
-                className="group relative w-full max-w-[360px] overflow-hidden rounded-none border border-primary bg-primary px-8 py-4 text-sm uppercase tracking-[0.18em] text-primary-foreground transition-all duration-500 hover:bg-transparent hover:text-primary sm:w-auto sm:max-w-none sm:px-10 sm:py-4"
-              >
-                <span className="relative z-10">{t("hero.cta1")}</span>
-              </a>
-
+              {/* FIX: Early access removed. Explore Membership now uses the primary gold styling and sits centered. */}
               <a
                 href="/membership"
-                className="w-full max-w-[360px] rounded-none border border-muted-foreground/30 px-8 py-4 text-sm uppercase tracking-[0.18em] text-foreground transition-all duration-500 hover:border-primary hover:text-primary sm:w-auto sm:max-w-none sm:px-10 sm:py-4"
+                className="group relative w-full max-w-[360px] overflow-hidden rounded-none border border-primary bg-primary px-8 py-4 text-sm uppercase tracking-[0.18em] text-primary-foreground transition-all duration-500 hover:bg-transparent hover:text-primary sm:w-auto sm:max-w-none sm:px-10 sm:py-4"
               >
-                {t("hero.cta2")}
+                <span className="relative z-10">{t("hero.cta2")}</span>
               </a>
             </motion.div>
           </motion.div>
@@ -150,7 +138,7 @@ export function Hero() {
             transition={{ duration: 0.8 }}
             className="flex flex-col items-center gap-8 rounded-2xl border border-[#C5A059]/60 shadow-[0_4px_25px_rgba(197,160,89,0.15)] bg-card/90 backdrop-blur-sm px-6 py-10 text-card-foreground xl:flex-row xl:justify-between xl:px-12 xl:py-8"
           >
-            {/* 1. Goa Tourism (Enlarged) */}
+            {/* 1. Goa Tourism */}
             <div className="flex items-center gap-4 xl:w-auto">
               <Image
                 src="/images/goa_tourism.png"
@@ -170,11 +158,10 @@ export function Hero() {
               </div>
             </div>
 
-            {/* Divider */}
             <div className="hidden h-16 w-px bg-[#C5A059]/30 xl:block" />
             <div className="h-px w-3/4 bg-[#C5A059]/30 xl:hidden" />
 
-            {/* 2. Startup India (Enlarged with DPIIT Caption under it) */}
+            {/* 2. Startup India */}
             <div className="flex flex-col items-center justify-center gap-2 xl:w-auto text-center">
               <Image
                 src={startupLogo}
@@ -188,7 +175,6 @@ export function Hero() {
               </span>
             </div>
 
-            {/* Divider */}
             <div className="hidden h-16 w-px bg-[#C5A059]/30 xl:block" />
             <div className="h-px w-3/4 bg-[#C5A059]/30 xl:hidden" />
 
@@ -206,7 +192,6 @@ export function Hero() {
               </div>
             </div>
 
-            {/* Divider */}
             <div className="hidden h-16 w-px bg-[#C5A059]/30 xl:block" />
             <div className="h-px w-3/4 bg-[#C5A059]/30 xl:hidden" />
 
@@ -240,7 +225,6 @@ export function Hero() {
               </div>
             </div>
 
-            {/* Divider */}
             <div className="hidden h-16 w-px bg-[#C5A059]/30 xl:block" />
             <div className="h-px w-3/4 bg-[#C5A059]/30 xl:hidden" />
 

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation"; 
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { useTranslation } from "./providers";
@@ -14,6 +15,9 @@ export function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { t } = useTranslation();
+  
+  const pathname = usePathname();
+  const isPaymentPage = pathname === "/payment";
 
   const navLinks = [
     { label: t("nav.home"), href: "/" },
@@ -25,15 +29,15 @@ export function Navigation() {
   
   const { resolvedTheme } = useTheme();
 
-  const partnerTextColor =
-    resolvedTheme === "dark" 
-      ? "text-white/90" 
-      : "text-black/80";
-
-  const startupLogo = 
-    resolvedTheme === "dark" 
-      ? "/images/startup_logo_black.png" 
-      : "/images/startup_logo_white.png";
+  const partnerTextColor = isPaymentPage ? "text-black/90 font-bold" : (resolvedTheme === "dark" ? "text-white/90" : "text-black/80");
+  
+  // FIX: Reverted to your exact original file naming logic
+  const startupLogo = isPaymentPage 
+    ? "/images/startup_logo_white.png" 
+    : (resolvedTheme === "dark" ? "/images/startup_logo_black.png" : "/images/startup_logo_white.png");
+  
+  const textColor = isPaymentPage ? "text-black" : "text-foreground";
+  const mutedTextColor = isPaymentPage ? "text-gray-600 hover:text-black" : "text-muted-foreground hover:text-foreground";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -43,40 +47,41 @@ export function Navigation() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const headerBg = isPaymentPage 
+    ? "bg-[#FDFBF7] border-b border-[#D4AF37]/30 shadow-sm pb-2" 
+    : (isScrolled ? "bg-background/95 backdrop-blur-md pb-2" : "bg-transparent pb-2");
+
   return (
     <>
       <motion.header
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className={`fixed left-0 right-0 top-0 z-50 flex flex-col transition-all duration-500 ${
-          isScrolled ? "bg-background/95 backdrop-blur-md pb-2" : "bg-transparent pb-2"
-        }`}
+        className={`fixed left-0 right-0 top-0 z-50 flex flex-col transition-all duration-500 ${headerBg}`}
       >
         <nav className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-4 sm:px-6 sm:py-5">
-          <Link href="/" className="group flex items-center gap-3">
-            {/* Main Logo Enlarged */}
+          <Link href="/" className="group flex items-center gap-2 sm:gap-3">
             <Image
               src="/images/logo.png"
               alt="GOA MOMENTS Logo"
               width={140}
               height={140}
-              className="h-14 w-auto object-contain"
+              className="h-10 sm:h-14 w-auto object-contain"
               priority
             />
 
             <div className="flex flex-col leading-tight">
               <div className="sm:hidden">
-                <span className="block whitespace-nowrap text-sm font-medium tracking-wider text-foreground">
+                <span className={`block whitespace-nowrap text-xs font-medium tracking-wider ${textColor}`}>
                   GOA MOMENTS
                 </span>
-                <span className="block whitespace-nowrap text-[9px] uppercase tracking-[0.2em] text-[#C5A059]">
+                <span className="block whitespace-nowrap text-[7px] uppercase tracking-[0.2em] text-[#C5A059]">
                   LUXURY LIVING
                 </span>
               </div>
 
               <div className="hidden flex-col sm:flex">
-                <span className="text-base font-medium tracking-wider text-foreground sm:text-lg">
+                <span className={`text-base font-medium tracking-wider sm:text-lg ${textColor}`}>
                   GOA MOMENTS
                 </span>
                 <span className="text-[9px] uppercase tracking-[0.2em] text-[#C5A059]">
@@ -91,7 +96,7 @@ export function Navigation() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="group relative text-xs uppercase tracking-widest text-muted-foreground transition-colors hover:text-foreground xl:text-sm"
+                className={`group relative text-xs uppercase tracking-widest transition-colors xl:text-sm ${mutedTextColor}`}
               >
                 {link.label}
                 <span className="absolute -bottom-1 left-0 h-px w-0 bg-[#C5A059] transition-all duration-300 group-hover:w-full" />
@@ -100,28 +105,22 @@ export function Navigation() {
           </div>
 
           <div className="hidden items-center gap-3 lg:flex">
-            <LanguageSwitcher />
-            <ThemeToggle />
-            <Link
-              href="/coming-soon"
-              className="border border-[#C5A059] bg-transparent px-4 py-2 text-xs uppercase tracking-widest text-[#C5A059] transition-all duration-300 hover:bg-[#C5A059] hover:text-black xl:px-6"
-            >
-              {t("nav.joinNow")}
-            </Link>
+            {!isPaymentPage && <LanguageSwitcher />}
+            {!isPaymentPage && <ThemeToggle />}
           </div>
 
           <div className="flex items-center gap-2 lg:hidden">
-            <LanguageSwitcher />
-            <ThemeToggle />
+            {!isPaymentPage && <LanguageSwitcher />}
+            {!isPaymentPage && <ThemeToggle />}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="relative z-50 ml-2"
               aria-label="Toggle menu"
             >
               {isMobileMenuOpen ? (
-                <X className="h-6 w-6 text-foreground" />
+                <X className={`h-6 w-6 ${textColor}`} />
               ) : (
-                <Menu className="h-6 w-6 text-foreground" />
+                <Menu className={`h-6 w-6 ${textColor}`} />
               )}
             </button>
           </div>
@@ -159,25 +158,23 @@ export function Navigation() {
                 </div>
               </div>
 
-              <div className="mx-3 h-14 w-px bg-white/20" />
+              <div className={`mx-3 h-14 w-px ${isPaymentPage ? 'bg-gray-300' : 'bg-white/20'}`} />
 
-              {/* Goa Tourism Logo Enlarged */}
               <div className="flex items-center gap-1">
                 <div className="flex flex-col items-center justify-center">
                   <Image src="/images/goa_tourism.png" alt="Goa Tourism" width={160} height={90} className="h-20 w-auto object-contain drop-shadow-md" />
-                  <span className={`mt-1.5 text-[10px] font-medium tracking-wide ${partnerTextColor}`}>
+                  <span className={`mt-1.5 text-[10px] tracking-wide ${partnerTextColor}`}>
                     Goa Tourism
                   </span>
                 </div>
               </div>
 
-              <div className="mx-3 h-14 w-px bg-white/20" />
+              <div className={`mx-3 h-14 w-px ${isPaymentPage ? 'bg-gray-300' : 'bg-white/20'}`} />
 
-              {/* Startup India Logo Enlarged */}
               <div className="flex items-center gap-1">
                 <div className="flex flex-col items-center justify-center">
                   <Image src={startupLogo} alt="Startup India" width={160} height={90} className="h-20 w-auto object-contain drop-shadow-md" />
-                  <span className={`mt-1.5 text-[10px] font-medium tracking-wide ${partnerTextColor}`}>
+                  <span className={`mt-1.5 text-[10px] tracking-wide ${partnerTextColor}`}>
                     Startup India
                   </span>
                 </div>
@@ -195,7 +192,7 @@ export function Navigation() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-40 bg-background/98 backdrop-blur-lg lg:hidden"
+            className={`fixed inset-0 z-40 backdrop-blur-lg lg:hidden ${isPaymentPage ? 'bg-[#FDFBF7]/98' : 'bg-background/98'}`}
           >
             <div className="flex min-h-screen flex-col items-center justify-center gap-6 px-6 sm:gap-8">
               {navLinks.map((link, index) => (
@@ -206,31 +203,18 @@ export function Navigation() {
                     exit={{ opacity: 0, y: -20 }}
                     transition={{ duration: 0.3, delay: index * 0.1 }}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="text-center text-lg uppercase tracking-widest text-foreground transition-colors hover:text-[#C5A059] sm:text-2xl"
+                    className={`text-center text-lg uppercase tracking-widest transition-colors hover:text-[#C5A059] sm:text-2xl ${textColor}`}
                   >
                     {link.label}
                   </motion.a>
                 </Link>
               ))}
 
-              <Link href="/coming-soon" passHref legacyBehavior>
-                <motion.a
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.3, delay: 0.4 }}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="mt-4 border border-[#C5A059] px-6 py-3 text-sm uppercase tracking-widest text-[#C5A059] transition-all duration-300 hover:bg-[#C5A059] hover:text-black sm:px-8"
-                >
-                  {t("nav.joinNow")}
-                </motion.a>
-              </Link>
-
               <motion.div 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.3, delay: 0.5 }}
-                className="mt-8 flex w-full max-w-[340px] flex-col items-center gap-6 border-t border-white/10 pt-8"
+                className={`mt-8 flex w-full max-w-[340px] flex-col items-center gap-6 border-t pt-8 ${isPaymentPage ? 'border-gray-300' : 'border-white/10'}`}
               >
                 <div className="flex items-center gap-3">
                   <svg width="24" height="29" viewBox="0 0 36 44" fill="none" xmlns="http://www.w3.org/2000/svg" className="drop-shadow-md">
@@ -257,16 +241,14 @@ export function Navigation() {
                 </div>
 
                 <div className="flex items-center justify-center gap-10">
-                  {/* Goa Tourism Mobile Logo Enlarged */}
                   <div className="flex flex-col items-center gap-1.5">
                     <Image src="/images/goa_tourism.png" alt="Goa Tourism" width={120} height={70} className="h-18 w-auto object-contain" />
-                    <span className={`text-center text-[9px] font-medium tracking-wide ${partnerTextColor}`}>Goa<br/>Tourism</span>
+                    <span className={`text-center text-[9px] tracking-wide ${partnerTextColor}`}>Goa<br/>Tourism</span>
                   </div>
 
-                  {/* Startup India Mobile Logo Enlarged */}
                   <div className="flex flex-col items-center gap-1.5">
                     <Image src={startupLogo} alt="Startup India" width={120} height={70} className="h-18 w-auto object-contain" />
-                    <span className={`text-center text-[9px] font-medium tracking-wide ${partnerTextColor}`}>Startup<br/>India</span>
+                    <span className={`text-center text-[9px] tracking-wide ${partnerTextColor}`}>Startup<br/>India</span>
                   </div>
                 </div>
               </motion.div>
