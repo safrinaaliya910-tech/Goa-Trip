@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { Navigation } from "@/components/navigation";
@@ -21,12 +22,54 @@ import {
   Headphones,
   LockKeyhole,
   CreditCard,
+  Loader2, // Added for the loading spinner
 } from "lucide-react";
 
 export default function ContactPage() {
   const { t } = useTranslation();
 
-  // Data arrays moved inside the component to use the translation hook
+  // --- NEW: Form State Variables ---
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    supportType: "",
+    message: "",
+  });
+
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+
+  // Handle input changes dynamically
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  // Handle form submission
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus("loading");
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        setStatus("success");
+        // Clear the form
+        setFormData({ firstName: "", lastName: "", email: "", phone: "", supportType: "", message: "" });
+      } else {
+        setStatus("error");
+      }
+    } catch (error) {
+      console.error("Failed to submit:", error);
+      setStatus("error");
+    }
+  };
+
   const publicContactInfo = [
     {
       icon: Mail,
@@ -187,16 +230,24 @@ export default function ContactPage() {
                   {t("contact.form.desc")}
                 </p>
 
-                <form className="mt-8 space-y-6">
+                {/* --- UPDATED FORM WITH ONSUBMIT --- */}
+                <form onSubmit={handleSubmit} className="mt-8 space-y-6">
                   <div className="grid gap-5 md:grid-cols-2">
                     <input
                       type="text"
+                      name="firstName"
+                      value={formData.firstName}
+                      onChange={handleChange}
                       placeholder={t("contact.form.firstName")}
+                      required
                       aria-label="First Name"
                       className="border-b border-border bg-transparent py-3 text-foreground outline-none transition focus:border-primary"
                     />
                     <input
                       type="text"
+                      name="lastName"
+                      value={formData.lastName}
+                      onChange={handleChange}
                       placeholder={t("contact.form.lastName")}
                       aria-label="Last Name"
                       className="border-b border-border bg-transparent py-3 text-foreground outline-none transition focus:border-primary"
@@ -205,13 +256,20 @@ export default function ContactPage() {
 
                   <input
                     type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
                     placeholder={t("contact.form.email")}
+                    required
                     aria-label="Email Address"
                     className="w-full border-b border-border bg-transparent py-3 text-foreground outline-none transition focus:border-primary"
                   />
 
                   <input
                     type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
                     placeholder={t("contact.form.phone")}
                     aria-label="Phone Number"
                     className="w-full border-b border-border bg-transparent py-3 text-foreground outline-none transition focus:border-primary"
@@ -223,6 +281,8 @@ export default function ContactPage() {
                   <select
                     id="supportType"
                     name="supportType"
+                    value={formData.supportType}
+                    onChange={handleChange}
                     className="w-full border-b border-border bg-transparent py-3 text-foreground outline-none transition focus:border-primary"
                   >
                     <option className="bg-background" value="">
@@ -244,17 +304,36 @@ export default function ContactPage() {
 
                   <textarea
                     rows={4}
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
                     placeholder={t("contact.form.message")}
+                    required
                     aria-label="Message"
                     className="w-full resize-none border-b border-border bg-transparent py-3 text-foreground outline-none transition focus:border-primary"
                   />
 
+                  {/* Feedback Messages */}
+                  {status === "success" && (
+                    <p className="text-sm text-[#4CAF50]">Message sent successfully! Our team will contact you soon.</p>
+                  )}
+                  {status === "error" && (
+                    <p className="text-sm text-[#E57373]">Failed to send message. Please try again or email us directly.</p>
+                  )}
+
                   <button
-                    type="button"
-                    className="group flex w-full items-center justify-center gap-3 bg-primary py-4 text-sm uppercase tracking-[0.22em] text-primary-foreground transition hover:bg-primary/90"
+                    type="submit"
+                    disabled={status === "loading"}
+                    className="group flex w-full items-center justify-center gap-3 bg-primary py-4 text-sm uppercase tracking-[0.22em] text-primary-foreground transition hover:bg-primary/90 disabled:opacity-70 disabled:cursor-not-allowed"
                   >
-                    {t("contact.form.submit")}
-                    <Send className="h-4 w-4 transition group-hover:translate-x-1" />
+                    {status === "loading" ? (
+                      <Loader2 className="h-5 w-5 animate-spin" />
+                    ) : (
+                      <>
+                        {t("contact.form.submit")}
+                        <Send className="h-4 w-4 transition group-hover:translate-x-1" />
+                      </>
+                    )}
                   </button>
                 </form>
               </motion.div>

@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
@@ -18,7 +17,7 @@ import {
   BadgeCheck,
   Sparkles,
   MapPin,
-  Loader2, 
+  Loader2,
 } from "lucide-react";
 
 type Tier = {
@@ -35,17 +34,15 @@ type Tier = {
 export default function MembershipPage() {
   const router = useRouter();
   const { t } = useTranslation();
-
+  
   const [selectedTier, setSelectedTier] = useState<Tier | null>(null);
   const [checkoutStep, setCheckoutStep] = useState<1 | 2>(1);
-
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [customerEmail, setCustomerEmail] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
   const [customerAddress, setCustomerAddress] = useState("");
   const [customerCity, setCustomerCity] = useState("");
-
   const [addressError, setAddressError] = useState("");
   const [isFetchingLocation, setIsFetchingLocation] = useState(false);
 
@@ -179,12 +176,10 @@ export default function MembershipPage() {
   const handleContinue = () => {
     const hasNumber = /\d/.test(customerAddress);
     const words = customerAddress.trim().split(/\s+/).length;
-
     if (!hasNumber || customerAddress.length < 15 || words < 3) {
       setAddressError("Please enter full address with country, state, pincode, and address.");
       return;
     }
-
     setAddressError("");
     setCheckoutStep(2);
   };
@@ -194,96 +189,48 @@ export default function MembershipPage() {
       alert("Geolocation is not supported by your browser.");
       return;
     }
-
+    
     setIsFetchingLocation(true);
     setAddressError("");
-
+    
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         try {
           const { latitude, longitude } = position.coords;
           const googleApiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
-
-          if (googleApiKey) {
-            const response = await fetch(
-              `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${googleApiKey}`
-            );
-            const data = await response.json();
-
-            if (data.status === "OK" && data.results?.length) {
-  const preciseResult =
-    data.results.find((r: any) => r.types.includes("street_address")) ||
-    data.results.find((r: any) => r.types.includes("premise")) ||
-    data.results[0];
-
-  const getComponent = (result: any, types: string[]) =>
-    result.address_components.find((c: any) =>
-      types.some((t) => c.types.includes(t))
-    )?.long_name;
-
-  const streetNumber = getComponent(preciseResult, ["street_number"]);
-  const route = getComponent(preciseResult, ["route"]);
-  const sublocality = getComponent(preciseResult, ["sublocality", "sublocality_level_1"]);
-  const locality = getComponent(preciseResult, ["locality", "postal_town"]);
-  const adminArea2 = getComponent(preciseResult, ["administrative_area_level_2"]);
-  const adminArea1 = getComponent(preciseResult, ["administrative_area_level_1"]);
-  const country = getComponent(preciseResult, ["country"]);
-
-  // Postal code is often missing from the precise result but present
-  // in a separate "postal_code" typed result in the same response
-  let postalCode = getComponent(preciseResult, ["postal_code"]);
-  if (!postalCode) {
-    const postalResult = data.results.find((r: any) => r.types.includes("postal_code"));
-    postalCode = postalResult ? getComponent(postalResult, ["postal_code"]) : undefined;
-  }
-
-  const cityValue = locality || adminArea2 || adminArea1;
-
-  const addressParts = [
-    [streetNumber, route].filter(Boolean).join(" "),
-    sublocality,
-    cityValue,
-    adminArea1,
-    country,
-  ].filter(Boolean);
-
-  const formatted = postalCode
-    ? `${addressParts.join(", ")} - ${postalCode}`
-    : addressParts.join(", ") || preciseResult.formatted_address;
-
-  setCustomerAddress(formatted);
-  if (cityValue && !customerCity) setCustomerCity(cityValue);
-
-  if (!postalCode) {
-  setAddressError("We got your city, but couldn't detect an exact pincode — please add it to your address.");
-}
-  setIsFetchingLocation(false);
-  return;
-}
+          
+          // DIAGNOSTIC CHECK 1: Is the key actually loaded?
+          if (!googleApiKey) {
+            alert("NEXT.JS ERROR: The API key is missing!\n\nPlease check your .env.local file. If you just added it, you MUST kill the terminal (Ctrl+C) and run 'npm run dev' again for Next.js to see it.");
+            setIsFetchingLocation(false);
+            return;
           }
-
-          // Fallback: BigDataCloud
-          const response = await fetch(
-            `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`
-          );
+          
+          // We have the key! Let's ping Google.
+          const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${googleApiKey}`);
           const data = await response.json();
-
-          if (data && data.city) {
-            const parts = [data.locality, data.city, data.principalSubdivision, data.countryName].filter(Boolean);
-            const formatted = `${parts.join(", ")}${data.postcode ? ` - ${data.postcode}` : ""}`;
-
-            setCustomerAddress(formatted);
-            if (!customerCity) setCustomerCity(data.city);
-
-            if (!data.postcode) {
-              setAddressError("Pincode not found for this location, please add it manually.");
-            }
+          
+          if (data.status === "OK" && data.results[0]) {
+            // SUCCESS! Google's formatted_address natively includes the exact street and pincode!
+            setCustomerAddress(data.results[0].formatted_address);
+            
+            const cityObj = data.results[0].address_components.find((component: any) =>
+              component.types.includes("locality") || component.types.includes("administrative_area_level_2")
+            );
+            
+            if (cityObj && !customerCity) setCustomerCity(cityObj.long_name);
+            
+            setIsFetchingLocation(false);
+            return;
           } else {
-            setAddressError("Could not retrieve exact address. Please refine it manually.");
+            // DIAGNOSTIC CHECK 2: Google Rejected the Request!
+            alert(`GOOGLE MAPS BLOCKED THE REQUEST:\n\nStatus: ${data.status}\nMessage: ${data.error_message || "Unknown API restriction error"}\n\nTell your client to change Application Restrictions from 'Websites' to 'None' in the Google Cloud Console.`);
+            setIsFetchingLocation(false);
+            return; // Force it to stop so it doesn't fall back to the silent error!
           }
+          
         } catch (error) {
-          setAddressError("Failed to fetch address details. Please type manually.");
-        } finally {
+          alert("Network failed to reach Google Maps. Check your internet connection.");
           setIsFetchingLocation(false);
         }
       },
@@ -301,9 +248,7 @@ export default function MembershipPage() {
 
   const goToPaymentPage = () => {
     if (!selectedTier) return;
-
     const membershipId = `GM-${selectedTier.name.slice(0, 3).toUpperCase()}-${Math.floor(100000 + Math.random() * 900000)}`;
-
     const params = new URLSearchParams({
       membershipId,
       plan: selectedTier.name,
@@ -314,7 +259,6 @@ export default function MembershipPage() {
       address: customerAddress,
       city: customerCity,
     });
-
     closeCheckout();
     router.push(`/payment?${params.toString()}`);
   };
@@ -322,7 +266,6 @@ export default function MembershipPage() {
   return (
     <main className="min-h-screen bg-background">
       <Navigation />
-
       <section className="relative h-[75vh] min-h-[560px] overflow-hidden">
         <Image
           src="/images/membership-hero.jpg"
@@ -363,7 +306,6 @@ export default function MembershipPage() {
           </motion.div>
         </div>
       </section>
-
       <section className="bg-secondary/30 px-6 py-24 md:py-32">
         <div className="mx-auto max-w-6xl">
           <motion.div
@@ -436,7 +378,6 @@ export default function MembershipPage() {
           </div>
         </div>
       </section>
-
       <section className="px-6 py-24 md:py-32">
         <div className="mx-auto max-w-5xl text-center">
           <motion.div
@@ -487,7 +428,6 @@ export default function MembershipPage() {
           </motion.div>
         </div>
       </section>
-
       <section className="bg-secondary/30 px-6 py-24 md:py-32">
         <div className="mx-auto max-w-6xl">
           <motion.div
@@ -529,7 +469,6 @@ export default function MembershipPage() {
           </div>
         </div>
       </section>
-
       <section className="px-6 py-24 md:py-32">
         <div className="mx-auto max-w-6xl">
           <motion.div
@@ -565,7 +504,6 @@ export default function MembershipPage() {
           </div>
         </div>
       </section>
-
       <AnimatePresence>
         {selectedTier && (
           <motion.div
@@ -590,7 +528,6 @@ export default function MembershipPage() {
                 >
                   <X className="h-5 w-5" />
                 </button>
-                
                 <div className="border-b border-border p-6 md:p-8">
                   <p className="text-xs uppercase tracking-[0.3em] text-primary">
                     {t("membership.checkout.secureTitle")}
@@ -618,7 +555,6 @@ export default function MembershipPage() {
                     </span>
                   </div>
                 </div>
-
                 {checkoutStep === 1 && (
                   <div className="p-6 md:p-8">
                     <div className="grid gap-8 md:grid-cols-[1.05fr_0.95fr]">
@@ -627,11 +563,9 @@ export default function MembershipPage() {
                           <p className="text-xs uppercase tracking-[0.3em] text-primary">
                             {t("membership.checkout.selectedTitle")}
                           </p>
-                          
                           <h4 className="mt-3 font-[Arial,sans-serif] text-xl font-bold tracking-wider text-foreground">
                             {selectedTier.name}
                           </h4>
-                          
                           <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
                             {selectedTier.tagline}
                           </p>
@@ -658,7 +592,6 @@ export default function MembershipPage() {
                           </div>
                         </div>
                       </div>
-
                       <div className="space-y-4">
                         <div className="grid grid-cols-2 gap-4">
                           <div>
@@ -686,7 +619,6 @@ export default function MembershipPage() {
                             />
                           </div>
                         </div>
-
                         <div>
                           <label className="mb-2 block font-[Arial,sans-serif] text-xs font-bold uppercase tracking-widest text-muted-foreground">
                             {t("membership.checkout.form.email")}
@@ -700,7 +632,6 @@ export default function MembershipPage() {
                             className="w-full border border-border bg-background px-4 py-3 font-[Arial,sans-serif] text-sm text-foreground outline-none transition focus:border-primary placeholder:font-normal placeholder:tracking-normal"
                           />
                         </div>
-
                         <div>
                           <label className="mb-2 block font-[Arial,sans-serif] text-xs font-bold uppercase tracking-widest text-muted-foreground">
                             {t("membership.checkout.form.phone")}
@@ -714,7 +645,6 @@ export default function MembershipPage() {
                             className="w-full border border-border bg-background px-4 py-3 font-[Arial,sans-serif] text-sm text-foreground outline-none transition focus:border-primary placeholder:font-normal placeholder:tracking-normal"
                           />
                         </div>
-
                         <div>
                           <label className="mb-2 block font-[Arial,sans-serif] text-xs font-bold uppercase tracking-widest text-muted-foreground">
                             {t("membership.checkout.form.address")}
@@ -724,7 +654,7 @@ export default function MembershipPage() {
                               value={customerAddress}
                               onChange={(e) => {
                                 setCustomerAddress(e.target.value);
-                                if (addressError) setAddressError(""); 
+                                if (addressError) setAddressError("");
                               }}
                               placeholder="Enter country, state, pincode, address"
                               autoComplete="street-address"
@@ -745,12 +675,11 @@ export default function MembershipPage() {
                             </button>
                           </div>
                           {addressError && (
-                            <p className="mt-2 text-xs font-medium text-red-500">
+                            <p className="mt-2 text-xs font-medium text-[#E57373]">
                               {addressError}
                             </p>
                           )}
                         </div>
-
                         <div>
                           <label className="mb-2 block font-[Arial,sans-serif] text-xs font-bold uppercase tracking-widest text-muted-foreground">
                             {t("membership.checkout.form.city")}
@@ -763,7 +692,6 @@ export default function MembershipPage() {
                             className="w-full border border-border bg-background px-4 py-3 font-[Arial,sans-serif] text-sm text-foreground outline-none transition focus:border-primary placeholder:font-normal placeholder:tracking-normal"
                           />
                         </div>
-
                         <button
                           type="button"
                           onClick={handleContinue}
@@ -776,7 +704,6 @@ export default function MembershipPage() {
                     </div>
                   </div>
                 )}
-
                 {checkoutStep === 2 && (
                   <div className="p-6 md:p-8">
                     <div className="grid gap-8 md:grid-cols-[1fr_0.95fr]">
@@ -793,7 +720,6 @@ export default function MembershipPage() {
                               {selectedTier.name}
                             </span>
                           </div>
-                          
                           <div className="flex items-center justify-between gap-4 border-b border-border pb-3">
                             <span className="font-[Arial,sans-serif] text-[12px] font-bold uppercase tracking-widest text-muted-foreground">
                               {t("membership.checkout.summary.name")}
@@ -802,7 +728,6 @@ export default function MembershipPage() {
                               {firstName} {lastName}
                             </span>
                           </div>
-                          
                           <div className="flex items-center justify-between gap-4 border-b border-border pb-3">
                             <span className="font-[Arial,sans-serif] text-[12px] font-bold uppercase tracking-widest text-muted-foreground">
                               {t("membership.checkout.summary.email")}
@@ -811,7 +736,6 @@ export default function MembershipPage() {
                               {customerEmail}
                             </span>
                           </div>
-                          
                           <div className="flex items-center justify-between gap-4 border-b border-border pb-3">
                             <span className="font-[Arial,sans-serif] text-[12px] font-bold uppercase tracking-widest text-muted-foreground">
                               {t("membership.checkout.summary.phone")}
@@ -820,7 +744,6 @@ export default function MembershipPage() {
                               {customerPhone}
                             </span>
                           </div>
-                          
                           <div className="flex items-start justify-between gap-4 border-b border-border pb-3">
                             <span className="font-[Arial,sans-serif] text-[12px] font-bold uppercase tracking-widest text-muted-foreground pt-1">
                               {t("membership.checkout.summary.address")}
@@ -829,7 +752,6 @@ export default function MembershipPage() {
                               {customerAddress}
                             </span>
                           </div>
-                          
                           <div className="flex items-center justify-between gap-4 border-b border-border pb-3">
                             <span className="font-[Arial,sans-serif] text-[12px] font-bold uppercase tracking-widest text-muted-foreground">
                               {t("membership.checkout.summary.city")}
@@ -838,7 +760,6 @@ export default function MembershipPage() {
                               {customerCity}
                             </span>
                           </div>
-                          
                           <div className="flex items-center justify-between pt-2">
                             <span className="font-[Arial,sans-serif] text-sm font-bold uppercase tracking-widest text-foreground">
                               {t("membership.checkout.summary.amount")}
@@ -849,7 +770,6 @@ export default function MembershipPage() {
                           </div>
                         </div>
                       </div>
-
                       <div className="border border-primary/20 bg-gradient-to-b from-primary/5 to-transparent p-5">
                         <p className="text-xs uppercase tracking-[0.3em] text-primary">
                           {t("membership.checkout.confirm.title")}
@@ -868,7 +788,6 @@ export default function MembershipPage() {
                             </p>
                           </div>
                         </div>
-
                         <div className="mt-8 flex gap-3">
                           <button
                             type="button"
@@ -894,7 +813,6 @@ export default function MembershipPage() {
           </motion.div>
         )}
       </AnimatePresence>
-
       <Footer />
     </main>
   );
