@@ -1,4 +1,5 @@
 "use client";
+
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
@@ -34,7 +35,6 @@ type Tier = {
 export default function MembershipPage() {
   const router = useRouter();
   const { t } = useTranslation();
-  
   const [selectedTier, setSelectedTier] = useState<Tier | null>(null);
   const [checkoutStep, setCheckoutStep] = useState<1 | 2>(1);
   const [firstName, setFirstName] = useState("");
@@ -189,37 +189,36 @@ export default function MembershipPage() {
       alert("Geolocation is not supported by your browser.");
       return;
     }
-    
+
     setIsFetchingLocation(true);
     setAddressError("");
-    
+
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         try {
           const { latitude, longitude } = position.coords;
           const googleApiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
-          
+
           // DIAGNOSTIC CHECK 1: Is the key actually loaded?
           if (!googleApiKey) {
             alert("NEXT.JS ERROR: The API key is missing!\n\nPlease check your .env.local file. If you just added it, you MUST kill the terminal (Ctrl+C) and run 'npm run dev' again for Next.js to see it.");
             setIsFetchingLocation(false);
             return;
           }
-          
+
           // We have the key! Let's ping Google.
           const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${googleApiKey}`);
           const data = await response.json();
-          
+
           if (data.status === "OK" && data.results[0]) {
-            // SUCCESS! Google's formatted_address natively includes the exact street and pincode!
+            // SUCCESS! Google's formatted address natively includes the exact street and pincode!
             setCustomerAddress(data.results[0].formatted_address);
-            
+
             const cityObj = data.results[0].address_components.find((component: any) =>
               component.types.includes("locality") || component.types.includes("administrative_area_level_2")
             );
-            
+
             if (cityObj && !customerCity) setCustomerCity(cityObj.long_name);
-            
             setIsFetchingLocation(false);
             return;
           } else {
@@ -228,7 +227,6 @@ export default function MembershipPage() {
             setIsFetchingLocation(false);
             return; // Force it to stop so it doesn't fall back to the silent error!
           }
-          
         } catch (error) {
           alert("Network failed to reach Google Maps. Check your internet connection.");
           setIsFetchingLocation(false);
@@ -306,6 +304,7 @@ export default function MembershipPage() {
           </motion.div>
         </div>
       </section>
+
       <section className="bg-secondary/30 px-6 py-24 md:py-32">
         <div className="mx-auto max-w-6xl">
           <motion.div
@@ -378,6 +377,7 @@ export default function MembershipPage() {
           </div>
         </div>
       </section>
+
       <section className="px-6 py-24 md:py-32">
         <div className="mx-auto max-w-5xl text-center">
           <motion.div
@@ -428,6 +428,7 @@ export default function MembershipPage() {
           </motion.div>
         </div>
       </section>
+
       <section className="bg-secondary/30 px-6 py-24 md:py-32">
         <div className="mx-auto max-w-6xl">
           <motion.div
@@ -469,6 +470,7 @@ export default function MembershipPage() {
           </div>
         </div>
       </section>
+
       <section className="px-6 py-24 md:py-32">
         <div className="mx-auto max-w-6xl">
           <motion.div
@@ -504,6 +506,7 @@ export default function MembershipPage() {
           </div>
         </div>
       </section>
+
       <AnimatePresence>
         {selectedTier && (
           <motion.div
@@ -518,7 +521,8 @@ export default function MembershipPage() {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 24, scale: 0.98 }}
                 transition={{ duration: 0.25 }}
-                className="relative my-4 max-h-[90vh] w-full max-w-3xl overflow-y-auto border border-primary/30 bg-card shadow-[0_0_50px_rgba(0,0,0,0.5)]"
+                // NOTE: Added overflow-x-hidden here to guarantee no horizontal scrolling
+                className="relative my-4 max-h-[90vh] w-full max-w-3xl overflow-y-auto overflow-x-hidden border border-primary/30 bg-card shadow-[0_0_50px_rgba(0,0,0,0.5)]"
               >
                 <button
                   onClick={closeCheckout}
@@ -555,9 +559,11 @@ export default function MembershipPage() {
                     </span>
                   </div>
                 </div>
+
                 {checkoutStep === 1 && (
                   <div className="p-6 md:p-8">
-                    <div className="grid gap-8 md:grid-cols-[1.05fr_0.95fr]">
+                    {/* NOTE: Changed to md:grid-cols-2 for perfect sizing */}
+                    <div className="grid gap-8 md:grid-cols-2">
                       <div>
                         <div className="border border-border bg-background/40 p-5">
                           <p className="text-xs uppercase tracking-[0.3em] text-primary">
@@ -658,7 +664,9 @@ export default function MembershipPage() {
                               }}
                               placeholder="Enter country, state, pincode, address"
                               autoComplete="street-address"
-                              className={`w-full border ${addressError ? 'border-red-500' : 'border-border'} bg-background px-4 py-3 pr-12 font-[Arial,sans-serif] text-sm text-foreground outline-none transition focus:border-primary placeholder:font-normal placeholder:tracking-normal`}
+                              className={`w-full border ${
+                                addressError ? 'border-[#E57373]' : 'border-border'
+                              } bg-background px-4 py-3 pr-12 font-[Arial,sans-serif] text-sm text-foreground outline-none transition focus:border-primary placeholder:font-normal placeholder:tracking-normal`}
                             />
                             <button
                               type="button"
@@ -704,9 +712,11 @@ export default function MembershipPage() {
                     </div>
                   </div>
                 )}
+
                 {checkoutStep === 2 && (
                   <div className="p-6 md:p-8">
-                    <div className="grid gap-8 md:grid-cols-[1fr_0.95fr]">
+                    {/* NOTE: Changed to md:grid-cols-2 for perfect sizing without overflow */}
+                    <div className="grid gap-8 md:grid-cols-2">
                       <div className="border border-border bg-background/40 p-5">
                         <p className="text-xs uppercase tracking-[0.3em] text-primary">
                           {t("membership.checkout.summary.title")}
@@ -732,7 +742,8 @@ export default function MembershipPage() {
                             <span className="font-[Arial,sans-serif] text-[12px] font-bold uppercase tracking-widest text-muted-foreground">
                               {t("membership.checkout.summary.email")}
                             </span>
-                            <span className="font-[Arial,sans-serif] text-sm font-bold tracking-wide text-foreground text-right">
+                            {/* NOTE: Added break-all to prevent long emails from breaking layout */}
+                            <span className="font-[Arial,sans-serif] text-sm font-bold tracking-wide text-foreground text-right break-all max-w-[60%]">
                               {customerEmail}
                             </span>
                           </div>
@@ -748,7 +759,7 @@ export default function MembershipPage() {
                             <span className="font-[Arial,sans-serif] text-[12px] font-bold uppercase tracking-widest text-muted-foreground pt-1">
                               {t("membership.checkout.summary.address")}
                             </span>
-                            <span className="max-w-[50%] truncate text-right font-[Arial,sans-serif] text-sm font-bold tracking-wide text-foreground capitalize">
+                            <span className="max-w-[60%] truncate text-right font-[Arial,sans-serif] text-sm font-bold tracking-wide text-foreground capitalize">
                               {customerAddress}
                             </span>
                           </div>
