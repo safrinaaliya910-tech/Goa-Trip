@@ -62,7 +62,7 @@
   "membership": {
     "heroTitle": "Membership",
     "heroSubtitle": "Join GOA MOMENTS and unlock exceptional value across luxury stays, restaurants, curated travel, nightlife, and unforgettable premium experiences in Goa.",
-    "heroTagline": "Up to 10%–70% Member Savings • Premium Access • Lifetime Value",
+    "heroTagline": "Up to 5%–70% Member Savings • Premium Access • Lifetime Value",
     "whyTitle": "Why GOA MOMENTS Membership",
     "oneCard": "One Card.",
     "premiumPrivileges": "Many Premium Privileges.",
@@ -70,7 +70,7 @@
     "features": {
       "savings": {
         "title": "Trusted Savings",
-        "desc": "Unlock up to 10%–70% discounts across selected premium partner venues in Goa."
+        "desc": "Unlock up to 5%–70% discounts across selected premium partner venues in Goa."
       },
       "access": {
         "title": "Premium Access",
@@ -86,7 +86,7 @@
       "subtitle": "Bigger Savings. Better Experiences. More Goa.",
       "hotels": {
         "category": "Hotels & Resorts",
-        "item1": "Up to 10–70% savings at selected partner stays",
+        "item1": "Up to 5–70% savings at selected partner stays",
         "item2": "Priority reservations during peak season",
         "item3": "Room upgrades and late checkout benefits",
         "item4": "Special member-only resort packages"
@@ -126,7 +126,7 @@
         "description": "Gold is the perfect entry into luxury access. Designed for smart travellers, couples, and small groups who want real value without compromising comfort.",
         "h1": "Card accessibility for up to 4 members",
         "h2": "Hotels and travel benefits included",
-        "h3": "Up to 10%–70% discounts at selected partners",
+        "h3": "Up to 5%–70% discounts at selected partners",
         "h4": "Reliable GOA MOMENTS support whenever guidance is needed",
         "h5": "Perfect for people who want premium savings with simple access"
       },
@@ -137,7 +137,7 @@
         "description": "Platinum is made for members who want more freedom, more categories, and stronger support. From hotels to restaurants, travel, and premium venues.",
         "h1": "Card accessibility for up to 8 members",
         "h2": "Hotels, restaurants, travel, accommodation, clubs, and more",
-        "h3": "Up to 10%–70% discounts at selected partner places",
+        "h3": "Up to 5%–70% discounts at selected partner places",
         "h4": "Stronger support than Gold membership",
         "h5": "Best choice for families, groups, and regular Goa visitors"
       },
@@ -148,7 +148,7 @@
         "description": "Diamond is the highest GOA MOMENTS membership — created for members who want the best treatment, strongest support, and first preference wherever possible.",
         "h1": "Card accessibility for up to 8 members",
         "h2": "Discounts across all major partner categories",
-        "h3": "Up to 10%–70% savings at selected premium places",
+        "h3": "Up to 5%–70% savings at selected premium places",
         "h4": "Strongest GOA MOMENTS support among all plans",
         "h5": "First preference and priority treatment at selected places",
         "h6": "No unnecessary waiting wherever priority access is available"
@@ -183,7 +183,7 @@
         "tagline": "Perfect for smart travelers who want premium Goa access at the best value.",
         "idealFor": "Ideal for couples, solo travelers, and frequent weekend visitors.",
         "f1": "Access to selected partner hotels, restaurants, and travel partners",
-        "f2": "Up to 10%–70% discounts at participating venues",
+        "f2": "Up to 5%–70% discounts at participating venues",
         "f3": "Priority reservation support",
         "f4": "Special seasonal member offers",
         "f5": "Digital membership card",
@@ -193,7 +193,7 @@
         "tagline": "Our most popular membership for premium experiences and bigger savings.",
         "idealFor": "Ideal for families, premium travelers, and regular Goa visitors.",
         "f1": "Broader partner network across Goa",
-        "f2": "Up to 10%–70% discounts at participating venues",
+        "f2": "Up to 5%–70% discounts at participating venues",
         "f3": "Priority booking and premium support",
         "f4": "Special access to curated experiences",
         "f5": "Enhanced dining, stay, and travel privileges",
@@ -204,7 +204,7 @@
         "tagline": "The ultimate elite card for high-value savings and top-tier member treatment.",
         "idealFor": "Ideal for luxury travelers, VIP clients, and those who want the best of Goa.",
         "f1": "Premium access across top partner categories",
-        "f2": "Up to 10%–70% discounts at participating venues",
+        "f2": "Up to 5%–70% discounts at participating venues",
         "f3": "Priority concierge-style assistance",
         "f4": "High-value luxury stay and dining privileges",
         "f5": "Premium event, nightlife, and experience offers",
@@ -264,7 +264,7 @@
       "title2": "GOA MOMENTS",
       "subtitle": "Your membership is now active. You now have access to your member benefits, premium support, and a dedicated GOA MOMENTS experience designed to help you enjoy Goa with more value, more comfort, and more confidence.",
       "tags": {
-        "t1": "10%–70% Member Savings",
+        "t1": "5%–70% Member Savings",
         "t2": "Premium Support Access",
         "t3": "Goa Lifestyle Guidance"
       }
@@ -304,7 +304,7 @@
       "desc": "GOA MOMENTS helps members discover options that actually fit their needs — from premium stays to dining, local travel, and curated experiences."
     },
     "feeling": {
-      "title": "10%–70% venue-based member savings",
+      "title": "5%–70% venue-based member savings",
       "desc": "Discount levels depend on the venue, category, availability, and timing. If you are unsure where your card gives the best value, GOA MOMENTS support can help guide you."
     },
     "services": {
@@ -363,7 +363,7 @@
     "benefits": {
       "pretitle": "Why Members Choose Us",
       "title": "Benefits That Make Goa Better",
-      "b1": { "title": "10%–70% Venue Savings", "desc": "Enjoy member-only savings at selected hotels, restaurants, nightlife spots, cafés, travel partners, and curated lifestyle venues across Goa." },
+      "b1": { "title": "5%–70% Venue Savings", "desc": "Enjoy member-only savings at selected hotels, restaurants, nightlife spots, cafés, travel partners, and curated lifestyle venues across Goa." },
       "b2": { "title": "Lifetime Accessibility", "desc": "GOA MOMENTS is designed as a long-term lifestyle membership, giving you continued access to premium support and member-first guidance." },
       "b3": { "title": "Strong GOA MOMENTS Support", "desc": "From planning where to stay to choosing where to dine, our support helps members make better decisions with confidence." },
       "b4": { "title": "Trusted Premium Guidance", "desc": "We help you discover suitable venues, better experiences, and premium choices instead of leaving you to search alone." }
@@ -398,7 +398,7 @@
         "support": "Strongest GOA MOMENTS support among all memberships",
         "highlight": "Best for VIP travellers, premium families, luxury groups, business guests, and people who want top-class Goa treatment.",
         "p1": "Discounts across hotels, restaurants, travel, accommodation, bars, clubs, nightlife, cafés, and selected premium venues",
-        "p2": "Up to 10%–70% savings at selected partner places",
+        "p2": "Up to 5%–70% savings at selected partner places",
         "p3": "High priority and first preference wherever partner access allows",
         "p4": "Strongest support for choosing places, planning experiences, and using membership benefits",
         "p5": "Premium guidance so members feel confident, respected, and supported",
@@ -413,7 +413,7 @@
         "support": "Stronger support than Gold membership",
         "highlight": "Best for families, groups, frequent visitors, premium travellers, and people who want wider Goa benefits.",
         "p1": "Discounts at hotels, restaurants, travel partners, accommodation, bars, clubs, and selected lifestyle venues",
-        "p2": "Up to 10%–70% savings at selected partner places",
+        "p2": "Up to 5%–70% savings at selected partner places",
         "p3": "Better category coverage than Gold membership",
         "p4": "Premium support for choosing where to stay, dine, travel, and enjoy",
         "p5": "A strong value membership for people who want more access without going to the highest tier",
@@ -428,7 +428,7 @@
         "support": "Reliable GOA MOMENTS support included",
         "highlight": "Best for couples, solo travellers, small families, and smart visitors who want premium savings.",
         "p1": "Hotels and travel benefits included",
-        "p2": "Up to 10%–70% discounts at selected partners",
+        "p2": "Up to 5%–70% discounts at selected partners",
         "p3": "Useful support for basic stay and travel guidance",
         "p4": "Great entry-level membership for people starting their GOA MOMENTS journey",
         "p5": "Perfect for small groups who want savings without complexity",
@@ -451,9 +451,9 @@
       "r3": { "text": "The membership feels classy, useful, and reliable. Perfect for people who want better Goa experiences." }
     },
     "discounts": {
-      "pretitle": "10%–70% Discounts",
+      "pretitle": "5%–70% Discounts",
       "title": "Save More at Selected Premium Venues",
-      "desc": "Members can unlock 10% to 70% savings depending on the venue, category, timing, availability, and partner offer. GOA MOMENTS helps you understand where your membership gives the best value."
+      "desc": "Members can unlock 5% to 70% savings depending on the venue, category, timing, availability, and partner offer. GOA MOMENTS helps you understand where your membership gives the best value."
     },
     "premium": {
       "pretitle": "Premium Lifestyle",
@@ -492,7 +492,7 @@
       },
       "q4": {
         "q": "What kind of discounts can members get?",
-        "a": "Members can access selected venue-based benefits ranging from 10% to 70%, depending on the partner venue and active membership offer."
+        "a": "Members can access selected venue-based benefits ranging from 5% to 70%, depending on the partner venue and active membership offer."
       },
       "q5": {
         "q": "Is GOA MOMENTS only a discount card?",

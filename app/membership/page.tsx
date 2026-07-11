@@ -97,7 +97,7 @@ export default function MembershipPage() {
       key: "gold",
       name: "Gold",
       icon: Crown,
-      price: "110",
+      price: "125",
       tagline: t("membership.tiers.gold.tagline"),
       idealFor: t("membership.tiers.gold.idealFor"),
       features: [
@@ -114,7 +114,7 @@ export default function MembershipPage() {
       key: "platinum",
       name: "Platinum",
       icon: Star,
-      price: "160",
+      price: "165",
       tagline: t("membership.tiers.platinum.tagline"),
       idealFor: t("membership.tiers.platinum.idealFor"),
       features: [
@@ -132,7 +132,7 @@ export default function MembershipPage() {
       key: "diamond",
       name: "Diamond",
       icon: Gem,
-      price: "260",
+      price: "265",
       tagline: t("membership.tiers.diamond.tagline"),
       idealFor: t("membership.tiers.diamond.idealFor"),
       features: [

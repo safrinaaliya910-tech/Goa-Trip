@@ -169,7 +169,7 @@ export async function POST(req: Request) {
                   <tr>
                     <td width="33.33%" style="padding:10px;">
                       <div style="border:1px solid rgba(212,175,55,0.35);padding:18px;text-align:center;min-height:105px;">
-                        <div style="font-size:22px;color:#d4af37;font-weight:bold;">10–70%</div>
+                        <div style="font-size:22px;color:#d4af37;font-weight:bold;">5–70%</div>
                         <div style="margin-top:8px;font-size:13px;color:#cfc7b8;line-height:1.5;">
                           Selected venue savings
                         </div>

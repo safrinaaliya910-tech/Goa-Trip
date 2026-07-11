@@ -62,7 +62,7 @@
   "membership": {
     "heroTitle": "Mitgliedschaft",
     "heroSubtitle": "Treten Sie GOA MOMENTS bei und profitieren Sie von außergewöhnlichen Vorteilen bei Luxusaufenthalten, Restaurants, kuratierten Reisen, Nachtleben und unvergesslichen Premium-Erlebnissen in Goa.",
-    "heroTagline": "Bis zu 10%–70% Ersparnis • Premium-Zugang • Lebenslanger Wert",
+    "heroTagline": "Bis zu 5%–70% Ersparnis • Premium-Zugang • Lebenslanger Wert",
     "whyTitle": "Warum GOA MOMENTS Mitgliedschaft",
     "oneCard": "Eine Karte.",
     "premiumPrivileges": "Viele Premium-Privilegien.",
@@ -70,7 +70,7 @@
     "features": {
       "savings": {
         "title": "Vertrauenswürdige Einsparungen",
-        "desc": "Schalten Sie bis zu 10%–70% Rabatt bei ausgewählten Premium-Partnern in Goa frei."
+        "desc": "Schalten Sie bis zu 5%–70% Rabatt bei ausgewählten Premium-Partnern in Goa frei."
       },
       "access": {
         "title": "Premium-Zugang",
@@ -86,7 +86,7 @@
       "subtitle": "Größere Ersparnisse. Bessere Erfahrungen. Mehr Goa.",
       "hotels": {
         "category": "Hotels & Resorts",
-        "item1": "Bis zu 10–70% Ersparnis bei ausgewählten Partnern",
+        "item1": "Bis zu 5–70% Ersparnis bei ausgewählten Partnern",
         "item2": "Bevorzugte Reservierungen während der Hochsaison",
         "item3": "Zimmer-Upgrades und Late-Checkout-Vorteile",
         "item4": "Spezielle Resort-Pakete nur für Mitglieder"
@@ -126,7 +126,7 @@
         "description": "Gold ist der perfekte Einstieg in den Luxuszugang. Entwickelt für kluge Reisende, Paare und kleine Gruppen, die echten Wert ohne Kompromisse beim Komfort wünschen.",
         "h1": "Kartenzugang für bis zu 4 Mitglieder",
         "h2": "Hotel- und Reisevorteile inbegriffen",
-        "h3": "Bis zu 10%–70% Rabatt bei ausgewählten Partnern",
+        "h3": "Bis zu 5%–70% Rabatt bei ausgewählten Partnern",
         "h4": "Zuverlässiger GOA MOMENTS Support, wann immer Hilfe benötigt wird",
         "h5": "Perfekt für Menschen, die Premium-Ersparnisse mit einfachem Zugang wünschen"
       },
@@ -137,7 +137,7 @@
         "description": "Platin ist für Mitglieder gedacht, die mehr Freiheit, mehr Kategorien und stärkere Unterstützung wünschen. Von Hotels über Restaurants bis hin zu Reisen und Premium-Veranstaltungsorten.",
         "h1": "Kartenzugang für bis zu 8 Mitglieder",
         "h2": "Hotels, Restaurants, Reisen, Unterkünfte, Clubs und mehr",
-        "h3": "Bis zu 10%–70% Rabatt an ausgewählten Partnerstandorten",
+        "h3": "Bis zu 5%–70% Rabatt an ausgewählten Partnerstandorten",
         "h4": "Stärkere Unterstützung als bei der Gold-Mitgliedschaft",
         "h5": "Beste Wahl für Familien, Gruppen und regelmäßige Goa-Besucher"
       },
@@ -148,7 +148,7 @@
         "description": "Diamant ist die höchste GOA MOMENTS Mitgliedschaft — für Mitglieder, die die beste Behandlung, die stärkste Unterstützung und nach Möglichkeit Vorrang wünschen.",
         "h1": "Kartenzugang für bis zu 8 Mitglieder",
         "h2": "Rabatte in allen wichtigen Partnerkategorien",
-        "h3": "Bis zu 10%–70% Ersparnis an ausgewählten Premium-Standorten",
+        "h3": "Bis zu 5%–70% Ersparnis an ausgewählten Premium-Standorten",
         "h4": "Stärkster GOA MOMENTS Support unter allen Plänen",
         "h5": "Bevorzugte Behandlung an ausgewählten Orten",
         "h6": "Keine unnötigen Wartezeiten, wo Prioritätszugang verfügbar ist"
@@ -183,7 +183,7 @@
         "tagline": "Perfekt für clevere Reisende, die Premium-Goa-Zugang zum besten Preis wollen.",
         "idealFor": "Ideal für Paare, Alleinreisende und häufige Wochenendbesucher.",
         "f1": "Zugang zu ausgewählten Partnerhotels, Restaurants und Reisepartnern",
-        "f2": "Bis zu 10%–70% Rabatt an teilnehmenden Orten",
+        "f2": "Bis zu 5%–70% Rabatt an teilnehmenden Orten",
         "f3": "Prioritäre Reservierungsunterstützung",
         "f4": "Spezielle saisonale Mitgliederangebote",
         "f5": "Digitale Mitgliedskarte",
@@ -193,7 +193,7 @@
         "tagline": "Unsere beliebteste Mitgliedschaft für Premium-Erlebnisse und größere Ersparnisse.",
         "idealFor": "Ideal für Familien, Premium-Reisende und regelmäßige Goa-Besucher.",
         "f1": "Breiteres Partnernetzwerk in ganz Goa",
-        "f2": "Bis zu 10%–70% Rabatt an teilnehmenden Orten",
+        "f2": "Bis zu 5%–70% Rabatt an teilnehmenden Orten",
         "f3": "Prioritäre Buchung und Premium-Support",
         "f4": "Spezieller Zugang zu kuratierten Erlebnissen",
         "f5": "Erweiterte Speise-, Aufenthalts- und Reiseprivilegien",
@@ -204,7 +204,7 @@
         "tagline": "Die ultimative Elite-Karte für hochwertige Ersparnisse und erstklassige Mitgliederbehandlung.",
         "idealFor": "Ideal für Luxusreisende, VIP-Kunden und diejenigen, die das Beste von Goa wollen.",
         "f1": "Premium-Zugang in den Top-Partnerkategorien",
-        "f2": "Bis zu 10%–70% Rabatt an teilnehmenden Orten",
+        "f2": "Bis zu 5%–70% Rabatt an teilnehmenden Orten",
         "f3": "Prioritäre Concierge-ähnliche Unterstützung",
         "f4": "Hochwertige Luxusaufenthalts- und Speiseprivilegien",
         "f5": "Premium-Angebote für Veranstaltungen, Nachtleben und Erlebnisse",
@@ -264,7 +264,7 @@
       "title2": "GOA MOMENTS",
       "subtitle": "Ihre Mitgliedschaft ist nun aktiv. Sie haben jetzt Zugang zu Ihren Mitgliedervorteilen, Premium-Support und einem dedizierten GOA MOMENTS Erlebnis, das entwickelt wurde, um Ihnen zu helfen, Goa mit mehr Wert, mehr Komfort und mehr Zuversicht zu genießen.",
       "tags": {
-        "t1": "10%–70% Einsparungen",
+        "t1": "5%–70% Einsparungen",
         "t2": "Premium-Support-Zugang",
         "t3": "Goa Lifestyle Beratung"
       }
@@ -304,7 +304,7 @@
       "desc": "GOA MOMENTS hilft Mitgliedern, Optionen zu entdecken, die tatsächlich ihren Bedürfnissen entsprechen — von Premium-Aufenthalten bis hin zu Restaurants, lokalen Reisen und kuratierten Erlebnissen."
     },
     "feeling": {
-      "title": "10%–70% einrichtungsbasierte Einsparungen",
+      "title": "5%–70% einrichtungsbasierte Einsparungen",
       "desc": "Die Rabattstufen hängen vom Ort, der Kategorie, der Verfügbarkeit und dem Zeitpunkt ab. Wenn Sie sich nicht sicher sind, wo Ihre Karte den besten Wert bietet, kann Ihnen der GOA MOMENTS Support helfen."
     },
     "services": {
@@ -363,7 +363,7 @@
     "benefits": {
       "pretitle": "Warum Mitglieder Uns Wählen",
       "title": "Vorteile, die Goa besser machen",
-      "b1": { "title": "10%–70% Einsparungen an Orten", "desc": "Genießen Sie Ersparnisse nur für Mitglieder bei ausgewählten Hotels, Restaurants, Nachtclubs, Cafés, Reisepartnern und kuratierten Lifestyle-Veranstaltungsorten in ganz Goa." },
+      "b1": { "title": "5%–70% Einsparungen an Orten", "desc": "Genießen Sie Ersparnisse nur für Mitglieder bei ausgewählten Hotels, Restaurants, Nachtclubs, Cafés, Reisepartnern und kuratierten Lifestyle-Veranstaltungsorten in ganz Goa." },
       "b2": { "title": "Lebenslange Erreichbarkeit", "desc": "GOA MOMENTS ist als langfristige Lifestyle-Mitgliedschaft konzipiert, die Ihnen kontinuierlichen Zugang zu Premium-Support und Beratung auf Mitgliederseite bietet." },
       "b3": { "title": "Starker GOA MOMENTS Support", "desc": "Von der Planung der Unterkunft bis zur Auswahl der Restaurants hilft unser Support den Mitgliedern, mit Zuversicht bessere Entscheidungen zu treffen." },
       "b4": { "title": "Vertrauenswürdige Premium-Beratung", "desc": "Wir helfen Ihnen, geeignete Orte, bessere Erlebnisse und Premium-Auswahlen zu entdecken, anstatt Sie alleine suchen zu lassen." }
@@ -398,7 +398,7 @@
         "support": "Stärkster GOA MOMENTS Support unter allen Mitgliedschaften",
         "highlight": "Beste Wahl für VIP-Reisende, Premium-Familien, Luxusgruppen, Geschäftsgäste und Menschen, die erstklassige Goa-Behandlung wünschen.",
         "p1": "Rabatte bei Hotels, Restaurants, Reisen, Unterkünften, Bars, Clubs, Nachtleben, Cafés und ausgewählten Premium-Orten",
-        "p2": "Bis zu 10%–70% Ersparnis an ausgewählten Partnerorten",
+        "p2": "Bis zu 5%–70% Ersparnis an ausgewählten Partnerorten",
         "p3": "Hohe Priorität und Erstbevorzugung, wo immer Partnerzugang dies zulässt",
         "p4": "Stärkste Unterstützung bei der Auswahl von Orten, der Planung von Erlebnissen und der Nutzung von Mitgliedschaftsvorteilen",
         "p5": "Premium-Anleitung, damit sich die Mitglieder sicher, respektiert und unterstützt fühlen",
@@ -413,7 +413,7 @@
         "support": "Stärkere Unterstützung als die Gold-Mitgliedschaft",
         "highlight": "Beste Wahl für Familien, Gruppen, regelmäßige Besucher, Premium-Reisende und Personen, die breitere Goa-Vorteile wünschen.",
         "p1": "Rabatte bei Hotels, Restaurants, Reisepartnern, Unterkünften, Bars, Clubs und ausgewählten Lifestyle-Orten",
-        "p2": "Bis zu 10%–70% Ersparnis an ausgewählten Partnerorten",
+        "p2": "Bis zu 5%–70% Ersparnis an ausgewählten Partnerorten",
         "p3": "Bessere Kategorieabdeckung als die Gold-Mitgliedschaft",
         "p4": "Premium-Unterstützung bei der Wahl von Aufenthalt, Essen, Reisen und Vergnügen",
         "p5": "Eine starke Mitgliedschaft für Menschen, die mehr Zugang wollen, ohne in die höchste Stufe zu gehen",
@@ -428,7 +428,7 @@
         "support": "Zuverlässiger GOA MOMENTS Support inklusive",
         "highlight": "Beste Wahl für Paare, Alleinreisende, kleine Familien und clevere Besucher, die Premium-Einsparungen wünschen.",
         "p1": "Hotel- und Reisevorteile inbegriffen",
-        "p2": "Bis zu 10%–70% Rabatte bei ausgewählten Partnern",
+        "p2": "Bis zu 5%–70% Rabatte bei ausgewählten Partnern",
         "p3": "Nützliche Unterstützung für grundlegende Aufenthalts- und Reiseführung",
         "p4": "Tolle Einstiegsmitgliedschaft für Leute, die ihre GOA MOMENTS Reise beginnen",
         "p5": "Perfekt für kleine Gruppen, die Einsparungen ohne Komplexität wünschen",
@@ -451,9 +451,9 @@
       "r3": { "text": "Die Mitgliedschaft fühlt sich edel, nützlich und zuverlässig an. Perfekt für Leute, die bessere Goa-Erlebnisse wollen." }
     },
     "discounts": {
-      "pretitle": "10%–70% Rabatte",
+      "pretitle": "5%–70% Rabatte",
       "title": "Sparen Sie mehr an ausgewählten Premium-Standorten",
-      "desc": "Mitglieder können 10% bis 70% Rabatt erhalten, abhängig von Ort, Kategorie, Zeit, Verfügbarkeit und Partnerangebot. GOA MOMENTS hilft Ihnen zu verstehen, wo Ihre Mitgliedschaft den besten Wert bietet."
+      "desc": "Mitglieder können 5% bis 70% Rabatt erhalten, abhängig von Ort, Kategorie, Zeit, Verfügbarkeit und Partnerangebot. GOA MOMENTS hilft Ihnen zu verstehen, wo Ihre Mitgliedschaft den besten Wert bietet."
     },
     "premium": {
       "pretitle": "Premium Lifestyle",
@@ -492,7 +492,7 @@
       },
       "q4": {
         "q": "Welche Art von Rabatten können Mitglieder erhalten?",
-        "a": "Mitglieder können auf ausgewählte standortbezogene Vorteile zugreifen, die von 10% bis 70% reichen, abhängig vom Partnerstandort und dem aktiven Mitgliedschaftsangebot."
+        "a": "Mitglieder können auf ausgewählte standortbezogene Vorteile zugreifen, die von 5% bis 70% reichen, abhängig vom Partnerstandort und dem aktiven Mitgliedschaftsangebot."
       },
       "q5": {
         "q": "Ist GOA MOMENTS nur eine Rabattkarte?",
