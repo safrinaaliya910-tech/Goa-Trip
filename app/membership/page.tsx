@@ -17,6 +17,8 @@ import {
   CreditCard,
   BadgeCheck,
   Sparkles,
+  MapPin,
+  Loader2, 
 } from "lucide-react";
 
 type Tier = {
@@ -43,6 +45,9 @@ export default function MembershipPage() {
   const [customerPhone, setCustomerPhone] = useState("");
   const [customerAddress, setCustomerAddress] = useState("");
   const [customerCity, setCustomerCity] = useState("");
+
+  const [addressError, setAddressError] = useState("");
+  const [isFetchingLocation, setIsFetchingLocation] = useState(false);
 
   const benefits = [
     {
@@ -160,6 +165,7 @@ export default function MembershipPage() {
     setCustomerPhone("");
     setCustomerAddress("");
     setCustomerCity("");
+    setAddressError("");
   };
 
   const canContinueToConfirm =
@@ -169,6 +175,129 @@ export default function MembershipPage() {
     customerPhone.trim() !== "" &&
     customerAddress.trim() !== "" &&
     customerCity.trim() !== "";
+
+  const handleContinue = () => {
+    const hasNumber = /\d/.test(customerAddress);
+    const words = customerAddress.trim().split(/\s+/).length;
+
+    if (!hasNumber || customerAddress.length < 15 || words < 3) {
+      setAddressError("Please enter full address with country, state, pincode, and address.");
+      return;
+    }
+
+    setAddressError("");
+    setCheckoutStep(2);
+  };
+
+  const handleGetLocation = () => {
+    if (!navigator.geolocation) {
+      alert("Geolocation is not supported by your browser.");
+      return;
+    }
+
+    setIsFetchingLocation(true);
+    setAddressError("");
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        try {
+          const { latitude, longitude } = position.coords;
+          const googleApiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+
+          if (googleApiKey) {
+            const response = await fetch(
+              `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${googleApiKey}`
+            );
+            const data = await response.json();
+
+            if (data.status === "OK" && data.results?.length) {
+  const preciseResult =
+    data.results.find((r: any) => r.types.includes("street_address")) ||
+    data.results.find((r: any) => r.types.includes("premise")) ||
+    data.results[0];
+
+  const getComponent = (result: any, types: string[]) =>
+    result.address_components.find((c: any) =>
+      types.some((t) => c.types.includes(t))
+    )?.long_name;
+
+  const streetNumber = getComponent(preciseResult, ["street_number"]);
+  const route = getComponent(preciseResult, ["route"]);
+  const sublocality = getComponent(preciseResult, ["sublocality", "sublocality_level_1"]);
+  const locality = getComponent(preciseResult, ["locality", "postal_town"]);
+  const adminArea2 = getComponent(preciseResult, ["administrative_area_level_2"]);
+  const adminArea1 = getComponent(preciseResult, ["administrative_area_level_1"]);
+  const country = getComponent(preciseResult, ["country"]);
+
+  // Postal code is often missing from the precise result but present
+  // in a separate "postal_code" typed result in the same response
+  let postalCode = getComponent(preciseResult, ["postal_code"]);
+  if (!postalCode) {
+    const postalResult = data.results.find((r: any) => r.types.includes("postal_code"));
+    postalCode = postalResult ? getComponent(postalResult, ["postal_code"]) : undefined;
+  }
+
+  const cityValue = locality || adminArea2 || adminArea1;
+
+  const addressParts = [
+    [streetNumber, route].filter(Boolean).join(" "),
+    sublocality,
+    cityValue,
+    adminArea1,
+    country,
+  ].filter(Boolean);
+
+  const formatted = postalCode
+    ? `${addressParts.join(", ")} - ${postalCode}`
+    : addressParts.join(", ") || preciseResult.formatted_address;
+
+  setCustomerAddress(formatted);
+  if (cityValue && !customerCity) setCustomerCity(cityValue);
+
+  if (!postalCode) {
+  setAddressError("We got your city, but couldn't detect an exact pincode — please add it to your address.");
+}
+  setIsFetchingLocation(false);
+  return;
+}
+          }
+
+          // Fallback: BigDataCloud
+          const response = await fetch(
+            `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`
+          );
+          const data = await response.json();
+
+          if (data && data.city) {
+            const parts = [data.locality, data.city, data.principalSubdivision, data.countryName].filter(Boolean);
+            const formatted = `${parts.join(", ")}${data.postcode ? ` - ${data.postcode}` : ""}`;
+
+            setCustomerAddress(formatted);
+            if (!customerCity) setCustomerCity(data.city);
+
+            if (!data.postcode) {
+              setAddressError("Pincode not found for this location, please add it manually.");
+            }
+          } else {
+            setAddressError("Could not retrieve exact address. Please refine it manually.");
+          }
+        } catch (error) {
+          setAddressError("Failed to fetch address details. Please type manually.");
+        } finally {
+          setIsFetchingLocation(false);
+        }
+      },
+      (error) => {
+        setIsFetchingLocation(false);
+        setAddressError("Location access denied or unavailable. Please type manually.");
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0,
+      }
+    );
+  };
 
   const goToPaymentPage = () => {
     if (!selectedTier) return;
@@ -194,7 +323,6 @@ export default function MembershipPage() {
     <main className="min-h-screen bg-background">
       <Navigation />
 
-      {/* --- 1. HERO SECTION --- */}
       <section className="relative h-[75vh] min-h-[560px] overflow-hidden">
         <Image
           src="/images/membership-hero.jpg"
@@ -236,7 +364,6 @@ export default function MembershipPage() {
         </div>
       </section>
 
-      {/* --- 2. MEMBERSHIP PLANS SECTION --- */}
       <section className="bg-secondary/30 px-6 py-24 md:py-32">
         <div className="mx-auto max-w-6xl">
           <motion.div
@@ -283,7 +410,6 @@ export default function MembershipPage() {
                     {t("membership.plans.priceLabel")}
                   </span>
                   <div className="mt-2">
-                    {/* FIX: Changed ₹ to $ */}
                     <span className="text-4xl font-light text-primary">${tier.price}</span>
                   </div>
                 </div>
@@ -311,7 +437,6 @@ export default function MembershipPage() {
         </div>
       </section>
 
-      {/* --- 3. WHY GOA MOMENTS SECTION --- */}
       <section className="px-6 py-24 md:py-32">
         <div className="mx-auto max-w-5xl text-center">
           <motion.div
@@ -363,7 +488,6 @@ export default function MembershipPage() {
         </div>
       </section>
 
-      {/* --- 4. BENEFITS SECTION --- */}
       <section className="bg-secondary/30 px-6 py-24 md:py-32">
         <div className="mx-auto max-w-6xl">
           <motion.div
@@ -393,10 +517,10 @@ export default function MembershipPage() {
                   {benefit.category}
                 </h3>
                 <ul className="mt-6 space-y-3">
-                  {benefits.map((item) => (
-                    <li key={item.category} className="flex items-start gap-3 text-muted-foreground">
+                  {benefit.items.map((item) => (
+                    <li key={item} className="flex items-start gap-3 text-muted-foreground">
                       <Check className="mt-1 h-4 w-4 shrink-0 text-primary" />
-                      <span>{item.category}</span>
+                      <span>{item}</span>
                     </li>
                   ))}
                 </ul>
@@ -406,7 +530,6 @@ export default function MembershipPage() {
         </div>
       </section>
 
-      {/* --- 5. STEPS SECTION --- */}
       <section className="px-6 py-24 md:py-32">
         <div className="mx-auto max-w-6xl">
           <motion.div
@@ -443,7 +566,6 @@ export default function MembershipPage() {
         </div>
       </section>
 
-      {/* CHECKOUT MODAL */}
       <AnimatePresence>
         {selectedTier && (
           <motion.div
@@ -469,7 +591,6 @@ export default function MembershipPage() {
                   <X className="h-5 w-5" />
                 </button>
                 
-                {/* MODAL HEADER */}
                 <div className="border-b border-border p-6 md:p-8">
                   <p className="text-xs uppercase tracking-[0.3em] text-primary">
                     {t("membership.checkout.secureTitle")}
@@ -498,7 +619,6 @@ export default function MembershipPage() {
                   </div>
                 </div>
 
-                {/* STEP 1: ORDER DETAILS */}
                 {checkoutStep === 1 && (
                   <div className="p-6 md:p-8">
                     <div className="grid gap-8 md:grid-cols-[1.05fr_0.95fr]">
@@ -508,7 +628,6 @@ export default function MembershipPage() {
                             {t("membership.checkout.selectedTitle")}
                           </p>
                           
-                          {/* FIX: Cleaner Bold Font */}
                           <h4 className="mt-3 font-[Arial,sans-serif] text-xl font-bold tracking-wider text-foreground">
                             {selectedTier.name}
                           </h4>
@@ -521,7 +640,6 @@ export default function MembershipPage() {
                               <span className="font-[Arial,sans-serif] text-xs font-bold uppercase tracking-widest text-muted-foreground">
                                 {t("membership.checkout.priceLabel")}
                               </span>
-                              {/* FIX: Changed ₹ to $ and adjusted size */}
                               <span className="font-[Arial,sans-serif] text-lg font-bold tracking-wider text-foreground">
                                 ${selectedTier.price}
                               </span>
@@ -530,7 +648,6 @@ export default function MembershipPage() {
                               <span className="font-[Arial,sans-serif] text-sm font-bold uppercase tracking-widest text-foreground">
                                 {t("membership.checkout.totalLabel")}
                               </span>
-                              {/* FIX: Changed ₹ to $ and adjusted size */}
                               <span className="font-[Arial,sans-serif] text-2xl font-bold tracking-wider text-primary">
                                 ${selectedTier.price}
                               </span>
@@ -548,11 +665,11 @@ export default function MembershipPage() {
                             <label className="mb-2 block font-[Arial,sans-serif] text-xs font-bold uppercase tracking-widest text-muted-foreground">
                               {t("membership.checkout.form.firstName")}
                             </label>
-                            {/* FIX: Removed font-bold from inputs for cleaner typing */}
                             <input
                               value={firstName}
                               onChange={(e) => setFirstName(e.target.value)}
                               placeholder="First name"
+                              autoComplete="given-name"
                               className="w-full border border-border bg-background px-4 py-3 font-[Arial,sans-serif] text-sm text-foreground outline-none transition focus:border-primary placeholder:font-normal placeholder:tracking-normal"
                             />
                           </div>
@@ -564,6 +681,7 @@ export default function MembershipPage() {
                               value={lastName}
                               onChange={(e) => setLastName(e.target.value)}
                               placeholder="Last name"
+                              autoComplete="family-name"
                               className="w-full border border-border bg-background px-4 py-3 font-[Arial,sans-serif] text-sm text-foreground outline-none transition focus:border-primary placeholder:font-normal placeholder:tracking-normal"
                             />
                           </div>
@@ -578,6 +696,7 @@ export default function MembershipPage() {
                             value={customerEmail}
                             onChange={(e) => setCustomerEmail(e.target.value)}
                             placeholder="Enter your email"
+                            autoComplete="email"
                             className="w-full border border-border bg-background px-4 py-3 font-[Arial,sans-serif] text-sm text-foreground outline-none transition focus:border-primary placeholder:font-normal placeholder:tracking-normal"
                           />
                         </div>
@@ -591,6 +710,7 @@ export default function MembershipPage() {
                             value={customerPhone}
                             onChange={(e) => setCustomerPhone(e.target.value.replace(/\D/g, ""))}
                             placeholder="Enter your phone number"
+                            autoComplete="tel"
                             className="w-full border border-border bg-background px-4 py-3 font-[Arial,sans-serif] text-sm text-foreground outline-none transition focus:border-primary placeholder:font-normal placeholder:tracking-normal"
                           />
                         </div>
@@ -599,12 +719,36 @@ export default function MembershipPage() {
                           <label className="mb-2 block font-[Arial,sans-serif] text-xs font-bold uppercase tracking-widest text-muted-foreground">
                             {t("membership.checkout.form.address")}
                           </label>
-                          <input
-                            value={customerAddress}
-                            onChange={(e) => setCustomerAddress(e.target.value)}
-                            placeholder="Enter your full address"
-                            className="w-full border border-border bg-background px-4 py-3 font-[Arial,sans-serif] text-sm text-foreground outline-none transition focus:border-primary placeholder:font-normal placeholder:tracking-normal"
-                          />
+                          <div className="relative">
+                            <input
+                              value={customerAddress}
+                              onChange={(e) => {
+                                setCustomerAddress(e.target.value);
+                                if (addressError) setAddressError(""); 
+                              }}
+                              placeholder="Enter country, state, pincode, address"
+                              autoComplete="street-address"
+                              className={`w-full border ${addressError ? 'border-red-500' : 'border-border'} bg-background px-4 py-3 pr-12 font-[Arial,sans-serif] text-sm text-foreground outline-none transition focus:border-primary placeholder:font-normal placeholder:tracking-normal`}
+                            />
+                            <button
+                              type="button"
+                              onClick={handleGetLocation}
+                              disabled={isFetchingLocation}
+                              title="Fetch current location"
+                              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground transition hover:text-primary disabled:opacity-50"
+                            >
+                              {isFetchingLocation ? (
+                                <Loader2 className="h-5 w-5 animate-spin text-primary" />
+                              ) : (
+                                <MapPin className="h-5 w-5" />
+                              )}
+                            </button>
+                          </div>
+                          {addressError && (
+                            <p className="mt-2 text-xs font-medium text-red-500">
+                              {addressError}
+                            </p>
+                          )}
                         </div>
 
                         <div>
@@ -615,13 +759,14 @@ export default function MembershipPage() {
                             value={customerCity}
                             onChange={(e) => setCustomerCity(e.target.value)}
                             placeholder="Enter your city"
+                            autoComplete="address-level2"
                             className="w-full border border-border bg-background px-4 py-3 font-[Arial,sans-serif] text-sm text-foreground outline-none transition focus:border-primary placeholder:font-normal placeholder:tracking-normal"
                           />
                         </div>
 
                         <button
                           type="button"
-                          onClick={() => setCheckoutStep(2)}
+                          onClick={handleContinue}
                           disabled={!canContinueToConfirm}
                           className="mt-2 w-full bg-primary px-5 py-4 font-[Arial,sans-serif] text-[13px] font-bold uppercase tracking-widest text-primary-foreground transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
                         >
@@ -632,7 +777,6 @@ export default function MembershipPage() {
                   </div>
                 )}
 
-                {/* STEP 2: CONFIRM ORDER */}
                 {checkoutStep === 2 && (
                   <div className="p-6 md:p-8">
                     <div className="grid gap-8 md:grid-cols-[1fr_0.95fr]">
@@ -641,7 +785,6 @@ export default function MembershipPage() {
                           {t("membership.checkout.summary.title")}
                         </p>
                         <div className="mt-6 space-y-5">
-                          {/* FIX: Cleaner, perfectly aligned summary rows */}
                           <div className="flex items-center justify-between gap-4 border-b border-border pb-3">
                             <span className="font-[Arial,sans-serif] text-[12px] font-bold uppercase tracking-widest text-muted-foreground">
                               {t("membership.checkout.summary.plan")}
@@ -664,7 +807,6 @@ export default function MembershipPage() {
                             <span className="font-[Arial,sans-serif] text-[12px] font-bold uppercase tracking-widest text-muted-foreground">
                               {t("membership.checkout.summary.email")}
                             </span>
-                            {/* FIX: Reduced text size to text-sm and added text-right so email stays aligned */}
                             <span className="font-[Arial,sans-serif] text-sm font-bold tracking-wide text-foreground text-right">
                               {customerEmail}
                             </span>
@@ -701,7 +843,6 @@ export default function MembershipPage() {
                             <span className="font-[Arial,sans-serif] text-sm font-bold uppercase tracking-widest text-foreground">
                               {t("membership.checkout.summary.amount")}
                             </span>
-                            {/* FIX: Changed ₹ to $ */}
                             <span className="font-[Arial,sans-serif] text-2xl font-bold tracking-wider text-primary">
                               ${selectedTier.price}
                             </span>
