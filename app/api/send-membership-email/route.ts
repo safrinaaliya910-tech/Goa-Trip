@@ -48,6 +48,8 @@ export async function POST(req: Request) {
       });
     }
 
+    
+
     await transporter.sendMail({
       from: '"GOA MOMENTS" <support@goamoments.com>',
       replyTo: "support@goamoments.com",
@@ -112,7 +114,8 @@ export async function POST(req: Request) {
                         </tr>
                         <tr>
                           <td style="padding:8px 0;color:#a99f8b;">Amount Paid</td>
-                          <td align="right" style="padding:8px 0;color:#d4af37;font-weight:bold;">₹${amountPaid}</td>
+                          <!-- FIX: Changed ₹ to $ -->
+                          <td align="right" style="padding:8px 0;color:#d4af37;font-weight:bold;">$${amountPaid}</td>
                         </tr>
                         <tr>
                           <td style="padding:8px 0;color:#a99f8b;">Payment Method</td>

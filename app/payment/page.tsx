@@ -33,12 +33,20 @@ export default function PaymentPage() {
 
   const membershipId = params.get("membershipId") || `GM-${Date.now()}`;
   const plan = params.get("plan") || "Platinum";
-  const amount = params.get("amount") || "160";
   const name = params.get("memberName") || "Member";
   const email = params.get("email") || "";
   const phone = params.get("phone") || "";
   const address = params.get("address") || "";
   const city = params.get("city") || "";
+
+  // --- HIDDEN FINANCIAL CALCULATION ---
+  const baseAmount = Number(params.get("amount")) || 160;
+  const serviceFee = 2.50;
+  const gstRate = 0.18; 
+  
+  const calculatedGst = (baseAmount + serviceFee) * gstRate;
+  const totalAmount = (baseAmount + serviceFee + calculatedGst).toFixed(2);
+  // ------------------------------------
 
   useEffect(() => {
     const existingScript = document.getElementById("razorpay-checkout-script");
@@ -72,22 +80,22 @@ export default function PaymentPage() {
   }, [method]);
 
   const paymentButtonLabel = useMemo(() => {
-    if (method === "razorpay") return `Pay ₹${amount} with Razorpay`;
-    if (method === "stripe") return `Pay ₹${amount} with Stripe`;
-    return `Pay ₹${amount} with Skydo`;
-  }, [method, amount]);
+    if (method === "razorpay") return `Pay $${baseAmount.toFixed(2)} with Razorpay`;
+    if (method === "stripe") return `Pay $${baseAmount.toFixed(2)} with Stripe`;
+    return `Pay $${baseAmount.toFixed(2)} with Skydo`;
+  }, [method, baseAmount]);
 
   const goToSuccessPage = (paymentMethod: string, paymentId: string) => {
     const query = new URLSearchParams({
       membershipId,
       plan,
-      amountPaid: amount,
+      amountPaid: totalAmount,
       memberName: name,
       email,
       phone,
       address,
       city,
-      paymentId,
+      paymentId, // <--- Passes the real "pay_..." ID here
       validity: "Lifetime Membership",
       paymentMethod,
     });
@@ -104,39 +112,36 @@ export default function PaymentPage() {
       const response = await fetch("/api/razorpay", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount, membershipId, plan, name, email, phone, address, city }),
+        body: JSON.stringify({ 
+          totalAmount, 
+          baseAmount, 
+          serviceFee, 
+          calculatedGst, 
+          membershipId, 
+          plan, 
+          name, 
+          email, 
+          phone, 
+          address, 
+          city 
+        }),
       });
 
       if (!response.ok) throw new Error("Failed to create Razorpay order");
       const order = await response.json();
 
-      await fetch("/api/save-member", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          membershipId,
-          plan,
-          amountPaid: amount,
-          memberName: name,
-          email,
-          phone,
-          address,
-          city,
-          paymentId: order.id,
-          paymentMethod: "razorpay",
-          status: "pending"
-        }),
-      });
+      // FIX: /api/save-member removed from here! It will now only save on the success page.
 
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         amount: order.amount,
-        currency: order.currency,
+        currency: order.currency, 
         name: "GOA MOMENTS",
-        description: `${plan} Membership`,
+        description: `Plan: $${baseAmount.toFixed(2)} | Fee: $${serviceFee.toFixed(2)} | GST: $${calculatedGst.toFixed(2)}`,
         image: "/images/logo.png",
         order_id: order.id,
         handler: function (response: any) {
+          // This captures the real pay_XXXX ID and sends it to the success page
           goToSuccessPage("razorpay", response.razorpay_payment_id);
         },
         prefill: { name, email, contact: phone },
@@ -159,29 +164,25 @@ export default function PaymentPage() {
       const response = await fetch("/api/stripe/create-session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: Number(amount), plan, membershipId, memberName: name, email, phone, address, city }),
+        body: JSON.stringify({ 
+          totalAmount, 
+          baseAmount, 
+          serviceFee, 
+          calculatedGst, 
+          plan, 
+          membershipId, 
+          memberName: name, 
+          email, 
+          phone, 
+          address, 
+          city 
+        }),
       });
       
       const data = await response.json();
       if (!response.ok || !data.url) throw new Error(data?.error || "Stripe session creation failed");
 
-      await fetch("/api/save-member", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          membershipId,
-          plan,
-          amountPaid: amount,
-          memberName: name,
-          email,
-          phone,
-          address,
-          city,
-          paymentId: data.id || `STRIPE-${Date.now()}`,
-          paymentMethod: "stripe",
-          status: "pending" 
-        }),
-      });
+      // FIX: /api/save-member removed from here!
 
       window.location.href = data.url;
     } catch (error) {
@@ -196,29 +197,25 @@ export default function PaymentPage() {
       const response = await fetch("/api/skydo/create-session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount, membershipId, plan, name, email, phone, address, city }),
+        body: JSON.stringify({ 
+          totalAmount, 
+          baseAmount, 
+          serviceFee, 
+          calculatedGst, 
+          membershipId, 
+          plan, 
+          name, 
+          email, 
+          phone, 
+          address, 
+          city 
+        }),
       });
       
       const data = await response.json();
       if (!response.ok || !data.url) throw new Error(data?.error || "Skydo session creation failed");
 
-      await fetch("/api/save-member", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          membershipId,
-          plan,
-          amountPaid: amount,
-          memberName: name,
-          email,
-          phone,
-          address,
-          city,
-          paymentId: data.id || `SKYDO-${Date.now()}`, 
-          paymentMethod: "skydo",
-          status: "pending" 
-        }),
-      });
+      // FIX: /api/save-member removed from here!
 
       window.location.href = data.url;
     } catch (error) {
@@ -245,7 +242,6 @@ export default function PaymentPage() {
     <main className="min-h-screen bg-[#FDFBF7]">
       <Navigation />
       
-      {/* PERFECT NAVBAR CLEARANCE */}
       <section className="relative z-10 px-6 pt-[220px] lg:pt-[260px] pb-16 md:pb-24">
         <div className="mx-auto max-w-6xl">
           
@@ -270,7 +266,6 @@ export default function PaymentPage() {
 
           <div className="mt-12 grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
             
-            {/* LEFT CARD */}
             <div className="rounded-xl border border-[#D4AF37]/30 bg-white p-6 shadow-[0_15px_40px_rgba(212,175,55,0.1)]">
               <div className="flex items-center justify-between border-b border-gray-200 pb-4">
                 <div>
@@ -304,7 +299,6 @@ export default function PaymentPage() {
                           <Icon className={`h-5 w-5 ${active ? 'text-[#D4AF37]' : 'text-gray-500'}`} />
                         </div>
                         <div>
-                          {/* INLINE FONT STYLE APPLIED TO OVERRIDE GLOBALS */}
                           <p 
                             className={`text-lg tracking-wide ${active ? 'text-black' : 'text-gray-800'}`}
                             style={{ fontFamily: 'Arial, Helvetica, sans-serif', fontWeight: active ? 900 : 700 }}
@@ -332,7 +326,6 @@ export default function PaymentPage() {
               </div>
             </div>
 
-            {/* RIGHT CARD: CHECKOUT SUMMARY */}
             <div className="rounded-xl border border-[#D4AF37]/30 bg-white p-6 shadow-[0_15px_40px_rgba(212,175,55,0.1)] md:p-8">
               <p className="font-serif text-xs font-bold uppercase tracking-widest text-[#D4AF37]">
                 Payment
@@ -358,7 +351,6 @@ export default function PaymentPage() {
                 </div>
               </div>
 
-              {/* ALL DYNAMIC DATA PROTECTED BY INLINE STYLES FOR PERFECT READABILITY */}
               <div className="mt-8 space-y-6">
                 
                 <div className="flex items-center justify-between gap-4 border-b border-gray-100 pb-3">
@@ -386,21 +378,15 @@ export default function PaymentPage() {
                   <span className="max-w-[60%] break-words text-right text-[15px] text-black tracking-wider capitalize" style={{ fontFamily: 'Arial, Helvetica, sans-serif', fontWeight: 900 }}>{address}</span>
                 </div>
                 
-                <div className="flex items-center justify-between gap-4 border-b border-gray-100 pb-3">
+                <div className="flex items-center justify-between gap-4 border-b border-gray-100 pb-4">
                   <span className="font-serif text-[12px] font-bold tracking-widest text-gray-500 uppercase">City</span>
                   <span className="text-base text-black tracking-wider uppercase" style={{ fontFamily: 'Arial, Helvetica, sans-serif', fontWeight: 900 }}>{city}</span>
                 </div>
-                
-                <div className="flex items-center justify-between gap-4 pb-2">
-                  <span className="font-serif text-[12px] font-bold tracking-widest text-gray-500 uppercase">Selected Method</span>
-                  <span className="text-base text-[#D4AF37] tracking-wider" style={{ fontFamily: 'Arial, Helvetica, sans-serif', fontWeight: 900 }}>{paymentTitle}</span>
-                </div>
-                
-                <div className="flex items-center justify-between gap-4 rounded-lg bg-gray-50 p-4 border border-gray-200">
-                  <span className="font-serif text-sm font-bold tracking-widest text-black uppercase">Total Amount</span>
-                  <span className="text-3xl text-[#D4AF37] tracking-wider" style={{ fontFamily: 'Arial, Helvetica, sans-serif', fontWeight: 900 }}>₹{amount}</span>
-                </div>
 
+                <div className="flex items-center justify-between gap-4 rounded-lg bg-gray-50 p-5 border border-gray-200">
+                  <span className="font-serif text-sm font-bold tracking-widest text-black uppercase">Total Amount</span>
+                  <span className="text-3xl text-[#D4AF37] tracking-wider" style={{ fontFamily: 'Arial, Helvetica, sans-serif', fontWeight: 900 }}>${baseAmount.toFixed(2)}</span>
+                </div>
               </div>
               
               <button

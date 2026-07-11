@@ -19,22 +19,24 @@ export default function OrderSuccessPage() {
   const address = searchParams.get("address") || "";
   const city = searchParams.get("city") || "";
   const validity = searchParams.get("validity") || "Lifetime Membership";
-  const orderId = searchParams.get("paymentId") || `ORDER-${Date.now()}`;
+  
+  // FIX: This now accurately pulls the real payment ID (e.g. pay_XXXX) from the URL
+  const orderId = searchParams.get("paymentId") || `ORDER-${Date.now()}`; 
   const paymentMethod = searchParams.get("paymentMethod") || "Secure Checkout";
 
   const emailSentRef = useRef(false);
   const [previewUrl, setPreviewUrl] = useState<string>("");
 
-  const safePlanName = plan.toLowerCase(); 
-  const cardImagePath = `/images/${safePlanName}-card.jpg`; 
+  const safePlanName = plan.toLowerCase();
+  const cardImagePath = `/images/${safePlanName}-card.jpg`;
 
-  // --- COMBINED AUTOMATION: DRAW CARD THEN SEND EMAIL ---
+  //--- COMBINED AUTOMATION: DRAW CARD, SAVE TO DB, AND SEND EMAIL ---
   useEffect(() => {
     if (emailSentRef.current) return;
     if (!email || !cardImagePath) return;
-    
-    // We lock it immediately so React Strict Mode doesn't draw/send twice
-    emailSentRef.current = true; 
+
+    // We lock it immediately so React Strict Mode doesn't execute twice
+    emailSentRef.current = true;
 
     const generateCardAndSendEmail = async () => {
       const canvas = document.createElement("canvas");
@@ -42,7 +44,7 @@ export default function OrderSuccessPage() {
       if (!ctx) return;
 
       const img = new window.Image();
-      img.crossOrigin = "anonymous"; 
+      img.crossOrigin = "anonymous";
       img.src = cardImagePath;
 
       img.onload = async () => {
@@ -51,27 +53,27 @@ export default function OrderSuccessPage() {
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
         // Dynamic Color Theming
-        let primaryColor = "#D4AF37"; 
-        let labelColor = "#B89B2F";   
-        
+        let primaryColor = "#D4AF37";
+        let labelColor = "#B89B2F";
+
         if (safePlanName === "platinum") {
-          primaryColor = "#E5E4E2"; 
-          labelColor = "#A0AAB5";   
+          primaryColor = "#E5E4E2";
+          labelColor = "#A0AAB5";
         } else if (safePlanName === "diamond") {
-          primaryColor = "#FFFFFF"; 
-          labelColor = "#94A3B8";   
+          primaryColor = "#FFFFFF";
+          labelColor = "#94A3B8";
         }
 
         // Grid Alignment
-        const leftColX = canvas.width * 0.38; 
-        const rightColX = canvas.width * 0.92; 
-        let startY = canvas.height * 0.56;   
+        const leftColX = canvas.width * 0.38;
+        const rightColX = canvas.width * 0.92;
+        let startY = canvas.height * 0.56;
 
         // Tagline
-        ctx.textAlign = "left"; 
+        ctx.textAlign = "left";
         ctx.fillStyle = primaryColor;
         ctx.font = `500 ${canvas.height * 0.022}px 'Arial', sans-serif`;
-        ctx.fillText("L U X U R Y   M E M B E R S H I P   E X P E R I E N C E", leftColX, startY);
+        ctx.fillText("LUXURY MEMBERSHIP EXPERIENCE", leftColX, startY);
 
         // Divider Line
         startY += canvas.height * 0.035;
@@ -80,9 +82,9 @@ export default function OrderSuccessPage() {
         ctx.lineTo(rightColX, startY);
         ctx.strokeStyle = labelColor;
         ctx.lineWidth = 1.5;
-        ctx.globalAlpha = 0.4; 
+        ctx.globalAlpha = 0.4;
         ctx.stroke();
-        ctx.globalAlpha = 1.0; 
+        ctx.globalAlpha = 1.0;
 
         // ROW 1: MEMBER NAME
         startY += canvas.height * 0.10;
@@ -93,7 +95,7 @@ export default function OrderSuccessPage() {
 
         ctx.fillStyle = primaryColor;
         ctx.font = `bold ${canvas.height * 0.042}px 'Georgia', serif`;
-        ctx.shadowColor = "rgba(0, 0, 0, 0.7)";
+        ctx.shadowColor = "rgba(0,0,0,0.7)";
         ctx.shadowBlur = 4;
         ctx.shadowOffsetX = 1;
         ctx.shadowOffsetY = 2;
@@ -110,14 +112,14 @@ export default function OrderSuccessPage() {
 
         ctx.fillStyle = primaryColor;
         ctx.font = `bold ${canvas.height * 0.028}px 'Courier New', monospace`;
-        ctx.shadowColor = "rgba(0, 0, 0, 0.7)";
+        ctx.shadowColor = "rgba(0,0,0,0.7)";
         ctx.shadowBlur = 4;
         ctx.shadowOffsetX = 1;
         ctx.shadowOffsetY = 1;
         ctx.fillText(membershipId.toUpperCase(), leftColX, row2Y + (canvas.height * 0.040));
         ctx.shadowColor = "transparent";
 
-        ctx.textAlign = "right"; 
+        ctx.textAlign = "right";
         ctx.fillStyle = labelColor;
         ctx.font = `700 ${canvas.height * 0.018}px 'Arial', sans-serif`;
         ctx.fillText("REGISTERED CONTACT", rightColX, row2Y);
@@ -125,29 +127,48 @@ export default function OrderSuccessPage() {
         ctx.fillStyle = primaryColor;
         ctx.font = `bold ${canvas.height * 0.030}px 'Arial', sans-serif`;
         ctx.fillText(phone, rightColX, row2Y + (canvas.height * 0.045));
-        
+
         ctx.font = `600 ${canvas.height * 0.022}px 'Arial', sans-serif`;
         ctx.fillText(email.toLowerCase(), rightColX, row2Y + (canvas.height * 0.080));
 
         // 1. Generate the final image data string
-        // We use 0.9 quality to compress it slightly so the API request is lighting fast
         const finalImageDataUrl = canvas.toDataURL("image/jpeg", 0.9);
-        
+
         // 2. Set it to state so the user sees it instantly on the screen
         setPreviewUrl(finalImageDataUrl);
 
-        // 3. NOW send the email safely, passing the generated image directly to your backend!
         try {
+          // 3. FIX: Save to DB EXACTLY ONCE AFTER SUCCESS
+          await fetch("/api/save-member", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              membershipId,
+              plan,
+              amountPaid,
+              memberName,
+              email,
+              phone,
+              address,
+              city,
+              paymentId: orderId, // Perfectly saves pay_XXXX ID
+              paymentMethod,
+              status: "Confirmed"
+            }),
+          });
+
+          // 4. NOW send the email safely
           await fetch("/api/send-membership-email", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              membershipId, plan, amountPaid, memberName, email, phone, address, city, paymentId: orderId, validity, paymentMethod,
-              cardImage: finalImageDataUrl // <-- Safely handing off the image to the backend!
+              membershipId, plan, amountPaid, memberName, email, phone,
+              address, city, paymentId: orderId, validity, paymentMethod,
+              cardImage: finalImageDataUrl 
             }),
           });
         } catch (error) {
-          console.error("Failed to send membership email:", error);
+          console.error("Failed to process success actions:", error);
         }
       };
     };
@@ -155,9 +176,9 @@ export default function OrderSuccessPage() {
     generateCardAndSendEmail();
   }, [cardImagePath, safePlanName, memberName, membershipId, phone, email, amountPaid, address, city, orderId, validity, paymentMethod]);
 
-  // --- 3. DOWNLOAD BUTTON ---
+  //--- 3. DOWNLOAD BUTTON
   const downloadCard = () => {
-    if (!previewUrl) return; 
+    if (!previewUrl) return;
     const link = document.createElement("a");
     link.href = previewUrl;
     link.download = `${membershipId}-${safePlanName}-card.jpg`;
@@ -171,7 +192,6 @@ export default function OrderSuccessPage() {
       <Navigation />
       <section className="px-4 py-16 sm:px-6 md:py-24">
         <div className="mx-auto max-w-6xl">
-          
           <div className="text-center">
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-primary/30 bg-primary/10">
               <CheckCircle2 className="h-8 w-8 text-primary" />
@@ -183,7 +203,7 @@ export default function OrderSuccessPage() {
               Order Successful
             </h1>
             <p className="mx-auto mt-6 max-w-3xl text-lg leading-relaxed text-muted-foreground md:text-xl">
-              Welcome to GOA MOMENTS. Your membership has been activated successfully. 
+              Welcome to GOA MOMENTS. Your membership has been activated successfully.
               Your card, support access, and premium benefits are now ready.
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3 text-[11px] uppercase tracking-widest">
@@ -211,7 +231,6 @@ export default function OrderSuccessPage() {
                   Download Card
                 </button>
               </div>
-
               <div className="mt-6 flex min-h-72 items-center justify-center bg-black/40 p-4 md:min-h-96 md:h-[380px]">
                 <div className="relative h-56 w-full max-w-[700px]">
                   <Image
@@ -223,7 +242,6 @@ export default function OrderSuccessPage() {
                   />
                 </div>
               </div>
-
               <div className="mt-6 rounded-sm border border-primary/20 bg-primary/5 p-5">
                 <div className="flex items-start gap-3">
                   <Sparkles className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
@@ -232,7 +250,7 @@ export default function OrderSuccessPage() {
                       Your membership access is now active
                     </p>
                     <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                      You can now use your GOA MOMENTS membership card for eligible venue-based benefits, 
+                      You can now use your GOA MOMENTS membership card for eligible venue-based benefits,
                       premium support guidance, and member savings at selected partner locations.
                     </p>
                   </div>
@@ -245,7 +263,6 @@ export default function OrderSuccessPage() {
                 <h2 className="text-3xl font-light text-foreground">Order Details</h2>
                 <ShieldCheck className="h-6 w-6 text-primary" />
               </div>
-
               <div className="mt-8 space-y-5 text-sm text-muted-foreground">
                 <div className="flex items-start justify-between gap-4">
                   <span>Membership ID</span>
@@ -257,7 +274,7 @@ export default function OrderSuccessPage() {
                 </div>
                 <div className="flex items-start justify-between gap-4">
                   <span>Amount Paid</span>
-                  <span className="text-right text-foreground">₹{amountPaid}</span>
+                  <span className="text-right text-foreground">${amountPaid}</span>
                 </div>
                 <div className="flex items-start justify-between gap-4">
                   <span>Member Name</span>
@@ -296,7 +313,6 @@ export default function OrderSuccessPage() {
                   <span className="text-right text-foreground">{validity}</span>
                 </div>
               </div>
-
               <div className="mt-10">
                 <button
                   type="button"

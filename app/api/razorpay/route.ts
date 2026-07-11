@@ -10,11 +10,15 @@ export async function POST(req: Request) {
       key_secret: process.env.RAZORPAY_KEY_SECRET!,
     });
 
-    const amountInPaise = Math.round(Number(body.amount) * 100);
+    // FIX: Restored to INR to enable UPI, Netbanking, and Wallets in India.
+    // Converts the total calculated USD ($309.75) to INR using an approx exchange rate (e.g., 83 INR)
+    const exchangeRate = 83; 
+    const totalInINR = Number(body.totalAmount) * exchangeRate;
+    const amountInPaise = Math.round(totalInINR * 100);
 
     const order = await razorpay.orders.create({
       amount: amountInPaise,
-      currency: "INR",
+      currency: "INR", // Restored!
       receipt: `receipt_${Date.now()}`,
       notes: {
         membershipId: body.membershipId || "",
