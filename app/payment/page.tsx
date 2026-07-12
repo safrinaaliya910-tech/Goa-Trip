@@ -21,7 +21,7 @@ declare global {
   }
 }
 
-type Method = "razorpay" | "stripe" | "skydo";
+type Method = "razorpay" | "stripe" | "paypal";
 
 export default function PaymentPage() {
   const router = useRouter();
@@ -39,14 +39,12 @@ export default function PaymentPage() {
   const address = params.get("address") || "";
   const city = params.get("city") || "";
 
-  // --- HIDDEN FINANCIAL CALCULATION ---
+  // --- FINANCIAL CALCULATION ---
   const baseAmount = Number(params.get("amount")) || 160;
   const serviceFee = 2.50;
-  const gstRate = 0.18; 
-  
+  const gstRate = 0.18;
   const calculatedGst = (baseAmount + serviceFee) * gstRate;
   const totalAmount = (baseAmount + serviceFee + calculatedGst).toFixed(2);
-  // ------------------------------------
 
   useEffect(() => {
     const existingScript = document.getElementById("razorpay-checkout-script");
@@ -54,6 +52,7 @@ export default function PaymentPage() {
       setRazorpayLoaded(true);
       return;
     }
+
     const script = document.createElement("script");
     script.id = "razorpay-checkout-script";
     script.src = "https://checkout.razorpay.com/v1/checkout.js";
@@ -66,7 +65,7 @@ export default function PaymentPage() {
   const paymentTitle = useMemo(() => {
     if (method === "razorpay") return "Razorpay";
     if (method === "stripe") return "Stripe";
-    return "Skydo";
+    return "PayPal";
   }, [method]);
 
   const paymentDescription = useMemo(() => {
@@ -76,13 +75,13 @@ export default function PaymentPage() {
     if (method === "stripe") {
       return "Fast international card checkout with a clean payment experience.";
     }
-    return "Secure international B2B and direct payments.";
+    return "Secure international payments via PayPal.";
   }, [method]);
 
   const paymentButtonLabel = useMemo(() => {
     if (method === "razorpay") return `Pay $${baseAmount.toFixed(2)} with Razorpay`;
     if (method === "stripe") return `Pay $${baseAmount.toFixed(2)} with Stripe`;
-    return `Pay $${baseAmount.toFixed(2)} with Skydo`;
+    return `Pay $${baseAmount.toFixed(2)} with PayPal`;
   }, [method, baseAmount]);
 
   const goToSuccessPage = (paymentMethod: string, paymentId: string) => {
@@ -95,7 +94,7 @@ export default function PaymentPage() {
       phone,
       address,
       city,
-      paymentId, // <--- Passes the real "pay_..." ID here
+      paymentId, // Passes the real ID here
       validity: "Lifetime Membership",
       paymentMethod,
     });
@@ -112,36 +111,33 @@ export default function PaymentPage() {
       const response = await fetch("/api/razorpay", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          totalAmount, 
-          baseAmount, 
-          serviceFee, 
-          calculatedGst, 
-          membershipId, 
-          plan, 
-          name, 
-          email, 
-          phone, 
-          address, 
-          city 
+        body: JSON.stringify({
+          totalAmount,
+          baseAmount,
+          serviceFee,
+          calculatedGst,
+          membershipId,
+          plan,
+          name,
+          email,
+          phone,
+          address,
+          city,
         }),
       });
 
       if (!response.ok) throw new Error("Failed to create Razorpay order");
       const order = await response.json();
 
-      // FIX: /api/save-member removed from here! It will now only save on the success page.
-
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         amount: order.amount,
-        currency: order.currency, 
+        currency: order.currency,
         name: "GOA MOMENTS",
         description: `Plan: $${baseAmount.toFixed(2)} | Fee: $${serviceFee.toFixed(2)} | GST: $${calculatedGst.toFixed(2)}`,
         image: "/images/logo.png",
         order_id: order.id,
         handler: function (response: any) {
-          // This captures the real pay_XXXX ID and sends it to the success page
           goToSuccessPage("razorpay", response.razorpay_payment_id);
         },
         prefill: { name, email, contact: phone },
@@ -164,25 +160,23 @@ export default function PaymentPage() {
       const response = await fetch("/api/stripe/create-session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          totalAmount, 
-          baseAmount, 
-          serviceFee, 
-          calculatedGst, 
-          plan, 
-          membershipId, 
-          memberName: name, 
-          email, 
-          phone, 
-          address, 
-          city 
+        body: JSON.stringify({
+          totalAmount,
+          baseAmount,
+          serviceFee,
+          calculatedGst,
+          plan,
+          membershipId,
+          memberName: name,
+          email,
+          phone,
+          address,
+          city,
         }),
       });
-      
+
       const data = await response.json();
       if (!response.ok || !data.url) throw new Error(data?.error || "Stripe session creation failed");
-
-      // FIX: /api/save-member removed from here!
 
       window.location.href = data.url;
     } catch (error) {
@@ -192,35 +186,36 @@ export default function PaymentPage() {
     }
   };
 
-  const handleSkydoPayment = async () => {
+  const handlePayPalPayment = async () => {
     try {
-      const response = await fetch("/api/skydo/create-session", {
+      const response = await fetch("/api/paypal/create-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          totalAmount, 
-          baseAmount, 
-          serviceFee, 
-          calculatedGst, 
-          membershipId, 
-          plan, 
-          name, 
-          email, 
-          phone, 
-          address, 
-          city 
+        body: JSON.stringify({
+          amount: totalAmount, // Pass totalAmount as required by backend
+          plan,
+          membershipId,
+          memberName: name,
+          email,
+          phone,
+          city,
         }),
       });
-      
+
       const data = await response.json();
-      if (!response.ok || !data.url) throw new Error(data?.error || "Skydo session creation failed");
+      
+      // PayPal returns a links array, we need the 'approve' link to redirect the user
+      const approveLink = data.links?.find((link: any) => link.rel === "approve")?.href;
 
-      // FIX: /api/save-member removed from here!
+      if (!response.ok || !approveLink) {
+        throw new Error(data?.message || data?.error || "PayPal session creation failed");
+      }
 
-      window.location.href = data.url;
+      // Redirect user directly to PayPal's official secure checkout
+      window.location.href = approveLink;
     } catch (error) {
-      console.error("Skydo payment failed:", error);
-      alert("Unable to start Skydo payment. Please try again.");
+      console.error("PayPal payment failed:", error);
+      alert("Unable to start PayPal payment. Please try again.");
       setLoading(false);
     }
   };
@@ -229,22 +224,20 @@ export default function PaymentPage() {
     setLoading(true);
     if (method === "razorpay") await handleRazorpayPayment();
     else if (method === "stripe") await handleStripePayment();
-    else if (method === "skydo") await handleSkydoPayment();
+    else if (method === "paypal") await handlePayPalPayment();
   };
 
   const methods = [
     { key: "razorpay" as Method, title: "Razorpay", desc: "UPI, GPay, Paytm, cards, and net banking", icon: Landmark },
     { key: "stripe" as Method, title: "Stripe", desc: "International debit and credit cards", icon: CreditCard },
-    { key: "skydo" as Method, title: "Skydo", desc: "Secure international B2B payments", icon: Wallet },
+    { key: "paypal" as Method, title: "PayPal", desc: "Secure international payments via PayPal", icon: Wallet },
   ];
 
   return (
     <main className="min-h-screen bg-[#FDFBF7]">
       <Navigation />
-      
       <section className="relative z-10 px-6 pt-[220px] lg:pt-[260px] pb-16 md:pb-24">
         <div className="mx-auto max-w-6xl">
-          
           <div className="text-center">
             <p className="font-serif text-xs uppercase tracking-[0.3em] text-[#D4AF37] font-bold">
               Payment Method
@@ -258,14 +251,21 @@ export default function PaymentPage() {
           </div>
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3 font-serif text-[11px] uppercase tracking-widest">
-            <span className="rounded-full border border-gray-300 bg-white px-4 py-1.5 font-bold text-gray-500 shadow-sm">1. Details</span>
-            <span className="rounded-full border border-gray-300 bg-white px-4 py-1.5 font-bold text-gray-500 shadow-sm">2. Confirm Order</span>
-            <span className="rounded-full border-[#D4AF37] bg-[#D4AF37] px-4 py-1.5 font-bold text-white shadow-md">3. Payment Method</span>
-            <span className="rounded-full border border-gray-300 bg-white px-4 py-1.5 font-bold text-gray-500 shadow-sm">4. Order Successful</span>
+            <span className="rounded-full border border-gray-300 bg-white px-4 py-1.5 font-bold text-gray-500 shadow-sm">
+              1. Details
+            </span>
+            <span className="rounded-full border border-gray-300 bg-white px-4 py-1.5 font-bold text-gray-500 shadow-sm">
+              2. Confirm Order
+            </span>
+            <span className="rounded-full border-[#D4AF37] bg-[#D4AF37] px-4 py-1.5 font-bold text-white shadow-md">
+              3. Payment Method
+            </span>
+            <span className="rounded-full border border-gray-300 bg-white px-4 py-1.5 font-bold text-gray-500 shadow-sm">
+              4. Order Successful
+            </span>
           </div>
 
           <div className="mt-12 grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
-            
             <div className="rounded-xl border border-[#D4AF37]/30 bg-white p-6 shadow-[0_15px_40px_rgba(212,175,55,0.1)]">
               <div className="flex items-center justify-between border-b border-gray-200 pb-4">
                 <div>
@@ -283,25 +283,33 @@ export default function PaymentPage() {
                 {methods.map((m) => {
                   const Icon = m.icon;
                   const active = method === m.key;
+
                   return (
                     <button
                       key={m.key}
                       type="button"
                       onClick={() => setMethod(m.key)}
                       className={`flex w-full items-center justify-between rounded-lg border p-5 text-left transition-all duration-300 ${
-                        active 
-                        ? "border-[#D4AF37] bg-[#D4AF37]/10 shadow-[0_5px_15px_rgba(212,175,55,0.15)]" 
-                        : "border-gray-200 bg-gray-50 hover:border-[#D4AF37]/50 hover:bg-white"
+                        active
+                          ? "border-[#D4AF37] bg-[#D4AF37]/10 shadow-[0_5px_15px_rgba(212,175,55,0.15)]"
+                          : "border-gray-200 bg-gray-50 hover:border-[#D4AF37]/50 hover:bg-white"
                       }`}
                     >
                       <div className="flex items-center gap-4">
-                        <div className={`flex h-12 w-12 items-center justify-center rounded-full border ${active ? 'border-[#D4AF37] bg-white' : 'border-gray-300 bg-white'}`}>
-                          <Icon className={`h-5 w-5 ${active ? 'text-[#D4AF37]' : 'text-gray-500'}`} />
+                        <div
+                          className={`flex h-12 w-12 items-center justify-center rounded-full border ${
+                            active ? "border-[#D4AF37] bg-white" : "border-gray-300 bg-white"
+                          }`}
+                        >
+                          <Icon className={`h-5 w-5 ${active ? "text-[#D4AF37]" : "text-gray-500"}`} />
                         </div>
                         <div>
-                          <p 
-                            className={`text-lg tracking-wide ${active ? 'text-black' : 'text-gray-800'}`}
-                            style={{ fontFamily: 'Arial, Helvetica, sans-serif', fontWeight: active ? 900 : 700 }}
+                          <p
+                            className={`text-lg tracking-wide ${active ? "text-black" : "text-gray-800"}`}
+                            style={{
+                              fontFamily: "Arial, Helvetica, sans-serif",
+                              fontWeight: active ? 900 : 700,
+                            }}
                           >
                             {m.title}
                           </p>
@@ -338,9 +346,9 @@ export default function PaymentPage() {
                 <div className="flex items-start gap-3">
                   <Sparkles className="mt-0.5 h-5 w-5 shrink-0 text-[#D4AF37]" />
                   <div>
-                    <p 
+                    <p
                       className="text-[15px] text-black tracking-wide"
-                      style={{ fontFamily: 'Arial, Helvetica, sans-serif', fontWeight: 900 }}
+                      style={{ fontFamily: "Arial, Helvetica, sans-serif", fontWeight: 900 }}
                     >
                       Selected: {paymentTitle}
                     </p>
@@ -352,54 +360,95 @@ export default function PaymentPage() {
               </div>
 
               <div className="mt-8 space-y-6">
-                
                 <div className="flex items-center justify-between gap-4 border-b border-gray-100 pb-3">
-                  <span className="font-serif text-[12px] font-bold tracking-widest text-gray-500 uppercase">Membership Plan</span>
-                  <span className="text-base text-black tracking-wider" style={{ fontFamily: 'Arial, Helvetica, sans-serif', fontWeight: 900 }}>{plan}</span>
+                  <span className="font-serif text-[12px] font-bold tracking-widest text-gray-500 uppercase">
+                    Membership Plan
+                  </span>
+                  <span
+                    className="text-base text-black tracking-wider"
+                    style={{ fontFamily: "Arial, Helvetica, sans-serif", fontWeight: 900 }}
+                  >
+                    {plan}
+                  </span>
                 </div>
-                
                 <div className="flex items-center justify-between gap-4 border-b border-gray-100 pb-3">
-                  <span className="font-serif text-[12px] font-bold tracking-widest text-gray-500 uppercase">Member Name</span>
-                  <span className="text-base text-black tracking-wider uppercase" style={{ fontFamily: 'Arial, Helvetica, sans-serif', fontWeight: 900 }}>{name}</span>
+                  <span className="font-serif text-[12px] font-bold tracking-widest text-gray-500 uppercase">
+                    Member Name
+                  </span>
+                  <span
+                    className="text-base text-black tracking-wider uppercase"
+                    style={{ fontFamily: "Arial, Helvetica, sans-serif", fontWeight: 900 }}
+                  >
+                    {name}
+                  </span>
                 </div>
-                
                 <div className="flex items-center justify-between gap-4 border-b border-gray-100 pb-3">
-                  <span className="font-serif text-[12px] font-bold tracking-widest text-gray-500 uppercase">Email</span>
-                  <span className="break-all text-[15px] text-black tracking-wider" style={{ fontFamily: 'Arial, Helvetica, sans-serif', fontWeight: 900 }}>{email}</span>
+                  <span className="font-serif text-[12px] font-bold tracking-widest text-gray-500 uppercase">
+                    Email
+                  </span>
+                  <span
+                    className="break-all text-[15px] text-black tracking-wider"
+                    style={{ fontFamily: "Arial, Helvetica, sans-serif", fontWeight: 900 }}
+                  >
+                    {email}
+                  </span>
                 </div>
-                
                 <div className="flex items-center justify-between gap-4 border-b border-gray-100 pb-3">
-                  <span className="font-serif text-[12px] font-bold tracking-widest text-gray-500 uppercase">Phone</span>
-                  <span className="text-base text-black tracking-wider" style={{ fontFamily: 'Arial, Helvetica, sans-serif', fontWeight: 900 }}>{phone}</span>
+                  <span className="font-serif text-[12px] font-bold tracking-widest text-gray-500 uppercase">
+                    Phone
+                  </span>
+                  <span
+                    className="text-base text-black tracking-wider"
+                    style={{ fontFamily: "Arial, Helvetica, sans-serif", fontWeight: 900 }}
+                  >
+                    {phone}
+                  </span>
                 </div>
-                
                 <div className="flex items-start justify-between gap-4 border-b border-gray-100 pb-3">
-                  <span className="font-serif text-[12px] font-bold tracking-widest text-gray-500 uppercase pt-1">Address</span>
-                  <span className="max-w-[60%] break-words text-right text-[15px] text-black tracking-wider capitalize" style={{ fontFamily: 'Arial, Helvetica, sans-serif', fontWeight: 900 }}>{address}</span>
+                  <span className="font-serif text-[12px] font-bold tracking-widest text-gray-500 uppercase pt-1">
+                    Address
+                  </span>
+                  <span
+                    className="max-w-[60%] break-words text-right text-[15px] text-black tracking-wider capitalize"
+                    style={{ fontFamily: "Arial, Helvetica, sans-serif", fontWeight: 900 }}
+                  >
+                    {address}
+                  </span>
                 </div>
-                
                 <div className="flex items-center justify-between gap-4 border-b border-gray-100 pb-4">
-                  <span className="font-serif text-[12px] font-bold tracking-widest text-gray-500 uppercase">City</span>
-                  <span className="text-base text-black tracking-wider uppercase" style={{ fontFamily: 'Arial, Helvetica, sans-serif', fontWeight: 900 }}>{city}</span>
+                  <span className="font-serif text-[12px] font-bold tracking-widest text-gray-500 uppercase">
+                    City
+                  </span>
+                  <span
+                    className="text-base text-black tracking-wider uppercase"
+                    style={{ fontFamily: "Arial, Helvetica, sans-serif", fontWeight: 900 }}
+                  >
+                    {city}
+                  </span>
                 </div>
-
                 <div className="flex items-center justify-between gap-4 rounded-lg bg-gray-50 p-5 border border-gray-200">
-                  <span className="font-serif text-sm font-bold tracking-widest text-black uppercase">Total Amount</span>
-                  <span className="text-3xl text-[#D4AF37] tracking-wider" style={{ fontFamily: 'Arial, Helvetica, sans-serif', fontWeight: 900 }}>${baseAmount.toFixed(2)}</span>
+                  <span className="font-serif text-sm font-bold tracking-widest text-black uppercase">
+                    Total Amount
+                  </span>
+                  <span
+                    className="text-3xl text-[#D4AF37] tracking-wider"
+                    style={{ fontFamily: "Arial, Helvetica, sans-serif", fontWeight: 900 }}
+                  >
+                    ${baseAmount.toFixed(2)}
+                  </span>
                 </div>
               </div>
-              
+
               <button
                 type="button"
                 onClick={handlePayment}
                 disabled={loading}
                 className="mt-8 flex w-full items-center justify-center gap-3 rounded-md bg-[#D4AF37] py-4 text-[15px] uppercase tracking-widest text-white shadow-[0_4px_14px_rgba(212,175,55,0.4)] transition-all hover:bg-[#c29b2b] hover:shadow-[0_6px_20px_rgba(212,175,55,0.6)] disabled:opacity-50"
-                style={{ fontFamily: 'Arial, Helvetica, sans-serif', fontWeight: 900 }}
+                style={{ fontFamily: "Arial, Helvetica, sans-serif", fontWeight: 900 }}
               >
                 {loading ? "Processing Securely..." : paymentButtonLabel}
                 {!loading && <ArrowRight className="h-5 w-5" />}
               </button>
-
             </div>
           </div>
         </div>

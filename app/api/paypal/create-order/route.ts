@@ -69,6 +69,9 @@ export async function POST(req: Request) {
         application_context: {
           brand_name: "GOA MOMENTS",
           user_action: "PAY_NOW",
+          // ADDED: Tell PayPal where to send the user after payment!
+          return_url: "http://localhost:3000/order-success",
+          cancel_url: "http://localhost:3000/payment",
         },
         payer: {
           name: memberName
@@ -89,7 +92,7 @@ export async function POST(req: Request) {
             ? {
                 address_line_1: city,
                 admin_area_2: city,
-                country_code: "US",
+                country_code: "US", // PayPal requires a valid country code
               }
             : undefined,
         },

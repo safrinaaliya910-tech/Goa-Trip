@@ -199,19 +199,16 @@ export default function MembershipPage() {
           const { latitude, longitude } = position.coords;
           const googleApiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
-          // DIAGNOSTIC CHECK 1: Is the key actually loaded?
           if (!googleApiKey) {
             alert("NEXT.JS ERROR: The API key is missing!\n\nPlease check your .env.local file. If you just added it, you MUST kill the terminal (Ctrl+C) and run 'npm run dev' again for Next.js to see it.");
             setIsFetchingLocation(false);
             return;
           }
 
-          // We have the key! Let's ping Google.
           const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${googleApiKey}`);
           const data = await response.json();
 
           if (data.status === "OK" && data.results[0]) {
-            // SUCCESS! Google's formatted address natively includes the exact street and pincode!
             setCustomerAddress(data.results[0].formatted_address);
 
             const cityObj = data.results[0].address_components.find((component: any) =>
@@ -222,10 +219,9 @@ export default function MembershipPage() {
             setIsFetchingLocation(false);
             return;
           } else {
-            // DIAGNOSTIC CHECK 2: Google Rejected the Request!
             alert(`GOOGLE MAPS BLOCKED THE REQUEST:\n\nStatus: ${data.status}\nMessage: ${data.error_message || "Unknown API restriction error"}\n\nTell your client to change Application Restrictions from 'Websites' to 'None' in the Google Cloud Console.`);
             setIsFetchingLocation(false);
-            return; // Force it to stop so it doesn't fall back to the silent error!
+            return;
           }
         } catch (error) {
           alert("Network failed to reach Google Maps. Check your internet connection.");
@@ -521,7 +517,6 @@ export default function MembershipPage() {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 24, scale: 0.98 }}
                 transition={{ duration: 0.25 }}
-                // NOTE: Added overflow-x-hidden here to guarantee no horizontal scrolling
                 className="relative my-4 max-h-[90vh] w-full max-w-3xl overflow-y-auto overflow-x-hidden border border-primary/30 bg-card shadow-[0_0_50px_rgba(0,0,0,0.5)]"
               >
                 <button
@@ -562,7 +557,6 @@ export default function MembershipPage() {
 
                 {checkoutStep === 1 && (
                   <div className="p-6 md:p-8">
-                    {/* NOTE: Changed to md:grid-cols-2 for perfect sizing */}
                     <div className="grid gap-8 md:grid-cols-2">
                       <div>
                         <div className="border border-border bg-background/40 p-5">
@@ -715,70 +709,77 @@ export default function MembershipPage() {
 
                 {checkoutStep === 2 && (
                   <div className="p-6 md:p-8">
-                    {/* NOTE: Changed to md:grid-cols-2 for perfect sizing without overflow */}
                     <div className="grid gap-8 md:grid-cols-2">
                       <div className="border border-border bg-background/40 p-5">
                         <p className="text-xs uppercase tracking-[0.3em] text-primary">
                           {t("membership.checkout.summary.title")}
                         </p>
-                        <div className="mt-6 space-y-5">
-                          <div className="flex items-center justify-between gap-4 border-b border-border pb-3">
-                            <span className="font-[Arial,sans-serif] text-[12px] font-bold uppercase tracking-widest text-muted-foreground">
+                        <div className="mt-6 space-y-4">
+                          
+                          {/* NOTE: Replaced <span> with <div> and added break-words min-w-0 */}
+                          <div className="flex items-start justify-between gap-4 border-b border-border pb-3">
+                            <span className="font-[Arial,sans-serif] text-[12px] font-bold uppercase tracking-widest text-muted-foreground pt-[2px] shrink-0">
                               {t("membership.checkout.summary.plan")}
                             </span>
-                            <span className="font-[Arial,sans-serif] text-sm font-bold tracking-wide text-foreground uppercase text-right">
+                            <div className="font-[Arial,sans-serif] text-sm font-bold tracking-wide text-foreground uppercase text-right break-words min-w-0">
                               {selectedTier.name}
-                            </span>
+                            </div>
                           </div>
-                          <div className="flex items-center justify-between gap-4 border-b border-border pb-3">
-                            <span className="font-[Arial,sans-serif] text-[12px] font-bold uppercase tracking-widest text-muted-foreground">
+                          
+                          <div className="flex items-start justify-between gap-4 border-b border-border pb-3">
+                            <span className="font-[Arial,sans-serif] text-[12px] font-bold uppercase tracking-widest text-muted-foreground pt-[2px] shrink-0">
                               {t("membership.checkout.summary.name")}
                             </span>
-                            <span className="font-[Arial,sans-serif] text-sm font-bold tracking-wide text-foreground uppercase text-right">
+                            <div className="font-[Arial,sans-serif] text-sm font-bold tracking-wide text-foreground uppercase text-right break-words min-w-0">
                               {firstName} {lastName}
-                            </span>
+                            </div>
                           </div>
-                          <div className="flex items-center justify-between gap-4 border-b border-border pb-3">
-                            <span className="font-[Arial,sans-serif] text-[12px] font-bold uppercase tracking-widest text-muted-foreground">
+                          
+                          <div className="flex items-start justify-between gap-4 border-b border-border pb-3">
+                            <span className="font-[Arial,sans-serif] text-[12px] font-bold uppercase tracking-widest text-muted-foreground pt-[2px] shrink-0">
                               {t("membership.checkout.summary.email")}
                             </span>
-                            {/* NOTE: Added break-all to prevent long emails from breaking layout */}
-                            <span className="font-[Arial,sans-serif] text-sm font-bold tracking-wide text-foreground text-right break-all max-w-[60%]">
+                            <div className="font-[Arial,sans-serif] text-sm font-bold tracking-wide text-foreground text-right break-all min-w-0">
                               {customerEmail}
-                            </span>
+                            </div>
                           </div>
-                          <div className="flex items-center justify-between gap-4 border-b border-border pb-3">
-                            <span className="font-[Arial,sans-serif] text-[12px] font-bold uppercase tracking-widest text-muted-foreground">
+                          
+                          <div className="flex items-start justify-between gap-4 border-b border-border pb-3">
+                            <span className="font-[Arial,sans-serif] text-[12px] font-bold uppercase tracking-widest text-muted-foreground pt-[2px] shrink-0">
                               {t("membership.checkout.summary.phone")}
                             </span>
-                            <span className="font-[Arial,sans-serif] text-sm font-bold tracking-wide text-foreground text-right">
+                            <div className="font-[Arial,sans-serif] text-sm font-bold tracking-wide text-foreground text-right break-words min-w-0">
                               {customerPhone}
-                            </span>
+                            </div>
                           </div>
+                          
                           <div className="flex items-start justify-between gap-4 border-b border-border pb-3">
-                            <span className="font-[Arial,sans-serif] text-[12px] font-bold uppercase tracking-widest text-muted-foreground pt-1">
+                            <span className="font-[Arial,sans-serif] text-[12px] font-bold uppercase tracking-widest text-muted-foreground pt-[2px] shrink-0">
                               {t("membership.checkout.summary.address")}
                             </span>
-                            <span className="max-w-[60%] truncate text-right font-[Arial,sans-serif] text-sm font-bold tracking-wide text-foreground capitalize">
+                            <div className="font-[Arial,sans-serif] text-sm font-bold tracking-wide text-foreground text-right capitalize break-words min-w-0">
                               {customerAddress}
-                            </span>
+                            </div>
                           </div>
-                          <div className="flex items-center justify-between gap-4 border-b border-border pb-3">
-                            <span className="font-[Arial,sans-serif] text-[12px] font-bold uppercase tracking-widest text-muted-foreground">
+                          
+                          <div className="flex items-start justify-between gap-4 border-b border-border pb-3">
+                            <span className="font-[Arial,sans-serif] text-[12px] font-bold uppercase tracking-widest text-muted-foreground pt-[2px] shrink-0">
                               {t("membership.checkout.summary.city")}
                             </span>
-                            <span className="font-[Arial,sans-serif] text-sm font-bold tracking-wide text-foreground uppercase text-right">
+                            <div className="font-[Arial,sans-serif] text-sm font-bold tracking-wide text-foreground uppercase text-right break-words min-w-0">
                               {customerCity}
-                            </span>
+                            </div>
                           </div>
-                          <div className="flex items-center justify-between pt-2">
-                            <span className="font-[Arial,sans-serif] text-sm font-bold uppercase tracking-widest text-foreground">
+                          
+                          <div className="flex items-start justify-between gap-4 pt-1">
+                            <span className="font-[Arial,sans-serif] text-[12px] font-bold uppercase tracking-widest text-foreground pt-[4px] shrink-0">
                               {t("membership.checkout.summary.amount")}
                             </span>
-                            <span className="font-[Arial,sans-serif] text-2xl font-bold tracking-wider text-primary">
+                            <div className="font-[Arial,sans-serif] text-2xl font-bold tracking-wider text-primary text-right break-words min-w-0">
                               ${selectedTier.price}
-                            </span>
+                            </div>
                           </div>
+
                         </div>
                       </div>
                       <div className="border border-primary/20 bg-gradient-to-b from-primary/5 to-transparent p-5">
@@ -793,28 +794,31 @@ export default function MembershipPage() {
                         </p>
                         <div className="mt-5 rounded-sm border border-primary/20 bg-background/30 p-4">
                           <div className="flex items-center gap-3">
-                            <Sparkles className="h-5 w-5 text-primary" />
+                            <Sparkles className="h-5 w-5 text-primary shrink-0" />
                             <p className="text-sm text-foreground">
                               {t("membership.checkout.confirm.sparkNote")}
                             </p>
                           </div>
                         </div>
-                        <div className="mt-8 flex gap-3">
+                        
+                        {/* NOTE: Changed to stack vertically on mobile (Confirm on top) and side-by-side on desktop */}
+                        <div className="mt-8 flex flex-col-reverse sm:flex-row gap-3">
                           <button
                             type="button"
                             onClick={() => setCheckoutStep(1)}
-                            className="w-1/2 border border-border px-4 py-4 font-[Arial,sans-serif] text-[13px] font-bold uppercase tracking-widest text-foreground transition hover:border-primary hover:text-primary"
+                            className="w-full sm:w-1/2 border border-border px-4 py-4 font-[Arial,sans-serif] text-[13px] font-bold uppercase tracking-widest text-foreground transition hover:border-primary hover:text-primary"
                           >
                             {t("membership.checkout.confirm.btnBack")}
                           </button>
                           <button
                             type="button"
                             onClick={goToPaymentPage}
-                            className="w-1/2 bg-primary px-4 py-4 font-[Arial,sans-serif] text-[13px] font-bold uppercase tracking-widest text-primary-foreground transition hover:bg-primary/90"
+                            className="w-full sm:w-1/2 bg-primary px-4 py-4 font-[Arial,sans-serif] text-[13px] font-bold uppercase tracking-widest text-primary-foreground transition hover:bg-primary/90"
                           >
                             {t("membership.checkout.confirm.btnConfirm")}
                           </button>
                         </div>
+
                       </div>
                     </div>
                   </div>
