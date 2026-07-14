@@ -101,18 +101,20 @@ export function SplashScreen() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 2.2, ease: "easeOut" }}
-            className="relative z-10 flex flex-1 flex-col justify-end pb-12 sm:pb-16"
+            className="relative z-10 flex flex-1 flex-col justify-end pb-12 sm:pb-16 px-2 w-full max-w-5xl"
           >
-            <div className="flex items-center justify-center gap-6 sm:gap-10">
+            {/* NOTE: Adjusted gaps slightly so all 4 items fit beautifully on a single line for mobile phones */}
+            <div className="flex items-center justify-center gap-4 sm:gap-8">
+              
               {/* Shield Badge + Official Tourism Partner Text */}
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2 sm:gap-3">
                 <svg
                   width="28"
                   height="34"
                   viewBox="0 0 36 44"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
-                  className="drop-shadow-[0_2px_10px_rgba(212,175,55,0.3)]"
+                  className="w-5 sm:w-7 drop-shadow-[0_2px_10px_rgba(212,175,55,0.3)]"
                 >
                   <defs>
                     <linearGradient id="shieldGradSplash" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -130,45 +132,64 @@ export function SplashScreen() {
                   <path d="M11 21L15.5 26L25 15" stroke="#231709" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
                 <div className="flex flex-col justify-center text-left">
-                  <span className="mb-[2px] text-[10px] font-bold uppercase tracking-[0.25em] text-[#d4af37] drop-shadow-md sm:text-[11px]">
+                  <span className="mb-[2px] text-[8px] font-bold uppercase tracking-[0.25em] text-[#d4af37] drop-shadow-md sm:text-[11px]">
                     Official
                   </span>
-                  <span className="text-[12px] font-bold uppercase tracking-[0.05em] text-[#d4af37] drop-shadow-md sm:text-[13px]">
+                  <span className="text-[9px] font-bold uppercase tracking-[0.05em] text-[#d4af37] drop-shadow-md sm:text-[13px]">
                     Tourism Partner
                   </span>
                 </div>
               </div>
 
-              {/* Goa Tourism Logo (Enlarged) */}
-              <div className="flex flex-col items-center gap-1.5">
+              {/* Goa Tourism Logo */}
+              <div className="flex flex-col items-center gap-1 sm:gap-1.5">
                 <Image
                   src="/images/goa_tourism.png"
                   alt="Goa Tourism"
                   width={130}
                   height={75}
-                  className="h-14 w-auto object-contain drop-shadow-[0_2px_10px_rgba(255,255,255,0.1)] sm:h-16"
+                  className="h-10 sm:h-14 w-auto object-contain drop-shadow-[0_2px_10px_rgba(255,255,255,0.1)] sm:h-16"
                 />
-                <span className="text-center text-[10px] font-medium leading-tight tracking-wide text-white/90 drop-shadow-md sm:text-[11px]">
+                <span className="text-center text-[8px] font-medium leading-tight tracking-wide text-white/90 drop-shadow-md sm:text-[11px]">
                   Goa<br />Tourism
                 </span>
               </div>
 
               {/* Divider */}
-              <div className="h-12 w-px bg-[#d4af37]/30 sm:h-14" />
+              <div className="h-8 sm:h-14 w-px bg-[#d4af37]/30" />
 
-              {/* Startup India Logo (Enlarged + New Caption) */}
-              <div className="flex flex-col items-center gap-1.5">
+              {/* Startup India Logo */}
+              <div className="flex flex-col items-center gap-1 sm:gap-1.5">
                 <Image
                   src="/images/startup_logo_black.png"
                   alt="Startup India"
                   width={160}
                   height={70}
-                  className="h-14 w-auto object-contain drop-shadow-[0_2px_10px_rgba(255,255,255,0.1)] sm:h-16"
+                  className="h-10 sm:h-14 w-auto object-contain drop-shadow-[0_2px_10px_rgba(255,255,255,0.1)] sm:h-16"
                 />
-                <span className="text-center text-[10px] font-medium leading-tight tracking-wide text-white/90 drop-shadow-md sm:text-[11px]">
-                  Recognized by DPIIT
+                <span className="text-center text-[8px] font-medium leading-tight tracking-wide text-white/90 drop-shadow-md sm:text-[11px]">
+                  Recognized by<br className="sm:hidden" /> DPIIT
                 </span>
               </div>
+
+              {/* Divider */}
+              <div className="h-8 sm:h-14 w-px bg-[#d4af37]/30" />
+
+              {/* Ministry of Tourism Logo */}
+              <div className="flex flex-col items-center gap-1 sm:gap-1.5">
+                {/* NOTE: scale-[1.35] and -translate-y-1 applied to visibly inflate the logo without shifting alignment */}
+                <Image
+                  src="/images/ministry_logo_white.png"
+                  alt="Ministry of Tourism"
+                  width={160}
+                  height={70}
+                  className="h-10 sm:h-14 w-auto object-contain drop-shadow-[0_2px_10px_rgba(255,255,255,0.1)] sm:h-16 scale-[1.9] -translate-y-1"
+                />
+                <span className="text-center text-[8px] font-medium leading-tight tracking-wide text-white/90 drop-shadow-md sm:text-[11px]">
+                  Government<br />of India
+                </span>
+              </div>
+
             </div>
           </motion.div>
         </motion.div>
