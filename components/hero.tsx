@@ -21,6 +21,7 @@ export function Hero() {
   const subTextColor = isDark ? "text-white/60" : "text-muted-foreground";
 
   const startupLogo = isDark ? "/images/startup_logo_black.png" : "/images/startup_logo_white.png";
+  const ministryLogo = isDark ? "/images/ministry_logo_white.png" : "/images/ministry_logo_black.png";
 
   if (!mounted) {
     return null;
@@ -97,7 +98,6 @@ export function Hero() {
               transition={{ duration: 0.8, delay: 1.2 }}
               className="mb-40 flex flex-col items-center gap-4 sm:mb-0 sm:flex-row sm:justify-center sm:gap-4"
             >
-              {/* FIX: Early access removed. Explore Membership now uses the primary gold styling and sits centered. */}
               <a
                 href="/membership"
                 className="group relative w-full max-w-[360px] overflow-hidden rounded-none border border-primary bg-primary px-8 py-4 text-sm uppercase tracking-[0.18em] text-primary-foreground transition-all duration-500 hover:bg-transparent hover:text-primary sm:w-auto sm:max-w-none sm:px-10 sm:py-4"
@@ -128,7 +128,7 @@ export function Hero() {
         </div>
       </section>
 
-      {/* Trust Banner Section */}
+      {/* Trust Banner Section - PERFECTLY ALIGNED GRID */}
       <section className="relative z-20 w-full bg-background px-4 py-12 sm:px-6 sm:py-16">
         <div className="mx-auto max-w-[1400px]">
           <motion.div
@@ -136,111 +136,123 @@ export function Hero() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8 }}
-            className="flex flex-col items-center gap-8 rounded-2xl border border-[#C5A059]/60 shadow-[0_4px_25px_rgba(197,160,89,0.15)] bg-card/90 backdrop-blur-sm px-6 py-10 text-card-foreground xl:flex-row xl:justify-between xl:px-12 xl:py-8"
+            /* 6-Column Grid guarantees identical spacing for every single item */
+            className="grid grid-cols-1 gap-y-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 xl:gap-y-0 rounded-2xl border border-[#C5A059]/60 bg-card/90 py-8 px-4 shadow-[0_4px_25px_rgba(197,160,89,0.15)] backdrop-blur-sm"
           >
+            
             {/* 1. Goa Tourism */}
-            <div className="flex items-center gap-4 xl:w-auto">
-              <Image
-                src="/images/goa_tourism.png"
-                alt="Goa Tourism"
-                width={130}
-                height={75}
-                className="h-14 w-auto object-contain drop-shadow-md sm:h-16"
-              />
-              <div className="flex flex-col pt-1">
-                <span className={`font-serif text-[15px] uppercase tracking-wide ${textColor}`}>
-                  Goa Tourism
-                </span>
-                <span className={`mt-1 text-[11px] leading-[1.5] ${subTextColor}`}>
-                  Official Tourism Partner<br />
-                  Promoting Goa Worldwide
-                </span>
+            <div className="flex w-full justify-start sm:justify-center px-1 xl:px-4 xl:border-r border-[#C5A059]/30 [&:nth-child(6)]:border-0">
+              <div className="flex w-full max-w-[220px] items-center gap-3 sm:gap-4">
+                <div className="flex h-14 w-[76px] sm:h-16 sm:w-[84px] shrink-0 items-center justify-center">
+                  <Image src="/images/goa_tourism.png" alt="Goa Tourism" width={140} height={90} className="max-h-full max-w-full object-contain drop-shadow-md" />
+                </div>
+                <div className="flex flex-col text-left">
+                  <span className={`font-serif text-[11px] lg:text-[12px] font-bold uppercase tracking-wider leading-tight ${textColor}`}>
+                    Goa Tourism
+                  </span>
+                  <span className={`mt-1 text-[10px] leading-[1.3] ${subTextColor}`}>
+                    Official Partner<br />Promoting Goa
+                  </span>
+                </div>
               </div>
             </div>
-
-            <div className="hidden h-16 w-px bg-[#C5A059]/30 xl:block" />
-            <div className="h-px w-3/4 bg-[#C5A059]/30 xl:hidden" />
 
             {/* 2. Startup India */}
-            <div className="flex flex-col items-center justify-center gap-2 xl:w-auto text-center">
-              <Image
-                src={startupLogo}
-                alt="Startup India"
-                width={190}
-                height={75}
-                className="h-14 w-auto object-contain drop-shadow-md sm:h-16"
-              />
-              <span className={`text-[11px] font-medium tracking-wide uppercase text-[#C5A059] ${subTextColor}`}>
-                Recognized by DPIIT
-              </span>
-            </div>
-
-            <div className="hidden h-16 w-px bg-[#C5A059]/30 xl:block" />
-            <div className="h-px w-3/4 bg-[#C5A059]/30 xl:hidden" />
-
-            {/* 3. Trusted & Secured */}
-            <div className="flex items-center gap-4 xl:w-auto">
-              <ShieldCheck className="h-10 w-10 text-[#C5A059]" strokeWidth={1.2} />
-              <div className="flex flex-col pt-1">
-                <span className={`font-serif text-[14px] tracking-wide ${textColor}`}>
-                  Trusted & Secured
-                </span>
-                <span className={`mt-1 text-[11px] leading-[1.5] ${subTextColor}`}>
-                  Government Integrated<br />
-                  & Verified
-                </span>
+            <div className="flex w-full justify-start sm:justify-center px-1 xl:px-4 xl:border-r border-[#C5A059]/30 [&:nth-child(6)]:border-0">
+              <div className="flex w-full max-w-[220px] items-center gap-3 sm:gap-4">
+                <div className="flex h-14 w-[76px] sm:h-16 sm:w-[84px] shrink-0 items-center justify-center">
+                  <Image src={startupLogo} alt="Startup India" width={140} height={90} className="max-h-full max-w-full object-contain drop-shadow-md" />
+                </div>
+                <div className="flex flex-col text-left">
+                  <span className={`font-serif text-[11px] lg:text-[12px] font-bold uppercase tracking-wider leading-tight ${textColor}`}>
+                    Startup India
+                  </span>
+                  <span className={`mt-1 text-[10px] leading-[1.3] ${subTextColor}`}>
+                    Recognized<br />by DPIIT
+                  </span>
+                </div>
               </div>
             </div>
 
-            <div className="hidden h-16 w-px bg-[#C5A059]/30 xl:block" />
-            <div className="h-px w-3/4 bg-[#C5A059]/30 xl:hidden" />
-
-            {/* 4. Premium Experiences */}
-            <div className="flex items-center gap-4 xl:w-auto">
-              <svg
-                width="40"
-                height="40"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className="text-[#C5A059]"
-              >
-                <path d="M12 17C16.4183 17 20 13.4183 20 9" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
-                <path d="M12 17C7.58172 17 4 13.4183 4 9" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
-                <path d="M8 4L9.5 6.5L12 3L14.5 6.5L16 4L15 8H9L8 4Z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round" />
-                <path d="M18 11C19.5 10 20 9 20 9C20 9 19 9.5 18 11Z" fill="currentColor" />
-                <path d="M16 13C17.5 12 18 11 18 11C18 11 17 11.5 16 13Z" fill="currentColor" />
-                <path d="M14 15C15.5 14 16 13 16 13C16 13 15 13.5 14 15Z" fill="currentColor" />
-                <path d="M6 11C4.5 10 4 9 4 9C4 9 5 9.5 6 11Z" fill="currentColor" />
-                <path d="M8 13C6.5 12 6 11 6 11C6 11 7 11.5 8 13Z" fill="currentColor" />
-                <path d="M10 15C8.5 14 8 13 8 13C8 13 9 13.5 10 15Z" fill="currentColor" />
-              </svg>
-              <div className="flex flex-col pt-1">
-                <span className={`font-serif text-[14px] leading-tight tracking-wide ${textColor}`}>
-                  Premium<br />Experiences
-                </span>
-                <span className={`mt-1 text-[11px] leading-[1.5] ${subTextColor}`}>
-                  Curated for Members
-                </span>
+            {/* 3. Ministry of Tourism */}
+            <div className="flex w-full justify-start sm:justify-center px-1 xl:px-4 xl:border-r border-[#C5A059]/30 [&:nth-child(6)]:border-0">
+              <div className="flex w-full max-w-[220px] items-center gap-3 sm:gap-4">
+                <div className="flex h-14 w-[76px] sm:h-16 sm:w-[84px] shrink-0 items-center justify-center">
+                  {/* Visually inflated with scale to match adjacent logos without breaking layout bounds */}
+                  <Image src={ministryLogo} alt="Ministry of Tourism" width={140} height={90} className="max-h-full max-w-full object-contain drop-shadow-md scale-[1.9]" />
+                </div>
+                <div className="flex flex-col text-left">
+                  <span className={`font-serif text-[11px] lg:text-[12px] font-bold uppercase tracking-wider leading-tight ${textColor}`}>
+                    Ministry of<br />Tourism
+                  </span>
+                  <span className={`mt-1 text-[10px] leading-[1.3] ${subTextColor}`}>
+                    Government<br />of India
+                  </span>
+                </div>
               </div>
             </div>
 
-            <div className="hidden h-16 w-px bg-[#C5A059]/30 xl:block" />
-            <div className="h-px w-3/4 bg-[#C5A059]/30 xl:hidden" />
-
-            {/* 5. 24x7 Concierge */}
-            <div className="flex items-center gap-4 xl:w-auto">
-              <Headphones className="h-10 w-10 text-[#C5A059]" strokeWidth={1.2} />
-              <div className="flex flex-col pt-1">
-                <span className={`font-serif text-[14px] tracking-wide ${textColor}`}>
-                  24x7 Concierge
-                </span>
-                <span className={`mt-1 text-[11px] leading-[1.5] ${subTextColor}`}>
-                  Personalized<br />
-                  Assistance
-                </span>
+            {/* 4. Trusted & Secured */}
+            <div className="flex w-full justify-start sm:justify-center px-1 xl:px-4 xl:border-r border-[#C5A059]/30 [&:nth-child(6)]:border-0">
+              <div className="flex w-full max-w-[220px] items-center gap-3 sm:gap-4">
+                <div className="flex h-14 w-[76px] sm:h-16 sm:w-[84px] shrink-0 items-center justify-center">
+                  <ShieldCheck className="h-10 w-10 sm:h-11 sm:w-11 text-[#C5A059]" strokeWidth={1.2} />
+                </div>
+                <div className="flex flex-col text-left">
+                  <span className={`font-serif text-[11px] lg:text-[12px] font-bold uppercase tracking-wider leading-tight ${textColor}`}>
+                    Trusted &<br className="hidden xl:block" /> Secured
+                  </span>
+                  <span className={`mt-1 text-[10px] leading-[1.3] ${subTextColor}`}>
+                    Government<br />Verified
+                  </span>
+                </div>
               </div>
             </div>
+
+            {/* 5. Premium Experiences */}
+            <div className="flex w-full justify-start sm:justify-center px-1 xl:px-4 xl:border-r border-[#C5A059]/30 [&:nth-child(6)]:border-0">
+              <div className="flex w-full max-w-[220px] items-center gap-3 sm:gap-4">
+                <div className="flex h-14 w-[76px] sm:h-16 sm:w-[84px] shrink-0 items-center justify-center">
+                  <svg width="44" height="44" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 sm:h-11 sm:w-11 text-[#C5A059]">
+                    <path d="M12 17C16.4183 17 20 13.4183 20 9" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+                    <path d="M12 17C7.58172 17 4 13.4183 4 9" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+                    <path d="M8 4L9.5 6.5L12 3L14.5 6.5L16 4L15 8H9L8 4Z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round" />
+                    <path d="M18 11C19.5 10 20 9 20 9C20 9 19 9.5 18 11Z" fill="currentColor" />
+                    <path d="M16 13C17.5 12 18 11 18 11C18 11 17 11.5 16 13Z" fill="currentColor" />
+                    <path d="M14 15C15.5 14 16 13 16 13C16 13 15 13.5 14 15Z" fill="currentColor" />
+                    <path d="M6 11C4.5 10 4 9 4 9C4 9 5 9.5 6 11Z" fill="currentColor" />
+                    <path d="M8 13C6.5 12 6 11 6 11C6 11 7 11.5 8 13Z" fill="currentColor" />
+                    <path d="M10 15C8.5 14 8 13 8 13C8 13 9 13.5 10 15Z" fill="currentColor" />
+                  </svg>
+                </div>
+                <div className="flex flex-col text-left">
+                  <span className={`font-serif text-[11px] lg:text-[12px] font-bold uppercase tracking-wider leading-tight ${textColor}`}>
+                    Premium<br className="hidden xl:block" /> Experiences
+                  </span>
+                  <span className={`mt-1 text-[10px] leading-[1.3] ${subTextColor}`}>
+                    Curated for<br />Members
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* 6. 24x7 Concierge */}
+            <div className="flex w-full justify-start sm:justify-center px-1 xl:px-4 xl:border-r border-[#C5A059]/30 [&:nth-child(6)]:border-0">
+              <div className="flex w-full max-w-[220px] items-center gap-3 sm:gap-4">
+                <div className="flex h-14 w-[76px] sm:h-16 sm:w-[84px] shrink-0 items-center justify-center">
+                  <Headphones className="h-10 w-10 sm:h-11 sm:w-11 text-[#C5A059]" strokeWidth={1.2} />
+                </div>
+                <div className="flex flex-col text-left">
+                  <span className={`font-serif text-[11px] lg:text-[12px] font-bold uppercase tracking-wider leading-tight ${textColor}`}>
+                    24x7<br className="hidden xl:block" /> Concierge
+                  </span>
+                  <span className={`mt-1 text-[10px] leading-[1.3] ${subTextColor}`}>
+                    Personalized<br />Assistance
+                  </span>
+                </div>
+              </div>
+            </div>
+
           </motion.div>
         </div>
       </section>

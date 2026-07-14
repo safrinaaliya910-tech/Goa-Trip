@@ -33,7 +33,9 @@ export function Footer() {
 
   const isDark = mounted && resolvedTheme === "dark";
   const subTextColor = isDark ? "text-white/60" : "text-muted-foreground";
+  
   const startupLogo = isDark ? "/images/startup_logo_black.png" : "/images/startup_logo_white.png";
+  const ministryLogo = isDark ? "/images/ministry_logo_white.png" : "/images/ministry_logo_black.png";
 
   if (!mounted) {
     return null;
@@ -205,7 +207,7 @@ export function Footer() {
             </div>
           </motion.div>
 
-          {/* Official Tourism Partners & Recognitions Section (Enlarged Logos + Captions Added) */}
+          {/* Official Tourism Partners & Recognitions Section */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -246,6 +248,23 @@ export function Footer() {
                 />
                 <span className={`mt-1.5 text-center text-[9px] font-medium leading-[1.4] sm:text-[10px] ${subTextColor}`}>
                   Recognized by DPIIT
+                </span>
+              </div>
+
+              {/* Elegant Divider Line between logos inside box */}
+              <div className="w-full h-px bg-[#C5A059]/30" />
+
+              {/* Ministry of Tourism */}
+              <div className="flex flex-col items-center justify-center text-center">
+                <Image
+                  src={ministryLogo}
+                  alt="Ministry of Tourism"
+                  width={140}
+                  height={65}
+                  className="h-12 w-auto object-contain opacity-100 drop-shadow-md sm:h-14 scale-[1.9] -translate-y-1"
+                />
+                <span className={`mt-1 text-center text-[9px] font-medium leading-[1.4] sm:text-[10px] ${subTextColor}`}>
+                  Government of India
                 </span>
               </div>
               
