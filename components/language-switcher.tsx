@@ -14,7 +14,6 @@ export function LanguageSwitcher() {
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        
         className="flex items-center gap-1.5 rounded bg-transparent px-2 py-1.5 text-sm text-foreground transition-colors hover:bg-foreground/10 hover:text-primary"
       >
         <Globe className="h-4 w-4 text-primary" />
@@ -35,30 +34,32 @@ export function LanguageSwitcher() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.2 }}
-              className="absolute right-0 top-full z-50 mt-2 w-48 rounded border border-border bg-card py-2 shadow-xl"
+              className="absolute right-0 top-full z-50 mt-2 w-48 rounded border border-border bg-card py-2 shadow-xl overflow-hidden"
             >
               <div className="px-3 py-2 text-xs uppercase tracking-wider text-muted-foreground">
                 {t("language.select")}
               </div>
-              {locales.map((loc) => (
-                <button
-                  key={loc}
-                  onClick={() => {
-                    setLocale(loc as Locale);
-                    setIsOpen(false);
-                  }}
-                  className={`flex w-full items-center gap-3 px-3 py-2 text-left text-sm transition-colors hover:bg-secondary ${
-                    locale === loc ? "text-primary" : "text-foreground"
-                  }`}
-                >
-                  <span className={locale === loc ? "font-medium" : ""}>
-                    {localeNames[loc as Locale]}
-                  </span>
-                  {locale === loc && (
-                    <span className="ml-auto h-2 w-2 rounded-full bg-primary" />
-                  )}
-                </button>
-              ))}
+              <div className="max-h-[60vh] overflow-y-auto">
+                {locales.map((loc) => (
+                  <button
+                    key={loc}
+                    onClick={() => {
+                      setLocale(loc as Locale);
+                      setIsOpen(false);
+                    }}
+                    className={`flex w-full items-center gap-3 px-3 py-2 text-left text-sm transition-colors hover:bg-secondary ${
+                      locale === loc ? "text-primary" : "text-foreground"
+                    }`}
+                  >
+                    <span className={locale === loc ? "font-medium" : ""}>
+                      {localeNames[loc as Locale]}
+                    </span>
+                    {locale === loc && (
+                      <span className="ml-auto h-2 w-2 rounded-full bg-primary" />
+                    )}
+                  </button>
+                ))}
+              </div>
             </motion.div>
           </>
         )}

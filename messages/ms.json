@@ -1,0 +1,746 @@
+{
+  "nav": {
+    "home": "Laman Utama",
+    "about": "Tentang Kami",
+    "membership": "Keahlian",
+    "membershipActivities": "Aktiviti Keahlian",
+    "contact": "Hubungi",
+    "joinNow": "Sertai Sekarang"
+  },
+  "hero": {
+    "pretitle": "Keahlian Eksklusif",
+    "title1": "Alami Goa",
+    "title2": "Seperti Kerabat Diraja",
+    "subtitle": "Penginapan mewah, akses eksklusif, dan pengalaman yang tidak dapat dilupakan — semuanya dengan satu keahlian.",
+    "cta1": "Dapatkan Akses Awal",
+    "cta2": "Terokai Keahlian",
+    "scroll": "Tatal"
+  },
+  "experiences": {
+    "badge": "Pengalaman Tersusun",
+    "title": "Dunia Keistimewaan",
+    "subtitle": "Dari pantai yang indah hingga kasino bertaruhan tinggi, setiap detik direka khas untuk mereka yang mengharapkan sesuatu yang luar biasa.",
+    "discover": "Teroka",
+    "items": {
+      "beach": {
+        "title": "Pantai Keemasan",
+        "subtitle": "Akses Pantai Peribadi",
+        "description": "Pengalaman matahari terbit dan terbenam yang eksklusif di pantai paling indah di Goa."
+      },
+      "nightlife": {
+        "title": "Selepas Senja",
+        "subtitle": "Hiburan Malam Elit",
+        "description": "Langkau barisan dan dapatkan akses pengalaman hiburan malam gaya VIP di seluruh Goa."
+      },
+      "casino": {
+        "title": "Taruhan Tinggi",
+        "subtitle": "Keistimewaan Kasino VIP",
+        "description": "Meja peribadi, hos berdedikasi, dan pengalaman kasino premium."
+      },
+      "yacht": {
+        "title": "Pelayaran Lautan",
+        "subtitle": "Penyewaan Kapal Layar Peribadi",
+        "description": "Belayar pada waktu senja dengan pengalaman kapal layar mewah dan perkhidmatan tersusun."
+      },
+      "parasailing": {
+        "title": "Parasailing",
+        "subtitle": "Pengembaraan Langit",
+        "description": "Meluncur tinggi di ruang udara pesisir pantai Goa dengan pemandangan lautan waktu keemasan yang menakjubkan."
+      },
+      "scuba": {
+        "title": "Selam Skuba",
+        "subtitle": "Penemuan Lautan",
+        "description": "Terokai keindahan bawah air, hidupan laut, dan detik air biru yang tidak dapat dilupakan."
+      },
+      "scooter": {
+        "title": "Tunggangan Skuter Air",
+        "subtitle": "Kelajuan Tinggi di Air",
+        "description": "Rasai keseronokan kelajuan di perairan keemasan Goa dengan tunggangan premium."
+      }
+    }
+  },
+  "membership": {
+    "heroTitle": "Keahlian",
+    "heroSubtitle": "Sertai GOA MOMENTS dan buka nilai luar biasa di penginapan mewah, restoran, perjalanan tersusun, hiburan malam, dan pengalaman premium yang tidak dapat dilupakan di Goa.",
+    "heroTagline": "Penjimatan Ahli Sehingga 5%-70% • Akses Premium • Nilai Sepanjang Hayat",
+    "whyTitle": "Mengapa Keahlian GOA MOMENTS",
+    "oneCard": "Satu Kad.",
+    "premiumPrivileges": "Banyak Keistimewaan Premium.",
+    "whyDesc": "GOA MOMENTS adalah platform keahlian premium untuk mereka yang ingin menerokai Goa dengan lebih nilai, keselesaan, dan akses eksklusif.",
+    "features": {
+      "savings": {
+        "title": "Penjimatan Dipercayai",
+        "desc": "Buka diskaun sehingga 5%-70% di rakan kongsi premium terpilih di Goa."
+      },
+      "access": {
+        "title": "Akses Premium",
+        "desc": "Nikmati keistimewaan ahli sahaja, tempahan pantas, dan pengalaman yang dipertingkatkan."
+      },
+      "value": {
+        "title": "Nilai Sepanjang Hayat",
+        "desc": "Melabur sekali dan terus nikmati faedah di Goa dengan nilai yang berkekalan."
+      }
+    },
+    "benefits": {
+      "title": "Faedah Ahli",
+      "subtitle": "Penjimatan Lebih Besar. Pengalaman Lebih Baik. Lebih Banyak Goa.",
+      "hotels": {
+        "category": "Hotel & Tempat Peranginan",
+        "item1": "Penjimatan sehingga 5-70% di penginapan rakan kongsi",
+        "item2": "Keutamaan tempahan pada musim puncak",
+        "item3": "Naik taraf bilik dan faedah daftar keluar lewat",
+        "item4": "Pakej resort khas ahli sahaja"
+      },
+      "dining": {
+        "category": "Restoran & Tempat Makan",
+        "item1": "Diskaun eksklusif di restoran premium",
+        "item2": "Meja yang ditempah khas di tempat rakan kongsi",
+        "item3": "Kelebihan alu-aluan percuma di lokasi terpilih",
+        "item4": "Tawaran makan khas untuk pasangan, keluarga, dan kumpulan"
+      },
+      "travel": {
+        "category": "Perjalanan & Pengalaman",
+        "item1": "Harga istimewa untuk teksi, sewaan, pelayaran, dan aktiviti",
+        "item2": "Akses diskaun untuk pengalaman Goa yang tersusun",
+        "item3": "Sokongan tempahan lebih pantas melalui bantuan premium",
+        "item4": "Tawaran perjalanan bermusim tersedia hanya untuk ahli"
+      },
+      "nightlife": {
+        "category": "Hiburan Malam",
+        "item1": "Keistimewaan ahli di kelab, ruang istirahat, dan acara",
+        "item2": "Kemasukan keutamaan di tempat hiburan malam terpilih",
+        "item3": "Akses eksklusif untuk tawaran acara premium",
+        "item4": "Diskaun khas rakan kongsi hiburan dan parti"
+      }
+    },
+    "power": {
+      "sectionTitle": "Kuasa Keahlian",
+      "heading": "Pilih Kad Yang Sepadan Dengan",
+      "headingGold": "Gaya Hidup Goa Anda",
+      "subheading": "Setiap kad GOA MOMENTS memberi anda status, penjimatan, dan sokongan. Gold memberi akses pintar, Platinum memberi kebebasan gaya hidup yang lebih luas, dan Diamond memberi layanan keutamaan tertinggi.",
+      "priorityTag": "Keutamaan Tertinggi",
+      "gold": {
+        "name": "Keahlian Gold",
+        "members": "Akses 4 Ahli",
+        "title": "Penjimatan Pintar Untuk Hotel & Perjalanan",
+        "description": "Gold adalah permulaan sempurna untuk akses mewah. Direka untuk pelancong pintar, pasangan, dan kumpulan kecil yang mahukan nilai sebenar tanpa menjejaskan keselesaan.",
+        "h1": "Kebolehcapaian kad sehingga 4 ahli",
+        "h2": "Termasuk faedah hotel dan perjalanan",
+        "h3": "Diskaun sehingga 5%-70% di rakan kongsi terpilih",
+        "h4": "Sokongan GOA MOMENTS yang boleh dipercayai pada bila-bila masa",
+        "h5": "Sesuai untuk mereka yang mahukan penjimatan premium dengan akses mudah"
+      },
+      "platinum": {
+        "name": "Keahlian Platinum",
+        "members": "Akses 8 Ahli",
+        "title": "Akses Lebih Besar Merentasi Gaya Hidup Goa",
+        "description": "Platinum dibuat untuk ahli yang mahukan lebih banyak kebebasan, kategori yang lebih luas, dan sokongan yang lebih kuat. Dari hotel ke restoran, perjalanan, dan tempat premium.",
+        "h1": "Kebolehcapaian kad sehingga 8 ahli",
+        "h2": "Hotel, restoran, perjalanan, penginapan, kelab, dan banyak lagi",
+        "h3": "Diskaun sehingga 5%-70% di tempat rakan kongsi terpilih",
+        "h4": "Sokongan yang lebih kuat daripada keahlian Gold",
+        "h5": "Pilihan terbaik untuk keluarga, kumpulan, dan pelawat Goa yang kerap"
+      },
+      "diamond": {
+        "name": "Keahlian Diamond",
+        "members": "Akses 8 Ahli",
+        "title": "Keutamaan Elit. Sokongan Terkuat. Prestij Maksimum.",
+        "description": "Diamond adalah keahlian GOA MOMENTS tertinggi yang dicipta untuk ahli yang mahukan layanan terbaik, sokongan terkuat, dan pilihan pertama di mana-mana yang mungkin.",
+        "h1": "Kebolehcapaian kad sehingga 8 ahli",
+        "h2": "Diskaun merentasi semua kategori rakan kongsi utama",
+        "h3": "Penjimatan sehingga 5%-70% di tempat premium terpilih",
+        "h4": "Sokongan GOA MOMENTS terkuat antara semua pelan",
+        "h5": "Keutamaan pertama dan layanan istimewa di tempat terpilih",
+        "h6": "Tiada penantian yang tidak perlu di mana keutamaan akses tersedia"
+      }
+    },
+    "labels": {
+      "hotels": "Hotel",
+      "travel": "Perjalanan",
+      "dining": "Tempat Makan",
+      "clubs": "Kelab",
+      "u4": "4 Pengguna",
+      "u8": "8 Pengguna",
+      "hp": "Keutamaan Tinggi"
+    },
+    "steps": {
+      "sectionTitle": "Bagaimana Ia Berfungsi",
+      "heading": "Perjalanan Premium Dari Permulaan Hingga Akses",
+      "s1": {
+        "title": "Pilih Keahlian Anda",
+        "desc": "Pilih kad GOA MOMENTS yang sesuai dengan gaya hidup, bajet, dan cara anda melancong."
+      },
+      "s2": {
+        "title": "Sahkan Pesanan Anda",
+        "desc": "Semak butiran pesanan anda dan sahkan keahlian anda dengan yakin."
+      },
+      "s3": {
+        "title": "Pilih Kaedah Pembayaran",
+        "desc": "Pilih pilihan pembayaran pilihan anda dan teruskan dengan pengalaman pembayaran yang selamat."
+      },
+      "s4": {
+        "title": "Nikmati Keistimewaan Goa",
+        "desc": "Gunakan kad anda di Goa dan buka faedah premium, diskaun, dan akses eksklusif."
+      }
+    },
+    "plans": {
+      "sectionTitle": "Pilih Peringkat Anda",
+      "heading": "Pelan Keahlian",
+      "popularTag": "Paling Popular",
+      "priceLabel": "Harga keahlian seumur hidup",
+      "btnLabel": "Dapatkan"
+    },
+    "tiers": {
+      "gold": {
+        "tagline": "Sesuai untuk pelancong pintar yang mahukan akses Goa premium dengan nilai terbaik.",
+        "idealFor": "Sesuai untuk pasangan, pelancong solo, dan pelawat hujung minggu.",
+        "f1": "Akses ke hotel rakan kongsi terpilih, restoran, dan rakan perjalanan",
+        "f2": "Diskaun sehingga 5%-70% di tempat yang mengambil bahagian",
+        "f3": "Sokongan tempahan keutamaan",
+        "f4": "Tawaran ahli bermusim khas",
+        "f5": "Kad keahlian digital",
+        "f6": "Akses keahlian seumur hidup"
+      },
+      "platinum": {
+        "tagline": "Keahlian kami yang paling popular untuk pengalaman premium dan penjimatan yang lebih besar.",
+        "idealFor": "Sesuai untuk keluarga, pelancong premium, dan pelawat Goa yang kerap.",
+        "f1": "Rangkaian rakan kongsi yang lebih luas di seluruh Goa",
+        "f2": "Diskaun sehingga 5%-70% di tempat yang mengambil bahagian",
+        "f3": "Tempahan keutamaan dan sokongan premium",
+        "f4": "Akses khas kepada pengalaman yang tersusun",
+        "f5": "Keistimewaan tempat makan, penginapan, dan perjalanan yang dipertingkatkan",
+        "f6": "Kad keahlian digital",
+        "f7": "Akses keahlian seumur hidup"
+      },
+      "diamond": {
+        "tagline": "Kad elit utama untuk penjimatan bernilai tinggi dan layanan ahli peringkat teratas.",
+        "idealFor": "Sesuai untuk pelancong mewah, pelanggan VIP, dan mereka yang mahukan yang terbaik di Goa.",
+        "f1": "Akses premium di pelbagai kategori rakan kongsi teratas",
+        "f2": "Diskaun sehingga 5%-70% di tempat yang mengambil bahagian",
+        "f3": "Bantuan gaya concierge keutamaan",
+        "f4": "Keistimewaan penginapan mewah dan tempat makan bernilai tinggi",
+        "f5": "Tawaran acara premium, hiburan malam, dan pengalaman",
+        "f6": "Kad keahlian digital",
+        "f7": "Akses keahlian seumur hidup"
+      }
+    },
+    "checkout": {
+      "secureTitle": "Daftar Keluar Selamat",
+      "step1Heading": "Butiran Pesanan",
+      "step2Heading": "Sahkan Pesanan",
+      "indicator1": "Butiran",
+      "indicator2": "Sahkan Pesanan",
+      "indicator3": "Kaedah Pembayaran",
+      "indicator4": "Pesanan Berjaya",
+      "selectedTitle": "Keahlian Dipilih",
+      "priceLabel": "Harga Keahlian",
+      "totalLabel": "Jumlah",
+      "infoNote": "Termasuk pengaktifan digital premium dan akses keahlian seumur hidup.",
+      "form": {
+        "firstName": "Nama Pertama",
+        "lastName": "Nama Akhir",
+        "email": "Alamat E-mel",
+        "phone": "Nombor Telefon",
+        "address": "Alamat",
+        "city": "Bandar",
+        "btnContinue": "Teruskan"
+      },
+      "summary": {
+        "title": "Ringkasan Pesanan",
+        "plan": "Pelan",
+        "name": "Nama",
+        "email": "E-mel",
+        "phone": "Telefon",
+        "address": "Alamat",
+        "city": "Bandar",
+        "amount": "Jumlah"
+      },
+      "confirm": {
+        "title": "Sahkan Pesanan",
+        "heading": "Sedia Untuk Meneruskan",
+        "desc": "Semak butiran keahlian anda dan teruskan ke pemilihan kaedah pembayaran.",
+        "sparkNote": "Anda berada selangkah lagi daripada keistimewaan Goa premium.",
+        "btnBack": "Kembali",
+        "btnConfirm": "Sahkan Pesanan"
+      }
+    }
+  },
+  "dashboard": {
+    "defaultName": "Ahli",
+    "defaultPlan": "Keahlian",
+    "defaultCity": "Pelawat Goa",
+    "defaultValidity": "Keahlian Seumur Hidup",
+    "hero": {
+      "pretitle": "Papan Pemuka Ahli",
+      "title1": "Selamat datang ke",
+      "title2": "GOA MOMENTS",
+      "subtitle": "Keahlian anda kini aktif. Anda kini mempunyai akses kepada faedah ahli, sokongan premium, dan pengalaman GOA MOMENTS yang direka khas untuk membantu anda menikmati Goa dengan lebih nilai, keselesaan, dan keyakinan.",
+      "tags": {
+        "t1": "Penjimatan Ahli 5%–70%",
+        "t2": "Akses Sokongan Premium",
+        "t3": "Panduan Gaya Hidup Goa"
+      }
+    },
+    "card": {
+      "pretitle": "Kad Keahlian Anda",
+      "titleSuffix": "Akses Keahlian"
+    },
+    "profile": {
+      "title": "Profil Ahli",
+      "fields": {
+        "name": "Nama",
+        "email": "E-mel",
+        "phone": "Telefon",
+        "city": "Bandar",
+        "membershipId": "ID Keahlian",
+        "plan": "Pelan",
+        "amountPaid": "Jumlah Dibayar",
+        "validity": "Kesahan"
+      }
+    },
+    "support": {
+      "pretitle": "Sokongan Goa Moments",
+      "title": "Anda Mempunyai Sokongan Padu",
+      "desc": "Keahlian anda bukan sekadar kad. Ia adalah sambungan langsung anda kepada sokongan GOA MOMENTS. Jika anda memerlukan panduan untuk teksi, hotel, restoran, hiburan malam, perancangan perjalanan, atau pilihan tempat terbaik, pasukan kami di sini sedia membantu.",
+      "contact": {
+        "phoneLabel": "Telefon Sokongan",
+        "emailLabel": "E-mel Sokongan",
+        "conciergeLabel": "E-mel Concierge",
+        "assistanceLabel": "Bantuan Ahli",
+        "assistanceDesc": "Sokongan untuk penginapan, pengangkutan, restoran, perjalanan, dan cadangan Goa premium"
+      }
+    },
+    "premium": {
+      "pretitle": "Panduan Peribadi",
+      "title": "Pilihan Lebih Baik, Bukan Sekadar Diskaun",
+      "desc": "GOA MOMENTS membantu ahli menemui pilihan yang benar-benar sesuai dengan keperluan mereka — dari penginapan premium hingga makan malam, perjalanan tempatan, dan pengalaman yang tersusun."
+    },
+    "feeling": {
+      "title": "Penjimatan ahli berasaskan tempat 5%–70%",
+      "desc": "Tahap diskaun bergantung pada tempat, kategori, ketersediaan, dan masa. Jika anda tidak pasti di mana kad anda memberi nilai terbaik, sokongan GOA MOMENTS boleh membimbing anda."
+    },
+    "services": {
+      "pretitle": "Perkhidmatan Kami",
+      "title": "Bagaimana GOA MOMENTS Menyokong Perjalanan Anda",
+      "desc": "Peranan kami adalah untuk membantu ahli membuat pilihan yang lebih baik di seluruh Goa — sama ada kemudahan perjalanan, hotel yang tepat, restoran yang lebih baik, atau sekadar mengetahui siapa yang perlu dihubungi apabila bantuan diperlukan.",
+      "s1": {
+        "title": "Bantuan Teksi & Perjalanan",
+        "desc": "Perlukan pengambilan lapangan terbang, pengangkutan tempatan, perancangan perjalanan harian, atau cadangan pemindahan premium? Sokongan GOA MOMENTS membantu ahli bergerak di sekitar Goa dengan lebih selesa dan dengan pilihan yang lebih baik."
+      },
+      "s2": {
+        "title": "Panduan Hotel & Penginapan",
+        "desc": "Dari resort premium kepada pilihan penginapan mesra ahli yang sesuai, pasukan kami boleh membimbing anda ke tempat yang sesuai dengan mood, bajet, dan gaya perjalanan anda."
+      },
+      "s3": {
+        "title": "Sokongan Restoran & Tempat Makan",
+        "desc": "Mencari tempat sarapan lewat pagi, tempat makan premium, restoran mesra keluarga, makan malam romantis, atau tempat perayaan? Kami membantu anda mencari pilihan yang sepadan dengan pengalaman yang anda inginkan."
+      },
+      "s4": {
+        "title": "Pengalaman & Bantuan Concierge",
+        "desc": "Sama ada anda memerlukan idea hiburan malam, percutian yang tersusun, cadangan masa lapang, atau cadangan gaya hidup premium, GOA MOMENTS sedia menyokong keseluruhan pengalaman Goa anda."
+      }
+    },
+    "promise": {
+      "pretitle": "Janji Ahli",
+      "title": "Sokongan Terkuat. Akses Premium. Goa Yang Lebih Baik.",
+      "desc": "Keahlian GOA MOMENTS anda bukan hanya mengenai penjimatan. Ia adalah mengenai betapa yakinnya anda mengalami Goa. Sama ada anda memerlukan bantuan dengan teksi, hotel, restoran, tempat gaya hidup, atau cadangan yang lebih baik, pasukan kami sedia menyokong anda.",
+      "btnPhone": "Hubungi Sokongan Ahli",
+      "btnEmail": "E-mel Sokongan",
+      "btnConcierge": "Hubungi Concierge"
+    },
+    "reviews": {
+      "r1": {
+        "title": "Ahli Hujung Minggu",
+        "text": "Bahagian terbaik bukan sahaja diskaun — ia adalah sokongan. Kami meminta cadangan tempat makan dan penginapan, dan GOA MOMENTS menjadikan keseluruhan perjalanan lebih mudah dan premium."
+      },
+      "r2": {
+        "title": "Pengembara Goa Yang Kerap",
+        "text": "Ia seperti mempunyai kenalan sokongan tempatan yang premium. Dari panduan restoran hingga bantuan perjalanan, keahlian ini memberi nilai sebenar melebihi sekadar tawaran."
+      },
+      "r3": {
+        "title": "Ahli Gaya Hidup",
+        "text": "Pengalaman ini terasa sangat istimewa. Anda tidak hanya membeli kad — anda rasa mempunyai akses, hala tuju, dan seseorang untuk membantu anda memilih tempat yang tepat."
+      }
+    }
+  },
+  "activities": {
+    "hero": {
+      "pretitle": "Aktiviti Keahlian",
+      "title1": "Alami Goa Dengan",
+      "title2": "Akses Ahli Premium",
+      "subtitle": "GOA MOMENTS lebih daripada sekadar kad keahlian. Ia adalah sistem sokongan gaya hidup Goa premium anda — dibina untuk penjimatan, akses, keselesaan, bimbingan, dan pengalaman yang tidak dapat dilupakan.",
+      "btnBuy": "Beli Keahlian",
+      "btnExplore": "Terokai Faedah"
+    },
+    "benefits": {
+      "pretitle": "Mengapa Ahli Memilih Kami",
+      "title": "Faedah Yang Menjadikan Goa Lebih Baik",
+      "b1": {
+        "title": "Penjimatan Tempat 5%–70%",
+        "desc": "Nikmati penjimatan ahli sahaja di hotel terpilih, restoran, tempat hiburan malam, kafe, rakan perjalanan, dan tempat gaya hidup yang disusun di seluruh Goa."
+      },
+      "b2": {
+        "title": "Kebolehcapaian Seumur Hidup",
+        "desc": "GOA MOMENTS direka sebagai keahlian gaya hidup jangka panjang, memberi anda akses berterusan ke sokongan premium dan panduan yang mengutamakan ahli."
+      },
+      "b3": {
+        "title": "Sokongan GOA MOMENTS Yang Kuat",
+        "desc": "Dari merancang tempat menginap hingga memilih tempat makan, sokongan kami membantu ahli membuat keputusan yang lebih baik dengan penuh keyakinan."
+      },
+      "b4": {
+        "title": "Panduan Premium Yang Dipercayai",
+        "desc": "Kami membantu anda menemui tempat yang sesuai, pengalaman yang lebih baik, dan pilihan premium daripada membiarkan anda mencari sendiri."
+      }
+    },
+    "access": {
+      "pretitle": "Kebolehcapaian Keahlian",
+      "title1": "Setiap Kad Memberi Akses.",
+      "title2": "Kad Tertinggi Memberi Lebih Kuasa.",
+      "subtitle": "GOA MOMENTS dibina untuk membuat ahli berasa dihargai sebelum, semasa, dan selepas setiap pengalaman di Goa. Pilih Gold untuk nilai pintar, Platinum untuk akses yang lebih luas, atau Diamond untuk sokongan keutamaan terkuat dan layanan fasiliti terbaik.",
+      "memberAccessLabel": "Akses Ahli",
+      "supportLevelLabel": "Tahap Sokongan",
+      "whyValuableLabel": "Mengapa Kad Ini Berharga",
+      "bestChoiceLabel": "Pilihan Terbaik:",
+      "icons": {
+        "hotels": "Hotel",
+        "travel": "Perjalanan",
+        "dining": "Tempat Makan",
+        "u4": "4 Ahli",
+        "clubs": "Kelab",
+        "hp": "Keutamaan Tinggi",
+        "support": "Sokongan"
+      },
+      "btnChoose": "Pilih Keahlian Anda"
+    },
+    "memberships": {
+      "diamond": {
+        "name": "Keahlian Diamond",
+        "badge": "Keutamaan Tertinggi",
+        "title": "Akses GOA MOMENTS Yang Paling Berkuasa",
+        "desc": "Diamond dicipta untuk ahli yang mahukan tahap keselesaan tertinggi, sokongan terkuat, dan pilihan pertama di mana jua yang mungkin. Ini adalah keahlian untuk orang yang tidak mahu menunggu, mencari, atau berkompromi.",
+        "access": "Sehingga 8 ahli boleh menggunakan kebolehcapaian kad",
+        "support": "Sokongan GOA MOMENTS terkuat antara semua keahlian",
+        "highlight": "Terbaik untuk pelancong VIP, keluarga premium, kumpulan mewah, tetamu perniagaan, dan orang yang mahukan layanan kelas atasan di Goa.",
+        "p1": "Diskaun merentasi hotel, restoran, perjalanan, penginapan, bar, kelab, hiburan malam, kafe, dan tempat premium terpilih",
+        "p2": "Penjimatan sehingga 5%–70% di tempat rakan kongsi terpilih",
+        "p3": "Keutamaan tinggi dan pilihan pertama di mana sahaja akses rakan kongsi membenarkan",
+        "p4": "Sokongan terkuat untuk memilih tempat, merancang pengalaman, dan menggunakan faedah keahlian",
+        "p5": "Panduan premium supaya ahli berasa yakin, dihormati, dan disokong",
+        "p6": "Direka untuk orang yang mahukan akses gaya hidup Goa terbaik tanpa kekeliruan"
+      },
+      "platinum": {
+        "name": "Keahlian Platinum",
+        "badge": "Paling Seimbang",
+        "title": "Akses Lebih Besar Untuk Keluarga, Kumpulan & Pelawat Kerap",
+        "desc": "Platinum adalah keahlian yang hebat untuk ahli yang mahukan lebih banyak kategori, keselesaan yang lebih baik, dan akses Goa yang lebih luas. Ia memberi nilai lebih daripada Gold dan sokongan yang lebih kuat.",
+        "access": "Sehingga 8 ahli boleh menggunakan kebolehcapaian kad",
+        "support": "Sokongan yang lebih kuat daripada keahlian Gold",
+        "highlight": "Terbaik untuk keluarga, kumpulan, pengunjung yang kerap, pelancong premium, dan orang yang mahukan faedah Goa yang lebih luas.",
+        "p1": "Diskaun di hotel, restoran, rakan perjalanan, penginapan, bar, kelab, dan tempat gaya hidup terpilih",
+        "p2": "Penjimatan sehingga 5%–70% di tempat rakan kongsi terpilih",
+        "p3": "Liputan kategori yang lebih baik daripada keahlian Gold",
+        "p4": "Sokongan premium untuk memilih tempat menginap, makan, melancong, dan menikmati",
+        "p5": "Keahlian bernilai kukuh bagi mereka yang mahukan lebih akses tanpa pergi ke peringkat tertinggi",
+        "p6": "Paling sesuai untuk ahli yang kerap melawat Goa dan mahukan faedah yang boleh dipercayai setiap masa"
+      },
+      "gold": {
+        "name": "Keahlian Gold",
+        "badge": "Penyertaan Pintar",
+        "title": "Penjimatan Pintar Untuk Hotel & Perjalanan",
+        "desc": "Gold ialah keahlian permulaan yang sempurna untuk orang yang ingin merasai faedah GOA MOMENTS dengan penjimatan pintar dan sokongan yang boleh dipercayai. Ia ringkas, berguna, dan sesuai untuk kumpulan kecil.",
+        "access": "Sehingga 4 ahli boleh menggunakan kebolehcapaian kad",
+        "support": "Sokongan GOA MOMENTS yang boleh dipercayai disertakan",
+        "highlight": "Terbaik untuk pasangan, pelancong solo, keluarga kecil, dan pengunjung pintar yang mahukan penjimatan premium.",
+        "p1": "Termasuk faedah hotel dan perjalanan",
+        "p2": "Diskaun sehingga 5%–70% di rakan kongsi terpilih",
+        "p3": "Sokongan berguna untuk penginapan asas dan panduan perjalanan",
+        "p4": "Keahlian permulaan yang hebat untuk mereka yang memulakan perjalanan GOA MOMENTS mereka",
+        "p5": "Sesuai untuk kumpulan kecil yang mahukan penjimatan tanpa kerumitan",
+        "p6": "Kad pintar untuk orang yang mahukan nilai, keselesaan, dan panduan yang dipercayai"
+      }
+    },
+    "venues": {
+      "v1": "Hotel & Tempat Peranginan Mewah",
+      "v2": "Kelab Pantai",
+      "v3": "Restoran Premium",
+      "v4": "Tempat Hiburan Malam",
+      "v5": "Bantuan Perjalanan & Teksi",
+      "v6": "Pengalaman Goa Yang Tersusun"
+    },
+    "reviews": {
+      "pretitle": "Ulasan Ahli",
+      "title": "Apa Pendapat Orang Tentang GOA MOMENTS",
+      "r1": {
+        "text": "GOA MOMENTS menjadikan lawatan saya ke Goa terasa premium. Sokongan keahlian membantu saya memilih tempat yang lebih baik dan lebih berjimat."
+      },
+      "r2": {
+        "text": "Ia seperti mempunyai pemandu tempatan yang mewah. Diskaunnya bagus, tetapi sokongan yang menjadikannya sangat bernilai."
+      },
+      "r3": {
+        "text": "Keahlian ini dirasa berkelas, sangat berguna, dan boleh dipercayai. Sangat sesuai untuk orang yang inginkan pengalaman Goa yang lebih baik."
+      }
+    },
+    "discounts": {
+      "pretitle": "Diskaun 5%–70%",
+      "title": "Lebih Penjimatan Di Tempat Premium Terpilih",
+      "desc": "Ahli boleh menikmati penjimatan 5% hingga 70% bergantung kepada tempat, kategori, masa, ketersediaan, dan tawaran rakan kongsi. GOA MOMENTS membantu anda memahami di mana keahlian anda memberi nilai yang terbaik."
+    },
+    "premium": {
+      "pretitle": "Gaya Hidup Premium",
+      "title": "Goa Terasa Lebih Baik Bila Anda Tahu Ke Mana Ingin Pergi",
+      "desc": "Keahlian kami membantu pengguna menikmati tempat yang lebih baik, sokongan yang lebih mantap, dan keyakinan yang lebih tinggi ketika meneroka Goa."
+    },
+    "lifetime": {
+      "pretitle": "Akses Seumur Hidup",
+      "title": "Satu Keahlian. Nilai Jangka Panjang.",
+      "desc": "Keahlian anda memastikan anda sentiasa dihubungkan dengan sokongan GOA MOMENTS, bimbingan premium, dan akses kepada gaya hidup Goa yang direka khusus."
+    },
+    "support": {
+      "pretitle": "Sokongan Kukuh",
+      "title": "Kami Bersama Setiap Ahli",
+      "desc": "GOA MOMENTS dicipta untuk memastikan setiap ahli berasa disokong, dihargai, dan yakin. Sama ada anda memerlukan bantuan memilih hotel, restoran, aktiviti, pilihan teksi, kehidupan malam, atau pengalaman premium, sokongan kami akan memberi anda panduan.",
+      "features": {
+        "f1": "Panduan penginapan untuk pengalaman Goa yang selesa dan premium.",
+        "f2": "Cadangan untuk restoran, tempat makan, keramaian, dan kehidupan malam.",
+        "f3": "Sokongan khas untuk membantu anda memilih tempat yang tepat."
+      }
+    },
+    "faqs": {
+      "pretitle": "FAQ Sokongan Ahli",
+      "title": "Soalan Biasa Sebelum Menyertai",
+      "q1": {
+        "q": "Bagaimana GOA MOMENTS menyokong ahli?",
+        "a": "GOA MOMENTS membantu ahli dengan cadangan hotel, panduan restoran, bantuan teksi dan perjalanan, saranan hiburan malam, dan perancangan pengalaman Goa yang premium."
+      },
+      "q2": {
+        "q": "Bolehkah saya mendapat bantuan selepas membeli keahlian?",
+        "a": "Ya. Selepas membeli keahlian, ahli boleh menghubungi sokongan GOA MOMENTS untuk panduan di mana untuk menggunakan keahlian dan cara mendapat nilai yang lebih baik merentas pelbagai lokasi terpilih."
+      },
+      "q3": {
+        "q": "Adakah diskaun tersedia di seluruh Goa?",
+        "a": "Diskaun hanya tersedia di tempat rakan kongsi yang terpilih dan mungkin berbeza mengikut lokasi, kategori, masa, ketersediaan, dan syarat-syarat tawaran."
+      },
+      "q4": {
+        "q": "Apakah jenis diskaun yang boleh diperoleh oleh ahli?",
+        "a": "Ahli boleh mengakses pelbagai faedah lokasi antara 5% hingga 70%, bergantung kepada lokasi rakan kongsi dan tawaran keahlian yang aktif."
+      },
+      "q5": {
+        "q": "Adakah GOA MOMENTS sekadar kad diskaun?",
+        "a": "Tidak. GOA MOMENTS direka bentuk sebagai keahlian gaya hidup premium dengan pelbagai penjimatan, panduan, sokongan gaya concierge, serta pelbagai cadangan Goa yang disusun rapi."
+      },
+      "q6": {
+        "q": "Mengapakah saya patut membeli keahlian?",
+        "a": "Keahlian ini membantu anda berjimat, mencari pelbagai tempat terbaik, mengelak sebarang kekeliruan, dan juga menikmati Goa dengan lebih banyak sokongan utuh daripada kumpulan GOA MOMENTS."
+      }
+    },
+    "cta": {
+      "pretitle": "Jadi Ahli Hari Ini",
+      "title": "Pilih Keahlian Gold, Diamond, atau Platinum",
+      "desc": "Mulakan perjalanan GOA MOMENTS anda hari ini dan buka akses kepada sokongan premium, pelbagai penjimatan tempat, panduan gaya hidup, dan pelbagai cara terbaik untuk mengalami Goa.",
+      "btn": "Beli Keahlian"
+    }
+  },
+  "about": {
+    "heroTitle": "Kisah Kami",
+    "whoWeAre": "Siapa Kami",
+    "missionTitle1": "Kami tidak merancang percutian.",
+    "missionTitle2": "Kami mencipta pengalaman yang tidak dapat dilupakan.",
+    "missionDesc": "Lahir daripada semangat untuk keindahan Goa yang tiada tandingan dan wawasan untuk perkhidmatan yang luar biasa, GOA MOMENTS ditubuhkan untuk merapatkan jurang antara pengembara dan yang luar biasa. Kami percaya kemewahan haruslah tanpa usaha, asli, dan transformatif.",
+    "ourValues": "Nilai Kami",
+    "pillarsTitle": "Tunjang Kecemerlangan",
+    "values": {
+      "excellence": {
+        "title": "Kecemerlangan",
+        "description": "Kami hanya mengatur pengalaman yang terbaik, memastikan setiap detik melebihi jangkaan."
+      },
+      "exclusivity": {
+        "title": "Eksklusiviti",
+        "description": "Akses ke tempat peribadi, meja yang ditempah khas, dan pengalaman yang tidak boleh dibeli dengan wang semata-mata."
+      },
+      "authenticity": {
+        "title": "Keaslian",
+        "description": "Hubungan tulen dengan pelbagai perniagaan paling berprestij serta permata tersembunyi di Goa."
+      }
+    },
+    "ourVision": "Visi Kami",
+    "visionTitle1": "Menjadikan setiap pengembara berasa seperti",
+    "visionTitle2": "kerabat diraja",
+    "visionDesc": "Kami membayangkan dunia di mana pelbagai pengalaman yang luar biasa dapat diakses oleh mereka yang mencarinya. Di mana setiap matahari terbenam, setiap hidangan, setiap detik di Goa menjadi satu memori terindah yang akan kekal abadi seumur hidup.",
+    "ctaTitle": "Bersedia untuk Mengalami Detik-detik Goa?",
+    "ctaDesc": "Sertai komuniti eksklusif pengembara yang arif.",
+    "ctaBtn1": "Lihat Keahlian",
+    "ctaBtn2": "Hubungi Kami"
+  },
+  "contact": {
+    "hero": {
+      "pretitle": "SOKONGAN GOA MOMENTS",
+      "title": "Kami Berada Di Sini Untuk Menyokong Anda",
+      "subtitle": "Sama ada anda sedang meneroka GOA MOMENTS, membeli keahlian, atau merancang pelbagai pengalaman ke Goa, pasukan kami sentiasa berada di sini untuk membimbing anda dengan pelbagai sokongan padu dan jelas."
+    },
+    "public": {
+      "pretitle": "Bantuan Awam",
+      "title": "Sokongan Am untuk Setiap Pelawat",
+      "desc": "Halaman perhubungan ini sentiasa terbuka kepada semua. Biarpun sekiranya anda belum membeli sebarang keahlian, anda boleh untuk bertanyakan apa-apa sahaja soalan berkaitan GOA MOMENTS, pelbagai pelan keahlian, faedah yang diperolehi, pelbagai bentuk diskaun, dan pelbagai hal ehwal akses lokasi, malah keseluruhan proses untuk menyokong bagaimana fungsi kad keahlian.",
+      "note": "Pengunjung boleh menggunakan ruangan borang yang terletak di sebelah kanan berkenaan setiap pelbagai pertanyaan yang mungkin akan di ajukan kepada orang luar. Manakala, setiap ahli berbayar pula akan diberikan ruang halaman log akses yang sepenuhnya amat berlainan untuk dapat digunakan ketika kad keahlian mula diaktifkan.",
+      "info": {
+        "i1": {
+          "label": "Pertanyaan Umum"
+        },
+        "i2": {
+          "label": "Soalan Keahlian"
+        },
+        "i3": {
+          "label": "Lokasi Sokongan",
+          "value": "Panjim, Goa, India"
+        }
+      }
+    },
+    "form": {
+      "pretitle": "Hantar Pesanan",
+      "title": "Tanya Apa Sahaja Mengenai GOA MOMENTS",
+      "desc": "Borang ini khas untuk pengguna di seluruh pelusuk negara — malah pelawat pelancong, pihak klien serta kesemua pengunjung boleh gunakan sekiranya perlu. Ia di sediakan kepada pihak pelanggan agar mudah fahami GOA MOMENTS secara keseluruhan dan sebelum lakukan pembelian. Pertanyaan mengenai pakej pelan yang ada, diskaun ditawarkan, pelbagai keahlian yang diberikan untuk hotel, pelan sokongan sistem operasi pemandu pelancong peribadi taksi, pelbagai pilihan tempat makanan di sekitar hotel dan kafe malah hiburan di sekitarnya.",
+      "firstName": "Nama Pertama",
+      "lastName": "Nama Akhir",
+      "email": "Alamat E-mel",
+      "phone": "Nombor Telefon",
+      "supportType": "Jenis Sokongan",
+      "options": {
+        "default": "Pilih Jenis Sokongan",
+        "membership": "Pertanyaan Keahlian",
+        "benefits": "Sokongan Faedah / Diskaun",
+        "travel": "Hotel / Teksi / Panduan Perjalanan",
+        "experience": "Sokongan Pengalaman Goa"
+      },
+      "message": "Beritahu kami tentang keperluan anda...",
+      "submit": "Hantar Pesanan"
+    },
+    "private": {
+      "pretitle": "Akses Kenalan Ahli Berbayar",
+      "title1": "Sokongan Istimewa Dibuka",
+      "title2": "Selepas Pembelian Keahlian",
+      "desc": "Apabila pelanggan membeli keahlian Gold, Platinum, atau Diamond, mereka perlu memberikan butiran maklumat alamat emel mahupun no talian mudah alih yang akan beroperasi bagi tujuan semasa buat proses semakan dan di hujung pembayaran. GOA MOMENTS memanfaatkan pendaftaran e-mel pelanggan tersebut bersertakan kata laluan log untuk memudahkan sistem mencari jejak data keahlian.",
+      "support": {
+        "gold": {
+          "title": "Sokongan Ahli Gold",
+          "desc": "Ahli Gold layak dan berhak memperoleh kesemua bantuan pelan dari pihak GOA MOMENTS bagi perkhidmatan perihal destinasi log penginapan secara atas talian di portal GOA MOMENTS dan mendapatkan sokongan premium dengan kadar paling munasabah untuk menjimat wang ringgit selepas mendaftar pakej keahlian pelan pelancongan ini."
+        },
+        "platinum": {
+          "title": "Sokongan Keutamaan Platinum",
+          "desc": "Ahli Platinum sentiasa menikmati kepelbagaian perkhidmatan sokongan premium hotel peribadi VIP dalam soal bilik hotel menginap malah bagi kelab premium lounge yang pastinya menghidangkan pelbagai makanan menyelerakan serta minuman pilihan pelbagai. Di sertai tawaran gaya hidup percutian gaya kelas tinggi secara total untuk pengguna pelan eksklusif."
+        },
+        "diamond": {
+          "title": "Sokongan Elit Diamond",
+          "desc": "Ahli Diamond akan sentiasa menikmati kelebihan pengalaman gaya perkhidmatan VIP gaya concierge premium untuk pelan perjalanan dan kelab premium lounge dan perihal layanan tempahan di seluruh negara atau rantau antarabangsa dan seumpamanya."
+        }
+      },
+      "features": {
+        "phone": {
+          "title": "Akses Telefon Ahli Peribadi",
+          "subtitle": "Dikongsi Hanya Selepas Pengesahan Pembayaran",
+          "desc": "Sistem aplikasi web pelanggan yang telah lengkap melanggan sistem pelan pakej ini di janjikan kesemua perihal pelan privasi bagi kemudahan bantuan pelanggan sepanjang tempoh waktu dengan penggunaan panggilan perkhidmatan pelanggan. Di sebabkan hal kerahsiaan, hanya pelanggan ahli log dan kata laluan premium pakej sahaja di benarkan."
+        },
+        "verification": {
+          "title": "Pengesahan E-mel & Telefon Berdaftar",
+          "subtitle": "Sokongan Menggunakan Butiran Pembayaran",
+          "desc": "Semua maklumat tempahan pesanan dan bayaran bersertakan log E-mel dan kata laluan untuk daftar langgan pakej yang disahkan boleh mendapat pelbagai perkhidmatan pertanyaan dengan sekelip mata dari petugas pegawai talian."
+        },
+        "cards": {
+          "c1": "Selepas setiap pelanggan selesaikan pakej log keahlian berbayar, kad digital beserta alamat maklumat pelan pelanggan yang diperolehi GOA MOMENTS akan secara terus didaftarkan secara peribadi tanpa pengetahuan orang ramai dan sulit.",
+          "c2": "Kesemua bantuan dalam soal maklumat atau penggunaan no alat mudah alih dari pendaftaran talian rasmi pakej ini adalah untuk rujukan rahsia sistem sokongan eksklusif di portal bantuan sokongan VIP pakej kami sahaja dan bukan di buka kepada awam secara mutlak.",
+          "c3": "Sepanjang tempoh percutian pakej, keseluruhan pelan seumur hidup kad pelanggan yang berjaya log kepada keahlian sentiasa tersedia."
+        }
+      }
+    },
+    "difference": {
+      "pretitle": "Perbezaan Akses Kenalan",
+      "title1": "Halaman Hubungan Yang Sama.",
+      "title2": "Akses Sokongan Yang Berbeza.",
+      "desc": "Sesiapa sahaja boleh menghubungi GOA MOMENTS untuk pelbagai jenis persoalan untuk ditanyakan secara awam tanpa paksaan malah tanpa tekanan dari perihal pihak penganjur sistem penginapan pakej lawatan di web kami.",
+      "general": {
+        "title": "Pertanyaan Umum Hubungi",
+        "desc": "Mereka yang tidak memiliki sebarang bentuk pakej perkhidmatan langgan keahlian dari sistem GOA MOMENTS masih bebas di alu-alukan bagi memberikan apa saja persoalan atau mengutarakan kemusykilan."
+      },
+      "memberOnly": {
+        "title": "Sokongan Ahli Sahaja",
+        "desc": "Hanya ahli rasmi berdaftar perkhidmatan yang sah dari pihak kami akan diberikan kelonggaran istimewa VIP concierge, keistimewaan maklumat pakej percutian di kelab eksklusif mewah sepanjang log berdaftar kad sistem di aktifkan secara total oleh sistem pangkalan log pihak GOA MOMENTS yang eksklusif."
+      },
+      "verified": {
+        "title": "Disahkan Melalui Butiran Pembayaran",
+        "desc": "Setiap pendaftaran dan kesemua bentuk pembayaran di laman log GOA MOMENTS akan dikenalpasti secara digital sepenuhnya agar tiada pencerobohan dan perlindungan privasi eksklusif data maklumat langgan perkhidmatan dilindungi sepanjang pakej ini."
+      }
+    },
+    "help": {
+      "pretitle": "Perkara Yang Kami Bantu",
+      "title": "Anda Mendapat Lebih Daripada Borang Hubungan",
+      "desc": "Setiap pelawat bebas menanyakan sebarang bentuk cadangan soalan menerusi laman web awam pendaftaran maklumat atau menghubungi sokongan panggilan GOA MOMENTS.",
+      "points": {
+        "p1": "Maklumat panduan sistem dan sebarang hal keahlian pelan",
+        "p2": "Pemilihan log sewaan eksklusif hotel peribadi teksi persendirian, restoran lawatan",
+        "p3": "Sistem perihal terma ahli, dan pemahaman penggunaan pakej kad",
+        "p4": "Eksklusif concierge untuk VIP pelanggan yang dilindungi"
+      },
+      "extra1": "Maklumat sistem atau hal awam bukan peribadi VIP adalah di kendalikan seratus-peratus asing untuk bantuan pelanggan di bahagian log kaunter bantuan VIP di GOA MOMENTS dan pastinya dilindungi privasi keselamatan.",
+      "extra2": "Setiap pengguna berbayar dari kalangan yang berdaftar akan beroleh servis panduan log seumur hidup bagi kesemua persoalan dari pelan eksklusif untuk setiap kunjungan melawati tempat pelancongan di atas pakej ini secara telus tanpa kos caj dan lain-lain di sekitar Goa."
+    }
+  },
+  "comingSoon": {
+    "weAre": "Kami Akan",
+    "launchingSoon": "Dilancarkan Tidak Lama Lagi",
+    "subtitle": "Keahlian Goa eksklusif akan datang. Ahli awal mendapat akses keutamaan kepada pengalaman yang paling diidamkan di syurga percutian ini.",
+    "emailPlaceholder": "Masukkan e-mel anda",
+    "btnNotify": "Beritahu Saya",
+    "spamDisclaimer": "Jadilah yang pertama untuk mengetahui. Tiada spam, selama-lamanya.",
+    "features": {
+      "f1": "Akses VIP",
+      "f2": "Tempat Eksklusif",
+      "f3": "Perkhidmatan Concierge"
+    },
+    "btnBack": "Kembali ke Laman Utama"
+  },
+  "footer": {
+    "description": "Puncak gaya hidup mewah di Goa. Akses eksklusif ke pengalaman premium, tempat, dan perkhidmatan untuk ahli yang mementingkan kualiti.",
+    "quickLinks": "Pautan Pantas",
+    "experiences": "Pengalaman",
+    "experiencesList": {
+      "beach": "Pantai Peribadi",
+      "casino": "Kasino VIP",
+      "yacht": "Kapal Layar",
+      "dining": "Makan Malam Mewah"
+    },
+    "contact": "Hubungi",
+    "newsletter": {
+      "title": "Sertai Bulatan Kami",
+      "description": "Langgan untuk kemas kini eksklusif dan tawaran ahli sahaja.",
+      "placeholder": "E-mel anda",
+      "submit": "Langgan"
+    },
+    "copyright": "© 2024 Goa Elite. Hak cipta terpelihara.",
+    "legal": {
+      "privacy": "Dasar Privasi",
+      "terms": "Syarat Perkhidmatan"
+    }
+  },
+  "theme": {
+    "light": "Terang",
+    "dark": "Gelap",
+    "system": "Sistem"
+  },
+  "language": {
+    "select": "Bahasa",
+    "en": "English",
+    "ta": "தமிழ்",
+    "hi": "हिन्दी",
+    "zh": "中文",
+    "es": "Español",
+    "fr": "Français",
+    "ar": "العربية",
+    "pt": "Português",
+    "de": "Deutsch",
+    "ml": "മലയാളം",
+    "ms": "Bahasa Melayu",
+    "ko": "한국어",
+    "ja": "日本語",
+    "ru": "Русский",
+    "kn": "ಕನ್ನಡ"
+  }
+}
