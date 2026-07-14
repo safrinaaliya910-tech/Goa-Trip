@@ -169,7 +169,7 @@ export function Footer() {
               <li className="flex items-center gap-2 sm:gap-3">
                 <Phone className="h-4 w-4 shrink-0 text-primary" />
                 <span className="text-xs text-muted-foreground sm:text-sm">
-                  +91 88079 65030
+                  +91 xxxxx xxxxx
                 </span>
               </li>
               <li className="flex items-center gap-2 sm:gap-3">
@@ -264,7 +264,7 @@ export function Footer() {
                   className="h-12 w-auto object-contain opacity-100 drop-shadow-md sm:h-14 scale-[1.9] -translate-y-1"
                 />
                 <span className={`mt-1 text-center text-[9px] font-medium leading-[1.4] sm:text-[10px] ${subTextColor}`}>
-                  Government of India
+                  Powered By Government of India
                 </span>
               </div>
               

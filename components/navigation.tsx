@@ -186,9 +186,12 @@ export function Navigation() {
               <div className={`mx-3 h-14 w-px ${isPaymentPage ? 'bg-gray-300' : 'bg-white/20'}`} />
 
               <div className="flex items-center gap-1">
-                <div className="flex flex-col items-center justify-center px-2">
-                  {/* FIX: Height is kept at h-20 to perfectly align text, but scale-[1.45] visually inflates the logo massively */}
-                  <Image src={ministryLogo} alt="Ministry of Tourism" width={160} height={90} className="h-20 w-auto object-contain drop-shadow-md scale-[1.6] -translate-y-1" />
+                {/* FIX: Increased font size, adjusted positioning, added drop-shadow and brighter gold for "Powered By" */}
+                <div className="flex flex-col items-center justify-center px-2 relative">
+                  <span className="absolute -top-3.5 text-[9px] font-bold uppercase tracking-[0.3em] text-[#d4af37] whitespace-nowrap z-10 drop-shadow-md">
+                    Powered By
+                  </span>
+                  <Image src={ministryLogo} alt="Ministry of Tourism" width={160} height={90} className="h-20 w-auto object-contain drop-shadow-md scale-[1.5]" />
                   <span className={`mt-1.5 text-[10px] tracking-wide ${partnerTextColor}`}>
                     Ministry of Tourism
                   </span>
@@ -266,9 +269,12 @@ export function Navigation() {
                     <span className={`text-center text-[9px] tracking-wide ${partnerTextColor}`}>Startup<br/>India</span>
                   </div>
 
-                  <div className="flex flex-col items-center gap-1.5">
-                    {/* FIX: Scaled up the mobile version massively as well without breaking layout */}
-                    <Image src={ministryLogo} alt="Ministry of Tourism" width={100} height={60} className="h-14 w-auto object-contain scale-[1.45] -translate-y-1" />
+                  {/* FIX: Increased font size, adjusted positioning, added drop-shadow and brighter gold for "Powered By" on mobile */}
+                  <div className="flex flex-col items-center gap-1.5 relative">
+                    <span className="absolute -top-3 text-[8px] font-bold uppercase tracking-[0.3em] text-[#d4af37] whitespace-nowrap z-10 drop-shadow-md">
+                      Powered By
+                    </span>
+                    <Image src={ministryLogo} alt="Ministry of Tourism" width={100} height={60} className="h-14 w-auto object-contain scale-[1.45]" />
                     <span className={`text-center text-[9px] tracking-wide ${partnerTextColor}`}>Ministry of<br/>Tourism</span>
                   </div>
                 </div>

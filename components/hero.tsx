@@ -183,7 +183,7 @@ export function Hero() {
                 </div>
                 <div className="flex flex-col text-left">
                   <span className={`font-serif text-[11px] lg:text-[12px] font-bold uppercase tracking-wider leading-tight ${textColor}`}>
-                    Ministry of<br />Tourism
+                    Powered By
                   </span>
                   <span className={`mt-1 text-[10px] leading-[1.3] ${subTextColor}`}>
                     Government<br />of India
