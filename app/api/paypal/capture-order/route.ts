@@ -10,7 +10,6 @@ async function getPayPalAccessToken() {
   }
 
   const auth = Buffer.from(`${clientId}:${secret}`).toString("base64");
-
   const response = await fetch(`${baseUrl}/v1/oauth2/token`, {
     method: "POST",
     headers: {
@@ -22,11 +21,9 @@ async function getPayPalAccessToken() {
   });
 
   const data = await response.json();
-
   if (!response.ok) {
     throw new Error(data?.error_description || "Failed to get PayPal access token.");
   }
-
   return data.access_token as string;
 }
 
@@ -41,7 +38,7 @@ export async function POST(req: Request) {
 
     const accessToken = await getPayPalAccessToken();
     const baseUrl = process.env.PAYPAL_BASE_URL!;
-
+    
     const response = await fetch(`${baseUrl}/v2/checkout/orders/${orderID}/capture`, {
       method: "POST",
       headers: {
@@ -52,16 +49,14 @@ export async function POST(req: Request) {
     });
 
     const data = await response.json();
-
     if (!response.ok) {
       throw new Error(data?.message || "Failed to capture PayPal order.");
     }
-
     return NextResponse.json(data);
-  } catch (error) {
+  } catch (error: any) {
     console.error("PayPal capture order error:", error);
     return NextResponse.json(
-      { error: "Unable to capture PayPal order." },
+      { error: error.message || "Unable to capture PayPal order." },
       { status: 500 }
     );
   }

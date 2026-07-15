@@ -26,7 +26,6 @@ type Method = "razorpay" | "stripe" | "paypal";
 export default function PaymentPage() {
   const router = useRouter();
   const params = useSearchParams();
-
   const [method, setMethod] = useState<Method>("razorpay");
   const [loading, setLoading] = useState(false);
   const [razorpayLoaded, setRazorpayLoaded] = useState(false);
@@ -39,7 +38,7 @@ export default function PaymentPage() {
   const address = params.get("address") || "";
   const city = params.get("city") || "";
 
-  // --- FINANCIAL CALCULATION ---
+  // FINANCIAL CALCULATION
   const baseAmount = Number(params.get("amount")) || 160;
   const serviceFee = 2.50;
   const gstRate = 0.18;
@@ -52,7 +51,6 @@ export default function PaymentPage() {
       setRazorpayLoaded(true);
       return;
     }
-
     const script = document.createElement("script");
     script.id = "razorpay-checkout-script";
     script.src = "https://checkout.razorpay.com/v1/checkout.js";
@@ -79,10 +77,10 @@ export default function PaymentPage() {
   }, [method]);
 
   const paymentButtonLabel = useMemo(() => {
-    if (method === "razorpay") return `Pay $${baseAmount.toFixed(2)} with Razorpay`;
-    if (method === "stripe") return `Pay $${baseAmount.toFixed(2)} with Stripe`;
-    return `Pay $${baseAmount.toFixed(2)} with PayPal`;
-  }, [method, baseAmount]);
+    if (method === "razorpay") return `Pay $${Number(totalAmount).toFixed(2)} with Razorpay`;
+    if (method === "stripe") return `Pay $${Number(totalAmount).toFixed(2)} with Stripe`;
+    return `Pay $${Number(totalAmount).toFixed(2)} with PayPal`;
+  }, [method, totalAmount]);
 
   const goToSuccessPage = (paymentMethod: string, paymentId: string) => {
     const query = new URLSearchParams({
@@ -94,7 +92,7 @@ export default function PaymentPage() {
       phone,
       address,
       city,
-      paymentId, // Passes the real ID here
+      paymentId,
       validity: "Lifetime Membership",
       paymentMethod,
     });
@@ -105,9 +103,9 @@ export default function PaymentPage() {
     try {
       if (!razorpayLoaded || !window.Razorpay) {
         alert("Razorpay failed to load. Please refresh and try again.");
+        setLoading(false);
         return;
       }
-
       const response = await fetch("/api/razorpay", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -143,9 +141,12 @@ export default function PaymentPage() {
         prefill: { name, email, contact: phone },
         notes: { membershipId, plan, city },
         theme: { color: "#d4af37" },
-        modal: { ondismiss: function () { setLoading(false); } },
+        modal: {
+          ondismiss: function () {
+            setLoading(false);
+          },
+        },
       };
-
       const razorpay = new window.Razorpay(options);
       razorpay.open();
     } catch (error) {
@@ -174,10 +175,8 @@ export default function PaymentPage() {
           city,
         }),
       });
-
       const data = await response.json();
       if (!response.ok || !data.url) throw new Error(data?.error || "Stripe session creation failed");
-
       window.location.href = data.url;
     } catch (error) {
       console.error("Stripe payment failed:", error);
@@ -192,26 +191,23 @@ export default function PaymentPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          amount: totalAmount, // Pass totalAmount as required by backend
+          amount: totalAmount,
           plan,
           membershipId,
           memberName: name,
           email,
           phone,
+          address,
           city,
         }),
       });
-
       const data = await response.json();
-      
-      // PayPal returns a links array, we need the 'approve' link to redirect the user
       const approveLink = data.links?.find((link: any) => link.rel === "approve")?.href;
-
+      
       if (!response.ok || !approveLink) {
         throw new Error(data?.message || data?.error || "PayPal session creation failed");
       }
-
-      // Redirect user directly to PayPal's official secure checkout
+      
       window.location.href = approveLink;
     } catch (error) {
       console.error("PayPal payment failed:", error);
@@ -249,22 +245,12 @@ export default function PaymentPage() {
               Select your preferred payment option and continue through a premium, secure checkout journey.
             </p>
           </div>
-
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3 font-serif text-[11px] uppercase tracking-widest">
-            <span className="rounded-full border border-gray-300 bg-white px-4 py-1.5 font-bold text-gray-500 shadow-sm">
-              1. Details
-            </span>
-            <span className="rounded-full border border-gray-300 bg-white px-4 py-1.5 font-bold text-gray-500 shadow-sm">
-              2. Confirm Order
-            </span>
-            <span className="rounded-full border-[#D4AF37] bg-[#D4AF37] px-4 py-1.5 font-bold text-white shadow-md">
-              3. Payment Method
-            </span>
-            <span className="rounded-full border border-gray-300 bg-white px-4 py-1.5 font-bold text-gray-500 shadow-sm">
-              4. Order Successful
-            </span>
+            <span className="rounded-full border border-gray-300 bg-white px-4 py-1.5 font-bold text-gray-500 shadow-sm">1. Details</span>
+            <span className="rounded-full border border-gray-300 bg-white px-4 py-1.5 font-bold text-gray-500 shadow-sm">2. Confirm Order</span>
+            <span className="rounded-full border-[#D4AF37] bg-[#D4AF37] px-4 py-1.5 font-bold text-white shadow-md">3. Payment Method</span>
+            <span className="rounded-full border border-gray-300 bg-white px-4 py-1.5 font-bold text-gray-500 shadow-sm">4. Order Successful</span>
           </div>
-
           <div className="mt-12 grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
             <div className="rounded-xl border border-[#D4AF37]/30 bg-white p-6 shadow-[0_15px_40px_rgba(212,175,55,0.1)]">
               <div className="flex items-center justify-between border-b border-gray-200 pb-4">
@@ -278,12 +264,10 @@ export default function PaymentPage() {
                 </div>
                 <ShieldCheck className="h-7 w-7 text-[#D4AF37]" />
               </div>
-
               <div className="mt-6 space-y-4">
                 {methods.map((m) => {
                   const Icon = m.icon;
                   const active = method === m.key;
-
                   return (
                     <button
                       key={m.key}
@@ -296,21 +280,11 @@ export default function PaymentPage() {
                       }`}
                     >
                       <div className="flex items-center gap-4">
-                        <div
-                          className={`flex h-12 w-12 items-center justify-center rounded-full border ${
-                            active ? "border-[#D4AF37] bg-white" : "border-gray-300 bg-white"
-                          }`}
-                        >
+                        <div className={`flex h-12 w-12 items-center justify-center rounded-full border ${active ? "border-[#D4AF37] bg-white" : "border-gray-300 bg-white"}`}>
                           <Icon className={`h-5 w-5 ${active ? "text-[#D4AF37]" : "text-gray-500"}`} />
                         </div>
                         <div>
-                          <p
-                            className={`text-lg tracking-wide ${active ? "text-black" : "text-gray-800"}`}
-                            style={{
-                              fontFamily: "Arial, Helvetica, sans-serif",
-                              fontWeight: active ? 900 : 700,
-                            }}
-                          >
+                          <p className={`text-lg tracking-wide ${active ? "text-black" : "text-gray-800"}`} style={{ fontFamily: "Arial, Helvetica, sans-serif", fontWeight: active ? 900 : 700 }}>
                             {m.title}
                           </p>
                           <p className="mt-1 font-serif text-sm font-medium text-gray-600">
@@ -323,7 +297,6 @@ export default function PaymentPage() {
                   );
                 })}
               </div>
-
               <div className="mt-6 rounded-lg border border-[#D4AF37]/30 bg-[#D4AF37]/10 p-4">
                 <div className="flex items-start gap-3">
                   <LockKeyhole className="mt-0.5 h-5 w-5 shrink-0 text-[#D4AF37]" />
@@ -333,7 +306,6 @@ export default function PaymentPage() {
                 </div>
               </div>
             </div>
-
             <div className="rounded-xl border border-[#D4AF37]/30 bg-white p-6 shadow-[0_15px_40px_rgba(212,175,55,0.1)] md:p-8">
               <p className="font-serif text-xs font-bold uppercase tracking-widest text-[#D4AF37]">
                 Payment
@@ -341,15 +313,11 @@ export default function PaymentPage() {
               <h2 className="mt-2 font-serif text-3xl font-bold text-black">
                 {paymentTitle} Checkout
               </h2>
-
               <div className="mt-5 rounded-lg border border-[#D4AF37]/30 bg-[#D4AF37]/10 p-4">
                 <div className="flex items-start gap-3">
                   <Sparkles className="mt-0.5 h-5 w-5 shrink-0 text-[#D4AF37]" />
                   <div>
-                    <p
-                      className="text-[15px] text-black tracking-wide"
-                      style={{ fontFamily: "Arial, Helvetica, sans-serif", fontWeight: 900 }}
-                    >
+                    <p className="text-[15px] text-black tracking-wide" style={{ fontFamily: "Arial, Helvetica, sans-serif", fontWeight: 900 }}>
                       Selected: {paymentTitle}
                     </p>
                     <p className="mt-1 font-serif text-sm font-medium leading-relaxed text-gray-800">
@@ -358,87 +326,38 @@ export default function PaymentPage() {
                   </div>
                 </div>
               </div>
-
               <div className="mt-8 space-y-6">
                 <div className="flex items-center justify-between gap-4 border-b border-gray-100 pb-3">
-                  <span className="font-serif text-[12px] font-bold tracking-widest text-gray-500 uppercase">
-                    Membership Plan
-                  </span>
-                  <span
-                    className="text-base text-black tracking-wider"
-                    style={{ fontFamily: "Arial, Helvetica, sans-serif", fontWeight: 900 }}
-                  >
-                    {plan}
-                  </span>
+                  <span className="font-serif text-[12px] font-bold tracking-widest text-gray-500 uppercase">Membership Plan</span>
+                  <span className="text-base text-black tracking-wider" style={{ fontFamily: "Arial, Helvetica, sans-serif", fontWeight: 900 }}>{plan}</span>
                 </div>
                 <div className="flex items-center justify-between gap-4 border-b border-gray-100 pb-3">
-                  <span className="font-serif text-[12px] font-bold tracking-widest text-gray-500 uppercase">
-                    Member Name
-                  </span>
-                  <span
-                    className="text-base text-black tracking-wider uppercase"
-                    style={{ fontFamily: "Arial, Helvetica, sans-serif", fontWeight: 900 }}
-                  >
-                    {name}
-                  </span>
+                  <span className="font-serif text-[12px] font-bold tracking-widest text-gray-500 uppercase">Member Name</span>
+                  <span className="text-base text-black tracking-wider uppercase" style={{ fontFamily: "Arial, Helvetica, sans-serif", fontWeight: 900 }}>{name}</span>
                 </div>
                 <div className="flex items-center justify-between gap-4 border-b border-gray-100 pb-3">
-                  <span className="font-serif text-[12px] font-bold tracking-widest text-gray-500 uppercase">
-                    Email
-                  </span>
-                  <span
-                    className="break-all text-[15px] text-black tracking-wider"
-                    style={{ fontFamily: "Arial, Helvetica, sans-serif", fontWeight: 900 }}
-                  >
-                    {email}
-                  </span>
+                  <span className="font-serif text-[12px] font-bold tracking-widest text-gray-500 uppercase">Email</span>
+                  <span className="break-all text-[15px] text-black tracking-wider" style={{ fontFamily: "Arial, Helvetica, sans-serif", fontWeight: 900 }}>{email}</span>
                 </div>
                 <div className="flex items-center justify-between gap-4 border-b border-gray-100 pb-3">
-                  <span className="font-serif text-[12px] font-bold tracking-widest text-gray-500 uppercase">
-                    Phone
-                  </span>
-                  <span
-                    className="text-base text-black tracking-wider"
-                    style={{ fontFamily: "Arial, Helvetica, sans-serif", fontWeight: 900 }}
-                  >
-                    {phone}
-                  </span>
+                  <span className="font-serif text-[12px] font-bold tracking-widest text-gray-500 uppercase">Phone</span>
+                  <span className="text-base text-black tracking-wider" style={{ fontFamily: "Arial, Helvetica, sans-serif", fontWeight: 900 }}>{phone}</span>
                 </div>
                 <div className="flex items-start justify-between gap-4 border-b border-gray-100 pb-3">
-                  <span className="font-serif text-[12px] font-bold tracking-widest text-gray-500 uppercase pt-1">
-                    Address
-                  </span>
-                  <span
-                    className="max-w-[60%] break-words text-right text-[15px] text-black tracking-wider capitalize"
-                    style={{ fontFamily: "Arial, Helvetica, sans-serif", fontWeight: 900 }}
-                  >
-                    {address}
-                  </span>
+                  <span className="font-serif text-[12px] font-bold tracking-widest text-gray-500 uppercase pt-1">Address</span>
+                  <span className="max-w-[60%] break-words text-right text-[15px] text-black tracking-wider capitalize" style={{ fontFamily: "Arial, Helvetica, sans-serif", fontWeight: 900 }}>{address}</span>
                 </div>
                 <div className="flex items-center justify-between gap-4 border-b border-gray-100 pb-4">
-                  <span className="font-serif text-[12px] font-bold tracking-widest text-gray-500 uppercase">
-                    City
-                  </span>
-                  <span
-                    className="text-base text-black tracking-wider uppercase"
-                    style={{ fontFamily: "Arial, Helvetica, sans-serif", fontWeight: 900 }}
-                  >
-                    {city}
-                  </span>
+                  <span className="font-serif text-[12px] font-bold tracking-widest text-gray-500 uppercase">City</span>
+                  <span className="text-base text-black tracking-wider uppercase" style={{ fontFamily: "Arial, Helvetica, sans-serif", fontWeight: 900 }}>{city}</span>
                 </div>
                 <div className="flex items-center justify-between gap-4 rounded-lg bg-gray-50 p-5 border border-gray-200">
-                  <span className="font-serif text-sm font-bold tracking-widest text-black uppercase">
-                    Total Amount
-                  </span>
-                  <span
-                    className="text-3xl text-[#D4AF37] tracking-wider"
-                    style={{ fontFamily: "Arial, Helvetica, sans-serif", fontWeight: 900 }}
-                  >
-                    ${baseAmount.toFixed(2)}
+                  <span className="font-serif text-sm font-bold tracking-widest text-black uppercase">Total Amount</span>
+                  <span className="text-3xl text-[#D4AF37] tracking-wider" style={{ fontFamily: "Arial, Helvetica, sans-serif", fontWeight: 900 }}>
+                    ${Number(totalAmount).toFixed(2)}
                   </span>
                 </div>
               </div>
-
               <button
                 type="button"
                 onClick={handlePayment}

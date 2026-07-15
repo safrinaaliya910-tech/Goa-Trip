@@ -9,7 +9,6 @@ import { CheckCircle2, ShieldCheck, Sparkles } from "lucide-react";
 
 export default function OrderSuccessPage() {
   const searchParams = useSearchParams();
-  
   const membershipId = searchParams.get("membershipId") || "GM-XXX-000000";
   const plan = searchParams.get("plan") || "Platinum";
   const amountPaid = searchParams.get("amountPaid") || "0";
@@ -19,43 +18,64 @@ export default function OrderSuccessPage() {
   const address = searchParams.get("address") || "";
   const city = searchParams.get("city") || "";
   const validity = searchParams.get("validity") || "Lifetime Membership";
-  
-  // FIX: This now accurately pulls the real payment ID (e.g. pay_XXXX) from the URL
-  const orderId = searchParams.get("paymentId") || `ORDER-${Date.now()}`; 
   const paymentMethod = searchParams.get("paymentMethod") || "Secure Checkout";
 
-  const emailSentRef = useRef(false);
-  const [previewUrl, setPreviewUrl] = useState<string>("");
+  const paypalToken = searchParams.get("token");
+  const rawPaymentId = searchParams.get("paymentId");
+  const [orderId, setOrderId] = useState<string>(rawPaymentId || paypalToken || `ORDER-${Date.now()}`);
+  const [verifying, setVerifying] = useState<boolean>(!!paypalToken);
 
+  const workflowExecutedRef = useRef(false);
+  const [previewUrl, setPreviewUrl] = useState<string>("");
   const safePlanName = plan.toLowerCase();
   const cardImagePath = `/images/${safePlanName}-card.jpg`;
 
-  //--- COMBINED AUTOMATION: DRAW CARD, SAVE TO DB, AND SEND EMAIL ---
   useEffect(() => {
-    if (emailSentRef.current) return;
+    if (workflowExecutedRef.current) return;
     if (!email || !cardImagePath) return;
 
-    // We lock it immediately so React Strict Mode doesn't execute twice
-    emailSentRef.current = true;
+    workflowExecutedRef.current = true;
 
-    const generateCardAndSendEmail = async () => {
+    const executeWorkflow = async () => {
+      // 1. Capture PayPal Funds
+      if (paymentMethod === "paypal" && paypalToken) {
+        try {
+          const captureResponse = await fetch("/api/paypal/capture-order", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ orderID: paypalToken }),
+          });
+          const captureData = await captureResponse.json();
+          if (!captureResponse.ok) {
+            throw new Error(captureData.error || "Failed to finalize PayPal capture.");
+          }
+          if (captureData.id) {
+            setOrderId(captureData.id);
+          }
+        } catch (err) {
+          console.error("Critical capture error:", err);
+          alert("Payment execution failed. Please verify with customer support.");
+          setVerifying(false);
+          return; 
+        }
+      }
+
+      setVerifying(false);
+
+      // 2. Generate the Membership Card
       const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d");
       if (!ctx) return;
-
       const img = new window.Image();
       img.crossOrigin = "anonymous";
       img.src = cardImagePath;
-
       img.onload = async () => {
         canvas.width = img.width;
         canvas.height = img.height;
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-        // Dynamic Color Theming
         let primaryColor = "#D4AF37";
         let labelColor = "#B89B2F";
-
         if (safePlanName === "platinum") {
           primaryColor = "#E5E4E2";
           labelColor = "#A0AAB5";
@@ -64,18 +84,15 @@ export default function OrderSuccessPage() {
           labelColor = "#94A3B8";
         }
 
-        // Grid Alignment
         const leftColX = canvas.width * 0.38;
         const rightColX = canvas.width * 0.92;
         let startY = canvas.height * 0.56;
 
-        // Tagline
         ctx.textAlign = "left";
         ctx.fillStyle = primaryColor;
         ctx.font = `500 ${canvas.height * 0.022}px 'Arial', sans-serif`;
         ctx.fillText("LUXURY MEMBERSHIP EXPERIENCE", leftColX, startY);
 
-        // Divider Line
         startY += canvas.height * 0.035;
         ctx.beginPath();
         ctx.moveTo(leftColX, startY);
@@ -86,13 +103,11 @@ export default function OrderSuccessPage() {
         ctx.stroke();
         ctx.globalAlpha = 1.0;
 
-        // ROW 1: MEMBER NAME
         startY += canvas.height * 0.10;
         ctx.textAlign = "left";
         ctx.fillStyle = labelColor;
         ctx.font = `600 ${canvas.height * 0.015}px 'Arial', sans-serif`;
         ctx.fillText("MEMBER NAME", leftColX, startY);
-
         ctx.fillStyle = primaryColor;
         ctx.font = `bold ${canvas.height * 0.042}px 'Georgia', serif`;
         ctx.shadowColor = "rgba(0,0,0,0.7)";
@@ -102,14 +117,11 @@ export default function OrderSuccessPage() {
         ctx.fillText(memberName.toUpperCase(), leftColX, startY + (canvas.height * 0.05));
         ctx.shadowColor = "transparent";
 
-        // ROW 2: ID & CONTACT
         const row2Y = startY + (canvas.height * 0.16);
-
         ctx.textAlign = "left";
         ctx.fillStyle = labelColor;
         ctx.font = `600 ${canvas.height * 0.015}px 'Arial', sans-serif`;
         ctx.fillText("MEMBER ID", leftColX, row2Y);
-
         ctx.fillStyle = primaryColor;
         ctx.font = `bold ${canvas.height * 0.028}px 'Courier New', monospace`;
         ctx.shadowColor = "rgba(0,0,0,0.7)";
@@ -123,22 +135,17 @@ export default function OrderSuccessPage() {
         ctx.fillStyle = labelColor;
         ctx.font = `700 ${canvas.height * 0.018}px 'Arial', sans-serif`;
         ctx.fillText("REGISTERED CONTACT", rightColX, row2Y);
-
         ctx.fillStyle = primaryColor;
         ctx.font = `bold ${canvas.height * 0.030}px 'Arial', sans-serif`;
         ctx.fillText(phone, rightColX, row2Y + (canvas.height * 0.045));
-
         ctx.font = `600 ${canvas.height * 0.022}px 'Arial', sans-serif`;
         ctx.fillText(email.toLowerCase(), rightColX, row2Y + (canvas.height * 0.080));
 
-        // 1. Generate the final image data string
         const finalImageDataUrl = canvas.toDataURL("image/jpeg", 0.9);
-
-        // 2. Set it to state so the user sees it instantly on the screen
         setPreviewUrl(finalImageDataUrl);
 
         try {
-          // 3. FIX: Save to DB EXACTLY ONCE AFTER SUCCESS
+          // 3. Save to DB
           await fetch("/api/save-member", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -151,20 +158,29 @@ export default function OrderSuccessPage() {
               phone,
               address,
               city,
-              paymentId: orderId, // Perfectly saves pay_XXXX ID
+              paymentId: paypalToken || orderId,
               paymentMethod,
-              status: "Confirmed"
+              status: "Confirmed",
             }),
           });
 
-          // 4. NOW send the email safely
+          // 4. Send the email
           await fetch("/api/send-membership-email", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              membershipId, plan, amountPaid, memberName, email, phone,
-              address, city, paymentId: orderId, validity, paymentMethod,
-              cardImage: finalImageDataUrl 
+              membershipId,
+              plan,
+              amountPaid,
+              memberName,
+              email,
+              phone,
+              address,
+              city,
+              paymentId: paypalToken || orderId,
+              validity,
+              paymentMethod,
+              cardImage: finalImageDataUrl,
             }),
           });
         } catch (error) {
@@ -173,10 +189,9 @@ export default function OrderSuccessPage() {
       };
     };
 
-    generateCardAndSendEmail();
-  }, [cardImagePath, safePlanName, memberName, membershipId, phone, email, amountPaid, address, city, orderId, validity, paymentMethod]);
+    executeWorkflow();
+  }, [cardImagePath, safePlanName, memberName, membershipId, phone, email, amountPaid, address, city, orderId, validity, paymentMethod, paypalToken]);
 
-  //--- 3. DOWNLOAD BUTTON
   const downloadCard = () => {
     if (!previewUrl) return;
     const link = document.createElement("a");
@@ -187,6 +202,16 @@ export default function OrderSuccessPage() {
     document.body.removeChild(link);
   };
 
+  if (verifying) {
+    return (
+      <main className="min-h-screen bg-background flex flex-col items-center justify-center font-serif text-gray-800">
+        <Sparkles className="animate-spin h-10 w-10 text-[#D4AF37]" />
+        <h2 className="mt-4 text-xl font-medium tracking-wide">Securing Live Transaction Data...</h2>
+        <p className="mt-2 text-sm text-gray-500">Executing final capture steps over security channels.</p>
+      </main>
+    );
+  }
+
   return (
     <main className="min-h-screen bg-background">
       <Navigation />
@@ -196,15 +221,10 @@ export default function OrderSuccessPage() {
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-primary/30 bg-primary/10">
               <CheckCircle2 className="h-8 w-8 text-primary" />
             </div>
-            <p className="mt-6 text-xs uppercase tracking-[0.35em] text-primary">
-              Order Confirmed
-            </p>
-            <h1 className="mt-5 text-5xl font-light text-foreground md:text-6xl lg:text-7xl">
-              Order Successful
-            </h1>
+            <p className="mt-6 text-xs uppercase tracking-[0.35em] text-primary">Order Confirmed</p>
+            <h1 className="mt-5 text-5xl font-light text-foreground md:text-6xl lg:text-7xl">Order Successful</h1>
             <p className="mx-auto mt-6 max-w-3xl text-lg leading-relaxed text-muted-foreground md:text-xl">
-              Welcome to GOA MOMENTS. Your membership has been activated successfully.
-              Your card, support access, and premium benefits are now ready.
+              Welcome to GOA MOMENTS. Your membership has been activated successfully. Your card, support access, and premium benefits are now ready.
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3 text-[11px] uppercase tracking-widest">
               <span className="rounded-full border border-border px-3 py-1 text-muted-foreground">1. Details</span>
@@ -213,14 +233,11 @@ export default function OrderSuccessPage() {
               <span className="rounded-full bg-primary px-3 py-1 text-primary-foreground">4. Order Successful</span>
             </div>
           </div>
-
           <div className="mt-14 grid gap-8 lg:grid-cols-[1.15fr_0.85fr]">
             <div className="border border-primary/30 bg-card p-4 shadow-[0_0_40px_rgba(212,175,55,0.10)] md:p-6">
               <div className="flex items-center justify-between border-b border-border pb-4">
                 <div>
-                  <p className="text-xs uppercase tracking-[0.25em] text-primary">
-                    Membership Card Preview
-                  </p>
+                  <p className="text-xs uppercase tracking-[0.25em] text-primary">Membership Card Preview</p>
                   <p className="mt-2 text-lg text-foreground">{plan} Membership</p>
                 </div>
                 <button
@@ -233,31 +250,21 @@ export default function OrderSuccessPage() {
               </div>
               <div className="mt-6 flex min-h-72 items-center justify-center bg-black/40 p-4 md:min-h-96 md:h-[380px]">
                 <div className="relative h-56 w-full max-w-[700px]">
-                  <Image
-                    src={previewUrl || cardImagePath}
-                    alt={`${plan} Membership card`}
-                    fill
-                    priority
-                    className="object-contain"
-                  />
+                  <Image src={previewUrl || cardImagePath} alt={`${plan} Membership card`} fill priority className="object-contain" />
                 </div>
               </div>
               <div className="mt-6 rounded-sm border border-primary/20 bg-primary/5 p-5">
                 <div className="flex items-start gap-3">
                   <Sparkles className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
                   <div>
-                    <p className="text-sm font-medium text-foreground">
-                      Your membership access is now active
-                    </p>
+                    <p className="text-sm font-medium text-foreground">Your membership access is now active</p>
                     <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                      You can now use your GOA MOMENTS membership card for eligible venue-based benefits,
-                      premium support guidance, and member savings at selected partner locations.
+                      You can now use your GOA MOMENTS membership card for eligible venue-based benefits, premium support guidance, and member savings at selected partner locations.
                     </p>
                   </div>
                 </div>
               </div>
             </div>
-
             <div className="border border-border bg-card p-6 md:p-8">
               <div className="flex items-center justify-between">
                 <h2 className="text-3xl font-light text-foreground">Order Details</h2>
@@ -302,7 +309,7 @@ export default function OrderSuccessPage() {
                 </div>
                 <div className="flex items-start justify-between gap-4">
                   <span>Order ID</span>
-                  <span className="break-all text-right text-foreground">{orderId}</span>
+                  <span className="break-all text-right text-foreground">{paypalToken || orderId}</span>
                 </div>
                 <div className="flex items-start justify-between gap-4 text-primary">
                   <span>Status</span>

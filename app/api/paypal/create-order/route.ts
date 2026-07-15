@@ -10,7 +10,6 @@ async function getPayPalAccessToken() {
   }
 
   const auth = Buffer.from(`${clientId}:${secret}`).toString("base64");
-
   const response = await fetch(`${baseUrl}/v1/oauth2/token`, {
     method: "POST",
     headers: {
@@ -22,30 +21,32 @@ async function getPayPalAccessToken() {
   });
 
   const data = await response.json();
-
   if (!response.ok) {
     throw new Error(data?.error_description || "Failed to get PayPal access token.");
   }
-
   return data.access_token as string;
 }
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-
-    const {
-      amount,
-      plan,
-      membershipId,
-      memberName,
-      email,
-      phone,
-      city,
-    } = body;
+    const { amount, plan, membershipId, memberName, email, phone, address, city } = body;
 
     const accessToken = await getPayPalAccessToken();
     const baseUrl = process.env.PAYPAL_BASE_URL!;
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+
+    const queryParams = new URLSearchParams({
+      membershipId,
+      plan,
+      amountPaid: String(amount),
+      memberName,
+      email,
+      phone,
+      address,
+      city,
+      paymentMethod: "paypal",
+    });
 
     const response = await fetch(`${baseUrl}/v2/checkout/orders`, {
       method: "POST",
@@ -69,48 +70,26 @@ export async function POST(req: Request) {
         application_context: {
           brand_name: "GOA MOMENTS",
           user_action: "PAY_NOW",
-          // ADDED: Tell PayPal where to send the user after payment!
-          return_url: "http://localhost:3000/order-success",
-          cancel_url: "http://localhost:3000/payment",
+          return_url: `${appUrl}/order-success?${queryParams.toString()}`,
+          cancel_url: `${appUrl}/payment`,
         },
         payer: {
-          name: memberName
-            ? {
-                given_name: memberName,
-              }
-            : undefined,
+          name: memberName ? { given_name: memberName } : undefined,
           email_address: email || undefined,
-          phone: phone
-            ? {
-                phone_type: "MOBILE",
-                phone_number: {
-                  national_number: phone,
-                },
-              }
-            : undefined,
-          address: city
-            ? {
-                address_line_1: city,
-                admin_area_2: city,
-                country_code: "US", // PayPal requires a valid country code
-              }
-            : undefined,
         },
       }),
       cache: "no-store",
     });
 
     const data = await response.json();
-
     if (!response.ok) {
       throw new Error(data?.message || "Failed to create PayPal order.");
     }
-
     return NextResponse.json(data);
-  } catch (error) {
+  } catch (error: any) {
     console.error("PayPal create order error:", error);
     return NextResponse.json(
-      { error: "Unable to create PayPal order." },
+      { error: error.message || "Unable to create PayPal order." },
       { status: 500 }
     );
   }
