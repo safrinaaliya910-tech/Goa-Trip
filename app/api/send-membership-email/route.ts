@@ -16,7 +16,7 @@ export async function POST(req: Request) {
       paymentId,
       validity,
       paymentMethod,
-      cardImage, // <-- NEW: Receiving the generated image from the frontend
+      cardImage, // <-- Receiving the generated image from the frontend
     } = body;
 
     if (!email) {
@@ -48,14 +48,12 @@ export async function POST(req: Request) {
       });
     }
 
-    
-
     await transporter.sendMail({
       from: '"GOA MOMENTS" <support@goamoments.com>',
       replyTo: "support@goamoments.com",
       to: email,
       subject: `Welcome to GOA MOMENTS — ${plan} Membership Activated`,
-      attachments: attachments, // <-- NEW: Attaching the card!
+      attachments: attachments, // <-- Attaching the card!
       html: `
 <!DOCTYPE html>
 <html>
@@ -114,7 +112,6 @@ export async function POST(req: Request) {
                         </tr>
                         <tr>
                           <td style="padding:8px 0;color:#a99f8b;">Amount Paid</td>
-                          <!-- FIX: Changed ₹ to $ -->
                           <td align="right" style="padding:8px 0;color:#d4af37;font-weight:bold;">$${amountPaid}</td>
                         </tr>
                         <tr>
@@ -157,6 +154,13 @@ export async function POST(req: Request) {
                         you with hotels, restaurants, nightlife, taxis, travel guidance, curated
                         experiences, membership usage, and selected partner venue benefits.
                       </p>
+                      
+                      <!-- NEW: Service Contact Section -->
+                      <div style="margin-top:16px;padding-top:16px;border-top:1px dashed rgba(212,175,55,0.3);">
+                        <span style="color:#cfc7b8;font-size:15px;text-transform:uppercase;letter-spacing:1px;">Service Contact:</span> 
+                        <strong style="color:#d4af37;font-size:18px;letter-spacing:1px;margin-left:8px;">7305516333</strong>
+                      </div>
+
                     </td>
                   </tr>
                 </table>
