@@ -158,7 +158,7 @@ export async function POST(req: Request) {
                       <!-- NEW: Service Contact Section -->
                       <div style="margin-top:16px;padding-top:16px;border-top:1px dashed rgba(212,175,55,0.3);">
                         <span style="color:#cfc7b8;font-size:15px;text-transform:uppercase;letter-spacing:1px;">Service Contact:</span> 
-                        <strong style="color:#d4af37;font-size:18px;letter-spacing:1px;margin-left:8px;">7305516333</strong>
+                        <strong style="color:#d4af37;font-size:18px;letter-spacing:1px;margin-left:8px;">+91 7305516333</strong>
                       </div>
 
                     </td>
