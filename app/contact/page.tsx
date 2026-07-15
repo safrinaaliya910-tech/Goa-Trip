@@ -79,7 +79,7 @@ export default function ContactPage() {
     {
       icon: Phone,
       label: t("contact.public.info.i2.label"),
-      value: "+91 xxxxx xxxxx",
+      value: "9150216333",
     },
     {
       icon: MapPin,

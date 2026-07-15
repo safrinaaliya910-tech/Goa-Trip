@@ -169,7 +169,7 @@ export function Footer() {
               <li className="flex items-center gap-2 sm:gap-3">
                 <Phone className="h-4 w-4 shrink-0 text-primary" />
                 <span className="text-xs text-muted-foreground sm:text-sm">
-                  +91 xxxxx xxxxx
+                  9150216333
                 </span>
               </li>
               <li className="flex items-center gap-2 sm:gap-3">
