@@ -34,7 +34,12 @@ export async function POST(req: Request) {
 
     const accessToken = await getPayPalAccessToken();
     const baseUrl = process.env.PAYPAL_BASE_URL!;
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+    
+    // FIX 1: Force absolute URL formatting to prevent PayPal Semantic Errors
+    let appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+    if (!appUrl.startsWith("http")) {
+      appUrl = `https://${appUrl}`;
+    }
 
     const queryParams = new URLSearchParams({
       membershipId,
@@ -48,6 +53,7 @@ export async function POST(req: Request) {
       paymentMethod: "paypal",
     });
 
+    // FIX 2: Stripped-down, ultra-safe payload containing only mandatory fields
     const response = await fetch(`${baseUrl}/v2/checkout/orders`, {
       method: "POST",
       headers: {
@@ -58,13 +64,11 @@ export async function POST(req: Request) {
         intent: "CAPTURE",
         purchase_units: [
           {
-            reference_id: membershipId,
-            description: `${plan} Membership`,
             amount: {
               currency_code: "USD",
               value: String(amount),
             },
-            custom_id: membershipId,
+            description: `${plan} Membership`,
           },
         ],
         application_context: {
@@ -72,19 +76,19 @@ export async function POST(req: Request) {
           user_action: "PAY_NOW",
           return_url: `${appUrl}/order-success?${queryParams.toString()}`,
           cancel_url: `${appUrl}/payment`,
-        },
-        payer: {
-          name: memberName ? { given_name: memberName } : undefined,
-          email_address: email || undefined,
-        },
+        }
       }),
       cache: "no-store",
     });
 
     const data = await response.json();
+    
+    // If PayPal still rejects it, log their exact reason to your Vercel logs
     if (!response.ok) {
+      console.error("PayPal API Rejection Reason:", data);
       throw new Error(data?.message || "Failed to create PayPal order.");
     }
+    
     return NextResponse.json(data);
   } catch (error: any) {
     console.error("PayPal create order error:", error);
