@@ -16,22 +16,9 @@ export const metadata: Metadata = {
   description:
     "Experience premium Goa with exclusive membership access to curated stays, dining, nightlife, travel, and luxury privileges.",
   generator: "v0.app",
-  icons: {
-    icon: [
-      {
-        url: "/icon-light-32x32.png",
-        media: "(prefers-color-scheme: light)",
-      },
-      {
-        url: "/icon-dark-32x32.png",
-        media: "(prefers-color-scheme: dark)",
-      },
-      {
-        url: "/icon.svg",
-        type: "image/svg+xml",
-      },
-    ],
-    apple: "/apple-icon.png",
+  // REMOVED: Old Vercel icon arrays so Next.js defaults to your new app/icon.png automatically
+  verification: {
+    google: "cKmc-hEP2MYewTKPZrkffCK2SivxCjr_28ATvxWHDEc", // <-- ADDED FOR VERIFICATION
   },
 };
 
