@@ -5,7 +5,6 @@ import { useEffect, useMemo, useState } from "react";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import {
-  CreditCard,
   Landmark,
   Wallet,
   CheckCircle2,
@@ -21,7 +20,7 @@ declare global {
   }
 }
 
-type Method = "razorpay" | "stripe" | "paypal";
+type Method = "razorpay" | "paypal";
 
 export default function PaymentPage() {
   const router = useRouter();
@@ -62,7 +61,6 @@ export default function PaymentPage() {
 
   const paymentTitle = useMemo(() => {
     if (method === "razorpay") return "Razorpay";
-    if (method === "stripe") return "Stripe";
     return "PayPal";
   }, [method]);
 
@@ -70,15 +68,11 @@ export default function PaymentPage() {
     if (method === "razorpay") {
       return "Best for India payments with UPI, GPay, Paytm, cards, and net banking.";
     }
-    if (method === "stripe") {
-      return "Fast international card checkout with a clean payment experience.";
-    }
     return "Secure international payments via PayPal.";
   }, [method]);
 
   const paymentButtonLabel = useMemo(() => {
     if (method === "razorpay") return `Pay $${Number(totalAmount).toFixed(2)} with Razorpay`;
-    if (method === "stripe") return `Pay $${Number(totalAmount).toFixed(2)} with Stripe`;
     return `Pay $${Number(totalAmount).toFixed(2)} with PayPal`;
   }, [method, totalAmount]);
 
@@ -156,35 +150,6 @@ export default function PaymentPage() {
     }
   };
 
-  const handleStripePayment = async () => {
-    try {
-      const response = await fetch("/api/stripe/create-session", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          totalAmount,
-          baseAmount,
-          serviceFee,
-          calculatedGst,
-          plan,
-          membershipId,
-          memberName: name,
-          email,
-          phone,
-          address,
-          city,
-        }),
-      });
-      const data = await response.json();
-      if (!response.ok || !data.url) throw new Error(data?.error || "Stripe session creation failed");
-      window.location.href = data.url;
-    } catch (error) {
-      console.error("Stripe payment failed:", error);
-      alert("Unable to start Stripe payment. Please try again.");
-      setLoading(false);
-    }
-  };
-
   const handlePayPalPayment = async () => {
     try {
       const response = await fetch("/api/paypal/create-order", {
@@ -219,13 +184,11 @@ export default function PaymentPage() {
   const handlePayment = async () => {
     setLoading(true);
     if (method === "razorpay") await handleRazorpayPayment();
-    else if (method === "stripe") await handleStripePayment();
     else if (method === "paypal") await handlePayPalPayment();
   };
 
   const methods = [
     { key: "razorpay" as Method, title: "Razorpay", desc: "UPI, GPay, Paytm, cards, and net banking", icon: Landmark },
-    { key: "stripe" as Method, title: "Stripe", desc: "International debit and credit cards", icon: CreditCard },
     { key: "paypal" as Method, title: "PayPal", desc: "Secure international payments via PayPal", icon: Wallet },
   ];
 
