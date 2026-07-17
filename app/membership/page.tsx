@@ -46,6 +46,12 @@ export default function MembershipPage() {
   const [addressError, setAddressError] = useState("");
   const [isFetchingLocation, setIsFetchingLocation] = useState(false);
 
+  // NEW: Corporate GST States
+  const [isCorporate, setIsCorporate] = useState(false);
+  const [gstin, setGstin] = useState("");
+  const [companyName, setCompanyName] = useState("");
+  const [companyAddress, setCompanyAddress] = useState("");
+
   const benefits = [
     {
       category: t("membership.benefits.hotels.category"),
@@ -163,6 +169,10 @@ export default function MembershipPage() {
     setCustomerAddress("");
     setCustomerCity("");
     setAddressError("");
+    setIsCorporate(false);
+    setGstin("");
+    setCompanyName("");
+    setCompanyAddress("");
   };
 
   const canContinueToConfirm =
@@ -189,39 +199,33 @@ export default function MembershipPage() {
       alert("Geolocation is not supported by your browser.");
       return;
     }
-
     setIsFetchingLocation(true);
     setAddressError("");
-
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         try {
           const { latitude, longitude } = position.coords;
           const googleApiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
-
           if (!googleApiKey) {
-            alert("NEXT.JS ERROR: The API key is missing!\n\nPlease check your .env.local file. If you just added it, you MUST kill the terminal (Ctrl+C) and run 'npm run dev' again for Next.js to see it.");
+            alert("NEXT.JS ERROR: The API key is missing!\n\nPlease check your .env.local file.");
             setIsFetchingLocation(false);
             return;
           }
-
-          const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${googleApiKey}`);
+          const response = await fetch(
+            `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${googleApiKey}`
+          );
           const data = await response.json();
-
           if (data.status === "OK" && data.results[0]) {
             setCustomerAddress(data.results[0].formatted_address);
-
             const cityObj = data.results[0].address_components.find((component: any) =>
-              component.types.includes("locality") || component.types.includes("administrative_area_level_2")
+              component.types.includes("locality") ||
+              component.types.includes("administrative_area_level_2")
             );
-
             if (cityObj && !customerCity) setCustomerCity(cityObj.long_name);
             setIsFetchingLocation(false);
-            return;
           } else {
-            alert(`GOOGLE MAPS BLOCKED THE REQUEST:\n\nStatus: ${data.status}\nMessage: ${data.error_message || "Unknown API restriction error"}\n\nTell your client to change Application Restrictions from 'Websites' to 'None' in the Google Cloud Console.`);
+            alert(`GOOGLE MAPS BLOCKED THE REQUEST:\n\nStatus: ${data.status}`);
             setIsFetchingLocation(false);
-            return;
           }
         } catch (error) {
           alert("Network failed to reach Google Maps. Check your internet connection.");
@@ -232,17 +236,14 @@ export default function MembershipPage() {
         setIsFetchingLocation(false);
         setAddressError("Location access denied or unavailable. Please type manually.");
       },
-      {
-        enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 0,
-      }
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
     );
   };
 
   const goToPaymentPage = () => {
     if (!selectedTier) return;
     const membershipId = `GM-${selectedTier.name.slice(0, 3).toUpperCase()}-${Math.floor(100000 + Math.random() * 900000)}`;
+    
     const params = new URLSearchParams({
       membershipId,
       plan: selectedTier.name,
@@ -252,7 +253,12 @@ export default function MembershipPage() {
       phone: customerPhone,
       address: customerAddress,
       city: customerCity,
+      isCorporate: String(isCorporate),
+      gstin: isCorporate ? gstin.trim() : "",
+      companyName: isCorporate ? companyName.trim() : "",
+      companyAddress: isCorporate ? companyAddress.trim() : "",
     });
+    
     closeCheckout();
     router.push(`/payment?${params.toString()}`);
   };
@@ -316,6 +322,7 @@ export default function MembershipPage() {
               {t("membership.plans.heading")}
             </h2>
           </motion.div>
+
           <div className="grid gap-8 lg:grid-cols-3">
             {tiers.map((tier, index) => (
               <motion.div
@@ -343,9 +350,7 @@ export default function MembershipPage() {
                   {tier.tagline}
                 </p>
                 <div className="mt-6 text-center">
-                  <span className="text-sm text-muted-foreground">
-                    {t("membership.plans.priceLabel")}
-                  </span>
+                  <span className="text-sm text-muted-foreground">{t("membership.plans.priceLabel")}</span>
                   <div className="mt-2">
                     <span className="text-4xl font-light text-primary">${tier.price}</span>
                   </div>
@@ -527,12 +532,13 @@ export default function MembershipPage() {
                 >
                   <X className="h-5 w-5" />
                 </button>
+
                 <div className="border-b border-border p-6 md:p-8">
                   <p className="text-xs uppercase tracking-[0.3em] text-primary">
                     {t("membership.checkout.secureTitle")}
                   </p>
                   <h3 className="mt-3 text-2xl font-light text-foreground md:text-3xl">
-                    {checkoutStep === 1 && `${t("membership.checkout.step1Heading")} - ${selectedTier.name}`}
+                    {checkoutStep === 1 && `${t("membership.checkout.step1Heading")} ${selectedTier.name}`}
                     {checkoutStep === 2 && t("membership.checkout.step2Heading")}
                   </h3>
                   <div className="mt-6 flex flex-wrap items-center gap-3 text-[11px] uppercase tracking-widest">
@@ -546,7 +552,7 @@ export default function MembershipPage() {
                     >
                       2. {t("membership.checkout.indicator2")}
                     </span>
-                    <span className="rounded-full border border-border px-3 py-1 text-muted-foreground font-[Arial,sans-serif] font-bold">
+                    <span className="rounded-full border border-border text-muted-foreground font-[Arial,sans-serif] font-bold">
                       3. {t("membership.checkout.indicator3")}
                     </span>
                     <span className="rounded-full border border-border px-3 py-1 text-muted-foreground font-[Arial,sans-serif] font-bold">
@@ -587,11 +593,12 @@ export default function MembershipPage() {
                               </span>
                             </div>
                           </div>
-                          <div className="mt-6 rounded-sm border border-primary/20 bg-primary/5 p-4 text-sm leading-relaxed text-muted-foreground">
-                            {t("membership.checkout.infoNote")}
-                          </div>
+                        </div>
+                        <div className="mt-6 rounded-sm border border-primary/20 bg-primary/5 p-4 text-sm leading-relaxed text-muted-foreground">
+                          {t("membership.checkout.infoNote")}
                         </div>
                       </div>
+
                       <div className="space-y-4">
                         <div className="grid grid-cols-2 gap-4">
                           <div>
@@ -599,6 +606,7 @@ export default function MembershipPage() {
                               {t("membership.checkout.form.firstName")}
                             </label>
                             <input
+                              type="text"
                               value={firstName}
                               onChange={(e) => setFirstName(e.target.value)}
                               placeholder="First name"
@@ -611,6 +619,7 @@ export default function MembershipPage() {
                               {t("membership.checkout.form.lastName")}
                             </label>
                             <input
+                              type="text"
                               value={lastName}
                               onChange={(e) => setLastName(e.target.value)}
                               placeholder="Last name"
@@ -651,6 +660,7 @@ export default function MembershipPage() {
                           </label>
                           <div className="relative">
                             <input
+                              type="text"
                               value={customerAddress}
                               onChange={(e) => {
                                 setCustomerAddress(e.target.value);
@@ -658,9 +668,7 @@ export default function MembershipPage() {
                               }}
                               placeholder="Enter country, state, pincode, address"
                               autoComplete="street-address"
-                              className={`w-full border ${
-                                addressError ? 'border-[#E57373]' : 'border-border'
-                              } bg-background px-4 py-3 pr-12 font-[Arial,sans-serif] text-sm text-foreground outline-none transition focus:border-primary placeholder:font-normal placeholder:tracking-normal`}
+                              className={`w-full border ${addressError ? "border-[#E57373]" : "border-border"} bg-background px-4 py-3 pr-12 font-[Arial,sans-serif] text-sm text-foreground outline-none transition focus:border-primary placeholder:font-normal placeholder:tracking-normal`}
                             />
                             <button
                               type="button"
@@ -687,6 +695,7 @@ export default function MembershipPage() {
                             {t("membership.checkout.form.city")}
                           </label>
                           <input
+                            type="text"
                             value={customerCity}
                             onChange={(e) => setCustomerCity(e.target.value)}
                             placeholder="Enter your city"
@@ -715,8 +724,6 @@ export default function MembershipPage() {
                           {t("membership.checkout.summary.title")}
                         </p>
                         <div className="mt-6 space-y-4">
-                          
-                          {/* NOTE: Replaced <span> with <div> and added break-words min-w-0 */}
                           <div className="flex items-start justify-between gap-4 border-b border-border pb-3">
                             <span className="font-[Arial,sans-serif] text-[12px] font-bold uppercase tracking-widest text-muted-foreground pt-[2px] shrink-0">
                               {t("membership.checkout.summary.plan")}
@@ -725,7 +732,6 @@ export default function MembershipPage() {
                               {selectedTier.name}
                             </div>
                           </div>
-                          
                           <div className="flex items-start justify-between gap-4 border-b border-border pb-3">
                             <span className="font-[Arial,sans-serif] text-[12px] font-bold uppercase tracking-widest text-muted-foreground pt-[2px] shrink-0">
                               {t("membership.checkout.summary.name")}
@@ -734,7 +740,6 @@ export default function MembershipPage() {
                               {firstName} {lastName}
                             </div>
                           </div>
-                          
                           <div className="flex items-start justify-between gap-4 border-b border-border pb-3">
                             <span className="font-[Arial,sans-serif] text-[12px] font-bold uppercase tracking-widest text-muted-foreground pt-[2px] shrink-0">
                               {t("membership.checkout.summary.email")}
@@ -743,7 +748,6 @@ export default function MembershipPage() {
                               {customerEmail}
                             </div>
                           </div>
-                          
                           <div className="flex items-start justify-between gap-4 border-b border-border pb-3">
                             <span className="font-[Arial,sans-serif] text-[12px] font-bold uppercase tracking-widest text-muted-foreground pt-[2px] shrink-0">
                               {t("membership.checkout.summary.phone")}
@@ -752,7 +756,6 @@ export default function MembershipPage() {
                               {customerPhone}
                             </div>
                           </div>
-                          
                           <div className="flex items-start justify-between gap-4 border-b border-border pb-3">
                             <span className="font-[Arial,sans-serif] text-[12px] font-bold uppercase tracking-widest text-muted-foreground pt-[2px] shrink-0">
                               {t("membership.checkout.summary.address")}
@@ -761,7 +764,6 @@ export default function MembershipPage() {
                               {customerAddress}
                             </div>
                           </div>
-                          
                           <div className="flex items-start justify-between gap-4 border-b border-border pb-3">
                             <span className="font-[Arial,sans-serif] text-[12px] font-bold uppercase tracking-widest text-muted-foreground pt-[2px] shrink-0">
                               {t("membership.checkout.summary.city")}
@@ -770,7 +772,6 @@ export default function MembershipPage() {
                               {customerCity}
                             </div>
                           </div>
-                          
                           <div className="flex items-start justify-between gap-4 pt-1">
                             <span className="font-[Arial,sans-serif] text-[12px] font-bold uppercase tracking-widest text-foreground pt-[4px] shrink-0">
                               {t("membership.checkout.summary.amount")}
@@ -779,9 +780,71 @@ export default function MembershipPage() {
                               ${selectedTier.price}
                             </div>
                           </div>
+                        </div>
 
+                        {/* NEW FEATURE: Corporate B2B Registration inputs */}
+                        <div className="mt-6 border-t border-border pt-5">
+                          <label className="flex items-start gap-3 cursor-pointer select-none">
+                            <input
+                              type="checkbox"
+                              checked={isCorporate}
+                              onChange={(e) => setIsCorporate(e.target.checked)}
+                              className="mt-1 h-4 w-4 rounded border-gray-300 bg-background text-primary focus:ring-primary outline-none accent-[#D4AF37]"
+                            />
+                            <div className="space-y-0.5">
+                              <span className="font-[Arial,sans-serif] text-xs font-bold uppercase tracking-widest text-foreground">
+                                Add GST Number
+                              </span>
+                              <p className="font-serif text-[11px] text-primary tracking-normal">
+                                Claim 18% input tax credit using corporate GST invoice
+                              </p>
+                            </div>
+                          </label>
+
+                          {isCorporate && (
+                            <div className="mt-4 space-y-4 pl-7 transition-all duration-300">
+                              <div>
+                                <label className="mb-1 block font-[Arial,sans-serif] text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                                  GST Registration Number (GSTIN)
+                                </label>
+                                <input
+                                  type="text"
+                                  value={gstin}
+                                  maxLength={15}
+                                  onChange={(e) => setGstin(e.target.value.toUpperCase())}
+                                  placeholder="e.g. 29AAAAA1111A1Z1"
+                                  className="w-full border border-border bg-background px-3 py-2 font-[Arial,sans-serif] text-xs text-foreground uppercase outline-none focus:border-primary"
+                                />
+                              </div>
+                              <div>
+                                <label className="mb-1 block font-[Arial,sans-serif] text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                                  Registered Company Name
+                                </label>
+                                <input
+                                  type="text"
+                                  value={companyName}
+                                  onChange={(e) => setCompanyName(e.target.value)}
+                                  placeholder="e.g. Goa Moments Private Limited"
+                                  className="w-full border border-border bg-background px-3 py-2 font-[Arial,sans-serif] text-xs text-foreground outline-none focus:border-primary"
+                                />
+                              </div>
+                              <div>
+                                <label className="mb-1 block font-[Arial,sans-serif] text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                                  Registered Company Address
+                                </label>
+                                <input
+                                  type="text"
+                                  value={companyAddress}
+                                  onChange={(e) => setCompanyAddress(e.target.value)}
+                                  placeholder="Complete company registered address"
+                                  className="w-full border border-border bg-background px-3 py-2 font-[Arial,sans-serif] text-xs text-foreground outline-none focus:border-primary"
+                                />
+                              </div>
+                            </div>
+                          )}
                         </div>
                       </div>
+
                       <div className="border border-primary/20 bg-gradient-to-b from-primary/5 to-transparent p-5">
                         <p className="text-xs uppercase tracking-[0.3em] text-primary">
                           {t("membership.checkout.confirm.title")}
@@ -794,14 +857,12 @@ export default function MembershipPage() {
                         </p>
                         <div className="mt-5 rounded-sm border border-primary/20 bg-background/30 p-4">
                           <div className="flex items-center gap-3">
-                            <Sparkles className="h-5 w-5 text-primary shrink-0" />
+                            <Sparkles className="h-5 w-5 shrink-0 text-primary" />
                             <p className="text-sm text-foreground">
                               {t("membership.checkout.confirm.sparkNote")}
                             </p>
                           </div>
                         </div>
-                        
-                        {/* NOTE: Changed to stack vertically on mobile (Confirm on top) and side-by-side on desktop */}
                         <div className="mt-8 flex flex-col-reverse sm:flex-row gap-3">
                           <button
                             type="button"
@@ -813,12 +874,12 @@ export default function MembershipPage() {
                           <button
                             type="button"
                             onClick={goToPaymentPage}
-                            className="w-full sm:w-1/2 bg-primary px-4 py-4 font-[Arial,sans-serif] text-[13px] font-bold uppercase tracking-widest text-primary-foreground transition hover:bg-primary/90"
+                            disabled={isCorporate && (!gstin || !companyName || !companyAddress)}
+                            className="w-full sm:w-1/2 bg-primary px-4 py-4 font-[Arial,sans-serif] text-[13px] font-bold uppercase tracking-widest text-primary-foreground transition hover:bg-primary/90 disabled:opacity-40 disabled:cursor-not-allowed"
                           >
                             {t("membership.checkout.confirm.btnConfirm")}
                           </button>
                         </div>
-
                       </div>
                     </div>
                   </div>

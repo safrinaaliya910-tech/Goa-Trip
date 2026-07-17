@@ -40,7 +40,13 @@ export async function POST(req: Request) {
           amount_paid: Number(body.amountPaid) || 0,
           payment_method: body.paymentMethod || 'unknown',
           payment_id: body.paymentId || `TXN-${Date.now()}`,
-          status: 'pending' // Ready for Flutter app activation
+          status: 'pending', // Ready for Flutter app activation
+          
+          // --- NEW CORPORATE B2B FIELDS ---
+          is_corporate: body.isCorporate || false,
+          gstin: body.gstin || null,
+          company_name: body.companyName || null,
+          company_address: body.companyAddress || null
         }
       ], { onConflict: 'id' }) // Explicitly state the primary key for the upsert
       .select();

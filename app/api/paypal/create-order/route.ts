@@ -30,12 +30,14 @@ async function getPayPalAccessToken() {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { amount, plan, membershipId, memberName, email, phone, address, city } = body;
+    const { 
+      amount, plan, membershipId, memberName, email, phone, address, city,
+      isCorporate, gstin, companyName, companyAddress 
+    } = body;
 
     const accessToken = await getPayPalAccessToken();
     const baseUrl = process.env.PAYPAL_BASE_URL!;
-    
-    // FIX 1: Force absolute URL formatting to prevent PayPal Semantic Errors
+
     let appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
     if (!appUrl.startsWith("http")) {
       appUrl = `https://${appUrl}`;
@@ -51,9 +53,12 @@ export async function POST(req: Request) {
       address,
       city,
       paymentMethod: "paypal",
+      isCorporate: String(isCorporate || false),
+      gstin: gstin || "",
+      companyName: companyName || "",
+      companyAddress: companyAddress || "",
     });
 
-    // FIX 2: Stripped-down, ultra-safe payload containing only mandatory fields
     const response = await fetch(`${baseUrl}/v2/checkout/orders`, {
       method: "POST",
       headers: {
@@ -76,25 +81,19 @@ export async function POST(req: Request) {
           user_action: "PAY_NOW",
           return_url: `${appUrl}/order-success?${queryParams.toString()}`,
           cancel_url: `${appUrl}/payment`,
-        }
+        },
       }),
       cache: "no-store",
     });
 
     const data = await response.json();
-    
-    // If PayPal still rejects it, log their exact reason to your Vercel logs
     if (!response.ok) {
       console.error("PayPal API Rejection Reason:", data);
       throw new Error(data?.message || "Failed to create PayPal order.");
     }
-    
     return NextResponse.json(data);
   } catch (error: any) {
     console.error("PayPal create order error:", error);
-    return NextResponse.json(
-      { error: error.message || "Unable to create PayPal order." },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: error.message || "Unable to create PayPal order." }, { status: 500 });
   }
 }

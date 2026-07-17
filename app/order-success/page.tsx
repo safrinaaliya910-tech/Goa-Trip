@@ -19,25 +19,33 @@ export default function OrderSuccessPage() {
   const city = searchParams.get("city") || "";
   const validity = searchParams.get("validity") || "Lifetime Membership";
   const paymentMethod = searchParams.get("paymentMethod") || "Secure Checkout";
-
+  
   const paypalToken = searchParams.get("token");
   const rawPaymentId = searchParams.get("paymentId");
+  
   const [orderId, setOrderId] = useState<string>(rawPaymentId || paypalToken || `ORDER-${Date.now()}`);
   const [verifying, setVerifying] = useState<boolean>(!!paypalToken);
-
   const workflowExecutedRef = useRef(false);
   const [previewUrl, setPreviewUrl] = useState<string>("");
+
   const safePlanName = plan.toLowerCase();
   const cardImagePath = `/images/${safePlanName}-card.jpg`;
+
+  // NEW: Corporate parameters parsing
+  const isCorporate = searchParams.get("isCorporate") === "true";
+  const gstin = searchParams.get("gstin") || "";
+  const companyName = searchParams.get("companyName") || "";
+  const companyAddress = searchParams.get("companyAddress") || "";
 
   useEffect(() => {
     if (workflowExecutedRef.current) return;
     if (!email || !cardImagePath) return;
-
     workflowExecutedRef.current = true;
 
     const executeWorkflow = async () => {
-      // 1. Capture PayPal Funds
+      let currentOrderId = orderId;
+
+      // 1. Capture PayPal Funds if necessary
       if (paymentMethod === "paypal" && paypalToken) {
         try {
           const captureResponse = await fetch("/api/paypal/capture-order", {
@@ -51,18 +59,18 @@ export default function OrderSuccessPage() {
           }
           if (captureData.id) {
             setOrderId(captureData.id);
+            currentOrderId = captureData.id;
           }
         } catch (err) {
           console.error("Critical capture error:", err);
           alert("Payment execution failed. Please verify with customer support.");
           setVerifying(false);
-          return; 
+          return;
         }
       }
-
       setVerifying(false);
 
-      // 2. Generate the Membership Card
+      // 2. Generate the Membership Card Canvas
       const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d");
       if (!ctx) return;
@@ -108,6 +116,7 @@ export default function OrderSuccessPage() {
         ctx.fillStyle = labelColor;
         ctx.font = `600 ${canvas.height * 0.015}px 'Arial', sans-serif`;
         ctx.fillText("MEMBER NAME", leftColX, startY);
+
         ctx.fillStyle = primaryColor;
         ctx.font = `bold ${canvas.height * 0.042}px 'Georgia', serif`;
         ctx.shadowColor = "rgba(0,0,0,0.7)";
@@ -122,6 +131,7 @@ export default function OrderSuccessPage() {
         ctx.fillStyle = labelColor;
         ctx.font = `600 ${canvas.height * 0.015}px 'Arial', sans-serif`;
         ctx.fillText("MEMBER ID", leftColX, row2Y);
+
         ctx.fillStyle = primaryColor;
         ctx.font = `bold ${canvas.height * 0.028}px 'Courier New', monospace`;
         ctx.shadowColor = "rgba(0,0,0,0.7)";
@@ -135,9 +145,11 @@ export default function OrderSuccessPage() {
         ctx.fillStyle = labelColor;
         ctx.font = `700 ${canvas.height * 0.018}px 'Arial', sans-serif`;
         ctx.fillText("REGISTERED CONTACT", rightColX, row2Y);
+
         ctx.fillStyle = primaryColor;
         ctx.font = `bold ${canvas.height * 0.030}px 'Arial', sans-serif`;
         ctx.fillText(phone, rightColX, row2Y + (canvas.height * 0.045));
+
         ctx.font = `600 ${canvas.height * 0.022}px 'Arial', sans-serif`;
         ctx.fillText(email.toLowerCase(), rightColX, row2Y + (canvas.height * 0.080));
 
@@ -145,7 +157,7 @@ export default function OrderSuccessPage() {
         setPreviewUrl(finalImageDataUrl);
 
         try {
-          // 3. Save to DB
+          // 3. Save to database record
           await fetch("/api/save-member", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -158,13 +170,17 @@ export default function OrderSuccessPage() {
               phone,
               address,
               city,
-              paymentId: paypalToken || orderId,
+              paymentId: paypalToken || currentOrderId,
               paymentMethod,
               status: "Confirmed",
+              isCorporate,
+              gstin,
+              companyName,
+              companyAddress,
             }),
           });
 
-          // 4. Send the email
+          // 4. Send email confirmation attaching the generated card and B2B invoice blocks
           await fetch("/api/send-membership-email", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -177,10 +193,14 @@ export default function OrderSuccessPage() {
               phone,
               address,
               city,
-              paymentId: paypalToken || orderId,
+              paymentId: paypalToken || currentOrderId,
               validity,
               paymentMethod,
               cardImage: finalImageDataUrl,
+              isCorporate,
+              gstin,
+              companyName,
+              companyAddress,
             }),
           });
         } catch (error) {
@@ -190,7 +210,7 @@ export default function OrderSuccessPage() {
     };
 
     executeWorkflow();
-  }, [cardImagePath, safePlanName, memberName, membershipId, phone, email, amountPaid, address, city, orderId, validity, paymentMethod, paypalToken]);
+  }, [cardImagePath, safePlanName, memberName, membershipId, phone, email, amountPaid, address, city, orderId, validity, paymentMethod, paypalToken, isCorporate, gstin, companyName, companyAddress]);
 
   const downloadCard = () => {
     if (!previewUrl) return;
@@ -224,7 +244,7 @@ export default function OrderSuccessPage() {
             <p className="mt-6 text-xs uppercase tracking-[0.35em] text-primary">Order Confirmed</p>
             <h1 className="mt-5 text-5xl font-light text-foreground md:text-6xl lg:text-7xl">Order Successful</h1>
             <p className="mx-auto mt-6 max-w-3xl text-lg leading-relaxed text-muted-foreground md:text-xl">
-              Welcome to GOA MOMENTS. Your membership has been activated successfully. Your card, support access, and premium benefits are now ready.
+              Welcome to GOA MOMENTS. Your membership has been activated successfully. Your card, support access, and premium privileges are now live.
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3 text-[11px] uppercase tracking-widest">
               <span className="rounded-full border border-border px-3 py-1 text-muted-foreground">1. Details</span>
@@ -233,6 +253,7 @@ export default function OrderSuccessPage() {
               <span className="rounded-full bg-primary px-3 py-1 text-primary-foreground">4. Order Successful</span>
             </div>
           </div>
+
           <div className="mt-14 grid gap-8 lg:grid-cols-[1.15fr_0.85fr]">
             <div className="border border-primary/30 bg-card p-4 shadow-[0_0_40px_rgba(212,175,55,0.10)] md:p-6">
               <div className="flex items-center justify-between border-b border-border pb-4">
@@ -265,6 +286,7 @@ export default function OrderSuccessPage() {
                 </div>
               </div>
             </div>
+
             <div className="border border-border bg-card p-6 md:p-8">
               <div className="flex items-center justify-between">
                 <h2 className="text-3xl font-light text-foreground">Order Details</h2>
@@ -311,11 +333,31 @@ export default function OrderSuccessPage() {
                   <span>Order ID</span>
                   <span className="break-all text-right text-foreground">{paypalToken || orderId}</span>
                 </div>
-                <div className="flex items-start justify-between gap-4 text-primary">
+
+                {/* Show Corporate B2B reference rows if selected */}
+                {isCorporate && (
+                  <div className="mt-4 pt-4 border-t border-dashed border-border space-y-3 bg-primary/5 p-3 rounded-md">
+                    <p className="text-xs uppercase tracking-wider font-sans font-bold text-primary">Corporate Invoice Details</p>
+                    <div className="flex justify-between text-xs">
+                      <span>Company Name</span>
+                      <span className="text-foreground font-medium uppercase text-right max-w-[60%] break-words">{companyName}</span>
+                    </div>
+                    <div className="flex justify-between text-xs">
+                      <span>GSTIN Number</span>
+                      <span className="text-foreground font-mono font-bold uppercase">{gstin}</span>
+                    </div>
+                    <div className="flex justify-between text-xs">
+                      <span>Company Address</span>
+                      <span className="text-foreground text-right max-w-[60%] break-words capitalize">{companyAddress}</span>
+                    </div>
+                  </div>
+                )}
+
+                <div className="flex items-start justify-between gap-4 border-t border-border pt-3 text-primary">
                   <span>Status</span>
                   <span className="text-right font-medium">Confirmed</span>
                 </div>
-                <div className="flex items-start justify-between gap-4 border-t border-border pt-5">
+                <div className="flex items-start justify-between gap-4">
                   <span>Validity</span>
                   <span className="text-right text-foreground">{validity}</span>
                 </div>

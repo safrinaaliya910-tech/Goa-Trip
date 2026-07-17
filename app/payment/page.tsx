@@ -37,6 +37,12 @@ export default function PaymentPage() {
   const address = params.get("address") || "";
   const city = params.get("city") || "";
 
+  // NEW: Read corporate keys from string values
+  const isCorporate = params.get("isCorporate") === "true";
+  const gstin = params.get("gstin") || "";
+  const companyName = params.get("companyName") || "";
+  const companyAddress = params.get("companyAddress") || "";
+
   // FINANCIAL CALCULATION
   const baseAmount = Number(params.get("amount")) || 160;
   const serviceFee = 2.50;
@@ -89,6 +95,10 @@ export default function PaymentPage() {
       paymentId,
       validity: "Lifetime Membership",
       paymentMethod,
+      isCorporate: String(isCorporate),
+      gstin,
+      companyName,
+      companyAddress,
     });
     router.push(`/order-success?${query.toString()}`);
   };
@@ -115,6 +125,10 @@ export default function PaymentPage() {
           phone,
           address,
           city,
+          isCorporate,
+          gstin,
+          companyName,
+          companyAddress,
         }),
       });
 
@@ -133,7 +147,7 @@ export default function PaymentPage() {
           goToSuccessPage("razorpay", response.razorpay_payment_id);
         },
         prefill: { name, email, contact: phone },
-        notes: { membershipId, plan, city },
+        notes: { membershipId, plan, city, isCorporate: String(isCorporate), gstin },
         theme: { color: "#d4af37" },
         modal: {
           ondismiss: function () {
@@ -164,6 +178,10 @@ export default function PaymentPage() {
           phone,
           address,
           city,
+          isCorporate,
+          gstin,
+          companyName,
+          companyAddress,
         }),
       });
       const data = await response.json();
@@ -289,6 +307,24 @@ export default function PaymentPage() {
                   </div>
                 </div>
               </div>
+
+              {/* NEW FEATURE: Corporate metadata claim dashboard confirmation badge */}
+              {isCorporate && (
+                <div className="mt-4 rounded-lg border border-yellow-600/30 bg-yellow-500/10 p-4">
+                  <div className="flex items-start gap-3">
+                    <ShieldCheck className="h-5 w-5 text-[#D4AF37] shrink-0 mt-0.5" />
+                    <div>
+                      <p className="text-xs uppercase tracking-wider text-black font-bold font-sans">
+                        Corporate Input Tax Credit Claimed
+                      </p>
+                      <p className="mt-1 font-serif text-xs text-gray-700 leading-relaxed">
+                        An official B2B tax invoice will automatically be sent to your email addressed to <strong className="uppercase">{companyName}</strong> (GSTIN: {gstin}).
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               <div className="mt-8 space-y-6">
                 <div className="flex items-center justify-between gap-4 border-b border-gray-100 pb-3">
                   <span className="font-serif text-[12px] font-bold tracking-widest text-gray-500 uppercase">Membership Plan</span>

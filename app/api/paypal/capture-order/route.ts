@@ -38,7 +38,7 @@ export async function POST(req: Request) {
 
     const accessToken = await getPayPalAccessToken();
     const baseUrl = process.env.PAYPAL_BASE_URL!;
-    
+
     const response = await fetch(`${baseUrl}/v2/checkout/orders/${orderID}/capture`, {
       method: "POST",
       headers: {
@@ -55,9 +55,6 @@ export async function POST(req: Request) {
     return NextResponse.json(data);
   } catch (error: any) {
     console.error("PayPal capture order error:", error);
-    return NextResponse.json(
-      { error: error.message || "Unable to capture PayPal order." },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: error.message || "Unable to capture PayPal order." }, { status: 500 });
   }
 }
