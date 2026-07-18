@@ -99,3 +99,14 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Webhook handler failed" }, { status: 500 });
   }
 }
+
+// This handles humans (like you) visiting the link in Chrome/Safari
+export async function GET() {
+  return NextResponse.json(
+    { 
+      status: "Online", 
+      message: "GOA MOMENTS PayPal Webhook listener is active and waiting for POST requests." 
+    },
+    { status: 200 }
+  );
+}
