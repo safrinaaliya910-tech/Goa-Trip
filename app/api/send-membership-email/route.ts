@@ -4,6 +4,49 @@ import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 import fs from "fs";
 import path from "path";
 
+// Helper to convert numbers to words (Strictly US Dollars + Cents)
+function convertNumberToWords(amount: number): string {
+  const num = Math.floor(amount);
+  const cents = Math.round((amount - num) * 100);
+  
+  if (num === 0 && cents === 0) return "Zero Dollars";
+  
+  const a = ['', 'One ', 'Two ', 'Three ', 'Four ', 'Five ', 'Six ', 'Seven ', 'Eight ', 'Nine ', 'Ten ', 'Eleven ', 'Twelve ', 'Thirteen ', 'Fourteen ', 'Fifteen ', 'Sixteen ', 'Seventeen ', 'Eighteen ', 'Nineteen '];
+  const b = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+  
+  const inWords = (n: number): string => {
+    if (n < 20) return a[n];
+    const strNum = n.toString();
+    return b[parseInt(strNum[0])] + ' ' + a[parseInt(strNum[1])];
+  };
+
+  let word = '';
+  let temp = num;
+  
+  if (temp > 99999) {
+    word += inWords(Math.floor(temp / 100000)) + "Hundred Thousand ";
+    temp %= 100000;
+  }
+  if (temp > 999) {
+    word += inWords(Math.floor(temp / 1000)) + "Thousand ";
+    temp %= 1000;
+  }
+  if (temp > 99) {
+    word += inWords(Math.floor(temp / 100)) + "Hundred ";
+    temp %= 100;
+  }
+  if (temp > 0) {
+    word += (word !== '' ? 'and ' : '') + inWords(temp);
+  }
+  
+  let finalString = "Dollars " + word.trim();
+  if (cents > 0) {
+    finalString += ` and ${cents}/100`;
+  }
+  
+  return finalString;
+}
+
 export async function POST(req: Request) {
   try {
     const body = await req.json();
@@ -14,6 +57,7 @@ export async function POST(req: Request) {
       memberName,
       email,
       phone,
+      address,
       city,
       paymentId,
       validity,
@@ -51,10 +95,17 @@ export async function POST(req: Request) {
       });
     }
 
-    // Financial calculations for the invoice
-    const totalCost = Number(amountPaid) || 160;
-    const calculatedBaseFee = (totalCost / 1.18) - 2.50;
-    const computedGstAmt = totalCost - (totalCost / 1.18);
+    // --- FINANCIAL CALCULATIONS ($ DOLLARS) ---
+    const rawTotal = parseFloat(String(amountPaid).replace(/[^0-9.-]+/g, "")) || 165;
+    const basePrice = rawTotal / 1.18;
+    const totalTax = rawTotal - basePrice;
+    const cgst = Math.round((totalTax / 2) * 100) / 100; 
+    const sgst = totalTax - cgst; 
+    const sacCode = "999799"; 
+    
+    // Clean, professional Invoice Number format
+    const invoiceNo = `INV-${Date.now().toString().slice(-6)}`;
+    const formatAmt = (num: number) => num.toFixed(2); 
 
     // 2. Generate and Attach the PREMIUM B2B PDF Invoice
     if (isCorporate && gstin && companyName) {
@@ -63,119 +114,144 @@ export async function POST(req: Request) {
       const { width, height } = page.getSize();
       
       const boldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
-      
-      // Colors: Pure Black for all text, Gold for accents
       const goldColor = rgb(0.831, 0.686, 0.216); // #D4AF37
-      const blackColor = rgb(0, 0, 0);            // Pure Black (#000000)
-      const lightGray = rgb(0.9, 0.9, 0.9);       // #E5E5E5 (Only used for thin border lines)
-      const whiteColor = rgb(1, 1, 1);            // #FFFFFF
-
-      // Helper function defaulting strictly to Bold Black text
-      const drawText = (text: string, x: number, yOffset: number, size = 10, color = blackColor) => {
-        page.drawText(text, { x, y: height - yOffset, size, font: boldFont, color });
+      const blackColor = rgb(0, 0, 0); 
+      
+      // Alignment Helpers (EVERYTHING FORCED BOLD)
+      const drawText = (text: string, x: number, y: number, size = 10, color = blackColor) => {
+        page.drawText(text, { x, y: height - y, size, font: boldFont, color });
       };
 
-      // --- PREMIUM PDF DESIGN START ---
+      const drawCenterText = (text: string, xStart: number, xEnd: number, y: number, size = 10, color = blackColor) => {
+        const textWidth = boldFont.widthOfTextAtSize(text, size);
+        const center = xStart + (xEnd - xStart) / 2;
+        page.drawText(text, { x: center - textWidth / 2, y: height - y, size, font: boldFont, color });
+      };
 
-      // 1. Top Gold Accent Bar
-      page.drawRectangle({ x: 0, y: height - 10, width: width, height: 10, color: goldColor });
+      const drawRightText = (text: string, xRight: number, y: number, size = 10, color = blackColor) => {
+        const textWidth = boldFont.widthOfTextAtSize(text, size);
+        page.drawText(text, { x: xRight - textWidth, y: height - y, size, font: boldFont, color });
+      };
 
-      // 2. Logo & Header Section
+      // --- PDF DESIGN START ---
+
       try {
         const logoPath = path.join(process.cwd(), 'public', 'images', 'logo.png');
         const logoBytes = fs.readFileSync(logoPath);
         const logoImage = await pdfDoc.embedPng(logoBytes); 
-        
         const scaleFactor = 45 / logoImage.height;
         page.drawImage(logoImage, {
-          x: 50,
+          x: 40,
           y: height - 75, 
           width: logoImage.width * scaleFactor,
           height: 45,
         });
       } catch (e) {
-        drawText("GOA MOMENTS", 50, 55, 24, goldColor);
+        drawText("GOA MOMENTS", 40, 55, 24, goldColor);
       }
 
-      // Top Right: Invoice Info (Bold Black)
+      // Header Text
       drawText("TAX INVOICE", 400, 45, 22, goldColor);
-      drawText(`Invoice No: INV-${Date.now().toString().slice(-6)}`, 400, 65, 10, blackColor);
+      drawText(`Invoice No: ${invoiceNo}`, 400, 65, 10, blackColor);
       drawText(`Date: ${new Date().toLocaleDateString('en-IN')}`, 400, 80, 10, blackColor);
 
-      // Main Gold Divider Line
-      page.drawLine({ start: { x: 50, y: height - 105 }, end: { x: width - 50, y: height - 105 }, thickness: 1.5, color: goldColor });
+      page.drawLine({ start: { x: 40, y: height - 105 }, end: { x: 555, y: height - 105 }, thickness: 1.5, color: goldColor });
 
-      // 3. Billing Sections (Perfectly Side-by-Side)
-      const sectionY = 135;
-      
-      // Left: Supplier Details (ALL BOLD BLACK)
-      drawText("SUPPLIER DETAILS", 50, sectionY, 11, goldColor);
-      drawText("LOTLAN EXPERT PRIVATE LIMITED", 50, sectionY + 20, 10, blackColor);
-      drawText("Sarojini Road,Pappanaickenpalayam", 50, sectionY + 35, 10, blackColor); // <-- Edit Address Here
-      drawText("Coimbatore, Tamil Nadu, 641044", 50, sectionY + 50, 10, blackColor);          // <-- Edit Pincode Here
-      drawText("GSTIN: 33AAFCL4757P1ZY", 50, sectionY + 70, 10, blackColor);           // <-- Edit GSTIN Here
+      // Addresses
+      const sectionY = 130;
+      drawText("SUPPLIER DETAILS", 40, sectionY, 11, goldColor);
+      drawText("LOTLAN EXPERT PRIVATE LIMITED", 40, sectionY + 20, 10, blackColor);
+      drawText("Sarojini Road, Pappanaickenpalayam", 40, sectionY + 35, 10, blackColor);
+      drawText("Coimbatore, Tamil Nadu, 641044", 40, sectionY + 50, 10, blackColor);
+      drawText("GSTIN: 33AAFCL4757P1ZY", 40, sectionY + 70, 10, blackColor); 
 
-      // Right: Recipient Details (ALL BOLD BLACK)
       drawText("BILLED TO (RECIPIENT)", 320, sectionY, 11, goldColor);
       drawText(companyName.toUpperCase(), 320, sectionY + 20, 10, blackColor);
       drawText(companyAddress, 320, sectionY + 35, 10, blackColor);
       drawText(`City: ${city.toUpperCase()}`, 320, sectionY + 50, 10, blackColor);
       drawText(`BUYER GSTIN: ${gstin.toUpperCase()}`, 320, sectionY + 70, 10, blackColor);
 
-      // 4. Table Header (Solid Gold Block with White Text)
-      const tableY = sectionY + 110;
-      page.drawRectangle({ x: 50, y: height - tableY - 20, width: width - 100, height: 26, color: goldColor });
+      // --- TABLE 1: Strict Grid Layout ---
+      const t1Y = 240;
+      page.drawRectangle({ x: 40, y: height - (t1Y + 125), width: 515, height: 125, borderColor: blackColor, borderWidth: 1 });
       
-      drawText("Description", 60, tableY + 13, 10, whiteColor);
-      drawText("SAC Code", 250, tableY + 13, 10, whiteColor);
-      drawText("Base Price", 330, tableY + 13, 10, whiteColor);
-      drawText("GST (18%)", 410, tableY + 13, 10, whiteColor);
-      drawText("Total", 490, tableY + 13, 10, whiteColor);
-
-      // 5. Table Data Row (ALL BOLD BLACK)
-      const rowY = tableY + 45;
-      drawText(`${plan} Membership`, 60, rowY, 10, blackColor);
-      drawText("999799", 250, rowY, 10, blackColor);
-      drawText(`$${calculatedBaseFee.toFixed(2)}`, 330, rowY, 10, blackColor);
-      drawText(`$${computedGstAmt.toFixed(2)}`, 410, rowY, 10, blackColor);
-      drawText(`$${totalCost.toFixed(2)}`, 490, rowY, 10, blackColor);
-
-      // Subtle Bottom Border for Row
-      page.drawLine({ start: { x: 50, y: height - rowY - 15 }, end: { x: width - 50, y: height - rowY - 15 }, thickness: 1, color: lightGray });
-
-      // 6. Totals Section (ALL BOLD BLACK)
-      const totalsY = rowY + 45;
-      drawText("Subtotal:", 410, totalsY, 10, blackColor);
-      drawText(`$${calculatedBaseFee.toFixed(2)}`, 490, totalsY, 10, blackColor);
+      page.drawLine({ start: { x: 40, y: height - (t1Y + 25) }, end: { x: 555, y: height - (t1Y + 25) }, thickness: 1, color: blackColor });
+      page.drawLine({ start: { x: 40, y: height - (t1Y + 50) }, end: { x: 555, y: height - (t1Y + 50) }, thickness: 1, color: blackColor });
+      page.drawLine({ start: { x: 40, y: height - (t1Y + 75) }, end: { x: 555, y: height - (t1Y + 75) }, thickness: 1, color: blackColor });
+      page.drawLine({ start: { x: 40, y: height - (t1Y + 100) }, end: { x: 555, y: height - (t1Y + 100) }, thickness: 1, color: blackColor });
       
-      drawText("GST (18%):", 410, totalsY + 18, 10, blackColor);
-      drawText(`$${computedGstAmt.toFixed(2)}`, 490, totalsY + 18, 10, blackColor);
+      page.drawLine({ start: { x: 300, y: height - t1Y }, end: { x: 300, y: height - (t1Y + 125) }, thickness: 1, color: blackColor });
+      page.drawLine({ start: { x: 430, y: height - t1Y }, end: { x: 430, y: height - (t1Y + 125) }, thickness: 1, color: blackColor });
 
-      // Thick Gold Line above Grand Total
-      page.drawLine({ start: { x: 390, y: height - totalsY - 30 }, end: { x: width - 50, y: height - totalsY - 30 }, thickness: 2, color: goldColor });
+      drawCenterText("Particulars", 40, 300, t1Y + 17, 10, blackColor);
+      drawCenterText("HSN/SAC", 300, 430, t1Y + 17, 10, blackColor);
+      drawCenterText("Amount ($)", 430, 555, t1Y + 17, 10, blackColor);
 
-      drawText("Grand Total:", 410, totalsY + 48, 12, goldColor);
-      drawText(`$${totalCost.toFixed(2)}`, 490, totalsY + 48, 12, goldColor);
+      drawText(`${plan} Membership Fee`, 45, t1Y + 42, 10, blackColor);
+      drawCenterText(sacCode, 300, 430, t1Y + 42, 10, blackColor);
+      drawRightText(formatAmt(basePrice), 545, t1Y + 42, 10, blackColor); // Flush right
 
-      // 7. Legal Footer (Centered, BOLD BLACK)
-      const footerY = 780;
-      page.drawLine({ start: { x: 50, y: height - footerY + 20 }, end: { x: width - 50, y: height - footerY + 20 }, thickness: 1, color: lightGray });
+      // PERFECT ALIGNMENT: Flush Right inside Particulars Column (x=290)
+      drawRightText("CGST @ 9.00%", 290, t1Y + 67, 10, blackColor);
+      drawRightText(formatAmt(cgst), 545, t1Y + 67, 10, blackColor);
+
+      drawRightText("SGST @ 9.00%", 290, t1Y + 92, 10, blackColor);
+      drawRightText(formatAmt(sgst), 545, t1Y + 92, 10, blackColor);
+
+      drawRightText("Grand Total", 290, t1Y + 117, 10, blackColor);
+      drawRightText(formatAmt(rawTotal), 545, t1Y + 117, 10, blackColor);
+
+      drawText(`Amount Chargeable (in words): ${convertNumberToWords(rawTotal)} Only.`, 40, t1Y + 145, 10, blackColor);
+
+      // --- TABLE 2: Tax Breakdown Strict Grid ---
+      const t2Y = 410;
+      page.drawRectangle({ x: 40, y: height - (t2Y + 90), width: 515, height: 90, borderColor: blackColor, borderWidth: 1 });
       
-      const drawCenteredText = (text: string, yOffset: number, size = 9, color = blackColor) => {
-        const textWidth = boldFont.widthOfTextAtSize(text, size);
-        page.drawText(text, { x: (width - textWidth) / 2, y: height - yOffset, size, font: boldFont, color });
-      };
+      page.drawLine({ start: { x: 215, y: height - (t2Y + 20) }, end: { x: 455, y: height - (t2Y + 20) }, thickness: 1, color: blackColor });
+      page.drawLine({ start: { x: 40, y: height - (t2Y + 40) }, end: { x: 555, y: height - (t2Y + 40) }, thickness: 1, color: blackColor });
+      page.drawLine({ start: { x: 40, y: height - (t2Y + 65) }, end: { x: 555, y: height - (t2Y + 65) }, thickness: 1, color: blackColor });
+      
+      page.drawLine({ start: { x: 120, y: height - t2Y }, end: { x: 120, y: height - (t2Y + 90) }, thickness: 1, color: blackColor });
+      page.drawLine({ start: { x: 215, y: height - t2Y }, end: { x: 215, y: height - (t2Y + 90) }, thickness: 1, color: blackColor });
+      page.drawLine({ start: { x: 265, y: height - (t2Y + 20) }, end: { x: 265, y: height - (t2Y + 90) }, thickness: 1, color: blackColor });
+      page.drawLine({ start: { x: 335, y: height - t2Y }, end: { x: 335, y: height - (t2Y + 90) }, thickness: 1, color: blackColor });
+      page.drawLine({ start: { x: 385, y: height - (t2Y + 20) }, end: { x: 385, y: height - (t2Y + 90) }, thickness: 1, color: blackColor });
+      page.drawLine({ start: { x: 455, y: height - t2Y }, end: { x: 455, y: height - (t2Y + 90) }, thickness: 1, color: blackColor });
 
-      drawCenteredText("This is a computer-generated invoice and does not require a physical signature.", footerY, 9, blackColor);
-      drawCenteredText(`Input Tax Credit (ITC) of 18% has been safely logged against Buyer GSTIN: ${gstin.toUpperCase()}`, footerY + 15, 9, blackColor);
+      drawCenterText("HSN/SAC", 40, 120, t2Y + 25, 10, blackColor);
+      drawCenterText("Taxable Value", 120, 215, t2Y + 25, 10, blackColor);
+      drawCenterText("CGST", 215, 335, t2Y + 14, 10, blackColor);
+      drawCenterText("SGST/UTGST", 335, 455, t2Y + 14, 10, blackColor);
+      drawCenterText("Total Tax", 455, 555, t2Y + 25, 10, blackColor);
 
-      // --- PREMIUM PDF DESIGN END ---
+      drawCenterText("Rate", 215, 265, t2Y + 34, 10, blackColor);
+      drawCenterText("Amount", 265, 335, t2Y + 34, 10, blackColor);
+      drawCenterText("Rate", 335, 385, t2Y + 34, 10, blackColor);
+      drawCenterText("Amount", 385, 455, t2Y + 34, 10, blackColor);
+
+      drawCenterText(sacCode, 40, 120, t2Y + 57, 10, blackColor);
+      drawRightText(formatAmt(basePrice), 205, t2Y + 57, 10, blackColor); // Flush right inside cell
+      drawCenterText("9.00%", 215, 265, t2Y + 57, 10, blackColor);
+      drawRightText(formatAmt(cgst), 325, t2Y + 57, 10, blackColor); // Flush right
+      drawCenterText("9.00%", 335, 385, t2Y + 57, 10, blackColor);
+      drawRightText(formatAmt(sgst), 445, t2Y + 57, 10, blackColor); // Flush right
+      drawRightText(formatAmt(totalTax), 545, t2Y + 57, 10, blackColor); // Flush right
+
+      drawCenterText("Total", 40, 120, t2Y + 82, 10, blackColor);
+      drawRightText(formatAmt(basePrice), 205, t2Y + 82, 10, blackColor);
+      drawRightText(formatAmt(cgst), 325, t2Y + 82, 10, blackColor);
+      drawRightText(formatAmt(sgst), 445, t2Y + 82, 10, blackColor);
+      drawRightText(formatAmt(totalTax), 545, t2Y + 82, 10, blackColor);
+
+      // Footer
+      drawText("This is a computer-generated invoice and does not require a physical signature.", 40, 525, 9, blackColor);
+      drawText(`Input Tax Credit (ITC) of 18% has been safely logged against Buyer GSTIN: ${gstin.toUpperCase()}`, 40, 540, 9, blackColor);
 
       const pdfBytes = await pdfDoc.save();
       const pdfBuffer = Buffer.from(pdfBytes);
 
       attachments.push({
-        filename: `Tax_Invoice_${paymentId}.pdf`,
+        filename: `Tax_Invoice_${invoiceNo}.pdf`,
         content: pdfBuffer,
         contentType: "application/pdf",
       });
@@ -241,27 +317,19 @@ export async function POST(req: Request) {
                         </tr>
                         <tr>
                           <td style="padding:8px 0;color:#a99f8b;">Amount Paid</td>
-                          <td align="right" style="padding:8px 0;color:#d4af37;font-weight:bold;">$${totalCost.toFixed(2)}</td>
+                          <td align="right" style="padding:8px 0;color:#d4af37;font-weight:bold;">$${rawTotal.toFixed(2)}</td>
                         </tr>
                         <tr>
                           <td style="padding:8px 0;color:#a99f8b;">Payment Method</td>
                           <td align="right" style="padding:8px 0;color:#ffffff;text-transform:capitalize;">${paymentMethod}</td>
                         </tr>
                         <tr>
-                          <td style="padding:8px 0;color:#a99f8b;">Payment ID</td>
-                          <td align="right" style="padding:8px 0;color:#ffffff;font-family:monospace;">${paymentId}</td>
+                          <td style="padding:8px 0;color:#a99f8b;">Invoice ID</td>
+                          <td align="right" style="padding:8px 0;color:#ffffff;font-family:monospace;">${invoiceNo}</td>
                         </tr>
                         <tr>
                           <td style="padding:8px 0;color:#a99f8b;">Validity</td>
                           <td align="right" style="padding:8px 0;color:#ffffff;">${validity}</td>
-                        </tr>
-                        <tr>
-                          <td style="padding:8px 0;color:#a99f8b;">Phone</td>
-                          <td align="right" style="padding:8px 0;color:#ffffff;">${phone || "-"}</td>
-                        </tr>
-                        <tr>
-                          <td style="padding:8px 0;color:#a99f8b;">City</td>
-                          <td align="right" style="padding:8px 0;color:#ffffff;">${city || "-"}</td>
                         </tr>
                       </table>
                     </td>
