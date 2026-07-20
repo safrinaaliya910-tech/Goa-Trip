@@ -4,14 +4,16 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Instagram, Facebook, Twitter, Mail, Phone, MapPin } from "lucide-react";
+import { Instagram, Mail, Phone, MapPin } from "lucide-react"; // Removed Facebook & Twitter
 import { useTranslation } from "./providers";
 import { useTheme } from "next-themes";
 
 const socialLinks = [
-  { icon: Instagram, href: "#", label: "Instagram" },
-  { icon: Facebook, href: "#", label: "Facebook" },
-  { icon: Twitter, href: "#", label: "Twitter" },
+  { 
+    icon: Instagram, 
+    href: "https://www.instagram.com/goamoments_official", // Put your real Instagram URL here
+    label: "Instagram" 
+  },
 ];
 
 export function Footer() {
@@ -80,6 +82,8 @@ export function Footer() {
                 <a
                   key={social.label}
                   href={social.href}
+                  target="_blank" 
+                  rel="noopener noreferrer" // Opens link safely in a new tab
                   aria-label={social.label}
                   className="flex h-9 w-9 items-center justify-center border border-border text-muted-foreground transition-all duration-300 hover:border-primary hover:text-primary sm:h-10 sm:w-10"
                 >
@@ -234,7 +238,7 @@ export function Footer() {
                 </span>
               </div>
 
-              {/* Elegant Divider Line between logos inside box */}
+              {/* Elegant Divider Line */}
               <div className="w-full h-px bg-[#C5A059]/30" />
 
               {/* Startup India */}
@@ -251,7 +255,7 @@ export function Footer() {
                 </span>
               </div>
 
-              {/* Elegant Divider Line between logos inside box */}
+              {/* Elegant Divider Line */}
               <div className="w-full h-px bg-[#C5A059]/30" />
 
               {/* Ministry of Tourism */}
