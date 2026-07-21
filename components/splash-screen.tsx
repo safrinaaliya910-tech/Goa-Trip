@@ -103,7 +103,7 @@ export function SplashScreen() {
             transition={{ duration: 1, delay: 2.2, ease: "easeOut" }}
             className="relative z-10 flex flex-1 flex-col justify-end pb-12 sm:pb-16 px-2 w-full max-w-[1200px]"
           >
-            {/* Reduced gaps so all 5 items fit beautifully on a single line for mobile phones */}
+            {/* Reduced gaps so all items fit beautifully on a single line for mobile phones */}
             <div className="flex items-center justify-center gap-2 sm:gap-6">
               
               {/* Shield Badge + Official Tourism Partner Text */}
@@ -141,19 +141,19 @@ export function SplashScreen() {
                 </div>
               </div>
 
-              {/* Goa Tourism Logo */}
+              {/* Goa Tourism Development Corporation Ltd. Logo */}
               <div className="flex flex-col items-center gap-1 sm:gap-1.5">
                 <div className="flex h-10 sm:h-16 items-center justify-center">
                   <Image
                     src="/images/goa_tourism.png"
-                    alt="Goa Tourism"
+                    alt="Goa Tourism Development Corporation Ltd."
                     width={130}
                     height={75}
                     className="max-h-full w-auto object-contain drop-shadow-[0_2px_10px_rgba(255,255,255,0.1)]"
                   />
                 </div>
-                <span className="text-center text-[7px] font-medium leading-tight tracking-wide text-white/90 drop-shadow-md sm:text-[11px]">
-                  Goa<br />Tourism
+                <span className="text-center text-[6px] font-medium leading-tight tracking-wide text-white/90 drop-shadow-md sm:text-[9px]">
+                  Goa Tourism<br />Development<br />Corporation Ltd.
                 </span>
               </div>
 
@@ -192,25 +192,6 @@ export function SplashScreen() {
                 </div>
                 <span className="text-center text-[7px] font-medium leading-tight tracking-wide text-white/90 drop-shadow-md sm:text-[11px]">
                   Nidhi
-                </span>
-              </div>
-
-              {/* Divider */}
-              <div className="h-6 sm:h-14 w-px bg-[#d4af37]/30" />
-
-              {/* Ministry of Tourism Logo */}
-              <div className="flex flex-col items-center gap-1 sm:gap-1.5">
-                <div className="flex h-10 sm:h-16 items-center justify-center">
-                  <Image
-                    src="/images/ministry_logo_white.png"
-                    alt="Ministry of Tourism"
-                    width={160}
-                    height={70}
-                    className="h-8 sm:h-12 w-auto object-contain drop-shadow-[0_2px_10px_rgba(255,255,255,0.1)] scale-[1.9] -translate-y-1"
-                  />
-                </div>
-                <span className="text-center text-[7px] font-medium leading-tight tracking-wide text-white/90 drop-shadow-md sm:text-[11px]">
-                  Government<br />of India
                 </span>
               </div>
 

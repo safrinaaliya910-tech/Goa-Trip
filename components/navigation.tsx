@@ -34,10 +34,6 @@ export function Navigation() {
   const startupLogo = isPaymentPage 
     ? "/images/startup_logo_white.png" 
     : (resolvedTheme === "dark" ? "/images/startup_logo_black.png" : "/images/startup_logo_white.png");
-
-  const ministryLogo = isPaymentPage
-    ? "/images/ministry_logo_black.png"
-    : (resolvedTheme === "dark" ? "/images/ministry_logo_white.png" : "/images/ministry_logo_black.png");
     
   // NIDHI Logo logic
   const nidhiLogo = isPaymentPage
@@ -173,10 +169,10 @@ export function Navigation() {
               <div className="flex items-center gap-1">
                 <div className="flex flex-col items-center justify-center">
                   <div className="h-20 flex items-center justify-center">
-                    <Image src="/images/goa_tourism.png" alt="Goa Tourism" width={160} height={90} className="h-20 w-auto object-contain drop-shadow-md" />
+                    <Image src="/images/goa_tourism.png" alt="Goa Tourism Development Corporation Ltd." width={160} height={90} className="h-20 w-auto object-contain drop-shadow-md" />
                   </div>
-                  <span className={`mt-1.5 text-[10px] tracking-wide ${partnerTextColor}`}>
-                    Goa Tourism
+                  <span className={`mt-1.5 text-center text-[9px] leading-tight tracking-wide ${partnerTextColor}`}>
+                    Goa Tourism<br />Development Corporation Ltd.
                   </span>
                 </div>
               </div>
@@ -206,23 +202,6 @@ export function Navigation() {
                   </div>
                   <span className={`mt-1.5 text-[10px] tracking-wide ${partnerTextColor}`}>
                     Nidhi
-                  </span>
-                </div>
-              </div>
-
-              <div className={`mx-3 h-14 w-px ${isPaymentPage ? 'bg-gray-300' : 'bg-white/20'}`} />
-
-              {/* Ministry of Tourism */}
-              <div className="flex items-center gap-1">
-                <div className="flex flex-col items-center justify-center px-2 relative">
-                  <span className="absolute -top-3.5 text-[9px] font-bold uppercase tracking-[0.3em] text-[#d4af37] whitespace-nowrap z-10 drop-shadow-md">
-                    Powered By
-                  </span>
-                  <div className="h-20 flex items-center justify-center">
-                    <Image src={ministryLogo} alt="Ministry of Tourism" width={160} height={90} className="h-20 w-auto object-contain drop-shadow-md scale-[1.5]" />
-                  </div>
-                  <span className={`mt-1.5 text-[10px] tracking-wide ${partnerTextColor}`}>
-                    Ministry of Tourism
                   </span>
                 </div>
               </div>
@@ -288,13 +267,14 @@ export function Navigation() {
                 </div>
 
                 <div className="flex items-center justify-center flex-wrap gap-4 sm:gap-6 w-full">
-                  
                   {/* Goa Tourism Mobile */}
                   <div className="flex flex-col items-center gap-1.5">
                     <div className="h-14 flex items-center justify-center">
-                      <Image src="/images/goa_tourism.png" alt="Goa Tourism" width={100} height={60} className="h-14 w-auto object-contain" />
+                      <Image src="/images/goa_tourism.png" alt="Goa Tourism Development Corporation Ltd." width={100} height={60} className="h-14 w-auto object-contain" />
                     </div>
-                    <span className={`text-center text-[9px] tracking-wide ${partnerTextColor}`}>Goa<br/>Tourism</span>
+                    <span className={`text-center text-[8px] leading-tight tracking-wide ${partnerTextColor}`}>
+                      Goa Tourism<br />Development Corporation Ltd.
+                    </span>
                   </div>
 
                   {/* Startup India Mobile */}
@@ -311,17 +291,6 @@ export function Navigation() {
                       <Image src={nidhiLogo} alt="NIDHI" width={100} height={60} className="h-10 w-auto object-contain" />
                     </div>
                     <span className={`text-center text-[9px] tracking-wide ${partnerTextColor}`}>NIDHI</span>
-                  </div>
-
-                  {/* Ministry of Tourism Mobile */}
-                  <div className="flex flex-col items-center gap-1.5 relative mt-2 sm:mt-0">
-                    <span className="absolute -top-3 text-[8px] font-bold uppercase tracking-[0.3em] text-[#d4af37] whitespace-nowrap z-10 drop-shadow-md">
-                      Powered By
-                    </span>
-                    <div className="h-14 flex items-center justify-center">
-                      <Image src={ministryLogo} alt="Ministry of Tourism" width={100} height={60} className="h-14 w-auto object-contain scale-[1.45]" />
-                    </div>
-                    <span className={`text-center text-[9px] tracking-wide ${partnerTextColor}`}>Ministry of<br/>Tourism</span>
                   </div>
 
                 </div>

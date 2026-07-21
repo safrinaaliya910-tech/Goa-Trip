@@ -37,7 +37,6 @@ export function Footer() {
   const subTextColor = isDark ? "text-white/60" : "text-muted-foreground";
   
   const startupLogo = isDark ? "/images/startup_logo_black.png" : "/images/startup_logo_white.png";
-  const ministryLogo = isDark ? "/images/ministry_logo_white.png" : "/images/ministry_logo_black.png";
   const nidhiLogo = isDark ? "/images/nidhi_black_theme.png" : "/images/nidhi_white_theme.png";
 
   if (!mounted) {
@@ -186,7 +185,7 @@ export function Footer() {
             </ul>
           </motion.div>
 
-          {/* Official Tourism Partners & Recognitions Section - 2x2 Grid */}
+          {/* Official Tourism Partners & Recognitions Section - 3-Column Layout */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -199,65 +198,47 @@ export function Footer() {
             </h4>
             
             <div className="w-full rounded-xl border border-[#C5A059] shadow-[0_0_15px_rgba(197,160,89,0.3)] bg-background/50 p-4 sm:p-5">
-              <div className="grid grid-cols-2">
+              <div className="grid grid-cols-3 gap-1">
                 
-                {/* Top Left: Goa Tourism */}
-                <div className="flex flex-col items-center justify-start text-center border-b border-r border-[#C5A059]/30 pb-4 pr-2">
+               {/* 1. Goa Tourism Development Corporation Ltd. */}
+                <div className="flex flex-col items-center justify-start text-center border-r border-[#C5A059]/30 pr-1">
                   <Image
                     src="/images/goa_tourism.png"
-                    alt="Goa Tourism"
-                    width={90}
-                    height={50}
+                    alt="Goa Tourism Development Corporation Ltd."
+                    width={80}
+                    height={45}
                     className="h-8 sm:h-9 w-auto object-contain opacity-100 drop-shadow-md"
                   />
-                  <span className={`mt-2 text-center text-[8px] font-medium leading-[1.3] sm:text-[9px] ${subTextColor}`}>
-                    Official<br/>Partner
+                  <span className={`mt-1.5 text-center text-[6px] font-medium leading-tight sm:text-[7px] ${subTextColor}`}>
+                    Goa Tourism<br />Development<br />Corporation Ltd.
                   </span>
                 </div>
 
-                {/* Top Right: Startup India */}
-                <div className="flex flex-col items-center justify-start text-center border-b border-[#C5A059]/30 pb-4 pl-2">
+                {/* 2. Startup India */}
+                <div className="flex flex-col items-center justify-start text-center border-r border-[#C5A059]/30 px-1">
                   <Image
                     src={startupLogo}
                     alt="Startup India"
-                    width={90}
-                    height={50}
+                    width={80}
+                    height={45}
                     className="h-8 sm:h-9 w-auto object-contain opacity-100 drop-shadow-md"
                   />
-                  <span className={`mt-2 text-center text-[8px] font-medium leading-[1.3] sm:text-[9px] ${subTextColor}`}>
+                  <span className={`mt-2 text-center text-[7px] font-medium leading-[1.3] sm:text-[8px] ${subTextColor}`}>
                     Recognized<br/>by DPIIT
                   </span>
                 </div>
 
-                {/* Bottom Left: NIDHI */}
-                <div className="flex flex-col items-center justify-start text-center border-r border-[#C5A059]/30 pt-4 pr-2">
+                {/* 3. NIDHI */}
+                <div className="flex flex-col items-center justify-start text-center pl-1">
                   <Image
                     src={nidhiLogo}
                     alt="NIDHI"
-                    width={90}
-                    height={50}
-                    // Visually scaled down to match the padding of other logos
-                    className="h-6 sm:h-7 w-auto object-contain opacity-100 drop-shadow-md"
+                    width={80}
+                    height={45}
+                    className="h-6 sm:h-7 w-auto object-contain opacity-100 drop-shadow-md my-1"
                   />
-                  <span className={`mt-2 text-center text-[8px] font-medium leading-[1.3] sm:text-[9px] ${subTextColor}`}>
-                    Hospitality<br/>Database
-                  </span>
-                </div>
-
-                {/* Bottom Right: Ministry of Tourism */}
-                <div className="flex flex-col items-center justify-start text-center pt-4 pl-2 relative">
-                  <span className="text-[6px] font-bold uppercase tracking-[0.2em] text-[#d4af37] absolute top-2 sm:top-2.5 z-10 drop-shadow-md text-center w-full">
-                    Powered By
-                  </span>
-                  <Image
-                    src={ministryLogo}
-                    alt="Ministry of Tourism"
-                    width={100}
-                    height={50}
-                    className="h-10 sm:h-11 w-auto object-contain opacity-100 drop-shadow-md scale-[2.3] mt-2"
-                  />
-                  <span className={`mt-1 text-center text-[8px] font-medium leading-[1.3] sm:text-[9px] ${subTextColor}`}>
-                    Government<br/>of India
+                  <span className={`mt-2 text-center text-[7px] font-medium leading-[1.3] sm:text-[8px] ${subTextColor}`}>
+                    Nidhi<br/>Database
                   </span>
                 </div>
 
