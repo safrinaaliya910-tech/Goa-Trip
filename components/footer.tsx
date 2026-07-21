@@ -47,7 +47,7 @@ export function Footer() {
     <footer className="border-t border-border bg-background">
       <div className="mx-auto max-w-[1400px] px-4 py-12 sm:px-6 sm:py-16 md:py-24">
         {/* Grid layout */}
-        <div className="grid gap-8 sm:gap-12 md:grid-cols-3 lg:grid-cols-6">
+        <div className="grid gap-8 sm:gap-12 md:grid-cols-3 lg:grid-cols-5">
           
           {/* Logo & Description */}
           <motion.div
@@ -183,32 +183,6 @@ export function Footer() {
                 </span>
               </li>
             </ul>
-          </motion.div>
-
-          {/* Join Our Circle (Newsletter) */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="lg:col-span-1"
-          >
-            <h4 className="mb-4 text-xs uppercase tracking-widest text-foreground sm:mb-6 sm:text-sm">
-              {t("footer.newsletter.title")}
-            </h4>
-            <p className="mb-3 text-xs text-muted-foreground sm:mb-4 sm:text-sm">
-              {t("footer.newsletter.description")}
-            </p>
-            <div className="flex flex-col gap-2 sm:gap-3">
-              <input
-                type="email"
-                placeholder={t("footer.newsletter.placeholder")}
-                className="border border-border bg-transparent px-3 py-2 text-xs text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none sm:px-4 sm:py-3 sm:text-sm"
-              />
-              <button className="border border-primary bg-primary px-3 py-2 text-xs uppercase tracking-widest text-primary-foreground transition-all duration-300 hover:bg-transparent hover:text-primary sm:px-4 sm:py-3 sm:text-sm">
-                {t("footer.newsletter.submit")}
-              </button>
-            </div>
           </motion.div>
 
           {/* Official Tourism Partners & Recognitions Section */}
