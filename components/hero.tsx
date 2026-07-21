@@ -22,6 +22,9 @@ export function Hero() {
 
   const startupLogo = isDark ? "/images/startup_logo_black.png" : "/images/startup_logo_white.png";
   const ministryLogo = isDark ? "/images/ministry_logo_white.png" : "/images/ministry_logo_black.png";
+  
+  // NIDHI Logo theme logic
+  const nidhiLogo = isDark ? "/images/nidhi_black_theme.png" : "/images/nidhi_white_theme.png";
 
   if (!mounted) {
     return null;
@@ -128,7 +131,7 @@ export function Hero() {
         </div>
       </section>
 
-      {/* Trust Banner Section - PERFECTLY ALIGNED GRID */}
+      {/* Trust Banner Section - UPGRADED TO 7-COLUMN GRID */}
       <section className="relative z-20 w-full bg-background px-4 py-12 sm:px-6 sm:py-16">
         <div className="mx-auto max-w-[1400px]">
           <motion.div
@@ -136,12 +139,12 @@ export function Hero() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8 }}
-            /* 6-Column Grid guarantees identical spacing for every single item */
-            className="grid grid-cols-1 gap-y-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 xl:gap-y-0 rounded-2xl border border-[#C5A059]/60 bg-card/90 py-8 px-4 shadow-[0_4px_25px_rgba(197,160,89,0.15)] backdrop-blur-sm"
+            /* 7-Column Grid to fit the new NIDHI logo beautifully */
+            className="grid grid-cols-1 gap-y-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-7 xl:gap-y-0 rounded-2xl border border-[#C5A059]/60 bg-card/90 py-8 px-4 shadow-[0_4px_25px_rgba(197,160,89,0.15)] backdrop-blur-sm"
           >
             
             {/* 1. Goa Tourism */}
-            <div className="flex w-full justify-start sm:justify-center px-1 xl:px-4 xl:border-r border-[#C5A059]/30 [&:nth-child(6)]:border-0">
+            <div className="flex w-full justify-start sm:justify-center px-1 xl:px-4 xl:border-r border-[#C5A059]/30 [&:nth-child(7)]:border-0">
               <div className="flex w-full max-w-[220px] items-center gap-3 sm:gap-4">
                 <div className="flex h-14 w-[76px] sm:h-16 sm:w-[84px] shrink-0 items-center justify-center">
                   <Image src="/images/goa_tourism.png" alt="Goa Tourism" width={140} height={90} className="max-h-full max-w-full object-contain drop-shadow-md" />
@@ -158,7 +161,7 @@ export function Hero() {
             </div>
 
             {/* 2. Startup India */}
-            <div className="flex w-full justify-start sm:justify-center px-1 xl:px-4 xl:border-r border-[#C5A059]/30 [&:nth-child(6)]:border-0">
+            <div className="flex w-full justify-start sm:justify-center px-1 xl:px-4 xl:border-r border-[#C5A059]/30 [&:nth-child(7)]:border-0">
               <div className="flex w-full max-w-[220px] items-center gap-3 sm:gap-4">
                 <div className="flex h-14 w-[76px] sm:h-16 sm:w-[84px] shrink-0 items-center justify-center">
                   <Image src={startupLogo} alt="Startup India" width={140} height={90} className="max-h-full max-w-full object-contain drop-shadow-md" />
@@ -174,11 +177,28 @@ export function Hero() {
               </div>
             </div>
 
-            {/* 3. Ministry of Tourism */}
-            <div className="flex w-full justify-start sm:justify-center px-1 xl:px-4 xl:border-r border-[#C5A059]/30 [&:nth-child(6)]:border-0">
+            {/* 3. NIDHI */}
+            <div className="flex w-full justify-start sm:justify-center px-1 xl:px-4 xl:border-r border-[#C5A059]/30 [&:nth-child(7)]:border-0">
               <div className="flex w-full max-w-[220px] items-center gap-3 sm:gap-4">
                 <div className="flex h-14 w-[76px] sm:h-16 sm:w-[84px] shrink-0 items-center justify-center">
-                  {/* Visually inflated with scale to match adjacent logos without breaking layout bounds */}
+                  {/* Visually scaled down using h-8 / sm:h-10 so it matches perfectly */}
+                  <Image src={nidhiLogo} alt="NIDHI" width={140} height={90} className="h-8 sm:h-10 w-auto object-contain drop-shadow-md" />
+                </div>
+                <div className="flex flex-col text-left">
+                  <span className={`font-serif text-[11px] lg:text-[12px] font-bold uppercase tracking-wider leading-tight ${textColor}`}>
+                    NIDHI
+                  </span>
+                  <span className={`mt-1 text-[10px] leading-[1.3] ${subTextColor}`}>
+                    Hospitality<br />Database
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* 4. Ministry of Tourism */}
+            <div className="flex w-full justify-start sm:justify-center px-1 xl:px-4 xl:border-r border-[#C5A059]/30 [&:nth-child(7)]:border-0">
+              <div className="flex w-full max-w-[220px] items-center gap-3 sm:gap-4">
+                <div className="flex h-14 w-[76px] sm:h-16 sm:w-[84px] shrink-0 items-center justify-center">
                   <Image src={ministryLogo} alt="Ministry of Tourism" width={140} height={90} className="max-h-full max-w-full object-contain drop-shadow-md scale-[1.9]" />
                 </div>
                 <div className="flex flex-col text-left">
@@ -192,8 +212,8 @@ export function Hero() {
               </div>
             </div>
 
-            {/* 4. Trusted & Secured */}
-            <div className="flex w-full justify-start sm:justify-center px-1 xl:px-4 xl:border-r border-[#C5A059]/30 [&:nth-child(6)]:border-0">
+            {/* 5. Trusted & Secured */}
+            <div className="flex w-full justify-start sm:justify-center px-1 xl:px-4 xl:border-r border-[#C5A059]/30 [&:nth-child(7)]:border-0">
               <div className="flex w-full max-w-[220px] items-center gap-3 sm:gap-4">
                 <div className="flex h-14 w-[76px] sm:h-16 sm:w-[84px] shrink-0 items-center justify-center">
                   <ShieldCheck className="h-10 w-10 sm:h-11 sm:w-11 text-[#C5A059]" strokeWidth={1.2} />
@@ -209,8 +229,8 @@ export function Hero() {
               </div>
             </div>
 
-            {/* 5. Premium Experiences */}
-            <div className="flex w-full justify-start sm:justify-center px-1 xl:px-4 xl:border-r border-[#C5A059]/30 [&:nth-child(6)]:border-0">
+            {/* 6. Premium Experiences */}
+            <div className="flex w-full justify-start sm:justify-center px-1 xl:px-4 xl:border-r border-[#C5A059]/30 [&:nth-child(7)]:border-0">
               <div className="flex w-full max-w-[220px] items-center gap-3 sm:gap-4">
                 <div className="flex h-14 w-[76px] sm:h-16 sm:w-[84px] shrink-0 items-center justify-center">
                   <svg width="44" height="44" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 sm:h-11 sm:w-11 text-[#C5A059]">
@@ -236,8 +256,8 @@ export function Hero() {
               </div>
             </div>
 
-            {/* 6. 24x7 Concierge */}
-            <div className="flex w-full justify-start sm:justify-center px-1 xl:px-4 xl:border-r border-[#C5A059]/30 [&:nth-child(6)]:border-0">
+            {/* 7. 24x7 Concierge */}
+            <div className="flex w-full justify-start sm:justify-center px-1 xl:px-4 xl:border-r border-[#C5A059]/30 [&:nth-child(7)]:border-0">
               <div className="flex w-full max-w-[220px] items-center gap-3 sm:gap-4">
                 <div className="flex h-14 w-[76px] sm:h-16 sm:w-[84px] shrink-0 items-center justify-center">
                   <Headphones className="h-10 w-10 sm:h-11 sm:w-11 text-[#C5A059]" strokeWidth={1.2} />

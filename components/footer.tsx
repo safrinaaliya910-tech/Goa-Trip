@@ -4,14 +4,14 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Instagram, Mail, Phone, MapPin } from "lucide-react"; // Removed Facebook & Twitter
+import { Instagram, Mail, Phone, MapPin } from "lucide-react"; 
 import { useTranslation } from "./providers";
 import { useTheme } from "next-themes";
 
 const socialLinks = [
   { 
     icon: Instagram, 
-    href: "https://www.instagram.com/goamoments_official", // Put your real Instagram URL here
+    href: "https://www.instagram.com/goamoments_official", 
     label: "Instagram" 
   },
 ];
@@ -38,6 +38,7 @@ export function Footer() {
   
   const startupLogo = isDark ? "/images/startup_logo_black.png" : "/images/startup_logo_white.png";
   const ministryLogo = isDark ? "/images/ministry_logo_white.png" : "/images/ministry_logo_black.png";
+  const nidhiLogo = isDark ? "/images/nidhi_black_theme.png" : "/images/nidhi_white_theme.png";
 
   if (!mounted) {
     return null;
@@ -83,7 +84,7 @@ export function Footer() {
                   key={social.label}
                   href={social.href}
                   target="_blank" 
-                  rel="noopener noreferrer" // Opens link safely in a new tab
+                  rel="noopener noreferrer" 
                   aria-label={social.label}
                   className="flex h-9 w-9 items-center justify-center border border-border text-muted-foreground transition-all duration-300 hover:border-primary hover:text-primary sm:h-10 sm:w-10"
                 >
@@ -185,7 +186,7 @@ export function Footer() {
             </ul>
           </motion.div>
 
-          {/* Official Tourism Partners & Recognitions Section */}
+          {/* Official Tourism Partners & Recognitions Section - 2x2 Grid */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -196,56 +197,71 @@ export function Footer() {
             <h4 className="mb-4 text-center font-serif text-[11px] uppercase tracking-[0.15em] text-[#C5A059] sm:mb-6 sm:text-xs">
               Partners & Recognitions
             </h4>
-            <div className="flex w-full flex-col gap-4 rounded-xl border border-[#C5A059] shadow-[0_0_15px_rgba(197,160,89,0.3)] bg-background/50 p-4 sm:p-5 items-center justify-center">
-              
-              {/* Goa Tourism */}
-              <div className="flex flex-col items-center justify-center text-center">
-                <Image
-                  src="/images/goa_tourism.png"
-                  alt="Goa Tourism"
-                  width={110}
-                  height={60}
-                  className="h-12 w-auto object-contain opacity-100 drop-shadow-md sm:h-14"
-                />
-                <span className={`mt-1.5 text-center text-[9px] font-medium leading-[1.4] sm:text-[10px] ${subTextColor}`}>
-                  Official Partner
-                </span>
+            
+            <div className="w-full rounded-xl border border-[#C5A059] shadow-[0_0_15px_rgba(197,160,89,0.3)] bg-background/50 p-4 sm:p-5">
+              <div className="grid grid-cols-2">
+                
+                {/* Top Left: Goa Tourism */}
+                <div className="flex flex-col items-center justify-start text-center border-b border-r border-[#C5A059]/30 pb-4 pr-2">
+                  <Image
+                    src="/images/goa_tourism.png"
+                    alt="Goa Tourism"
+                    width={90}
+                    height={50}
+                    className="h-8 sm:h-9 w-auto object-contain opacity-100 drop-shadow-md"
+                  />
+                  <span className={`mt-2 text-center text-[8px] font-medium leading-[1.3] sm:text-[9px] ${subTextColor}`}>
+                    Official<br/>Partner
+                  </span>
+                </div>
+
+                {/* Top Right: Startup India */}
+                <div className="flex flex-col items-center justify-start text-center border-b border-[#C5A059]/30 pb-4 pl-2">
+                  <Image
+                    src={startupLogo}
+                    alt="Startup India"
+                    width={90}
+                    height={50}
+                    className="h-8 sm:h-9 w-auto object-contain opacity-100 drop-shadow-md"
+                  />
+                  <span className={`mt-2 text-center text-[8px] font-medium leading-[1.3] sm:text-[9px] ${subTextColor}`}>
+                    Recognized<br/>by DPIIT
+                  </span>
+                </div>
+
+                {/* Bottom Left: NIDHI */}
+                <div className="flex flex-col items-center justify-start text-center border-r border-[#C5A059]/30 pt-4 pr-2">
+                  <Image
+                    src={nidhiLogo}
+                    alt="NIDHI"
+                    width={90}
+                    height={50}
+                    // Visually scaled down to match the padding of other logos
+                    className="h-6 sm:h-7 w-auto object-contain opacity-100 drop-shadow-md"
+                  />
+                  <span className={`mt-2 text-center text-[8px] font-medium leading-[1.3] sm:text-[9px] ${subTextColor}`}>
+                    Hospitality<br/>Database
+                  </span>
+                </div>
+
+                {/* Bottom Right: Ministry of Tourism */}
+                <div className="flex flex-col items-center justify-start text-center pt-4 pl-2 relative">
+                  <span className="text-[6px] font-bold uppercase tracking-[0.2em] text-[#d4af37] absolute top-2 sm:top-2.5 z-10 drop-shadow-md text-center w-full">
+                    Powered By
+                  </span>
+                  <Image
+                    src={ministryLogo}
+                    alt="Ministry of Tourism"
+                    width={100}
+                    height={50}
+                    className="h-10 sm:h-11 w-auto object-contain opacity-100 drop-shadow-md scale-[2.3] mt-2"
+                  />
+                  <span className={`mt-1 text-center text-[8px] font-medium leading-[1.3] sm:text-[9px] ${subTextColor}`}>
+                    Government<br/>of India
+                  </span>
+                </div>
+
               </div>
-
-              {/* Elegant Divider Line */}
-              <div className="w-full h-px bg-[#C5A059]/30" />
-
-              {/* Startup India */}
-              <div className="flex flex-col items-center justify-center text-center">
-                <Image
-                  src={startupLogo}
-                  alt="Startup India"
-                  width={140}
-                  height={65}
-                  className="h-12 w-auto object-contain opacity-100 drop-shadow-md sm:h-14"
-                />
-                <span className={`mt-1.5 text-center text-[9px] font-medium leading-[1.4] sm:text-[10px] ${subTextColor}`}>
-                  Recognized by DPIIT
-                </span>
-              </div>
-
-              {/* Elegant Divider Line */}
-              <div className="w-full h-px bg-[#C5A059]/30" />
-
-              {/* Ministry of Tourism */}
-              <div className="flex flex-col items-center justify-center text-center">
-                <Image
-                  src={ministryLogo}
-                  alt="Ministry of Tourism"
-                  width={140}
-                  height={65}
-                  className="h-12 w-auto object-contain opacity-100 drop-shadow-md sm:h-14 scale-[1.9] -translate-y-1"
-                />
-                <span className={`mt-1 text-center text-[9px] font-medium leading-[1.4] sm:text-[10px] ${subTextColor}`}>
-                  Powered By Government of India
-                </span>
-              </div>
-              
             </div>
           </motion.div>
         </div>

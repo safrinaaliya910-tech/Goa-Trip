@@ -38,6 +38,11 @@ export function Navigation() {
   const ministryLogo = isPaymentPage
     ? "/images/ministry_logo_black.png"
     : (resolvedTheme === "dark" ? "/images/ministry_logo_white.png" : "/images/ministry_logo_black.png");
+    
+  // NIDHI Logo logic
+  const nidhiLogo = isPaymentPage
+    ? "/images/nidhi_white_theme.png"
+    : (resolvedTheme === "dark" ? "/images/nidhi_black_theme.png" : "/images/nidhi_white_theme.png");
   
   const textColor = isPaymentPage ? "text-black" : "text-foreground";
   const mutedTextColor = isPaymentPage ? "text-gray-600 hover:text-black" : "text-muted-foreground hover:text-foreground";
@@ -133,6 +138,7 @@ export function Navigation() {
         <div className="hidden w-full lg:block">
           <div className="mx-auto flex w-full max-w-7xl items-center justify-end px-4 sm:px-6">
             <div className="flex items-center">
+              
               <div className="flex items-center gap-3 pr-2">
                 <svg width="28" height="34" viewBox="0 0 36 44" fill="none" xmlns="http://www.w3.org/2000/svg" className="drop-shadow-md">
                   <defs>
@@ -163,9 +169,12 @@ export function Navigation() {
 
               <div className={`mx-3 h-14 w-px ${isPaymentPage ? 'bg-gray-300' : 'bg-white/20'}`} />
 
+              {/* Goa Tourism */}
               <div className="flex items-center gap-1">
                 <div className="flex flex-col items-center justify-center">
-                  <Image src="/images/goa_tourism.png" alt="Goa Tourism" width={160} height={90} className="h-20 w-auto object-contain drop-shadow-md" />
+                  <div className="h-20 flex items-center justify-center">
+                    <Image src="/images/goa_tourism.png" alt="Goa Tourism" width={160} height={90} className="h-20 w-auto object-contain drop-shadow-md" />
+                  </div>
                   <span className={`mt-1.5 text-[10px] tracking-wide ${partnerTextColor}`}>
                     Goa Tourism
                   </span>
@@ -174,9 +183,12 @@ export function Navigation() {
 
               <div className={`mx-3 h-14 w-px ${isPaymentPage ? 'bg-gray-300' : 'bg-white/20'}`} />
 
+              {/* Startup India */}
               <div className="flex items-center gap-1">
                 <div className="flex flex-col items-center justify-center">
-                  <Image src={startupLogo} alt="Startup India" width={160} height={90} className="h-20 w-auto object-contain drop-shadow-md" />
+                  <div className="h-20 flex items-center justify-center">
+                    <Image src={startupLogo} alt="Startup India" width={160} height={90} className="h-20 w-auto object-contain drop-shadow-md" />
+                  </div>
                   <span className={`mt-1.5 text-[10px] tracking-wide ${partnerTextColor}`}>
                     Startup India
                   </span>
@@ -185,13 +197,30 @@ export function Navigation() {
 
               <div className={`mx-3 h-14 w-px ${isPaymentPage ? 'bg-gray-300' : 'bg-white/20'}`} />
 
+              {/* NIDHI - Perfect Alignment */}
               <div className="flex items-center gap-1">
-                {/* FIX: Increased font size, adjusted positioning, added drop-shadow and brighter gold for "Powered By" */}
+                <div className="flex flex-col items-center justify-center">
+                  {/* Fixed h-20 wrapper guarantees text alignment, while image stays h-13 */}
+                  <div className="h-20 flex items-center justify-center">
+                    <Image src={nidhiLogo} alt="NIDHI" width={160} height={90} className="h-13 w-auto object-contain drop-shadow-md" />
+                  </div>
+                  <span className={`mt-1.5 text-[10px] tracking-wide ${partnerTextColor}`}>
+                    Nidhi
+                  </span>
+                </div>
+              </div>
+
+              <div className={`mx-3 h-14 w-px ${isPaymentPage ? 'bg-gray-300' : 'bg-white/20'}`} />
+
+              {/* Ministry of Tourism */}
+              <div className="flex items-center gap-1">
                 <div className="flex flex-col items-center justify-center px-2 relative">
                   <span className="absolute -top-3.5 text-[9px] font-bold uppercase tracking-[0.3em] text-[#d4af37] whitespace-nowrap z-10 drop-shadow-md">
                     Powered By
                   </span>
-                  <Image src={ministryLogo} alt="Ministry of Tourism" width={160} height={90} className="h-20 w-auto object-contain drop-shadow-md scale-[1.5]" />
+                  <div className="h-20 flex items-center justify-center">
+                    <Image src={ministryLogo} alt="Ministry of Tourism" width={160} height={90} className="h-20 w-auto object-contain drop-shadow-md scale-[1.5]" />
+                  </div>
                   <span className={`mt-1.5 text-[10px] tracking-wide ${partnerTextColor}`}>
                     Ministry of Tourism
                   </span>
@@ -232,7 +261,7 @@ export function Navigation() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.3, delay: 0.5 }}
-                className={`mt-8 flex w-full max-w-[340px] flex-col items-center gap-6 border-t pt-8 ${isPaymentPage ? 'border-gray-300' : 'border-white/10'}`}
+                className={`mt-8 flex w-full max-w-[380px] flex-col items-center gap-6 border-t pt-8 ${isPaymentPage ? 'border-gray-300' : 'border-white/10'}`}
               >
                 <div className="flex items-center gap-3">
                   <svg width="24" height="29" viewBox="0 0 36 44" fill="none" xmlns="http://www.w3.org/2000/svg" className="drop-shadow-md">
@@ -258,25 +287,43 @@ export function Navigation() {
                   </div>
                 </div>
 
-                <div className="flex items-center justify-center gap-4 sm:gap-6 w-full">
+                <div className="flex items-center justify-center flex-wrap gap-4 sm:gap-6 w-full">
+                  
+                  {/* Goa Tourism Mobile */}
                   <div className="flex flex-col items-center gap-1.5">
-                    <Image src="/images/goa_tourism.png" alt="Goa Tourism" width={100} height={60} className="h-14 w-auto object-contain" />
+                    <div className="h-14 flex items-center justify-center">
+                      <Image src="/images/goa_tourism.png" alt="Goa Tourism" width={100} height={60} className="h-14 w-auto object-contain" />
+                    </div>
                     <span className={`text-center text-[9px] tracking-wide ${partnerTextColor}`}>Goa<br/>Tourism</span>
                   </div>
 
+                  {/* Startup India Mobile */}
                   <div className="flex flex-col items-center gap-1.5">
-                    <Image src={startupLogo} alt="Startup India" width={100} height={60} className="h-14 w-auto object-contain" />
+                    <div className="h-14 flex items-center justify-center">
+                      <Image src={startupLogo} alt="Startup India" width={100} height={60} className="h-14 w-auto object-contain" />
+                    </div>
                     <span className={`text-center text-[9px] tracking-wide ${partnerTextColor}`}>Startup<br/>India</span>
                   </div>
 
-                  {/* FIX: Increased font size, adjusted positioning, added drop-shadow and brighter gold for "Powered By" on mobile */}
-                  <div className="flex flex-col items-center gap-1.5 relative">
+                  {/* NIDHI Mobile */}
+                  <div className="flex flex-col items-center gap-1.5">
+                    <div className="h-14 flex items-center justify-center">
+                      <Image src={nidhiLogo} alt="NIDHI" width={100} height={60} className="h-10 w-auto object-contain" />
+                    </div>
+                    <span className={`text-center text-[9px] tracking-wide ${partnerTextColor}`}>NIDHI</span>
+                  </div>
+
+                  {/* Ministry of Tourism Mobile */}
+                  <div className="flex flex-col items-center gap-1.5 relative mt-2 sm:mt-0">
                     <span className="absolute -top-3 text-[8px] font-bold uppercase tracking-[0.3em] text-[#d4af37] whitespace-nowrap z-10 drop-shadow-md">
                       Powered By
                     </span>
-                    <Image src={ministryLogo} alt="Ministry of Tourism" width={100} height={60} className="h-14 w-auto object-contain scale-[1.45]" />
+                    <div className="h-14 flex items-center justify-center">
+                      <Image src={ministryLogo} alt="Ministry of Tourism" width={100} height={60} className="h-14 w-auto object-contain scale-[1.45]" />
+                    </div>
                     <span className={`text-center text-[9px] tracking-wide ${partnerTextColor}`}>Ministry of<br/>Tourism</span>
                   </div>
+
                 </div>
               </motion.div>
             </div>
