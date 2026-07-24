@@ -6,6 +6,7 @@ import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import Image from "next/image";
 import { CheckCircle2, ShieldCheck, Sparkles } from "lucide-react";
+import QRCode from "qrcode"; // NEW: Import QR Code generator
 
 export default function OrderSuccessPage() {
   const searchParams = useSearchParams();
@@ -31,7 +32,7 @@ export default function OrderSuccessPage() {
   const safePlanName = plan.toLowerCase();
   const cardImagePath = `/images/${safePlanName}-card.jpg`;
 
-  // NEW: Corporate parameters parsing
+  // Corporate parameters parsing
   const isCorporate = searchParams.get("isCorporate") === "true";
   const gstin = searchParams.get("gstin") || "";
   const companyName = searchParams.get("companyName") || "";
@@ -70,13 +71,40 @@ export default function OrderSuccessPage() {
       }
       setVerifying(false);
 
-      // 2. Generate the Membership Card Canvas
+      // 2. Determine Member Access Count
+      let memberAccessCount = "2"; // Default for Gold
+      if (safePlanName === "platinum") memberAccessCount = "6";
+      if (safePlanName === "diamond") memberAccessCount = "8";
+
+      // 3. Generate QR Code Data URL
+      // Storing the specific details needed for the Goa Moments App scanner
+      const qrPayload = JSON.stringify({
+        id: membershipId,
+        name: memberName,
+        phone: phone,
+        email: email,
+        plan: plan,
+        date: new Date().toISOString().split('T')[0]
+      });
+      
+      const qrDataUrl = await QRCode.toDataURL(qrPayload, {
+        width: 300,
+        margin: 1,
+        color: {
+          dark: '#000000', // Black dots
+          light: '#FFFFFF' // White background for 100% scan reliability
+        }
+      });
+
+      // 4. Generate the Membership Card Canvas
       const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d");
       if (!ctx) return;
+      
       const img = new window.Image();
       img.crossOrigin = "anonymous";
       img.src = cardImagePath;
+      
       img.onload = async () => {
         canvas.width = img.width;
         canvas.height = img.height;
@@ -96,6 +124,7 @@ export default function OrderSuccessPage() {
         const rightColX = canvas.width * 0.92;
         let startY = canvas.height * 0.56;
 
+        // TOP SECTION: Title and Line
         ctx.textAlign = "left";
         ctx.fillStyle = primaryColor;
         ctx.font = `500 ${canvas.height * 0.022}px 'Arial', sans-serif`;
@@ -111,11 +140,18 @@ export default function OrderSuccessPage() {
         ctx.stroke();
         ctx.globalAlpha = 1.0;
 
-        startY += canvas.height * 0.10;
+        // Dynamic Layout Positioning
+        const row1Y = startY + canvas.height * 0.07;
+        const row2Y = startY + canvas.height * 0.17;
+        const row3Y = startY + canvas.height * 0.27;
+
+        // --- LEFT COLUMN: Name, ID, Access ---
+        
+        // MEMBER NAME
         ctx.textAlign = "left";
         ctx.fillStyle = labelColor;
         ctx.font = `600 ${canvas.height * 0.015}px 'Arial', sans-serif`;
-        ctx.fillText("MEMBER NAME", leftColX, startY);
+        ctx.fillText("MEMBER NAME", leftColX, row1Y);
 
         ctx.fillStyle = primaryColor;
         ctx.font = `bold ${canvas.height * 0.042}px 'Georgia', serif`;
@@ -123,11 +159,10 @@ export default function OrderSuccessPage() {
         ctx.shadowBlur = 4;
         ctx.shadowOffsetX = 1;
         ctx.shadowOffsetY = 2;
-        ctx.fillText(memberName.toUpperCase(), leftColX, startY + (canvas.height * 0.05));
+        ctx.fillText(memberName.toUpperCase(), leftColX, row1Y + (canvas.height * 0.045));
         ctx.shadowColor = "transparent";
 
-        const row2Y = startY + (canvas.height * 0.16);
-        ctx.textAlign = "left";
+        // MEMBER ID
         ctx.fillStyle = labelColor;
         ctx.font = `600 ${canvas.height * 0.015}px 'Arial', sans-serif`;
         ctx.fillText("MEMBER ID", leftColX, row2Y);
@@ -138,26 +173,61 @@ export default function OrderSuccessPage() {
         ctx.shadowBlur = 4;
         ctx.shadowOffsetX = 1;
         ctx.shadowOffsetY = 1;
-        ctx.fillText(membershipId.toUpperCase(), leftColX, row2Y + (canvas.height * 0.040));
+        ctx.fillText(membershipId.toUpperCase(), leftColX, row2Y + (canvas.height * 0.035));
         ctx.shadowColor = "transparent";
+
+        // MEMBER ACCESS
+        ctx.fillStyle = labelColor;
+        ctx.font = `600 ${canvas.height * 0.015}px 'Arial', sans-serif`;
+        ctx.fillText("MEMBER ACCESS", leftColX, row3Y);
+
+        ctx.fillStyle = primaryColor;
+        ctx.font = `bold ${canvas.height * 0.028}px 'Courier New', monospace`;
+        ctx.shadowColor = "rgba(0,0,0,0.7)";
+        ctx.shadowBlur = 4;
+        ctx.shadowOffsetX = 1;
+        ctx.shadowOffsetY = 1;
+        ctx.fillText(memberAccessCount, leftColX, row3Y + (canvas.height * 0.035));
+        ctx.shadowColor = "transparent";
+
+        // --- RIGHT COLUMN: QR Code & Contact ---
+
+        // Load and Draw QR Code Image
+        const qrImg = new window.Image();
+        qrImg.crossOrigin = "anonymous";
+        qrImg.src = qrDataUrl;
+        
+        await new Promise((resolve) => { qrImg.onload = resolve; });
+
+        const qrSize = canvas.height * 0.14; // Sized perfectly to fit the UI
+        const qrX = rightColX - qrSize;
+        const qrY = row1Y - (canvas.height * 0.01); 
+
+        // Draw white border for QR Code ensuring crisp scanning
+        ctx.fillStyle = "#FFFFFF";
+        ctx.fillRect(qrX - 3, qrY - 3, qrSize + 6, qrSize + 6);
+        ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
+
+        // REGISTERED CONTACT (Positioned below the QR code)
+        const contactStartY = qrY + qrSize + (canvas.height * 0.05);
 
         ctx.textAlign = "right";
         ctx.fillStyle = labelColor;
-        ctx.font = `700 ${canvas.height * 0.018}px 'Arial', sans-serif`;
-        ctx.fillText("REGISTERED CONTACT", rightColX, row2Y);
+        ctx.font = `700 ${canvas.height * 0.015}px 'Arial', sans-serif`;
+        ctx.fillText("REGISTERED CONTACT", rightColX, contactStartY);
 
         ctx.fillStyle = primaryColor;
-        ctx.font = `bold ${canvas.height * 0.030}px 'Arial', sans-serif`;
-        ctx.fillText(phone, rightColX, row2Y + (canvas.height * 0.045));
+        ctx.font = `bold ${canvas.height * 0.022}px 'Arial', sans-serif`;
+        ctx.fillText(phone, rightColX, contactStartY + (canvas.height * 0.035));
 
-        ctx.font = `600 ${canvas.height * 0.022}px 'Arial', sans-serif`;
-        ctx.fillText(email.toLowerCase(), rightColX, row2Y + (canvas.height * 0.080));
+        ctx.font = `600 ${canvas.height * 0.016}px 'Arial', sans-serif`;
+        ctx.fillText(email.toLowerCase(), rightColX, contactStartY + (canvas.height * 0.060));
 
         const finalImageDataUrl = canvas.toDataURL("image/jpeg", 0.9);
         setPreviewUrl(finalImageDataUrl);
 
         try {
-          // 3. Save to database record
+          // 5. Save to database record
           await fetch("/api/save-member", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -180,7 +250,7 @@ export default function OrderSuccessPage() {
             }),
           });
 
-          // 4. Send email confirmation attaching the generated card and B2B invoice blocks
+          // 6. Send email confirmation attaching the generated card
           await fetch("/api/send-membership-email", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -210,7 +280,7 @@ export default function OrderSuccessPage() {
     };
 
     executeWorkflow();
-  }, [cardImagePath, safePlanName, memberName, membershipId, phone, email, amountPaid, address, city, orderId, validity, paymentMethod, paypalToken, isCorporate, gstin, companyName, companyAddress]);
+  }, [cardImagePath, safePlanName, memberName, membershipId, phone, email, amountPaid, address, city, orderId, validity, paymentMethod, paypalToken, isCorporate, gstin, companyName, companyAddress, plan]);
 
   const downloadCard = () => {
     if (!previewUrl) return;

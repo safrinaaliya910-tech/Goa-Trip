@@ -73,6 +73,12 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Member email is required." }, { status: 400 });
     }
 
+    // Determine Member Access limit for email text based on plan
+    const safePlanName = String(plan).toLowerCase();
+    let memberAccessCount = "2"; // Default for Gold
+    if (safePlanName === "platinum") memberAccessCount = "6";
+    if (safePlanName === "diamond") memberAccessCount = "8";
+
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: Number(process.env.SMTP_PORT),
@@ -85,7 +91,7 @@ export async function POST(req: Request) {
 
     const attachments: any[] = [];
     
-    // 1. Attach the Digital Membership Card
+    // 1. Attach the Digital Membership Card (Now containing QR Code)
     if (cardImage) {
       const base64Data = cardImage.split("base64,")[1];
       attachments.push({
@@ -363,8 +369,10 @@ export async function POST(req: Request) {
               <td style="padding:0 34px 30px;">
                 <div style="padding:22px;border-left:3px solid #d4af37;background:#080808;">
                   <p style="margin:0;font-size:15px;line-height:1.8;color:#d8d2c7;">
-                    <strong>Your Digital Assets are Attached!</strong><br><br>
-                    Please find your personalized <strong>${plan} membership card</strong> attached to this email. Keep your Membership ID safe. 
+                    <strong style="color:#ffffff;font-size:16px;">Your Digital Assets are Attached!</strong><br><br>
+                    Please find your personalized <strong>${plan} membership card</strong> attached to this email.<br><br>
+                    <strong style="color:#d4af37;">How to use your card:</strong> Simply present the QR Code on your digital card at any partner venue. The venue manager will scan it for instant, seamless access. No manual details required.<br><br>
+                    Your current plan allows for <strong style="color:#d4af37;">${memberAccessCount} Member Access</strong> entries.
                     ${isCorporate ? '<br><br>Your official <strong>B2B Tax Invoice</strong> has also been attached as a PDF document for your accounting and GST input tax credit records.' : ''}
                   </p>
                 </div>
