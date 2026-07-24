@@ -121,7 +121,7 @@
       "priorityTag": "Höchste Priorität",
       "gold": {
         "name": "Gold Mitgliedschaft",
-        "members": "Zugang für 4 Mitglieder",
+        "members": "Zugang für 2 Mitglieder",
         "title": "Intelligente Einsparungen bei Hotels & Reisen",
         "description": "Gold ist der perfekte Einstieg in den Luxuszugang. Entwickelt für kluge Reisende, Paare und kleine Gruppen, die echten Wert ohne Kompromisse beim Komfort wünschen.",
         "h1": "Kartenzugang für bis zu 4 Mitglieder",
@@ -158,7 +158,7 @@
         "travel": "Reise",
         "dining": "Essen",
         "clubs": "Clubs",
-        "u4": "4 Benutzer",
+        "u4": "2 Benutzer",
         "u8": "8 Benutzer",
         "hp": "Hohe Prio"
       }
@@ -381,7 +381,7 @@
         "hotels": "Hotels",
         "travel": "Reise",
         "dining": "Essen",
-        "u4": "4 Mitglieder",
+        "u4": "2 Mitglieder",
         "clubs": "Clubs",
         "hp": "Hohe Priorität",
         "support": "Support"
@@ -409,7 +409,7 @@
         "badge": "Am Ausgewogensten",
         "title": "Größerer Zugang für Familien, Gruppen & Regelmäßige Goa-Besucher",
         "desc": "Platin ist eine leistungsstarke Mitgliedschaft für Mitglieder, die mehr Kategorien, besseren Komfort und breiteren Goa-Zugang wünschen. Sie bietet mehr Wert als Gold und stärkere Unterstützung.",
-        "access": "Bis zu 8 Mitglieder können die Karte nutzen",
+        "access": "Bis zu 6 Mitglieder können die Karte nutzen",
         "support": "Stärkere Unterstützung als die Gold-Mitgliedschaft",
         "highlight": "Beste Wahl für Familien, Gruppen, regelmäßige Besucher, Premium-Reisende und Personen, die breitere Goa-Vorteile wünschen.",
         "p1": "Rabatte bei Hotels, Restaurants, Reisepartnern, Unterkünften, Bars, Clubs und ausgewählten Lifestyle-Orten",
@@ -424,7 +424,7 @@
         "badge": "Smart Entry",
         "title": "Intelligente Einsparungen bei Hotels & Reisen",
         "desc": "Gold ist die perfekte Einstiegsmitgliedschaft für Menschen, die GOA MOMENTS Vorteile mit intelligenten Einsparungen und zuverlässiger Unterstützung erleben möchten. Sie ist einfach, nützlich und ideal für kleinere Gruppen.",
-        "access": "Bis zu 4 Mitglieder können die Karte nutzen",
+        "access": "Bis zu 2 Mitglieder können die Karte nutzen",
         "support": "Zuverlässiger GOA MOMENTS Support inklusive",
         "highlight": "Beste Wahl für Paare, Alleinreisende, kleine Familien und clevere Besucher, die Premium-Einsparungen wünschen.",
         "p1": "Hotel- und Reisevorteile inbegriffen",

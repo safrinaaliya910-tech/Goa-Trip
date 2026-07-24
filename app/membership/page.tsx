@@ -103,7 +103,7 @@ export default function MembershipPage() {
       key: "gold",
       name: "Gold",
       icon: Crown,
-      price: "125",
+      price: "1",
       tagline: t("membership.tiers.gold.tagline"),
       idealFor: t("membership.tiers.gold.idealFor"),
       features: [
@@ -120,7 +120,7 @@ export default function MembershipPage() {
       key: "platinum",
       name: "Platinum",
       icon: Star,
-      price: "165",
+      price: "1",
       tagline: t("membership.tiers.platinum.tagline"),
       idealFor: t("membership.tiers.platinum.idealFor"),
       features: [
@@ -138,7 +138,7 @@ export default function MembershipPage() {
       key: "diamond",
       name: "Diamond",
       icon: Gem,
-      price: "265",
+      price: "1",
       tagline: t("membership.tiers.diamond.tagline"),
       idealFor: t("membership.tiers.diamond.idealFor"),
       features: [
@@ -349,10 +349,16 @@ export default function MembershipPage() {
                 <p className="mt-4 text-center text-sm leading-relaxed text-muted-foreground">
                   {tier.tagline}
                 </p>
-                <div className="mt-6 text-center">
+               <div className="mt-6 text-center">
                   <span className="text-sm text-muted-foreground">{t("membership.plans.priceLabel")}</span>
-                  <div className="mt-2">
-                    <span className="text-4xl font-light text-primary">${tier.price}</span>
+                  <div className="mt-2 flex items-center justify-center">
+                    <span className="text-4xl font-light text-primary">$</span>
+                    <span 
+                      className="text-4xl text-primary" 
+                      style={{ fontFamily: 'Arial, Helvetica, sans-serif', fontWeight: '300', marginLeft: '2px' }}
+                    >
+                      {tier.price}
+                    </span>
                   </div>
                 </div>
                 <p className="mt-6 border-t border-border pt-6 text-sm leading-relaxed text-muted-foreground">
