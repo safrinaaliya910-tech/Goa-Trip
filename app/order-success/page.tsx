@@ -33,7 +33,6 @@ export default function OrderSuccessPage() {
   const safePlanName = plan.toLowerCase();
   const cardImagePath = `/images/${safePlanName}-card.jpg`;
 
-  // Corporate parameters parsing
   const isCorporate = searchParams.get("isCorporate") === "true";
   const gstin = searchParams.get("gstin") || "";
   const companyName = searchParams.get("companyName") || "";
@@ -47,7 +46,6 @@ export default function OrderSuccessPage() {
     const executeWorkflow = async () => {
       let currentOrderId = orderId;
 
-      // 1. Capture PayPal Funds if necessary
       if (paymentMethod === "paypal" && paypalToken) {
         try {
           const captureResponse = await fetch("/api/paypal/capture-order", {
@@ -72,31 +70,31 @@ export default function OrderSuccessPage() {
       }
       setVerifying(false);
 
-      // 2. Determine Member Access Count
       let memberAccessCount = "2"; 
       if (safePlanName === "platinum") memberAccessCount = "6";
       if (safePlanName === "diamond") memberAccessCount = "8";
 
-      // 3. Generate QR Code Data URL
+      // 🟢 VISUAL DATE: This is for the nice text on the physical card image
+      const purchaseDateVisual = new Date().toLocaleDateString('en-US', { 
+        day: '2-digit', month: 'short', year: 'numeric' 
+      }).toUpperCase();
+
+      // 🟢 FIXED QR PAYLOAD: Reverted exactly to lowercase keys so the Flutter app doesn't crash!
       const qrPayload = JSON.stringify({
         id: membershipId,
         name: memberName,
         phone: phone,
         email: email,
         plan: plan,
-        date: new Date().toISOString().split('T')[0]
+        date: new Date().toISOString().split('T')[0] // Reverted to the original format the app expects
       });
       
       const qrDataUrl = await QRCode.toDataURL(qrPayload, {
         width: 300,
         margin: 1,
-        color: {
-          dark: '#000000',
-          light: '#FFFFFF'
-        }
+        color: { dark: '#000000', light: '#FFFFFF' }
       });
 
-      // 4. Generate the Membership Card Canvas
       const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d");
       if (!ctx) return;
@@ -122,7 +120,7 @@ export default function OrderSuccessPage() {
 
         const leftColX = canvas.width * 0.38;
         const rightColX = canvas.width * 0.92;
-        let startY = canvas.height * 0.56;
+        let startY = canvas.height * 0.55;
 
         ctx.textAlign = "left";
         ctx.fillStyle = primaryColor;
@@ -139,51 +137,54 @@ export default function OrderSuccessPage() {
         ctx.stroke();
         ctx.globalAlpha = 1.0;
 
-        const row1Y = startY + canvas.height * 0.07;
-        const row2Y = startY + canvas.height * 0.17;
-        const row3Y = startY + canvas.height * 0.27;
+        const row1Y = startY + canvas.height * 0.06;
+        const row2Y = startY + canvas.height * 0.15;
+        const row3Y = startY + canvas.height * 0.24;
+        const row4Y = startY + canvas.height * 0.33;
 
-        // MEMBER NAME
+        // ROW 1: MEMBER NAME
         ctx.textAlign = "left";
         ctx.fillStyle = labelColor;
         ctx.font = `600 ${canvas.height * 0.015}px 'Arial', sans-serif`;
         ctx.fillText("MEMBER NAME", leftColX, row1Y);
-
         ctx.fillStyle = primaryColor;
         ctx.font = `bold ${canvas.height * 0.042}px 'Georgia', serif`;
         ctx.shadowColor = "rgba(0,0,0,0.7)";
-        ctx.shadowBlur = 4;
-        ctx.shadowOffsetX = 1;
-        ctx.shadowOffsetY = 2;
+        ctx.shadowBlur = 4; ctx.shadowOffsetX = 1; ctx.shadowOffsetY = 2;
         ctx.fillText(memberName.toUpperCase(), leftColX, row1Y + (canvas.height * 0.045));
         ctx.shadowColor = "transparent";
 
-        // MEMBER ID
+        // ROW 2: MEMBER ID
         ctx.fillStyle = labelColor;
         ctx.font = `600 ${canvas.height * 0.015}px 'Arial', sans-serif`;
         ctx.fillText("MEMBER ID", leftColX, row2Y);
-
         ctx.fillStyle = primaryColor;
         ctx.font = `bold ${canvas.height * 0.028}px 'Courier New', monospace`;
         ctx.shadowColor = "rgba(0,0,0,0.7)";
-        ctx.shadowBlur = 4;
-        ctx.shadowOffsetX = 1;
-        ctx.shadowOffsetY = 1;
+        ctx.shadowBlur = 4; ctx.shadowOffsetX = 1; ctx.shadowOffsetY = 1;
         ctx.fillText(membershipId.toUpperCase(), leftColX, row2Y + (canvas.height * 0.035));
         ctx.shadowColor = "transparent";
 
-        // MEMBER ACCESS
+        // ROW 3: MEMBER ACCESS
         ctx.fillStyle = labelColor;
         ctx.font = `600 ${canvas.height * 0.015}px 'Arial', sans-serif`;
         ctx.fillText("MEMBER ACCESS", leftColX, row3Y);
-
         ctx.fillStyle = primaryColor;
         ctx.font = `bold ${canvas.height * 0.028}px 'Courier New', monospace`;
         ctx.shadowColor = "rgba(0,0,0,0.7)";
-        ctx.shadowBlur = 4;
-        ctx.shadowOffsetX = 1;
-        ctx.shadowOffsetY = 1;
+        ctx.shadowBlur = 4; ctx.shadowOffsetX = 1; ctx.shadowOffsetY = 1;
         ctx.fillText(memberAccessCount, leftColX, row3Y + (canvas.height * 0.035));
+        ctx.shadowColor = "transparent";
+
+        // ROW 4: PURCHASE DATE
+        ctx.fillStyle = labelColor;
+        ctx.font = `600 ${canvas.height * 0.015}px 'Arial', sans-serif`;
+        ctx.fillText("PURCHASE DATE", leftColX, row4Y);
+        ctx.fillStyle = primaryColor;
+        ctx.font = `bold ${canvas.height * 0.028}px 'Courier New', monospace`;
+        ctx.shadowColor = "rgba(0,0,0,0.7)";
+        ctx.shadowBlur = 4; ctx.shadowOffsetX = 1; ctx.shadowOffsetY = 1;
+        ctx.fillText(purchaseDateVisual, leftColX, row4Y + (canvas.height * 0.035));
         ctx.shadowColor = "transparent";
 
         // QR CODE & CONTACT
@@ -207,71 +208,39 @@ export default function OrderSuccessPage() {
         ctx.fillStyle = labelColor;
         ctx.font = `700 ${canvas.height * 0.015}px 'Arial', sans-serif`;
         ctx.fillText("REGISTERED CONTACT", rightColX, contactStartY);
-
         ctx.fillStyle = primaryColor;
         ctx.font = `bold ${canvas.height * 0.022}px 'Arial', sans-serif`;
         ctx.fillText(phone, rightColX, contactStartY + (canvas.height * 0.035));
-
         ctx.font = `600 ${canvas.height * 0.016}px 'Arial', sans-serif`;
         ctx.fillText(email.toLowerCase(), rightColX, contactStartY + (canvas.height * 0.060));
 
-        // Use 0.85 compression to keep payload lightweight and prevent body size limits
         const finalImageDataUrl = canvas.toDataURL("image/jpeg", 0.85);
         setPreviewUrl(finalImageDataUrl);
 
-        // 5. Save to database record FIRST with dedicated error handling
         try {
           const dbResponse = await fetch("/api/save-member", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              membershipId,
-              plan,
-              amountPaid,
-              memberName,
-              email,
-              phone,
-              address,
-              city,
+              membershipId, plan, amountPaid, memberName, email, phone, address, city,
               paymentId: paypalToken || currentOrderId,
-              paymentMethod,
-              status: "pending",
-              isCorporate,
-              gstin,
-              companyName,
-              companyAddress,
+              paymentMethod, status: "pending", isCorporate, gstin, companyName, companyAddress,
             }),
           });
-          
-          if (!dbResponse.ok) {
-            console.error("Database save failed during background sync.");
-          }
+          if (!dbResponse.ok) console.error("Database save failed during background sync.");
         } catch (dbErr) {
           console.error("Network error during database save:", dbErr);
         }
 
-        // 6. Send email confirmation with independent error catching
         try {
           const emailResponse = await fetch("/api/send-membership-email", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              membershipId,
-              plan,
-              amountPaid,
-              memberName,
-              email,
-              phone,
-              address,
-              city,
+              membershipId, plan, amountPaid, memberName, email, phone, address, city,
               paymentId: paypalToken || currentOrderId,
-              validity,
-              paymentMethod,
-              cardImage: finalImageDataUrl,
-              isCorporate,
-              gstin,
-              companyName,
-              companyAddress,
+              validity, paymentMethod, cardImage: finalImageDataUrl,
+              isCorporate, gstin, companyName, companyAddress,
             }),
           });
 
@@ -279,7 +248,6 @@ export default function OrderSuccessPage() {
             setEmailStatus("sent");
           } else {
             setEmailStatus("failed");
-            console.error("Email server rejected dispatch.");
           }
         } catch (emailErr) {
           setEmailStatus("failed");
@@ -326,7 +294,6 @@ export default function OrderSuccessPage() {
               Welcome to GOA MOMENTS. Your membership has been activated successfully. Your card, support access, and premium privileges are now live.
             </p>
 
-            {/* Email dispatch alert status for launch debugging */}
             {emailStatus === "failed" && (
               <div className="mx-auto mt-6 max-w-md rounded border border-red-500/30 bg-red-500/10 p-3 text-xs text-red-200 flex items-center justify-center gap-2">
                 <AlertCircle className="h-4 w-4 shrink-0 text-red-400" />

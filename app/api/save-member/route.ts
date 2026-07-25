@@ -8,9 +8,7 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
     console.log(`🟢 2. Saving data for: ${body.email} | ID: ${body.membershipId}`);
-    console.log("Payment Method:", body.paymentMethod);
 
-    // Fetch keys directly to avoid any import/path issues
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
@@ -19,12 +17,10 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Missing DB Keys" }, { status: 500 });
     }
 
-    // Initialize Supabase with admin rights
     const supabaseAdmin = createClient(supabaseUrl, supabaseKey);
 
-    // Map exact columns to match your Supabase 'members' table
-    // 🟢 THE FIX: Added fallback safety nets (|| null) to ensure undefined 
-    // values from GPay/PayPal don't crash the Supabase insert!
+    // 🟢 FIXED: Reverted back to body.membershipId so it perfectly matches the Flutter app
+    // Changed back to .upsert() so it safely updates if the same exact ID is passed again
     const { data, error } = await supabaseAdmin
       .from('members')
       .upsert([
@@ -33,22 +29,21 @@ export async function POST(req: Request) {
           name: body.memberName || 'Member',
           email: body.email,
           phone: body.phone || null,
-          address: body.address || null, // Safety Net 1
-          city: body.city || null,       // Safety Net 2
+          address: body.address || null,
+          city: body.city || null,
           plan_id: body.plan ? body.plan.toLowerCase() : 'unknown',
           plan_tier: body.plan,
           amount_paid: Number(body.amountPaid) || 0,
           payment_method: body.paymentMethod || 'unknown',
           payment_id: body.paymentId || `TXN-${Date.now()}`,
-          status: 'pending', // Ready for Flutter app activation
+          status: 'pending',
           
-          // --- NEW CORPORATE B2B FIELDS ---
           is_corporate: body.isCorporate || false,
           gstin: body.gstin || null,
           company_name: body.companyName || null,
           company_address: body.companyAddress || null
         }
-      ], { onConflict: 'id' }) // Explicitly state the primary key for the upsert
+      ], { onConflict: 'id' }) 
       .select();
 
     if (error) {
