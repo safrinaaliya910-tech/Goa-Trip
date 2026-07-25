@@ -48,37 +48,31 @@ function convertNumberToWords(amount: number): string {
 }
 
 export async function POST(req: Request) {
+  console.log("=========================================");
+  console.log("✉️ 1. EMAIL DISPATCH API TRIGGERED!");
+
   try {
     const body = await req.json();
     const {
-      membershipId,
-      plan,
-      amountPaid,
-      memberName,
-      email,
-      phone,
-      address,
-      city,
-      paymentId,
-      validity,
-      paymentMethod,
-      cardImage,
-      isCorporate,
-      gstin,
-      companyName,
-      companyAddress,
+      membershipId, plan, amountPaid, memberName, email, phone,
+      address, city, paymentId, validity, paymentMethod,
+      cardImage, isCorporate, gstin, companyName, companyAddress,
     } = body;
 
     if (!email) {
+      console.error("🔴 ERROR: Missing recipient email address.");
       return NextResponse.json({ error: "Member email is required." }, { status: 400 });
     }
 
-    // Determine Member Access limit for email text based on plan
+    console.log(`✉️ 2. Processing email for: ${email} | Plan: ${plan}`);
+
+    // Determine Member Access limit
     const safePlanName = String(plan).toLowerCase();
-    let memberAccessCount = "2"; // Default for Gold
+    let memberAccessCount = "2"; 
     if (safePlanName === "platinum") memberAccessCount = "6";
     if (safePlanName === "diamond") memberAccessCount = "8";
 
+    // Initialize Transporter
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: Number(process.env.SMTP_PORT),
@@ -87,18 +81,29 @@ export async function POST(req: Request) {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASSWORD,
       },
+      // 🟢 FIX: Force timeout so server doesn't hang indefinitely if Resend is slow
+      connectionTimeout: 10000, 
+      greetingTimeout: 5000,
+      socketTimeout: 10000,
     });
 
     const attachments: any[] = [];
     
-    // 1. Attach the Digital Membership Card (Now containing QR Code)
+    // 1. Process Digital Membership Card Safely
     if (cardImage) {
-      const base64Data = cardImage.split("base64,")[1];
-      attachments.push({
-        filename: `${membershipId}-${plan.toLowerCase()}-card.jpg`,
-        content: base64Data,
-        encoding: "base64",
-      });
+      try {
+        const base64Data = cardImage.split("base64,")[1];
+        if (base64Data) {
+          attachments.push({
+            filename: `${membershipId}-${plan.toLowerCase()}-card.jpg`,
+            content: base64Data,
+            encoding: "base64",
+          });
+          console.log("✅ Membership Card Base64 processed successfully.");
+        }
+      } catch (imgErr) {
+        console.error("⚠️ Warning: Failed to attach membership card image.", imgErr);
+      }
     }
 
     // --- FINANCIAL CALCULATIONS ($ DOLLARS) ---
@@ -108,162 +113,146 @@ export async function POST(req: Request) {
     const cgst = Math.round((totalTax / 2) * 100) / 100; 
     const sgst = totalTax - cgst; 
     const sacCode = "999799"; 
-    
-    // Clean, professional Invoice Number format
     const invoiceNo = `INV-${Date.now().toString().slice(-6)}`;
     const formatAmt = (num: number) => num.toFixed(2); 
 
-    // 2. Generate and Attach the PREMIUM B2B PDF Invoice
+    // 2. Generate and Attach PREMIUM B2B PDF Invoice
     if (isCorporate && gstin && companyName) {
-      const pdfDoc = await PDFDocument.create();
-      const page = pdfDoc.addPage([595.28, 841.89]); // Standard A4 Size
-      const { width, height } = page.getSize();
-      
-      const boldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
-      const goldColor = rgb(0.831, 0.686, 0.216); // #D4AF37
-      const blackColor = rgb(0, 0, 0); 
-      
-      // Alignment Helpers (EVERYTHING FORCED BOLD)
-      const drawText = (text: string, x: number, y: number, size = 10, color = blackColor) => {
-        page.drawText(text, { x, y: height - y, size, font: boldFont, color });
-      };
-
-      const drawCenterText = (text: string, xStart: number, xEnd: number, y: number, size = 10, color = blackColor) => {
-        const textWidth = boldFont.widthOfTextAtSize(text, size);
-        const center = xStart + (xEnd - xStart) / 2;
-        page.drawText(text, { x: center - textWidth / 2, y: height - y, size, font: boldFont, color });
-      };
-
-      const drawRightText = (text: string, xRight: number, y: number, size = 10, color = blackColor) => {
-        const textWidth = boldFont.widthOfTextAtSize(text, size);
-        page.drawText(text, { x: xRight - textWidth, y: height - y, size, font: boldFont, color });
-      };
-
-      // --- PDF DESIGN START ---
-
+      console.log("⚙️ Generating Corporate B2B PDF Invoice...");
       try {
-        const logoPath = path.join(process.cwd(), 'public', 'images', 'logo.png');
-        const logoBytes = fs.readFileSync(logoPath);
-        const logoImage = await pdfDoc.embedPng(logoBytes); 
-        const scaleFactor = 45 / logoImage.height;
-        page.drawImage(logoImage, {
-          x: 40,
-          y: height - 75, 
-          width: logoImage.width * scaleFactor,
-          height: 45,
+        const pdfDoc = await PDFDocument.create();
+        const page = pdfDoc.addPage([595.28, 841.89]); 
+        const { width, height } = page.getSize();
+        
+        const boldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+        const goldColor = rgb(0.831, 0.686, 0.216); 
+        const blackColor = rgb(0, 0, 0); 
+        
+        const drawText = (text: string, x: number, y: number, size = 10, color = blackColor) => {
+          page.drawText(text, { x, y: height - y, size, font: boldFont, color });
+        };
+        const drawCenterText = (text: string, xStart: number, xEnd: number, y: number, size = 10, color = blackColor) => {
+          const textWidth = boldFont.widthOfTextAtSize(text, size);
+          const center = xStart + (xEnd - xStart) / 2;
+          page.drawText(text, { x: center - textWidth / 2, y: height - y, size, font: boldFont, color });
+        };
+        const drawRightText = (text: string, xRight: number, y: number, size = 10, color = blackColor) => {
+          const textWidth = boldFont.widthOfTextAtSize(text, size);
+          page.drawText(text, { x: xRight - textWidth, y: height - y, size, font: boldFont, color });
+        };
+
+        try {
+          const logoPath = path.join(process.cwd(), 'public', 'images', 'logo.png');
+          const logoBytes = fs.readFileSync(logoPath);
+          const logoImage = await pdfDoc.embedPng(logoBytes); 
+          const scaleFactor = 45 / logoImage.height;
+          page.drawImage(logoImage, {
+            x: 40, y: height - 75, width: logoImage.width * scaleFactor, height: 45,
+          });
+        } catch (e) {
+          drawText("GOA MOMENTS", 40, 55, 24, goldColor);
+        }
+
+        drawText("TAX INVOICE", 400, 45, 22, goldColor);
+        drawText(`Invoice No: ${invoiceNo}`, 400, 65, 10, blackColor);
+        drawText(`Date: ${new Date().toLocaleDateString('en-IN')}`, 400, 80, 10, blackColor);
+        page.drawLine({ start: { x: 40, y: height - 105 }, end: { x: 555, y: height - 105 }, thickness: 1.5, color: goldColor });
+
+        const sectionY = 130;
+        drawText("SUPPLIER DETAILS", 40, sectionY, 11, goldColor);
+        drawText("LOTLAN EXPERT PRIVATE LIMITED", 40, sectionY + 20, 10, blackColor);
+        drawText("Sarojini Road, Pappanaickenpalayam", 40, sectionY + 35, 10, blackColor);
+        drawText("Coimbatore, Tamil Nadu, 641044", 40, sectionY + 50, 10, blackColor);
+        drawText("GSTIN: 33AAFCL4757P1ZY", 40, sectionY + 70, 10, blackColor); 
+
+        drawText("BILLED TO (RECIPIENT)", 320, sectionY, 11, goldColor);
+        drawText(companyName.toUpperCase(), 320, sectionY + 20, 10, blackColor);
+        drawText(companyAddress, 320, sectionY + 35, 10, blackColor);
+        drawText(`City: ${city.toUpperCase()}`, 320, sectionY + 50, 10, blackColor);
+        drawText(`BUYER GSTIN: ${gstin.toUpperCase()}`, 320, sectionY + 70, 10, blackColor);
+
+        // TABLE 1
+        const t1Y = 240;
+        page.drawRectangle({ x: 40, y: height - (t1Y + 125), width: 515, height: 125, borderColor: blackColor, borderWidth: 1 });
+        page.drawLine({ start: { x: 40, y: height - (t1Y + 25) }, end: { x: 555, y: height - (t1Y + 25) }, thickness: 1, color: blackColor });
+        page.drawLine({ start: { x: 40, y: height - (t1Y + 50) }, end: { x: 555, y: height - (t1Y + 50) }, thickness: 1, color: blackColor });
+        page.drawLine({ start: { x: 40, y: height - (t1Y + 75) }, end: { x: 555, y: height - (t1Y + 75) }, thickness: 1, color: blackColor });
+        page.drawLine({ start: { x: 40, y: height - (t1Y + 100) }, end: { x: 555, y: height - (t1Y + 100) }, thickness: 1, color: blackColor });
+        page.drawLine({ start: { x: 300, y: height - t1Y }, end: { x: 300, y: height - (t1Y + 125) }, thickness: 1, color: blackColor });
+        page.drawLine({ start: { x: 430, y: height - t1Y }, end: { x: 430, y: height - (t1Y + 125) }, thickness: 1, color: blackColor });
+
+        drawCenterText("Particulars", 40, 300, t1Y + 17, 10, blackColor);
+        drawCenterText("HSN/SAC", 300, 430, t1Y + 17, 10, blackColor);
+        drawCenterText("Amount ($)", 430, 555, t1Y + 17, 10, blackColor);
+        drawText(`${plan} Membership Fee`, 45, t1Y + 42, 10, blackColor);
+        drawCenterText(sacCode, 300, 430, t1Y + 42, 10, blackColor);
+        drawRightText(formatAmt(basePrice), 545, t1Y + 42, 10, blackColor); 
+        drawRightText("CGST @ 9.00%", 290, t1Y + 67, 10, blackColor);
+        drawRightText(formatAmt(cgst), 545, t1Y + 67, 10, blackColor);
+        drawRightText("SGST @ 9.00%", 290, t1Y + 92, 10, blackColor);
+        drawRightText(formatAmt(sgst), 545, t1Y + 92, 10, blackColor);
+        drawRightText("Grand Total", 290, t1Y + 117, 10, blackColor);
+        drawRightText(formatAmt(rawTotal), 545, t1Y + 117, 10, blackColor);
+        drawText(`Amount Chargeable (in words): ${convertNumberToWords(rawTotal)} Only.`, 40, t1Y + 145, 10, blackColor);
+
+        // TABLE 2
+        const t2Y = 410;
+        page.drawRectangle({ x: 40, y: height - (t2Y + 90), width: 515, height: 90, borderColor: blackColor, borderWidth: 1 });
+        page.drawLine({ start: { x: 215, y: height - (t2Y + 20) }, end: { x: 455, y: height - (t2Y + 20) }, thickness: 1, color: blackColor });
+        page.drawLine({ start: { x: 40, y: height - (t2Y + 40) }, end: { x: 555, y: height - (t2Y + 40) }, thickness: 1, color: blackColor });
+        page.drawLine({ start: { x: 40, y: height - (t2Y + 65) }, end: { x: 555, y: height - (t2Y + 65) }, thickness: 1, color: blackColor });
+        page.drawLine({ start: { x: 120, y: height - t2Y }, end: { x: 120, y: height - (t2Y + 90) }, thickness: 1, color: blackColor });
+        page.drawLine({ start: { x: 215, y: height - t2Y }, end: { x: 215, y: height - (t2Y + 90) }, thickness: 1, color: blackColor });
+        page.drawLine({ start: { x: 265, y: height - (t2Y + 20) }, end: { x: 265, y: height - (t2Y + 90) }, thickness: 1, color: blackColor });
+        page.drawLine({ start: { x: 335, y: height - t2Y }, end: { x: 335, y: height - (t2Y + 90) }, thickness: 1, color: blackColor });
+        page.drawLine({ start: { x: 385, y: height - (t2Y + 20) }, end: { x: 385, y: height - (t2Y + 90) }, thickness: 1, color: blackColor });
+        page.drawLine({ start: { x: 455, y: height - t2Y }, end: { x: 455, y: height - (t2Y + 90) }, thickness: 1, color: blackColor });
+
+        drawCenterText("HSN/SAC", 40, 120, t2Y + 25, 10, blackColor);
+        drawCenterText("Taxable Value", 120, 215, t2Y + 25, 10, blackColor);
+        drawCenterText("CGST", 215, 335, t2Y + 14, 10, blackColor);
+        drawCenterText("SGST/UTGST", 335, 455, t2Y + 14, 10, blackColor);
+        drawCenterText("Total Tax", 455, 555, t2Y + 25, 10, blackColor);
+        drawCenterText("Rate", 215, 265, t2Y + 34, 10, blackColor);
+        drawCenterText("Amount", 265, 335, t2Y + 34, 10, blackColor);
+        drawCenterText("Rate", 335, 385, t2Y + 34, 10, blackColor);
+        drawCenterText("Amount", 385, 455, t2Y + 34, 10, blackColor);
+
+        drawCenterText(sacCode, 40, 120, t2Y + 57, 10, blackColor);
+        drawRightText(formatAmt(basePrice), 205, t2Y + 57, 10, blackColor);
+        drawCenterText("9.00%", 215, 265, t2Y + 57, 10, blackColor);
+        drawRightText(formatAmt(cgst), 325, t2Y + 57, 10, blackColor); 
+        drawCenterText("9.00%", 335, 385, t2Y + 57, 10, blackColor);
+        drawRightText(formatAmt(sgst), 445, t2Y + 57, 10, blackColor); 
+        drawRightText(formatAmt(totalTax), 545, t2Y + 57, 10, blackColor); 
+
+        drawCenterText("Total", 40, 120, t2Y + 82, 10, blackColor);
+        drawRightText(formatAmt(basePrice), 205, t2Y + 82, 10, blackColor);
+        drawRightText(formatAmt(cgst), 325, t2Y + 82, 10, blackColor);
+        drawRightText(formatAmt(sgst), 445, t2Y + 82, 10, blackColor);
+        drawRightText(formatAmt(totalTax), 545, t2Y + 82, 10, blackColor);
+
+        drawText("This is a computer-generated invoice and does not require a physical signature.", 40, 525, 9, blackColor);
+        drawText(`Input Tax Credit (ITC) of 18% has been safely logged against Buyer GSTIN: ${gstin.toUpperCase()}`, 40, 540, 9, blackColor);
+
+        const pdfBytes = await pdfDoc.save();
+        const pdfBuffer = Buffer.from(pdfBytes);
+
+        attachments.push({
+          filename: `Tax_Invoice_${invoiceNo}.pdf`,
+          content: pdfBuffer,
+          contentType: "application/pdf",
         });
-      } catch (e) {
-        drawText("GOA MOMENTS", 40, 55, 24, goldColor);
+        console.log("✅ PDF generated and attached.");
+      } catch (pdfErr) {
+        console.error("⚠️ Warning: Failed to generate PDF invoice.", pdfErr);
       }
-
-      // Header Text
-      drawText("TAX INVOICE", 400, 45, 22, goldColor);
-      drawText(`Invoice No: ${invoiceNo}`, 400, 65, 10, blackColor);
-      drawText(`Date: ${new Date().toLocaleDateString('en-IN')}`, 400, 80, 10, blackColor);
-
-      page.drawLine({ start: { x: 40, y: height - 105 }, end: { x: 555, y: height - 105 }, thickness: 1.5, color: goldColor });
-
-      // Addresses
-      const sectionY = 130;
-      drawText("SUPPLIER DETAILS", 40, sectionY, 11, goldColor);
-      drawText("LOTLAN EXPERT PRIVATE LIMITED", 40, sectionY + 20, 10, blackColor);
-      drawText("Sarojini Road, Pappanaickenpalayam", 40, sectionY + 35, 10, blackColor);
-      drawText("Coimbatore, Tamil Nadu, 641044", 40, sectionY + 50, 10, blackColor);
-      drawText("GSTIN: 33AAFCL4757P1ZY", 40, sectionY + 70, 10, blackColor); 
-
-      drawText("BILLED TO (RECIPIENT)", 320, sectionY, 11, goldColor);
-      drawText(companyName.toUpperCase(), 320, sectionY + 20, 10, blackColor);
-      drawText(companyAddress, 320, sectionY + 35, 10, blackColor);
-      drawText(`City: ${city.toUpperCase()}`, 320, sectionY + 50, 10, blackColor);
-      drawText(`BUYER GSTIN: ${gstin.toUpperCase()}`, 320, sectionY + 70, 10, blackColor);
-
-      // --- TABLE 1: Strict Grid Layout ---
-      const t1Y = 240;
-      page.drawRectangle({ x: 40, y: height - (t1Y + 125), width: 515, height: 125, borderColor: blackColor, borderWidth: 1 });
-      
-      page.drawLine({ start: { x: 40, y: height - (t1Y + 25) }, end: { x: 555, y: height - (t1Y + 25) }, thickness: 1, color: blackColor });
-      page.drawLine({ start: { x: 40, y: height - (t1Y + 50) }, end: { x: 555, y: height - (t1Y + 50) }, thickness: 1, color: blackColor });
-      page.drawLine({ start: { x: 40, y: height - (t1Y + 75) }, end: { x: 555, y: height - (t1Y + 75) }, thickness: 1, color: blackColor });
-      page.drawLine({ start: { x: 40, y: height - (t1Y + 100) }, end: { x: 555, y: height - (t1Y + 100) }, thickness: 1, color: blackColor });
-      
-      page.drawLine({ start: { x: 300, y: height - t1Y }, end: { x: 300, y: height - (t1Y + 125) }, thickness: 1, color: blackColor });
-      page.drawLine({ start: { x: 430, y: height - t1Y }, end: { x: 430, y: height - (t1Y + 125) }, thickness: 1, color: blackColor });
-
-      drawCenterText("Particulars", 40, 300, t1Y + 17, 10, blackColor);
-      drawCenterText("HSN/SAC", 300, 430, t1Y + 17, 10, blackColor);
-      drawCenterText("Amount ($)", 430, 555, t1Y + 17, 10, blackColor);
-
-      drawText(`${plan} Membership Fee`, 45, t1Y + 42, 10, blackColor);
-      drawCenterText(sacCode, 300, 430, t1Y + 42, 10, blackColor);
-      drawRightText(formatAmt(basePrice), 545, t1Y + 42, 10, blackColor); // Flush right
-
-      // PERFECT ALIGNMENT: Flush Right inside Particulars Column (x=290)
-      drawRightText("CGST @ 9.00%", 290, t1Y + 67, 10, blackColor);
-      drawRightText(formatAmt(cgst), 545, t1Y + 67, 10, blackColor);
-
-      drawRightText("SGST @ 9.00%", 290, t1Y + 92, 10, blackColor);
-      drawRightText(formatAmt(sgst), 545, t1Y + 92, 10, blackColor);
-
-      drawRightText("Grand Total", 290, t1Y + 117, 10, blackColor);
-      drawRightText(formatAmt(rawTotal), 545, t1Y + 117, 10, blackColor);
-
-      drawText(`Amount Chargeable (in words): ${convertNumberToWords(rawTotal)} Only.`, 40, t1Y + 145, 10, blackColor);
-
-      // --- TABLE 2: Tax Breakdown Strict Grid ---
-      const t2Y = 410;
-      page.drawRectangle({ x: 40, y: height - (t2Y + 90), width: 515, height: 90, borderColor: blackColor, borderWidth: 1 });
-      
-      page.drawLine({ start: { x: 215, y: height - (t2Y + 20) }, end: { x: 455, y: height - (t2Y + 20) }, thickness: 1, color: blackColor });
-      page.drawLine({ start: { x: 40, y: height - (t2Y + 40) }, end: { x: 555, y: height - (t2Y + 40) }, thickness: 1, color: blackColor });
-      page.drawLine({ start: { x: 40, y: height - (t2Y + 65) }, end: { x: 555, y: height - (t2Y + 65) }, thickness: 1, color: blackColor });
-      
-      page.drawLine({ start: { x: 120, y: height - t2Y }, end: { x: 120, y: height - (t2Y + 90) }, thickness: 1, color: blackColor });
-      page.drawLine({ start: { x: 215, y: height - t2Y }, end: { x: 215, y: height - (t2Y + 90) }, thickness: 1, color: blackColor });
-      page.drawLine({ start: { x: 265, y: height - (t2Y + 20) }, end: { x: 265, y: height - (t2Y + 90) }, thickness: 1, color: blackColor });
-      page.drawLine({ start: { x: 335, y: height - t2Y }, end: { x: 335, y: height - (t2Y + 90) }, thickness: 1, color: blackColor });
-      page.drawLine({ start: { x: 385, y: height - (t2Y + 20) }, end: { x: 385, y: height - (t2Y + 90) }, thickness: 1, color: blackColor });
-      page.drawLine({ start: { x: 455, y: height - t2Y }, end: { x: 455, y: height - (t2Y + 90) }, thickness: 1, color: blackColor });
-
-      drawCenterText("HSN/SAC", 40, 120, t2Y + 25, 10, blackColor);
-      drawCenterText("Taxable Value", 120, 215, t2Y + 25, 10, blackColor);
-      drawCenterText("CGST", 215, 335, t2Y + 14, 10, blackColor);
-      drawCenterText("SGST/UTGST", 335, 455, t2Y + 14, 10, blackColor);
-      drawCenterText("Total Tax", 455, 555, t2Y + 25, 10, blackColor);
-
-      drawCenterText("Rate", 215, 265, t2Y + 34, 10, blackColor);
-      drawCenterText("Amount", 265, 335, t2Y + 34, 10, blackColor);
-      drawCenterText("Rate", 335, 385, t2Y + 34, 10, blackColor);
-      drawCenterText("Amount", 385, 455, t2Y + 34, 10, blackColor);
-
-      drawCenterText(sacCode, 40, 120, t2Y + 57, 10, blackColor);
-      drawRightText(formatAmt(basePrice), 205, t2Y + 57, 10, blackColor); // Flush right inside cell
-      drawCenterText("9.00%", 215, 265, t2Y + 57, 10, blackColor);
-      drawRightText(formatAmt(cgst), 325, t2Y + 57, 10, blackColor); // Flush right
-      drawCenterText("9.00%", 335, 385, t2Y + 57, 10, blackColor);
-      drawRightText(formatAmt(sgst), 445, t2Y + 57, 10, blackColor); // Flush right
-      drawRightText(formatAmt(totalTax), 545, t2Y + 57, 10, blackColor); // Flush right
-
-      drawCenterText("Total", 40, 120, t2Y + 82, 10, blackColor);
-      drawRightText(formatAmt(basePrice), 205, t2Y + 82, 10, blackColor);
-      drawRightText(formatAmt(cgst), 325, t2Y + 82, 10, blackColor);
-      drawRightText(formatAmt(sgst), 445, t2Y + 82, 10, blackColor);
-      drawRightText(formatAmt(totalTax), 545, t2Y + 82, 10, blackColor);
-
-      // Footer
-      drawText("This is a computer-generated invoice and does not require a physical signature.", 40, 525, 9, blackColor);
-      drawText(`Input Tax Credit (ITC) of 18% has been safely logged against Buyer GSTIN: ${gstin.toUpperCase()}`, 40, 540, 9, blackColor);
-
-      const pdfBytes = await pdfDoc.save();
-      const pdfBuffer = Buffer.from(pdfBytes);
-
-      attachments.push({
-        filename: `Tax_Invoice_${invoiceNo}.pdf`,
-        content: pdfBuffer,
-        contentType: "application/pdf",
-      });
     }
 
-    await transporter.sendMail({
+    console.log("✉️ 3. Transmitting to Resend via Nodemailer...");
+
+    // 🟢 FIX: Wrap in a promise to catch explicit send failures
+    const mailInfo = await transporter.sendMail({
       from: '"GOA MOMENTS" <support@goamoments.com>',
       replyTo: "support@goamoments.com",
       to: email,
@@ -397,9 +386,13 @@ export async function POST(req: Request) {
       `,
     });
 
-    return NextResponse.json({ success: true });
-  } catch (error) {
-    console.error("Membership email failed:", error);
-    return NextResponse.json({ error: "Unable to send membership email." }, { status: 500 });
+    console.log("🟢 4. SUCCESS! Email dispatched. Message ID:", mailInfo.messageId);
+    console.log("=========================================");
+    return NextResponse.json({ success: true, messageId: mailInfo.messageId });
+
+  } catch (error: any) {
+    console.error("🔴 CRITICAL EMAIL FAILURE:", error.message);
+    // 🟢 FIX: Ensure we return an error status so the frontend knows it failed
+    return NextResponse.json({ error: "Unable to send membership email.", details: error.message }, { status: 500 });
   }
 }

@@ -5,8 +5,8 @@ import { useEffect, useRef, useState } from "react";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import Image from "next/image";
-import { CheckCircle2, ShieldCheck, Sparkles } from "lucide-react";
-import QRCode from "qrcode"; // NEW: Import QR Code generator
+import { CheckCircle2, ShieldCheck, Sparkles, AlertCircle } from "lucide-react";
+import QRCode from "qrcode";
 
 export default function OrderSuccessPage() {
   const searchParams = useSearchParams();
@@ -26,6 +26,7 @@ export default function OrderSuccessPage() {
   
   const [orderId, setOrderId] = useState<string>(rawPaymentId || paypalToken || `ORDER-${Date.now()}`);
   const [verifying, setVerifying] = useState<boolean>(!!paypalToken);
+  const [emailStatus, setEmailStatus] = useState<"sending" | "sent" | "failed">("sending");
   const workflowExecutedRef = useRef(false);
   const [previewUrl, setPreviewUrl] = useState<string>("");
 
@@ -72,12 +73,11 @@ export default function OrderSuccessPage() {
       setVerifying(false);
 
       // 2. Determine Member Access Count
-      let memberAccessCount = "2"; // Default for Gold
+      let memberAccessCount = "2"; 
       if (safePlanName === "platinum") memberAccessCount = "6";
       if (safePlanName === "diamond") memberAccessCount = "8";
 
       // 3. Generate QR Code Data URL
-      // Storing the specific details needed for the Goa Moments App scanner
       const qrPayload = JSON.stringify({
         id: membershipId,
         name: memberName,
@@ -91,8 +91,8 @@ export default function OrderSuccessPage() {
         width: 300,
         margin: 1,
         color: {
-          dark: '#000000', // Black dots
-          light: '#FFFFFF' // White background for 100% scan reliability
+          dark: '#000000',
+          light: '#FFFFFF'
         }
       });
 
@@ -124,7 +124,6 @@ export default function OrderSuccessPage() {
         const rightColX = canvas.width * 0.92;
         let startY = canvas.height * 0.56;
 
-        // TOP SECTION: Title and Line
         ctx.textAlign = "left";
         ctx.fillStyle = primaryColor;
         ctx.font = `500 ${canvas.height * 0.022}px 'Arial', sans-serif`;
@@ -140,13 +139,10 @@ export default function OrderSuccessPage() {
         ctx.stroke();
         ctx.globalAlpha = 1.0;
 
-        // Dynamic Layout Positioning
         const row1Y = startY + canvas.height * 0.07;
         const row2Y = startY + canvas.height * 0.17;
         const row3Y = startY + canvas.height * 0.27;
 
-        // --- LEFT COLUMN: Name, ID, Access ---
-        
         // MEMBER NAME
         ctx.textAlign = "left";
         ctx.fillStyle = labelColor;
@@ -190,25 +186,21 @@ export default function OrderSuccessPage() {
         ctx.fillText(memberAccessCount, leftColX, row3Y + (canvas.height * 0.035));
         ctx.shadowColor = "transparent";
 
-        // --- RIGHT COLUMN: QR Code & Contact ---
-
-        // Load and Draw QR Code Image
+        // QR CODE & CONTACT
         const qrImg = new window.Image();
         qrImg.crossOrigin = "anonymous";
         qrImg.src = qrDataUrl;
         
         await new Promise((resolve) => { qrImg.onload = resolve; });
 
-        const qrSize = canvas.height * 0.14; // Sized perfectly to fit the UI
+        const qrSize = canvas.height * 0.14;
         const qrX = rightColX - qrSize;
         const qrY = row1Y - (canvas.height * 0.01); 
 
-        // Draw white border for QR Code ensuring crisp scanning
         ctx.fillStyle = "#FFFFFF";
         ctx.fillRect(qrX - 3, qrY - 3, qrSize + 6, qrSize + 6);
         ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
 
-        // REGISTERED CONTACT (Positioned below the QR code)
         const contactStartY = qrY + qrSize + (canvas.height * 0.05);
 
         ctx.textAlign = "right";
@@ -223,12 +215,13 @@ export default function OrderSuccessPage() {
         ctx.font = `600 ${canvas.height * 0.016}px 'Arial', sans-serif`;
         ctx.fillText(email.toLowerCase(), rightColX, contactStartY + (canvas.height * 0.060));
 
-        const finalImageDataUrl = canvas.toDataURL("image/jpeg", 0.9);
+        // Use 0.85 compression to keep payload lightweight and prevent body size limits
+        const finalImageDataUrl = canvas.toDataURL("image/jpeg", 0.85);
         setPreviewUrl(finalImageDataUrl);
 
+        // 5. Save to database record FIRST with dedicated error handling
         try {
-          // 5. Save to database record
-          await fetch("/api/save-member", {
+          const dbResponse = await fetch("/api/save-member", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -242,16 +235,24 @@ export default function OrderSuccessPage() {
               city,
               paymentId: paypalToken || currentOrderId,
               paymentMethod,
-              status: "Confirmed",
+              status: "pending",
               isCorporate,
               gstin,
               companyName,
               companyAddress,
             }),
           });
+          
+          if (!dbResponse.ok) {
+            console.error("Database save failed during background sync.");
+          }
+        } catch (dbErr) {
+          console.error("Network error during database save:", dbErr);
+        }
 
-          // 6. Send email confirmation attaching the generated card
-          await fetch("/api/send-membership-email", {
+        // 6. Send email confirmation with independent error catching
+        try {
+          const emailResponse = await fetch("/api/send-membership-email", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -273,8 +274,16 @@ export default function OrderSuccessPage() {
               companyAddress,
             }),
           });
-        } catch (error) {
-          console.error("Failed to process success actions:", error);
+
+          if (emailResponse.ok) {
+            setEmailStatus("sent");
+          } else {
+            setEmailStatus("failed");
+            console.error("Email server rejected dispatch.");
+          }
+        } catch (emailErr) {
+          setEmailStatus("failed");
+          console.error("Failed to dispatch membership email:", emailErr);
         }
       };
     };
@@ -316,6 +325,15 @@ export default function OrderSuccessPage() {
             <p className="mx-auto mt-6 max-w-3xl text-lg leading-relaxed text-muted-foreground md:text-xl">
               Welcome to GOA MOMENTS. Your membership has been activated successfully. Your card, support access, and premium privileges are now live.
             </p>
+
+            {/* Email dispatch alert status for launch debugging */}
+            {emailStatus === "failed" && (
+              <div className="mx-auto mt-6 max-w-md rounded border border-red-500/30 bg-red-500/10 p-3 text-xs text-red-200 flex items-center justify-center gap-2">
+                <AlertCircle className="h-4 w-4 shrink-0 text-red-400" />
+                <span>Notice: Automated confirmation email encountered a delivery delay. Your membership is fully active in our system.</span>
+              </div>
+            )}
+
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3 text-[11px] uppercase tracking-widest">
               <span className="rounded-full border border-border px-3 py-1 text-muted-foreground">1. Details</span>
               <span className="rounded-full border border-border px-3 py-1 text-muted-foreground">2. Confirm Order</span>
@@ -404,7 +422,6 @@ export default function OrderSuccessPage() {
                   <span className="break-all text-right text-foreground">{paypalToken || orderId}</span>
                 </div>
 
-                {/* Show Corporate B2B reference rows if selected */}
                 {isCorporate && (
                   <div className="mt-4 pt-4 border-t border-dashed border-border space-y-3 bg-primary/5 p-3 rounded-md">
                     <p className="text-xs uppercase tracking-wider font-sans font-bold text-primary">Corporate Invoice Details</p>
