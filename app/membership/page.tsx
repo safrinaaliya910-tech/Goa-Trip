@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -51,6 +51,13 @@ export default function MembershipPage() {
   const [gstin, setGstin] = useState("");
   const [companyName, setCompanyName] = useState("");
   const [companyAddress, setCompanyAddress] = useState("");
+
+  // REFS FOR AUTO-FOCUS UX
+  const lastNameRef = useRef<HTMLInputElement>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
+  const phoneRef = useRef<HTMLInputElement>(null);
+  const addressRef = useRef<HTMLInputElement>(null);
+  const cityRef = useRef<HTMLInputElement>(null);
 
   const benefits = [
     {
@@ -615,6 +622,12 @@ export default function MembershipPage() {
                               type="text"
                               value={firstName}
                               onChange={(e) => setFirstName(e.target.value)}
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                  e.preventDefault();
+                                  lastNameRef.current?.focus();
+                                }
+                              }}
                               placeholder="First name"
                               autoComplete="given-name"
                               className="w-full border border-border bg-background px-4 py-3 font-[Arial,sans-serif] text-sm text-foreground outline-none transition focus:border-primary placeholder:font-normal placeholder:tracking-normal"
@@ -625,9 +638,16 @@ export default function MembershipPage() {
                               {t("membership.checkout.form.lastName")}
                             </label>
                             <input
+                              ref={lastNameRef}
                               type="text"
                               value={lastName}
                               onChange={(e) => setLastName(e.target.value)}
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                  e.preventDefault();
+                                  emailRef.current?.focus();
+                                }
+                              }}
                               placeholder="Last name"
                               autoComplete="family-name"
                               className="w-full border border-border bg-background px-4 py-3 font-[Arial,sans-serif] text-sm text-foreground outline-none transition focus:border-primary placeholder:font-normal placeholder:tracking-normal"
@@ -639,9 +659,16 @@ export default function MembershipPage() {
                             {t("membership.checkout.form.email")}
                           </label>
                           <input
+                            ref={emailRef}
                             type="email"
                             value={customerEmail}
                             onChange={(e) => setCustomerEmail(e.target.value)}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter") {
+                                e.preventDefault();
+                                phoneRef.current?.focus();
+                              }
+                            }}
                             placeholder="Enter your email"
                             autoComplete="email"
                             className="w-full border border-border bg-background px-4 py-3 font-[Arial,sans-serif] text-sm text-foreground outline-none transition focus:border-primary placeholder:font-normal placeholder:tracking-normal"
@@ -652,9 +679,16 @@ export default function MembershipPage() {
                             {t("membership.checkout.form.phone")}
                           </label>
                           <input
+                            ref={phoneRef}
                             type="tel"
                             value={customerPhone}
                             onChange={(e) => setCustomerPhone(e.target.value.replace(/\D/g, ""))}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter") {
+                                e.preventDefault();
+                                addressRef.current?.focus();
+                              }
+                            }}
                             placeholder="Enter your phone number"
                             autoComplete="tel"
                             className="w-full border border-border bg-background px-4 py-3 font-[Arial,sans-serif] text-sm text-foreground outline-none transition focus:border-primary placeholder:font-normal placeholder:tracking-normal"
@@ -666,11 +700,18 @@ export default function MembershipPage() {
                           </label>
                           <div className="relative">
                             <input
+                              ref={addressRef}
                               type="text"
                               value={customerAddress}
                               onChange={(e) => {
                                 setCustomerAddress(e.target.value);
                                 if (addressError) setAddressError("");
+                              }}
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                  e.preventDefault();
+                                  cityRef.current?.focus();
+                                }
                               }}
                               placeholder="Enter country, state, pincode, address"
                               autoComplete="street-address"
@@ -701,9 +742,16 @@ export default function MembershipPage() {
                             {t("membership.checkout.form.city")}
                           </label>
                           <input
+                            ref={cityRef}
                             type="text"
                             value={customerCity}
                             onChange={(e) => setCustomerCity(e.target.value)}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter") {
+                                e.preventDefault();
+                                if (canContinueToConfirm) handleContinue();
+                              }
+                            }}
                             placeholder="Enter your city"
                             autoComplete="address-level2"
                             className="w-full border border-border bg-background px-4 py-3 font-[Arial,sans-serif] text-sm text-foreground outline-none transition focus:border-primary placeholder:font-normal placeholder:tracking-normal"
