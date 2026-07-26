@@ -214,7 +214,8 @@ export default function OrderSuccessPage() {
         ctx.font = `600 ${canvas.height * 0.016}px 'Arial', sans-serif`;
         ctx.fillText(email.toLowerCase(), rightColX, contactStartY + (canvas.height * 0.060));
 
-        const finalImageDataUrl = canvas.toDataURL("image/jpeg", 0.85);
+        // Compress to 40% quality to bypass Vercel's 4.5MB payload limit
+const finalImageDataUrl = canvas.toDataURL("image/jpeg", 0.4);
         setPreviewUrl(finalImageDataUrl);
 
         try {
