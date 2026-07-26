@@ -18,7 +18,7 @@ export default function OrderSuccessPage() {
   const phone = searchParams.get("phone") || "";
   const address = searchParams.get("address") || "";
   const city = searchParams.get("city") || "";
-  const validity = searchParams.get("validity") || "Lifetime Membership";
+  const validity = searchParams.get("validity") || "1 Year Validity";
   const paymentMethod = searchParams.get("paymentMethod") || "Secure Checkout";
   
   const paypalToken = searchParams.get("token");
