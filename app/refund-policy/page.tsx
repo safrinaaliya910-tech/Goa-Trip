@@ -53,7 +53,7 @@ export default function RefundPolicy() {
           <section>
             <h2 className="mb-4 font-serif text-xl text-foreground">4. How to Request a Cancellation</h2>
             <p>
-              To initiate a cancellation or refund request, you must email our support team at <strong>support@goamoments.com</strong> from your registered email address. Please include your Membership ID, Order ID, and a detailed reason for the request. 
+              To initiate a cancellation or refund request, you must email our support team at <strong>goamoments.com@gmail.com</strong> from your registered email address. Please include your Membership ID, Order ID, and a detailed reason for the request. 
             </p>
           </section>
 
