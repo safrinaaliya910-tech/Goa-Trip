@@ -148,6 +148,16 @@ export function Footer() {
                   {t("footer.legal.privacy") || "Privacy Policy"}
                 </a>
               </li>
+              <li>
+                <a
+                  href="/refund-policy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs text-muted-foreground transition-colors hover:text-primary sm:text-sm"
+                >
+                  {t("footer.legal.refund") || "Cancellation & Refund Policy"}
+                </a>
+              </li>
             </ul>
           </motion.div>
 
