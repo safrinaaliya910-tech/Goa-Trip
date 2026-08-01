@@ -119,7 +119,7 @@ export default function MembershipPage() {
         t("membership.tiers.gold.f3"),
         t("membership.tiers.gold.f4"),
         t("membership.tiers.gold.f5"),
-        t("membership.tiers.gold.f6"),
+        "Member Access: 2",
       ],
       popular: false,
     },
@@ -137,7 +137,7 @@ export default function MembershipPage() {
         t("membership.tiers.platinum.f4"),
         t("membership.tiers.platinum.f5"),
         t("membership.tiers.platinum.f6"),
-        t("membership.tiers.platinum.f7"),
+        "Member Access: 6",
       ],
       popular: true,
     },
@@ -155,7 +155,7 @@ export default function MembershipPage() {
         t("membership.tiers.diamond.f4"),
         t("membership.tiers.diamond.f5"),
         t("membership.tiers.diamond.f6"),
-        t("membership.tiers.diamond.f7"),
+        "Member Access: 8",
       ],
       popular: false,
     },
@@ -356,8 +356,8 @@ export default function MembershipPage() {
                 <p className="mt-4 text-center text-sm leading-relaxed text-muted-foreground">
                   {tier.tagline}
                 </p>
-               <div className="mt-6 text-center">
-                  <span className="text-sm text-muted-foreground">{t("membership.plans.priceLabel")}</span>
+              <div className="mt-6 text-center">
+                  <span className="text-sm text-muted-foreground uppercase tracking-widest">Membership Price</span>
                   <div className="mt-2 flex items-center justify-center">
                     <span className="text-4xl font-light text-primary">$</span>
                     <span 
