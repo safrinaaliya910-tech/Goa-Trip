@@ -107,7 +107,7 @@ export function Navigation() {
                 <path d="M11 21L15.5 26L25 15" stroke="#231709" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
               <span className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#d4af37] drop-shadow-md whitespace-nowrap pt-0.5">
-                Official Tourism Partner
+                Official Tourism Partners
               </span>
             </motion.div>
 

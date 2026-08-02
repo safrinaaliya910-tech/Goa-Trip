@@ -1,11 +1,72 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import Image from "next/image";
 import { ShieldCheck, Headphones } from "lucide-react";
 import { useTranslation } from "./providers";
 import { useTheme } from "next-themes";
+
+// --- MAGIC 3D KINEMATIC WRAPPER ---
+function InteractiveTrustCard({ children }: { children: React.ReactNode }) {
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  // Physics springs for buttery smooth movement
+  const mouseXSpring = useSpring(x, { stiffness: 150, damping: 20 });
+  const mouseYSpring = useSpring(y, { stiffness: 150, damping: 20 });
+
+  // Map the mouse position to a rotation angle (12 degrees max)
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["12deg", "-12deg"]);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-12deg", "12deg"]);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    
+    x.set(mouseX / width - 0.5);
+    y.set(mouseY / height - 0.5);
+  };
+
+  const handleMouseLeave = () => {
+    // Reset to flat when mouse leaves
+    x.set(0);
+    y.set(0);
+  };
+
+  return (
+    <motion.div
+      style={{ perspective: 1200 }}
+      className="flex w-full justify-center"
+    >
+      <motion.div
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+        // DEFAULT STATE UPGRADED: Permanent gold border, solid glass background, and ambient shadow
+        className="group relative flex w-full max-w-[240px] items-center gap-3 sm:gap-4 rounded-xl border border-[#C5A059]/40 bg-[#0a0a0a]/80 p-4 shadow-[0_8px_25px_rgba(197,160,89,0.15)] backdrop-blur-md transition-all duration-500 hover:border-[#C5A059]/80 hover:bg-[#111]/90 hover:shadow-[0_15px_35px_rgba(197,160,89,0.3)] cursor-default"
+      >
+        {/* DEFAULT STATE UPGRADED: Continuous breathing golden glow instead of waiting for hover */}
+        <motion.div 
+          animate={{ opacity: [0.5, 1, 0.5] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute inset-0 rounded-xl bg-gradient-to-br from-[#C5A059]/15 to-transparent pointer-events-none" 
+        />
+
+        {/* 3D Content Wrapper (Permanently popped out of the screen) */}
+        <div
+          style={{ transform: "translateZ(30px)" }}
+          className="flex w-full items-center gap-3 sm:gap-4 drop-shadow-md transition-transform duration-500 group-hover:drop-shadow-xl"
+        >
+          {children}
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
 
 export function Hero() {
   const { t } = useTranslation();
@@ -21,8 +82,6 @@ export function Hero() {
   const subTextColor = isDark ? "text-white/60" : "text-muted-foreground";
 
   const startupLogo = isDark ? "/images/startup_logo_black.png" : "/images/startup_logo_white.png";
-  
-  // NIDHI Logo theme logic
   const nidhiLogo = isDark ? "/images/nidhi_black_theme.png" : "/images/nidhi_white_theme.png";
 
   if (!mounted) {
@@ -33,7 +92,7 @@ export function Hero() {
     <>
       <section className="relative min-h-screen w-full overflow-hidden">
         {/* Background Video */}
-        <div className="absolute inset-0">
+        <div className="absolute inset-0 z-0">
           <video
             autoPlay
             muted
@@ -82,7 +141,7 @@ export function Hero() {
             >
               <span className="text-balance">{t("hero.title1")}</span>
               <br />
-              <span className="font-medium text-primary">{t("hero.title2")}</span>
+              <span className="font-medium text-primary drop-shadow-lg">{t("hero.title2")}</span>
             </motion.h1>
 
             <motion.p
@@ -102,7 +161,7 @@ export function Hero() {
             >
               <a
                 href="/membership"
-                className="group relative w-full max-w-[360px] overflow-hidden rounded-none border border-primary bg-primary px-8 py-4 text-sm uppercase tracking-[0.18em] text-primary-foreground transition-all duration-500 hover:bg-transparent hover:text-primary sm:w-auto sm:max-w-none sm:px-10 sm:py-4"
+                className="group relative w-full max-w-[360px] overflow-hidden rounded-none border border-primary bg-primary px-8 py-4 text-sm uppercase tracking-[0.18em] text-primary-foreground transition-all duration-500 hover:bg-transparent hover:text-primary sm:w-auto sm:max-w-none sm:px-10 sm:py-4 shadow-[0_0_20px_rgba(197,160,89,0.3)] hover:shadow-[0_0_30px_rgba(197,160,89,0.5)]"
               >
                 <span className="relative z-10">{t("hero.cta2")}</span>
               </a>
@@ -130,130 +189,104 @@ export function Hero() {
         </div>
       </section>
 
-      {/* Trust Banner Section - RESTORED TO 6-COLUMN GRID */}
-      <section className="relative z-20 w-full bg-background px-4 py-12 sm:px-6 sm:py-16">
+      {/* --- MAGIC 3D FLOATING TRUST SECTION --- */}
+      <section className="relative z-20 w-full px-4 py-12 sm:px-6 sm:py-16 mt-[-40px]">
         <div className="mx-auto max-w-[1400px]">
+          
+          {/* Subtle slow floating animation for the whole grid */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8 }}
-            /* 6-Column Grid */
-            className="grid grid-cols-1 gap-y-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 xl:gap-y-0 rounded-2xl border border-[#C5A059]/60 bg-card/90 py-8 px-4 shadow-[0_4px_25px_rgba(197,160,89,0.15)] backdrop-blur-sm"
+            animate={{ y: [0, -8, 0] }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+            className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 sm:gap-6"
           >
             
-            {/* 1. Goa Tourism Development Corporation Ltd. */}
-            <div className="flex w-full justify-start sm:justify-center px-1 xl:px-4 xl:border-r border-[#C5A059]/30 [&:nth-child(6)]:border-0">
-              <div className="flex w-full max-w-[220px] items-center gap-3 sm:gap-4">
-                <div className="flex h-14 w-[76px] sm:h-16 sm:w-[84px] shrink-0 items-center justify-center">
-                  <Image src="/images/goa_tourism.png" alt="Goa Tourism Development Corporation Ltd." width={140} height={90} className="max-h-full max-w-full object-contain drop-shadow-md" />
-                </div>
-                <div className="flex flex-col text-left">
-                  {/* Reduced font size slightly to fit the longer text neatly */}
-                  <span className={`font-serif text-[9px] lg:text-[10px] font-bold uppercase tracking-wide leading-tight ${textColor}`}>
-                    Goa Tourism<br />Development<br className="hidden xl:block" /> Corporation Ltd.
-                  </span>
-                  <span className={`mt-1 text-[9px] leading-[1.3] ${subTextColor}`}>
-                    Official Partner
-                  </span>
-                </div>
+            {/* 1. Goa Tourism */}
+            <InteractiveTrustCard>
+              <div className="flex h-14 w-[76px] sm:h-16 sm:w-[84px] shrink-0 items-center justify-center">
+                <Image src="/images/goa_tourism.png" alt="Goa Tourism" width={140} height={90} className="max-h-full max-w-full object-contain" />
               </div>
-            </div>
+              <div className="flex flex-col text-left">
+                <span className={`font-serif text-[9px] lg:text-[10px] font-bold uppercase tracking-wide leading-tight ${textColor}`}>
+                  Goa Tourism<br />Development<br className="hidden xl:block" /> Corp.
+                </span>
+                <span className={`mt-1 text-[9px] leading-[1.3] ${subTextColor}`}>Official Partner</span>
+              </div>
+            </InteractiveTrustCard>
 
             {/* 2. Startup India */}
-            <div className="flex w-full justify-start sm:justify-center px-1 xl:px-4 xl:border-r border-[#C5A059]/30 [&:nth-child(6)]:border-0">
-              <div className="flex w-full max-w-[220px] items-center gap-3 sm:gap-4">
-                <div className="flex h-14 w-[76px] sm:h-16 sm:w-[84px] shrink-0 items-center justify-center">
-                  <Image src={startupLogo} alt="Startup India" width={140} height={90} className="max-h-full max-w-full object-contain drop-shadow-md" />
-                </div>
-                <div className="flex flex-col text-left">
-                  <span className={`font-serif text-[11px] lg:text-[12px] font-bold uppercase tracking-wider leading-tight ${textColor}`}>
-                    Startup India
-                  </span>
-                  <span className={`mt-1 text-[10px] leading-[1.3] ${subTextColor}`}>
-                    Recognized<br />by DPIIT
-                  </span>
-                </div>
+            <InteractiveTrustCard>
+              <div className="flex h-14 w-[76px] sm:h-16 sm:w-[84px] shrink-0 items-center justify-center">
+                <Image src={startupLogo} alt="Startup India" width={140} height={90} className="max-h-full max-w-full object-contain" />
               </div>
-            </div>
+              <div className="flex flex-col text-left">
+                <span className={`font-serif text-[11px] lg:text-[12px] font-bold uppercase tracking-wider leading-tight ${textColor}`}>
+                  Startup India
+                </span>
+                <span className={`mt-1 text-[10px] leading-[1.3] ${subTextColor}`}>Recognized by DPIIT</span>
+              </div>
+            </InteractiveTrustCard>
 
             {/* 3. NIDHI */}
-            <div className="flex w-full justify-start sm:justify-center px-1 xl:px-4 xl:border-r border-[#C5A059]/30 [&:nth-child(6)]:border-0">
-              <div className="flex w-full max-w-[220px] items-center gap-3 sm:gap-4">
-                <div className="flex h-14 w-[76px] sm:h-16 sm:w-[84px] shrink-0 items-center justify-center">
-                  <Image src={nidhiLogo} alt="NIDHI" width={140} height={90} className="h-8 sm:h-10 w-auto object-contain drop-shadow-md" />
-                </div>
-                <div className="flex flex-col text-left">
-                  <span className={`font-serif text-[11px] lg:text-[12px] font-bold uppercase tracking-wider leading-tight ${textColor}`}>
-                    NIDHI
-                  </span>
-                  <span className={`mt-1 text-[10px] leading-[1.3] ${subTextColor}`}>
-                    Hospitality<br />Database
-                  </span>
-                </div>
+            <InteractiveTrustCard>
+              <div className="flex h-14 w-[76px] sm:h-16 sm:w-[84px] shrink-0 items-center justify-center">
+                <Image src={nidhiLogo} alt="NIDHI" width={140} height={90} className="h-8 sm:h-10 w-auto object-contain" />
               </div>
-            </div>
+              <div className="flex flex-col text-left">
+                <span className={`font-serif text-[11px] lg:text-[12px] font-bold uppercase tracking-wider leading-tight ${textColor}`}>
+                  NIDHI
+                </span>
+                <span className={`mt-1 text-[10px] leading-[1.3] ${subTextColor}`}>Hospitality Database</span>
+              </div>
+            </InteractiveTrustCard>
 
             {/* 4. Trusted & Secured */}
-            <div className="flex w-full justify-start sm:justify-center px-1 xl:px-4 xl:border-r border-[#C5A059]/30 [&:nth-child(6)]:border-0">
-              <div className="flex w-full max-w-[220px] items-center gap-3 sm:gap-4">
-                <div className="flex h-14 w-[76px] sm:h-16 sm:w-[84px] shrink-0 items-center justify-center">
-                  <ShieldCheck className="h-10 w-10 sm:h-11 sm:w-11 text-[#C5A059]" strokeWidth={1.2} />
-                </div>
-                <div className="flex flex-col text-left">
-                  <span className={`font-serif text-[11px] lg:text-[12px] font-bold uppercase tracking-wider leading-tight ${textColor}`}>
-                    Trusted &<br className="hidden xl:block" /> Secured
-                  </span>
-                  <span className={`mt-1 text-[10px] leading-[1.3] ${subTextColor}`}>
-                    Government<br />Verified
-                  </span>
-                </div>
+            <InteractiveTrustCard>
+              <div className="flex h-14 w-[76px] sm:h-16 sm:w-[84px] shrink-0 items-center justify-center">
+                <ShieldCheck className="h-10 w-10 sm:h-11 sm:w-11 text-[#C5A059]" strokeWidth={1.2} />
               </div>
-            </div>
+              <div className="flex flex-col text-left">
+                <span className={`font-serif text-[11px] lg:text-[12px] font-bold uppercase tracking-wider leading-tight ${textColor}`}>
+                  Trusted &<br />Secured
+                </span>
+                <span className={`mt-1 text-[10px] leading-[1.3] ${subTextColor}`}>Government Verified</span>
+              </div>
+            </InteractiveTrustCard>
 
             {/* 5. Premium Experiences */}
-            <div className="flex w-full justify-start sm:justify-center px-1 xl:px-4 xl:border-r border-[#C5A059]/30 [&:nth-child(6)]:border-0">
-              <div className="flex w-full max-w-[220px] items-center gap-3 sm:gap-4">
-                <div className="flex h-14 w-[76px] sm:h-16 sm:w-[84px] shrink-0 items-center justify-center">
-                  <svg width="44" height="44" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 sm:h-11 sm:w-11 text-[#C5A059]">
-                    <path d="M12 17C16.4183 17 20 13.4183 20 9" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
-                    <path d="M12 17C7.58172 17 4 13.4183 4 9" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
-                    <path d="M8 4L9.5 6.5L12 3L14.5 6.5L16 4L15 8H9L8 4Z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round" />
-                    <path d="M18 11C19.5 10 20 9 20 9C20 9 19 9.5 18 11Z" fill="currentColor" />
-                    <path d="M16 13C17.5 12 18 11 18 11C18 11 17 11.5 16 13Z" fill="currentColor" />
-                    <path d="M14 15C15.5 14 16 13 16 13C16 13 15 13.5 14 15Z" fill="currentColor" />
-                    <path d="M6 11C4.5 10 4 9 4 9C4 9 5 9.5 6 11Z" fill="currentColor" />
-                    <path d="M8 13C6.5 12 6 11 6 11C6 11 7 11.5 8 13Z" fill="currentColor" />
-                    <path d="M10 15C8.5 14 8 13 8 13C8 13 9 13.5 10 15Z" fill="currentColor" />
-                  </svg>
-                </div>
-                <div className="flex flex-col text-left">
-                  <span className={`font-serif text-[11px] lg:text-[12px] font-bold uppercase tracking-wider leading-tight ${textColor}`}>
-                    Premium<br className="hidden xl:block" /> Experiences
-                  </span>
-                  <span className={`mt-1 text-[10px] leading-[1.3] ${subTextColor}`}>
-                    Curated for<br />Members
-                  </span>
-                </div>
+            <InteractiveTrustCard>
+              <div className="flex h-14 w-[76px] sm:h-16 sm:w-[84px] shrink-0 items-center justify-center">
+                <svg width="44" height="44" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 sm:h-11 sm:w-11 text-[#C5A059]">
+                  <path d="M12 17C16.4183 17 20 13.4183 20 9" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+                  <path d="M12 17C7.58172 17 4 13.4183 4 9" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+                  <path d="M8 4L9.5 6.5L12 3L14.5 6.5L16 4L15 8H9L8 4Z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round" />
+                  <path d="M18 11C19.5 10 20 9 20 9C20 9 19 9.5 18 11Z" fill="currentColor" />
+                  <path d="M16 13C17.5 12 18 11 18 11C18 11 17 11.5 16 13Z" fill="currentColor" />
+                  <path d="M14 15C15.5 14 16 13 16 13C16 13 15 13.5 14 15Z" fill="currentColor" />
+                  <path d="M6 11C4.5 10 4 9 4 9C4 9 5 9.5 6 11Z" fill="currentColor" />
+                  <path d="M8 13C6.5 12 6 11 6 11C6 11 7 11.5 8 13Z" fill="currentColor" />
+                  <path d="M10 15C8.5 14 8 13 8 13C8 13 9 13.5 10 15Z" fill="currentColor" />
+                </svg>
               </div>
-            </div>
+              <div className="flex flex-col text-left">
+                <span className={`font-serif text-[11px] lg:text-[12px] font-bold uppercase tracking-wider leading-tight ${textColor}`}>
+                  Premium<br />Experiences
+                </span>
+                <span className={`mt-1 text-[10px] leading-[1.3] ${subTextColor}`}>Curated for Members</span>
+              </div>
+            </InteractiveTrustCard>
 
             {/* 6. 24x7 Concierge */}
-            <div className="flex w-full justify-start sm:justify-center px-1 xl:px-4 xl:border-r border-[#C5A059]/30 [&:nth-child(6)]:border-0">
-              <div className="flex w-full max-w-[220px] items-center gap-3 sm:gap-4">
-                <div className="flex h-14 w-[76px] sm:h-16 sm:w-[84px] shrink-0 items-center justify-center">
-                  <Headphones className="h-10 w-10 sm:h-11 sm:w-11 text-[#C5A059]" strokeWidth={1.2} />
-                </div>
-                <div className="flex flex-col text-left">
-                  <span className={`font-serif text-[11px] lg:text-[12px] font-bold uppercase tracking-wider leading-tight ${textColor}`}>
-                    24x7<br className="hidden xl:block" /> Concierge
-                  </span>
-                  <span className={`mt-1 text-[10px] leading-[1.3] ${subTextColor}`}>
-                    Personalized<br />Assistance
-                  </span>
-                </div>
+            <InteractiveTrustCard>
+              <div className="flex h-14 w-[76px] sm:h-16 sm:w-[84px] shrink-0 items-center justify-center">
+                <Headphones className="h-10 w-10 sm:h-11 sm:w-11 text-[#C5A059]" strokeWidth={1.2} />
               </div>
-            </div>
+              <div className="flex flex-col text-left">
+                <span className={`font-serif text-[11px] lg:text-[12px] font-bold uppercase tracking-wider leading-tight ${textColor}`}>
+                  24x7<br />Concierge
+                </span>
+                <span className={`mt-1 text-[10px] leading-[1.3] ${subTextColor}`}>Personalized Assistance</span>
+              </div>
+            </InteractiveTrustCard>
 
           </motion.div>
         </div>
