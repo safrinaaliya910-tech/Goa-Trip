@@ -1,123 +1,9 @@
 "use client";
 
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { useTranslation } from "./providers";
-import React from "react";
-
-// --- 3D Kinematic Tilt Card Component ---
-function TiltCard({ exp, index, isLastOddItem, t }: any) {
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-
-  // Smooth out the mouse movement using physics springs
-  const mouseXSpring = useSpring(x, { stiffness: 150, damping: 20 });
-  const mouseYSpring = useSpring(y, { stiffness: 150, damping: 20 });
-
-  // Map mouse position to rotation degrees (Max tilt is 8 degrees)
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["8deg", "-8deg"]);
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-8deg", "8deg"]);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-    
-    // Calculate position as a percentage (-0.5 to 0.5)
-    const xPct = mouseX / width - 0.5;
-    const yPct = mouseY / height - 0.5;
-    
-    x.set(xPct);
-    y.set(yPct);
-  };
-
-  const handleMouseLeave = () => {
-    // Reset to flat when mouse leaves
-    x.set(0);
-    y.set(0);
-  };
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.6, delay: index * 0.08 }}
-      className={`relative h-[420px] w-full sm:h-[460px] md:h-[500px] ${
-        isLastOddItem ? "md:col-span-2" : ""
-      }`}
-      style={{ perspective: 1200 }} // Gives the 3D depth to the parent
-    >
-      <motion.div
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-        style={{
-          rotateX,
-          rotateY,
-          transformStyle: "preserve-3d", // Allows children to pop out in Z-space
-        }}
-        className="group relative h-full w-full overflow-hidden bg-black rounded-xl shadow-[0_0_0_rgba(197,160,89,0)] transition-shadow duration-500 hover:shadow-[0_20px_40px_rgba(0,0,0,0.5),_0_0_30px_rgba(197,160,89,0.15)] cursor-pointer"
-      >
-        {/* Background Image (Slightly scaled so edges don't show when tilted) */}
-        <motion.div 
-          className="absolute inset-0 z-0 h-full w-full"
-          style={{ transform: "translateZ(-20px) scale(1.05)" }} // Pushes image back for depth
-        >
-          <Image
-            src={exp.image}
-            alt={exp.title}
-            fill
-            className="object-cover transition-transform duration-1000 group-hover:scale-110"
-            sizes="(max-width: 768px) 100vw, 50vw"
-            quality={90}
-          />
-        </motion.div>
-
-        {/* Gradients */}
-        <div className="absolute inset-0 z-10 bg-gradient-to-t from-background via-background/45 to-transparent opacity-85 transition-opacity duration-500 group-hover:opacity-95" />
-        <div className="absolute inset-0 z-10 bg-[radial-gradient(circle_at_bottom_left,rgba(212,175,55,0.16),transparent_35%)] opacity-70" />
-
-        {/* Text Content - Translated forward on the Z-axis to pop OUT of the screen */}
-        <motion.div 
-          style={{ transform: "translateZ(40px)" }} // The magic Z-index pop
-          className="absolute inset-0 z-20 flex flex-col justify-end p-5 sm:p-6 md:p-8"
-        >
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: index * 0.08 + 0.15 }}
-          >
-            <p className="mb-2 text-[10px] uppercase tracking-[0.18em] text-primary sm:text-xs sm:tracking-[0.22em] drop-shadow-md">
-              {exp.subtitle}
-            </p>
-
-            <h3 className="mb-2 text-xl font-medium tracking-wide text-white sm:text-2xl md:text-[28px] drop-shadow-lg">
-              {exp.title}
-            </h3>
-
-            <p className="mb-4 text-xs leading-relaxed text-white/70 sm:text-sm max-w-[90%]">
-              {exp.description}
-            </p>
-
-            <div className="flex items-center gap-2 text-primary opacity-0 transition-all duration-500 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0">
-              <span className="text-[10px] uppercase tracking-widest sm:text-xs font-semibold">
-                {t("experiences.discover")}
-              </span>
-              <div className="h-px w-6 bg-primary transition-all duration-500 group-hover:w-10 sm:w-8 sm:group-hover:w-12 shadow-[0_0_10px_rgba(197,160,89,1)]" />
-            </div>
-          </motion.div>
-        </motion.div>
-
-        {/* Glowing Border overlay */}
-        <div className="absolute inset-0 z-30 border border-primary/0 transition-all duration-500 group-hover:border-primary/40 rounded-xl" />
-      </motion.div>
-    </motion.div>
-  );
-}
 
 export function Experiences() {
   const { t } = useTranslation();
@@ -175,18 +61,18 @@ export function Experiences() {
   ];
 
   return (
-    <section id="experiences" className="relative bg-background py-14 sm:py-20 md:py-32 z-10 overflow-hidden">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 relative z-10">
+    <section id="experiences" className="bg-background py-14 sm:py-20 md:py-24">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
         
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="mb-12 flex flex-col items-center text-center sm:mb-20 md:mb-24"
+          className="mb-10 flex flex-col items-center text-center sm:mb-14 md:mb-16"
         >
-          {/* --- TOP LOGO --- */}
-          <Link href="/membership" className="mb-10 inline-block transition-transform duration-500 hover:scale-105 hover:drop-shadow-[0_0_30px_rgba(197,160,89,0.3)]">
+          {/* --- TOP LOGO (Significantly Enlarged) --- */}
+          <Link href="/membership" className="mb-8 inline-block transition-transform duration-500 hover:scale-105">
             <Image 
               src="/images/membership-logo.png" 
               alt="Goa Moments Membership" 
@@ -196,55 +82,101 @@ export function Experiences() {
             />
           </Link>
 
-          <p className="mb-4 text-xs uppercase tracking-[0.2em] text-primary sm:mb-6 sm:text-sm sm:tracking-[0.3em]">
+          <p className="mb-3 text-xs uppercase tracking-[0.2em] text-primary sm:mb-4 sm:text-sm sm:tracking-[0.3em]">
             {t("experiences.badge")}
           </p>
 
-          <h2 className="mb-6 text-3xl font-light tracking-wide text-foreground sm:mb-8 sm:text-4xl md:text-5xl lg:text-6xl">
+          <h2 className="mb-4 text-3xl font-light tracking-wide text-foreground sm:mb-6 sm:text-4xl md:text-5xl">
             {t("experiences.title").split(" ")[0]}{" "}
-            <span className="font-medium text-primary drop-shadow-md">
+            <span className="font-medium text-primary">
               {t("experiences.title").split(" ").slice(1).join(" ")}
             </span>
           </h2>
 
-          <p className="mx-auto mb-6 max-w-2xl text-sm text-muted-foreground sm:text-base md:text-lg">
+          <p className="mx-auto mb-4 max-w-2xl text-sm text-muted-foreground sm:text-base">
             {t("experiences.subtitle")}
           </p>
 
           <div className="mx-auto h-px w-16 bg-gradient-to-r from-transparent via-primary to-transparent sm:w-24" />
         </motion.div>
 
-        {/* 3D Grid */}
-        <div className="grid gap-6 sm:gap-8 md:grid-cols-2 lg:gap-10">
+        <div className="grid gap-4 sm:gap-6 md:grid-cols-2">
           {experienceKeys.map((exp, index) => {
-            const isLastOddItem = index === experienceKeys.length - 1 && experienceKeys.length % 2 !== 0;
+            const isLastOddItem =
+              index === experienceKeys.length - 1 && experienceKeys.length % 2 !== 0;
+
             return (
-              <TiltCard 
-                key={exp.key} 
-                exp={exp} 
-                index={index} 
-                isLastOddItem={isLastOddItem} 
-                t={t} 
-              />
+              <motion.div
+                key={exp.key}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: index * 0.08 }}
+                className={`group relative h-[420px] overflow-hidden bg-black sm:h-[460px] md:h-[500px] ${
+                  isLastOddItem ? "md:col-span-2" : ""
+                }`}
+              >
+                <Image
+                  src={exp.image}
+                  alt={exp.title}
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  quality={90}
+                />
+
+                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/45 to-transparent opacity-85 transition-opacity duration-500 group-hover:opacity-95" />
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(212,175,55,0.16),transparent_35%)] opacity-70" />
+
+                <div className="absolute inset-0 flex flex-col justify-end p-5 sm:p-6 md:p-7">
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: index * 0.08 + 0.15 }}
+                  >
+                    <p className="mb-2 text-[10px] uppercase tracking-[0.18em] text-primary sm:text-xs sm:tracking-[0.22em]">
+                      {exp.subtitle}
+                    </p>
+
+                    <h3 className="mb-2 text-xl font-medium tracking-wide text-foreground sm:text-2xl md:text-[28px]">
+                      {exp.title}
+                    </h3>
+
+                    <p className="mb-3 text-xs leading-relaxed text-muted-foreground sm:text-sm">
+                      {exp.description}
+                    </p>
+
+                    <div className="flex items-center gap-2 text-primary opacity-0 transition-all duration-500 group-hover:opacity-100">
+                      <span className="text-[10px] uppercase tracking-widest sm:text-xs">
+                        {t("experiences.discover")}
+                      </span>
+                      <div className="h-px w-6 bg-primary transition-all duration-500 group-hover:w-10 sm:w-8 sm:group-hover:w-12" />
+                    </div>
+                  </motion.div>
+                </div>
+
+                <div className="absolute inset-0 border border-primary/0 transition-all duration-500 group-hover:border-primary/30" />
+              </motion.div>
             );
           })}
         </div>
 
-        {/* --- BOTTOM LOGO --- */}
+        {/* --- BOTTOM LOGO (Significantly Enlarged) --- */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 1, ease: "easeOut" }}
-          className="mt-20 flex justify-center sm:mt-32"
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="mt-14 flex justify-center sm:mt-20"
         >
-          <Link href="/membership" className="inline-block transition-all duration-700 hover:scale-110 hover:drop-shadow-[0_0_40px_rgba(197,160,89,0.4)]">
+          <Link href="/membership" className="inline-block transition-transform duration-500 hover:scale-105">
             <Image 
               src="/images/membership-logo.png" 
               alt="Goa Moments Membership" 
               width={500} 
               height={250} 
-              className="h-32 w-auto object-contain drop-shadow-2xl sm:h-44 md:h-56"
+              className="h-32 w-auto object-contain drop-shadow-2xl sm:h-44 md:h-52"
             />
           </Link>
         </motion.div>

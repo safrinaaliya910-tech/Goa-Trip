@@ -29,7 +29,7 @@ export function Navigation() {
   
   const { resolvedTheme } = useTheme();
 
-  const partnerTextColor = isPaymentPage ? "text-black/90 font-bold" : (resolvedTheme === "dark" ? "text-white/90" : "text-black/80");
+  const partnerTextColor = isPaymentPage ? "text-black/80 font-semibold" : (resolvedTheme === "dark" ? "text-white/80" : "text-black/70");
   
   const startupLogo = isPaymentPage 
     ? "/images/startup_logo_white.png" 
@@ -45,70 +45,159 @@ export function Navigation() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      setIsScrolled(window.scrollY > 30);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const headerBg = isPaymentPage 
-    ? "bg-[#FDFBF7] border-b border-[#D4AF37]/30 shadow-sm pb-2" 
-    : (isScrolled ? "bg-background/95 backdrop-blur-md pb-2" : "bg-transparent pb-2");
+    ? "bg-[#FDFBF7] border-b border-[#D4AF37]/30 shadow-sm" 
+    : (isScrolled ? "bg-background/95 backdrop-blur-md shadow-sm border-b border-white/5" : "bg-gradient-to-b from-background/80 to-transparent");
 
   return (
     <>
-      <motion.header
+     <motion.header
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className={`fixed left-0 right-0 top-0 z-50 flex flex-col transition-all duration-500 ${headerBg}`}
+        className={`fixed left-0 right-0 top-0 z-50 flex flex-col transition-colors duration-500 ${headerBg}`}
       >
-        <nav className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-4 sm:px-6 sm:py-5">
-          <Link href="/" className="group flex items-center gap-2 sm:gap-3">
+        {/* Secondary Navigation / Transparent Trust Ribbon (Left & Right Split) */}
+        <motion.div 
+          initial={false}
+          animate={{ 
+            height: isScrolled ? 0 : "auto", 
+            opacity: isScrolled ? 0 : 1,
+          }}
+          className={`hidden w-full overflow-hidden lg:block border-b relative z-50 transition-colors duration-500 ${
+            isPaymentPage ? 'bg-[#FDFBF7] border-[#d4af37]/30' : 'bg-transparent border-white/15'
+          }`}
+        >
+          {/* Very Subtle, Slow Golden Light Sweep */}
+          <motion.div 
+            animate={{ x: ["-100%", "300%"] }}
+            transition={{ duration: 8.5, repeat: Infinity, ease: "linear" }}
+            className="absolute inset-y-0 w-1/4 bg-gradient-to-r from-transparent via-[#d4af37]/20 to-transparent skew-x-[30deg] pointer-events-none"
+          />
+
+          <div className="relative mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-2.5 sm:px-6">
+            
+            {/* LEFT SIDE: Official Tourism Partner */}
+            <motion.div 
+              initial={{ opacity: 0, x: -15 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="flex items-center gap-2.5"
+            >
+              <svg width="18" height="22" viewBox="0 0 36 44" fill="none" xmlns="http://www.w3.org/2000/svg" className="drop-shadow-lg">
+                <defs>
+                  <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#8a6125" />
+                    <stop offset="50%" stopColor="#d4af37" />
+                    <stop offset="100%" stopColor="#5c3f13" />
+                  </linearGradient>
+                  <linearGradient id="shieldInnerGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#f6d365" />
+                    <stop offset="100%" stopColor="#b38222" />
+                  </linearGradient>
+                </defs>
+                <path d="M18 0L36 8V21C36 31.5 28.5 41 18 44C7.5 41 0 31.5 0 21V8L18 0Z" fill="url(#shieldGrad)" />
+                <path d="M18 2.5L33.5 9.5V21C33.5 29.5 27 38 18 40.5C9 38 2.5 29.5 2.5 21V9.5L18 2.5Z" fill="url(#shieldInnerGrad)" />
+                <path d="M11 21L15.5 26L25 15" stroke="#231709" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              <span className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#d4af37] drop-shadow-md whitespace-nowrap pt-0.5">
+                Official Tourism Partner
+              </span>
+            </motion.div>
+
+            {/* RIGHT SIDE: The Proof Badges */}
+            <div className="flex items-center space-x-7">
+              
+              {/* Goa Tourism */}
+              <motion.div 
+                initial={{ opacity: 0, x: 15 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                className="flex items-center gap-2.5"
+              >
+                <Image src="/images/goa_tourism.png" alt="Goa Tourism" width={55} height={28} className="h-7 w-auto object-contain opacity-100 drop-shadow-md" />
+                <span className={`text-[10px] font-medium leading-tight tracking-widest whitespace-nowrap ${isPaymentPage ? 'text-black/80' : 'text-white/90 drop-shadow-md'}`}>
+                  Goa Tourism<br />Dev. Corp.
+                </span>
+              </motion.div>
+
+              <div className={`h-5 w-px ${isPaymentPage ? 'bg-gray-300' : 'bg-white/20'}`} />
+
+              {/* Startup India */}
+              <motion.div 
+                initial={{ opacity: 0, x: 15 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+                className="flex items-center gap-2.5"
+              >
+                <Image src={startupLogo} alt="Startup India" width={55} height={28} className="h-7 w-auto object-contain opacity-100 drop-shadow-md" />
+                <span className={`text-[10px] font-medium tracking-widest whitespace-nowrap pt-0.5 ${isPaymentPage ? 'text-black/80' : 'text-white/90 drop-shadow-md'}`}>
+                  Startup India
+                </span>
+              </motion.div>
+
+              <div className={`h-5 w-px ${isPaymentPage ? 'bg-gray-300' : 'bg-white/20'}`} />
+
+              {/* NIDHI */}
+              <motion.div 
+                initial={{ opacity: 0, x: 15 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.5 }}
+                className="flex items-center gap-2.5"
+              >
+                <Image src={nidhiLogo} alt="NIDHI" width={45} height={22} className="h-6 w-auto object-contain opacity-100 drop-shadow-md" />
+                <span className={`text-[10px] font-medium tracking-widest whitespace-nowrap pt-0.5 ${isPaymentPage ? 'text-black/80' : 'text-white/90 drop-shadow-md'}`}>
+                  NIDHI
+                </span>
+              </motion.div>
+
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Main Navigation */}
+
+        {/* Main Navigation */}
+        <nav className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
+          <Link href="/" className="group flex items-center gap-2 sm:gap-3 transition-transform hover:opacity-90">
             <Image
               src="/images/logo.png"
               alt="GOA MOMENTS Logo"
               width={140}
               height={140}
-              className="h-10 sm:h-14 w-auto object-contain"
+              className="h-10 sm:h-12 w-auto object-contain drop-shadow-lg"
               priority
             />
-
             <div className="flex flex-col leading-tight">
-              <div className="sm:hidden">
-                <span className={`block whitespace-nowrap text-xs font-medium tracking-wider ${textColor}`}>
-                  GOA MOMENTS
-                </span>
-                <span className="block whitespace-nowrap text-[7px] uppercase tracking-[0.2em] text-[#C5A059]">
-                  LUXURY LIVING
-                </span>
-              </div>
-
-              <div className="hidden flex-col sm:flex">
-                <span className={`text-base font-medium tracking-wider sm:text-lg ${textColor}`}>
-                  GOA MOMENTS
-                </span>
-                <span className="text-[9px] uppercase tracking-[0.2em] text-[#C5A059]">
-                  LUXURY LIVING
-                </span>
-              </div>
+              <span className={`block whitespace-nowrap text-[13px] sm:text-[15px] font-medium tracking-wider ${textColor}`}>
+                GOA MOMENTS
+              </span>
+              <span className="block whitespace-nowrap text-[7px] sm:text-[8px] uppercase tracking-[0.25em] text-[#C5A059]">
+                LUXURY LIVING
+              </span>
             </div>
           </Link>
 
-          <div className="hidden items-center gap-5 lg:flex xl:gap-8">
+          <div className="hidden items-center gap-6 lg:flex xl:gap-8 mt-1">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`group relative text-xs uppercase tracking-widest transition-colors xl:text-sm ${mutedTextColor}`}
+                className={`group relative text-[11px] font-medium uppercase tracking-widest transition-colors xl:text-xs ${mutedTextColor}`}
               >
                 {link.label}
-                <span className="absolute -bottom-1 left-0 h-px w-0 bg-[#C5A059] transition-all duration-300 group-hover:w-full" />
+                <span className="absolute -bottom-1.5 left-0 h-px w-0 bg-[#C5A059] transition-all duration-300 group-hover:w-full" />
               </Link>
             ))}
           </div>
 
-          <div className="hidden items-center gap-3 lg:flex">
+          <div className="hidden items-center gap-4 lg:flex">
             {!isPaymentPage && <LanguageSwitcher />}
             {!isPaymentPage && <ThemeToggle />}
           </div>
@@ -118,7 +207,7 @@ export function Navigation() {
             {!isPaymentPage && <ThemeToggle />}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="relative z-50 ml-2"
+              className="relative z-50 ml-2 p-1"
               aria-label="Toggle menu"
             >
               {isMobileMenuOpen ? (
@@ -129,88 +218,9 @@ export function Navigation() {
             </button>
           </div>
         </nav>
-
-        {/* Secondary Navigation / Partner Bar */}
-        <div className="hidden w-full lg:block">
-          <div className="mx-auto flex w-full max-w-7xl items-center justify-end px-4 sm:px-6">
-            <div className="flex items-center">
-              
-              <div className="flex items-center gap-3 pr-2">
-                <svg width="28" height="34" viewBox="0 0 36 44" fill="none" xmlns="http://www.w3.org/2000/svg" className="drop-shadow-md">
-                  <defs>
-                    <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="#8a6125" />
-                      <stop offset="50%" stopColor="#d4af37" />
-                      <stop offset="100%" stopColor="#5c3f13" />
-                    </linearGradient>
-                    <linearGradient id="shieldInnerGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                      <stop offset="0%" stopColor="#f6d365" />
-                      <stop offset="100%" stopColor="#b38222" />
-                    </linearGradient>
-                  </defs>
-                  <path d="M18 0L36 8V21C36 31.5 28.5 41 18 44C7.5 41 0 31.5 0 21V8L18 0Z" fill="url(#shieldGrad)" />
-                  <path d="M18 2.5L33.5 9.5V21C33.5 29.5 27 38 18 40.5C9 38 2.5 29.5 2.5 21V9.5L18 2.5Z" fill="url(#shieldInnerGrad)" />
-                  <path d="M11 21L15.5 26L25 15" stroke="#231709" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-
-                <div className="flex flex-col justify-center font-serif">
-                  <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-[#d4af37] mb-[2px]">
-                    Official
-                  </span>
-                  <span className="text-[13px] font-bold uppercase tracking-[0.05em] text-[#d4af37]">
-                    Tourism Partner
-                  </span>
-                </div>
-              </div>
-
-              <div className={`mx-3 h-14 w-px ${isPaymentPage ? 'bg-gray-300' : 'bg-white/20'}`} />
-
-              {/* Goa Tourism */}
-              <div className="flex items-center gap-1">
-                <div className="flex flex-col items-center justify-center">
-                  <div className="h-20 flex items-center justify-center">
-                    <Image src="/images/goa_tourism.png" alt="Goa Tourism Development Corporation Ltd." width={160} height={90} className="h-20 w-auto object-contain drop-shadow-md" />
-                  </div>
-                  <span className={`mt-1.5 text-center text-[9px] leading-tight tracking-wide ${partnerTextColor}`}>
-                    Goa Tourism<br />Development Corporation Ltd.
-                  </span>
-                </div>
-              </div>
-
-              <div className={`mx-3 h-14 w-px ${isPaymentPage ? 'bg-gray-300' : 'bg-white/20'}`} />
-
-              {/* Startup India */}
-              <div className="flex items-center gap-1">
-                <div className="flex flex-col items-center justify-center">
-                  <div className="h-20 flex items-center justify-center">
-                    <Image src={startupLogo} alt="Startup India" width={160} height={90} className="h-20 w-auto object-contain drop-shadow-md" />
-                  </div>
-                  <span className={`mt-1.5 text-[10px] tracking-wide ${partnerTextColor}`}>
-                    Startup India
-                  </span>
-                </div>
-              </div>
-
-              <div className={`mx-3 h-14 w-px ${isPaymentPage ? 'bg-gray-300' : 'bg-white/20'}`} />
-
-              {/* NIDHI - Perfect Alignment */}
-              <div className="flex items-center gap-1">
-                <div className="flex flex-col items-center justify-center">
-                  {/* Fixed h-20 wrapper guarantees text alignment, while image stays h-13 */}
-                  <div className="h-20 flex items-center justify-center">
-                    <Image src={nidhiLogo} alt="NIDHI" width={160} height={90} className="h-13 w-auto object-contain drop-shadow-md" />
-                  </div>
-                  <span className={`mt-1.5 text-[10px] tracking-wide ${partnerTextColor}`}>
-                    Nidhi
-                  </span>
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </div>
       </motion.header>
 
+      {/* Mobile Menu */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
@@ -218,32 +228,37 @@ export function Navigation() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className={`fixed inset-0 z-40 backdrop-blur-lg lg:hidden ${isPaymentPage ? 'bg-[#FDFBF7]/98' : 'bg-background/98'}`}
+            className={`fixed inset-0 z-40 backdrop-blur-xl lg:hidden ${isPaymentPage ? 'bg-[#FDFBF7]/98' : 'bg-background/95'}`}
           >
-            <div className="flex min-h-screen flex-col items-center justify-center gap-6 px-6 sm:gap-8">
-              {navLinks.map((link, index) => (
-                <Link key={link.href} href={link.href} passHref legacyBehavior>
-                  <motion.a
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.3, delay: index * 0.1 }}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className={`text-center text-lg uppercase tracking-widest transition-colors hover:text-[#C5A059] sm:text-2xl ${textColor}`}
-                  >
-                    {link.label}
-                  </motion.a>
-                </Link>
-              ))}
+            <div className="flex min-h-screen flex-col items-center justify-center px-6 pt-10 pb-8">
+              
+              {/* Mobile Navigation Links */}
+              <div className="flex flex-col items-center gap-8 mb-12 w-full">
+                {navLinks.map((link, index) => (
+                  <Link key={link.href} href={link.href} passHref legacyBehavior>
+                    <motion.a
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      transition={{ duration: 0.3, delay: index * 0.05 }}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className={`text-center text-lg uppercase tracking-[0.2em] transition-colors hover:text-[#C5A059] sm:text-xl ${textColor}`}
+                    >
+                      {link.label}
+                    </motion.a>
+                  </Link>
+                ))}
+              </div>
 
+              {/* Mobile Partner Grid (Clean & Neat) */}
               <motion.div 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ duration: 0.3, delay: 0.5 }}
-                className={`mt-8 flex w-full max-w-[380px] flex-col items-center gap-6 border-t pt-8 ${isPaymentPage ? 'border-gray-300' : 'border-white/10'}`}
+                transition={{ duration: 0.3, delay: 0.3 }}
+                className={`mt-auto flex w-full max-w-[320px] flex-col items-center gap-6 border-t pt-8 ${isPaymentPage ? 'border-gray-300' : 'border-white/10'}`}
               >
-                <div className="flex items-center gap-3">
-                  <svg width="24" height="29" viewBox="0 0 36 44" fill="none" xmlns="http://www.w3.org/2000/svg" className="drop-shadow-md">
+                <div className="flex items-center gap-2 mb-2">
+                  <svg width="18" height="22" viewBox="0 0 36 44" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <defs>
                       <linearGradient id="shieldGradMob" x1="0%" y1="0%" x2="100%" y2="100%">
                         <stop offset="0%" stopColor="#8a6125" />
@@ -259,40 +274,25 @@ export function Navigation() {
                     <path d="M18 2.5L33.5 9.5V21C33.5 29.5 27 38 18 40.5C9 38 2.5 29.5 2.5 21V9.5L18 2.5Z" fill="url(#shieldInnerGradMob)" />
                     <path d="M11 21L15.5 26L25 15" stroke="#231709" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
-
-                  <div className="flex flex-col text-left font-serif">
-                    <span className="text-[9px] font-bold uppercase tracking-[0.25em] text-[#d4af37]">Official</span>
-                    <span className="text-[12px] font-bold uppercase tracking-[0.05em] text-[#d4af37]">Tourism Partner</span>
+                  <div className="flex flex-col text-left font-serif leading-none">
+                    <span className="text-[9px] font-bold uppercase tracking-[0.25em] text-[#d4af37] mb-[2px]">Official</span>
+                    <span className="text-[11px] font-bold uppercase tracking-widest text-[#d4af37]">Tourism Partner</span>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-center flex-wrap gap-4 sm:gap-6 w-full">
-                  {/* Goa Tourism Mobile */}
-                  <div className="flex flex-col items-center gap-1.5">
-                    <div className="h-14 flex items-center justify-center">
-                      <Image src="/images/goa_tourism.png" alt="Goa Tourism Development Corporation Ltd." width={100} height={60} className="h-14 w-auto object-contain" />
-                    </div>
-                    <span className={`text-center text-[8px] leading-tight tracking-wide ${partnerTextColor}`}>
-                      Goa Tourism<br />Development Corporation Ltd.
-                    </span>
+                <div className="grid grid-cols-3 gap-4 w-full place-items-center">
+                  <div className="flex flex-col items-center gap-2">
+                    <Image src="/images/goa_tourism.png" alt="Goa Tourism" width={80} height={40} className="h-8 w-auto object-contain opacity-80" />
+                    <span className={`text-center text-[7px] leading-tight tracking-wider ${partnerTextColor}`}>Goa Tourism</span>
                   </div>
-
-                  {/* Startup India Mobile */}
-                  <div className="flex flex-col items-center gap-1.5">
-                    <div className="h-14 flex items-center justify-center">
-                      <Image src={startupLogo} alt="Startup India" width={100} height={60} className="h-14 w-auto object-contain" />
-                    </div>
-                    <span className={`text-center text-[9px] tracking-wide ${partnerTextColor}`}>Startup<br/>India</span>
+                  <div className="flex flex-col items-center gap-2 border-l border-r border-white/10 px-4 w-full">
+                    <Image src={startupLogo} alt="Startup India" width={80} height={40} className="h-8 w-auto object-contain opacity-80" />
+                    <span className={`text-center text-[7px] tracking-wider ${partnerTextColor}`}>Startup India</span>
                   </div>
-
-                  {/* NIDHI Mobile */}
-                  <div className="flex flex-col items-center gap-1.5">
-                    <div className="h-14 flex items-center justify-center">
-                      <Image src={nidhiLogo} alt="NIDHI" width={100} height={60} className="h-10 w-auto object-contain" />
-                    </div>
-                    <span className={`text-center text-[9px] tracking-wide ${partnerTextColor}`}>NIDHI</span>
+                  <div className="flex flex-col items-center gap-2">
+                    <Image src={nidhiLogo} alt="NIDHI" width={80} height={40} className="h-6 w-auto object-contain opacity-80 mt-1" />
+                    <span className={`text-center text-[7px] tracking-wider ${partnerTextColor}`}>NIDHI</span>
                   </div>
-
                 </div>
               </motion.div>
             </div>
