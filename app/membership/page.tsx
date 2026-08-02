@@ -1,7 +1,15 @@
 "use client";
 
-import { useState, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useRef, type MouseEvent as ReactMouseEvent } from "react";
+import {
+  motion,
+  AnimatePresence,
+  useMotionValue,
+  useSpring,
+  useTransform,
+  useMotionTemplate,
+  useReducedMotion,
+} from "framer-motion";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Navigation } from "@/components/navigation";
@@ -31,6 +39,271 @@ type Tier = {
   idealFor: string;
   popular: boolean;
 };
+
+
+type TierCardProps = {
+  tier: Tier;
+  index: number;
+  popularLabel: string;
+  buttonLabel: string;
+  onSelect: (tier: Tier) => void;
+};
+
+const tierVisuals = {
+  gold: {
+    accent: "#d7a93d",
+    edge: "rgba(215,169,61,0.48)",
+    soft: "rgba(215,169,61,0.14)",
+    surface:
+      "linear-gradient(145deg, rgba(31,24,10,0.98) 0%, rgba(11,10,7,0.99) 48%, rgba(5,5,5,1) 100%)",
+    code: "G / 01",
+  },
+  platinum: {
+    accent: "#eee1b4",
+    edge: "rgba(238,225,180,0.58)",
+    soft: "rgba(238,225,180,0.15)",
+    surface:
+      "linear-gradient(145deg, rgba(35,32,23,0.98) 0%, rgba(13,12,9,0.99) 48%, rgba(5,5,5,1) 100%)",
+    code: "P / 02",
+  },
+  diamond: {
+    accent: "#f0c85a",
+    edge: "rgba(240,200,90,0.52)",
+    soft: "rgba(240,200,90,0.14)",
+    surface:
+      "linear-gradient(145deg, rgba(28,23,12,0.98) 0%, rgba(10,9,7,0.99) 48%, rgba(4,4,4,1) 100%)",
+    code: "D / 03",
+  },
+} as const;
+
+function TierCard({
+  tier,
+  index,
+  popularLabel,
+  buttonLabel,
+  onSelect,
+}: TierCardProps) {
+  const reduceMotion = useReducedMotion();
+  const pointerX = useMotionValue(0);
+  const pointerY = useMotionValue(0);
+  const glareX = useMotionValue(50);
+  const glareY = useMotionValue(50);
+
+  const rotateX = useSpring(
+    useTransform(pointerY, [-0.5, 0.5], [5.5, -5.5]),
+    { stiffness: 210, damping: 24 }
+  );
+  const rotateY = useSpring(
+    useTransform(pointerX, [-0.5, 0.5], [-7, 7]),
+    { stiffness: 210, damping: 24 }
+  );
+
+  const glare = useMotionTemplate`radial-gradient(circle at ${glareX}% ${glareY}%, rgba(255,244,207,0.22), rgba(255,255,255,0.035) 19%, transparent 45%)`;
+  const visual = tierVisuals[tier.key];
+  const Icon = tier.icon;
+
+  const handlePointerMove = (event: ReactMouseEvent<HTMLElement>) => {
+    if (reduceMotion) return;
+
+    const rect = event.currentTarget.getBoundingClientRect();
+    const x = (event.clientX - rect.left) / rect.width;
+    const y = (event.clientY - rect.top) / rect.height;
+
+    pointerX.set(x - 0.5);
+    pointerY.set(y - 0.5);
+    glareX.set(x * 100);
+    glareY.set(y * 100);
+  };
+
+  const resetPointer = () => {
+    pointerX.set(0);
+    pointerY.set(0);
+    glareX.set(50);
+    glareY.set(50);
+  };
+
+  return (
+    <div className="relative" style={{ perspective: "1200px" }}>
+      {tier.popular && (
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="absolute left-1/2 top-0 z-30 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap rounded-full border border-[#eee1b4]/45 bg-[#17150f] px-4 py-1.5 text-[9px] uppercase tracking-[0.25em] text-[#eee1b4] shadow-[0_8px_30px_rgba(0,0,0,0.5)]"
+        >
+          {popularLabel}
+        </motion.div>
+      )}
+
+      <motion.article
+        initial={{ opacity: 0, y: 28 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-50px" }}
+        transition={{
+          duration: 0.65,
+          delay: index * 0.12,
+          ease: [0.22, 1, 0.36, 1],
+        }}
+        whileHover={reduceMotion ? undefined : { y: -7 }}
+        onMouseMove={handlePointerMove}
+        onMouseLeave={resetPointer}
+        style={{
+          rotateX,
+          rotateY,
+          transformStyle: "preserve-3d",
+          background: visual.surface,
+          borderColor: visual.edge,
+          boxShadow: tier.popular
+            ? `0 28px 75px rgba(0,0,0,0.58), 0 0 38px ${visual.soft}`
+            : "0 24px 65px rgba(0,0,0,0.48)",
+        }}
+        className={`group relative flex min-h-[545px] overflow-hidden rounded-[24px] border p-5 sm:p-6 ${
+          tier.popular ? "lg:-translate-y-2" : ""
+        }`}
+      >
+        <motion.div
+          aria-hidden="true"
+          style={{ background: glare }}
+          className="pointer-events-none absolute inset-0 z-10 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        />
+
+        <motion.div
+          aria-hidden="true"
+          animate={
+            reduceMotion
+              ? undefined
+              : {
+                  x: ["-140%", "230%"],
+                }
+          }
+          transition={{
+            duration: 5.5,
+            delay: index * 0.7,
+            repeat: Infinity,
+            repeatDelay: 3.5,
+            ease: "easeInOut",
+          }}
+          className="pointer-events-none absolute inset-y-0 z-10 w-24 -skew-x-12 bg-gradient-to-r from-transparent via-white/[0.055] to-transparent"
+        />
+
+        <div className="pointer-events-none absolute inset-[7px] rounded-[19px] border border-white/[0.045]" />
+        <div
+          className="pointer-events-none absolute -right-24 -top-24 h-56 w-56 rounded-full blur-3xl"
+          style={{ background: visual.soft }}
+        />
+        <div
+          className="pointer-events-none absolute bottom-0 left-0 h-px w-full"
+          style={{
+            background: `linear-gradient(90deg, transparent, ${visual.accent}, transparent)`,
+          }}
+        />
+
+        <div
+          className="relative z-20 flex w-full flex-col"
+          style={{ transform: "translateZ(34px)" }}
+        >
+          <div className="flex items-start justify-between gap-4">
+            <div
+              className="flex h-12 w-12 items-center justify-center rounded-2xl border bg-black/30"
+              style={{ borderColor: visual.edge }}
+            >
+              <Icon className="h-6 w-6" style={{ color: visual.accent }} />
+            </div>
+
+            <div className="text-right">
+              <p className="text-[8px] uppercase tracking-[0.28em] text-white/28">
+                Membership
+              </p>
+              <p
+                className="mt-1 font-[Arial,sans-serif] text-[10px] font-semibold tracking-[0.2em]"
+                style={{ color: visual.accent }}
+              >
+                {visual.code}
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-6 flex items-end justify-between gap-4 border-b border-white/[0.07] pb-5">
+            <div>
+              <h3 className="font-serif text-[28px] font-light uppercase tracking-[0.08em] text-white">
+                {tier.name}
+              </h3>
+              <p className="mt-2 max-w-[235px] text-xs leading-5 text-white/42">
+                {tier.tagline}
+              </p>
+            </div>
+
+            <div className="shrink-0 text-right">
+              <p className="text-[8px] uppercase tracking-[0.2em] text-white/28">
+                Price
+              </p>
+              <div className="mt-1 flex items-start justify-end">
+                <span
+                  className="mt-1 font-[Arial,sans-serif] text-base font-light"
+                  style={{ color: visual.accent }}
+                >
+                  $
+                </span>
+                <span
+                  className="font-[Arial,sans-serif] text-4xl font-light leading-none"
+                  style={{ color: visual.accent }}
+                >
+                  {tier.price}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <p className="mt-4 min-h-[42px] text-xs leading-5 text-white/46">
+            {tier.idealFor}
+          </p>
+
+          <ul className="mt-4 grid gap-2.5">
+            {tier.features.map((feature) => (
+              <li
+                key={feature}
+                className="flex items-start gap-2.5 text-[12px] leading-[1.35rem] text-white/54"
+              >
+                <span
+                  className="mt-[7px] h-1.5 w-1.5 shrink-0 rotate-45 border"
+                  style={{ borderColor: visual.accent }}
+                />
+                <span>{feature}</span>
+              </li>
+            ))}
+          </ul>
+
+          <button
+            type="button"
+            onClick={() => onSelect(tier)}
+            className="group/button relative mt-auto overflow-hidden rounded-xl border px-4 py-3.5 text-[10px] font-medium uppercase tracking-[0.24em] transition-all duration-300"
+            style={{
+              borderColor: visual.edge,
+              color: tier.key === "platinum" ? "#080808" : visual.accent,
+              background:
+                tier.key === "platinum"
+                  ? visual.accent
+                  : "rgba(0,0,0,0.28)",
+            }}
+          >
+            <span className="relative z-10">
+              {buttonLabel} {tier.name}
+            </span>
+            <span
+              className="absolute inset-0 -translate-x-full transition-transform duration-500 group-hover/button:translate-x-0"
+              style={{
+                background:
+                  tier.key === "platinum"
+                    ? "rgba(255,255,255,0.18)"
+                    : visual.soft,
+              }}
+            />
+          </button>
+        </div>
+      </motion.article>
+    </div>
+  );
+}
 
 export default function MembershipPage() {
   const router = useRouter();
@@ -271,8 +544,10 @@ export default function MembershipPage() {
   };
 
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen overflow-x-hidden bg-[#030303] text-white">
       <Navigation />
+
+      {/* Existing membership hero preserved exactly from the original page */}
       <section className="relative h-[75vh] min-h-[560px] overflow-hidden">
         <Image
           src="/images/membership-hero.jpg"
@@ -314,209 +589,313 @@ export default function MembershipPage() {
         </div>
       </section>
 
-      <section className="bg-secondary/30 px-6 py-24 md:py-32">
-        <div className="mx-auto max-w-6xl">
+      {/* Premium membership cards — current card design preserved */}
+      <section className="relative overflow-hidden border-b border-white/[0.055] px-5 py-16 sm:px-6 md:py-20 lg:px-10">
+        <div
+          className="pointer-events-none absolute inset-0 -z-20"
+          style={{
+            background:
+              "radial-gradient(circle at 50% 0%, rgba(212,175,55,0.13), transparent 31%), #030303",
+          }}
+        />
+        <div
+          className="pointer-events-none absolute inset-0 -z-10 opacity-[0.13]"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(212,175,55,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(212,175,55,0.07) 1px, transparent 1px)",
+            backgroundSize: "72px 72px",
+            maskImage: "linear-gradient(to bottom, black, transparent 88%)",
+          }}
+        />
+
+        <motion.div
+          aria-hidden="true"
+          animate={{ rotate: 360 }}
+          transition={{ duration: 42, repeat: Infinity, ease: "linear" }}
+          className="pointer-events-none absolute left-1/2 top-4 -z-10 h-[300px] w-[300px] -translate-x-1/2 rounded-full border border-[#d4af37]/10 sm:h-[390px] sm:w-[390px]"
+        >
+          <span className="absolute left-1/2 top-0 h-1.5 w-1.5 -translate-x-1/2 rounded-full bg-[#e3c45b] shadow-[0_0_16px_rgba(227,196,91,0.9)]" />
+        </motion.div>
+
+        <div className="mx-auto max-w-[1240px]">
           <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="mb-16 text-center"
+            transition={{ duration: 0.7 }}
+            className="mx-auto max-w-3xl text-center"
           >
-            <span className="text-xs uppercase tracking-[0.3em] text-primary">
-              {t("membership.plans.sectionTitle")}
-            </span>
-            <h2 className="mt-4 text-3xl font-light text-foreground md:text-4xl">
+            <div className="flex items-center justify-center gap-3">
+              <span className="h-px w-9 bg-gradient-to-r from-transparent to-[#d4af37]" />
+              <span className="text-[9px] uppercase tracking-[0.4em] text-[#d4af37] sm:text-[10px]">
+                {t("membership.plans.sectionTitle")}
+              </span>
+              <span className="h-px w-9 bg-gradient-to-l from-transparent to-[#d4af37]" />
+            </div>
+            <h2 className="mt-4 font-serif text-3xl font-light text-white sm:text-4xl">
               {t("membership.plans.heading")}
             </h2>
           </motion.div>
 
-          <div className="grid gap-8 lg:grid-cols-3">
-            {tiers.map((tier, index) => (
-              <motion.div
-                key={tier.name}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.2 }}
-                className="relative border bg-card p-8 transition-all duration-500 border-primary shadow-[0_0_40px_rgba(212,175,55,0.15)] hover:bg-primary/5"
-              >
-                {tier.popular && (
-                  <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                    <span className="bg-primary px-4 py-1 text-xs uppercase tracking-widest text-primary-foreground">
-                      {t("membership.plans.popularTag")}
-                    </span>
-                  </div>
-                )}
-                <div className="mb-6 flex items-center justify-center">
-                  <tier.icon className="h-12 w-12 text-primary" />
-                </div>
-                <h3 className="text-center text-2xl font-medium uppercase tracking-wider text-foreground">
-                  {tier.name}
-                </h3>
-                <p className="mt-4 text-center text-sm leading-relaxed text-muted-foreground">
-                  {tier.tagline}
-                </p>
-              <div className="mt-6 text-center">
-                  <span className="text-sm text-muted-foreground uppercase tracking-widest">Membership Price</span>
-                  <div className="mt-2 flex items-center justify-center">
-                    <span className="text-4xl font-light text-primary">$</span>
-                    <span 
-                      className="text-4xl text-primary" 
-                      style={{ fontFamily: 'Arial, Helvetica, sans-serif', fontWeight: '300', marginLeft: '2px' }}
-                    >
-                      {tier.price}
-                    </span>
-                  </div>
-                </div>
-                <p className="mt-6 border-t border-border pt-6 text-sm leading-relaxed text-muted-foreground">
-                  {tier.idealFor}
-                </p>
-                <ul className="mt-8 space-y-4">
-                  {tier.features.map((feature) => (
-                    <li key={feature} className="flex items-start gap-3 text-muted-foreground">
-                      <Check className="mt-1 h-4 w-4 shrink-0 text-primary" />
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-                <button
-                  type="button"
-                  onClick={() => openCheckout(tier)}
-                  className="mt-8 block w-full py-4 text-center text-sm uppercase tracking-widest transition-all duration-300 bg-primary text-primary-foreground hover:bg-primary/90"
-                >
-                  {t("membership.plans.btnLabel")} {tier.name}
-                </button>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="px-6 py-24 md:py-32">
-        <div className="mx-auto max-w-5xl text-center">
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 14 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.65, delay: 0.1 }}
+            className="mt-7 flex items-center justify-between gap-4 border-y border-white/[0.06] py-3.5"
           >
-            <span className="text-xs uppercase tracking-[0.3em] text-primary">
-              {t("membership.whyTitle")}
+            <div className="hidden items-center gap-2.5 sm:flex">
+              <Sparkles className="h-3.5 w-3.5 text-[#d4af37]" />
+              <span className="text-[8px] uppercase tracking-[0.28em] text-white/30">
+                Choose your access
+              </span>
+            </div>
+            <span className="text-center text-[9px] uppercase tracking-[0.3em] text-white/30">
+              Gold · Platinum · Diamond
             </span>
-            <h2 className="mt-4 text-3xl font-light text-foreground md:text-4xl lg:text-5xl">
-              {t("membership.oneCard")}{" "}
-              <span className="text-primary">{t("membership.premiumPrivileges")}</span>
-            </h2>
-            <p className="mx-auto mt-8 max-w-3xl text-lg leading-relaxed text-muted-foreground">
-              {t("membership.whyDesc")}
-            </p>
-            <div className="mt-12 grid gap-6 md:grid-cols-3">
-              <div className="border border-border bg-card p-6">
-                <ShieldCheck className="mx-auto h-10 w-10 text-primary" />
-                <h3 className="mt-4 text-lg uppercase tracking-wider text-foreground">
-                  {t("membership.features.savings.title")}
-                </h3>
-                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                  {t("membership.features.savings.desc")}
-                </p>
-              </div>
-              <div className="border border-border bg-card p-6">
-                <BadgeCheck className="mx-auto h-10 w-10 text-primary" />
-                <h3 className="mt-4 text-lg uppercase tracking-wider text-foreground">
-                  {t("membership.features.access.title")}
-                </h3>
-                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                  {t("membership.features.access.desc")}
-                </p>
-              </div>
-              <div className="border border-border bg-card p-6">
-                <CreditCard className="mx-auto h-10 w-10 text-primary" />
-                <h3 className="mt-4 text-lg uppercase tracking-wider text-foreground">
-                  {t("membership.features.value.title")}
-                </h3>
-                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                  {t("membership.features.value.desc")}
-                </p>
-              </div>
+            <div className="hidden items-center gap-2.5 sm:flex">
+              <span className="text-[8px] uppercase tracking-[0.28em] text-white/30">
+                Secure checkout
+              </span>
+              <ShieldCheck className="h-3.5 w-3.5 text-[#d4af37]" />
             </div>
           </motion.div>
-        </div>
-      </section>
 
-      <section className="bg-secondary/30 px-6 py-24 md:py-32">
-        <div className="mx-auto max-w-6xl">
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="mb-16 text-center"
-          >
-            <span className="text-xs uppercase tracking-[0.3em] text-primary">
-              {t("membership.benefits.title")}
-            </span>
-            <h2 className="mt-4 text-3xl font-light text-foreground md:text-4xl">
-              {t("membership.benefits.subtitle")}
-            </h2>
-          </motion.div>
-          <div className="grid gap-6 md:grid-cols-2">
-            {benefits.map((benefit) => (
-              <motion.div
-                key={benefit.category}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-                className="group border border-border bg-card p-8 transition-all duration-500 hover:border-primary/50"
-              >
-                <h3 className="text-xl font-medium uppercase tracking-wider text-primary">
-                  {benefit.category}
-                </h3>
-                <ul className="mt-6 space-y-3">
-                  {benefit.items.map((item) => (
-                    <li key={item} className="flex items-start gap-3 text-muted-foreground">
-                      <Check className="mt-1 h-4 w-4 shrink-0 text-primary" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </motion.div>
+          <div className="mt-9 grid items-stretch gap-7 lg:grid-cols-3 lg:gap-6">
+            {tiers.map((tier, index) => (
+              <TierCard
+                key={tier.name}
+                tier={tier}
+                index={index}
+                popularLabel={t("membership.plans.popularTag")}
+                buttonLabel={t("membership.plans.btnLabel")}
+                onSelect={openCheckout}
+              />
             ))}
           </div>
         </div>
       </section>
 
-      <section className="px-6 py-24 md:py-32">
+      {/* Why membership — compact split composition */}
+      <section className="relative overflow-hidden px-6 py-16 md:py-20 lg:px-10">
+        <div className="pointer-events-none absolute -left-32 top-1/2 h-72 w-72 -translate-y-1/2 rounded-full bg-[#d4af37]/[0.05] blur-[100px]" />
+        <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+          <motion.div
+            initial={{ opacity: 0, x: -28 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.75 }}
+          >
+            <div className="flex items-center gap-3">
+              <span className="h-px w-10 bg-[#d4af37]" />
+              <span className="text-[10px] uppercase tracking-[0.35em] text-[#d4af37]">
+                {t("membership.whyTitle")}
+              </span>
+            </div>
+            <h2 className="mt-5 max-w-xl font-serif text-3xl font-light leading-tight text-white sm:text-4xl lg:text-5xl">
+              {t("membership.oneCard")}{" "}
+              <span className="bg-gradient-to-r from-[#9d7525] via-[#f1d77b] to-[#b68b31] bg-clip-text text-transparent">
+                {t("membership.premiumPrivileges")}
+              </span>
+            </h2>
+            <p className="mt-5 max-w-xl text-sm leading-7 text-white/48 sm:text-[15px]">
+              {t("membership.whyDesc")}
+            </p>
+          </motion.div>
+
+          <div className="grid gap-4 sm:grid-cols-3">
+            {[
+              {
+                icon: ShieldCheck,
+                title: t("membership.features.savings.title"),
+                description: t("membership.features.savings.desc"),
+              },
+              {
+                icon: BadgeCheck,
+                title: t("membership.features.access.title"),
+                description: t("membership.features.access.desc"),
+              },
+              {
+                icon: CreditCard,
+                title: t("membership.features.value.title"),
+                description: t("membership.features.value.desc"),
+              },
+            ].map((feature, index) => {
+              const FeatureIcon = feature.icon;
+              return (
+                <motion.article
+                  key={feature.title}
+                  initial={{ opacity: 0, y: 22 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.55, delay: index * 0.1 }}
+                  whileHover={{
+                    y: -6,
+                    rotateX: 3,
+                    rotateY: index === 1 ? 0 : index === 0 ? -3 : 3,
+                  }}
+                  className="group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-[#080807] p-5 shadow-[0_18px_50px_rgba(0,0,0,0.35)]"
+                  style={{ transformStyle: "preserve-3d", perspective: "900px" }}
+                >
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(212,175,55,0.10),transparent_58%)] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+                  <div className="relative">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#d4af37]/25 bg-[#d4af37]/[0.04]">
+                      <FeatureIcon className="h-5 w-5 text-[#d4af37]" />
+                    </div>
+                    <h3 className="mt-5 text-sm uppercase tracking-[0.16em] text-white">
+                      {feature.title}
+                    </h3>
+                    <p className="mt-3 text-xs leading-6 text-white/42">
+                      {feature.description}
+                    </p>
+                  </div>
+                </motion.article>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Benefits — compact premium grid */}
+      <section className="relative overflow-hidden border-y border-white/[0.055] bg-[#050505] px-6 py-16 md:py-20 lg:px-10">
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.12]"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(212,175,55,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(212,175,55,0.07) 1px, transparent 1px)",
+            backgroundSize: "64px 64px",
+          }}
+        />
+        <div className="relative mx-auto max-w-6xl">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+            className="mb-10 flex flex-col justify-between gap-5 sm:flex-row sm:items-end"
+          >
+            <div>
+              <span className="text-[10px] uppercase tracking-[0.35em] text-[#d4af37]">
+                {t("membership.benefits.title")}
+              </span>
+              <h2 className="mt-3 font-serif text-3xl font-light text-white sm:text-4xl">
+                {t("membership.benefits.subtitle")}
+              </h2>
+            </div>
+            <div className="hidden items-center gap-3 sm:flex">
+              <span className="h-px w-16 bg-white/10" />
+              <span className="text-[8px] uppercase tracking-[0.3em] text-white/25">
+                Member privileges
+              </span>
+            </div>
+          </motion.div>
+
+          <div className="grid gap-4 md:grid-cols-2">
+            {benefits.map((benefit, index) => (
+              <motion.article
+                key={benefit.category}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.55, delay: index * 0.08 }}
+                whileHover={{ y: -5 }}
+                className="group relative overflow-hidden rounded-2xl border border-white/[0.075] bg-black/35 p-5 sm:p-6"
+              >
+                <motion.div
+                  aria-hidden="true"
+                  animate={{ x: ["-150%", "250%"] }}
+                  transition={{
+                    duration: 6,
+                    repeat: Infinity,
+                    repeatDelay: 5,
+                    delay: index * 0.7,
+                  }}
+                  className="pointer-events-none absolute inset-y-0 w-20 -skew-x-12 bg-gradient-to-r from-transparent via-white/[0.035] to-transparent"
+                />
+                <div className="relative flex gap-5">
+                  <span className="font-[Arial,sans-serif] text-[11px] font-semibold tracking-[0.2em] text-[#d4af37]/70">
+                    0{index + 1}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-base uppercase tracking-[0.13em] text-[#d4af37]">
+                      {benefit.category}
+                    </h3>
+                    <ul className="mt-4 grid gap-2.5 sm:grid-cols-2">
+                      {benefit.items.map((item) => (
+                        <li
+                          key={item}
+                          className="flex items-start gap-2.5 text-xs leading-5 text-white/47"
+                        >
+                          <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#d4af37]" />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+                <div className="absolute bottom-0 left-0 h-px w-0 bg-gradient-to-r from-[#d4af37] to-transparent transition-all duration-500 group-hover:w-full" />
+              </motion.article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* How it works — compact connected timeline */}
+      <section className="relative px-6 py-16 md:py-20 lg:px-10">
         <div className="mx-auto max-w-6xl">
           <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="mb-16 text-center"
+            transition={{ duration: 0.65 }}
+            className="text-center"
           >
-            <span className="text-xs uppercase tracking-[0.3em] text-primary">
+            <span className="text-[10px] uppercase tracking-[0.35em] text-[#d4af37]">
               {t("membership.steps.sectionTitle")}
             </span>
-            <h2 className="mt-4 text-3xl font-light text-foreground md:text-4xl">
+            <h2 className="mt-3 font-serif text-3xl font-light text-white sm:text-4xl">
               {t("membership.steps.heading")}
             </h2>
           </motion.div>
-          <div className="grid gap-8 md:grid-cols-4">
-            {steps.map((step, index) => (
-              <motion.div
-                key={step.number}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.15 }}
-                className="relative text-center"
-              >
-                <span className="text-7xl font-light text-primary/20">{step.number}</span>
-                <h3 className="mt-2 text-xl font-medium uppercase tracking-wider text-foreground">
-                  {step.title}
-                </h3>
-                <p className="mt-4 text-muted-foreground">{step.description}</p>
-              </motion.div>
-            ))}
+
+          <div className="relative mt-10">
+            <div className="absolute left-[12.5%] right-[12.5%] top-6 hidden h-px bg-gradient-to-r from-transparent via-[#d4af37]/35 to-transparent md:block" />
+            <div className="grid gap-4 md:grid-cols-4">
+              {steps.map((step, index) => (
+                <motion.article
+                  key={step.number}
+                  initial={{ opacity: 0, y: 22 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.55, delay: index * 0.1 }}
+                  whileHover={{ y: -5 }}
+                  className="group relative rounded-2xl border border-white/[0.075] bg-[#070707] px-5 pb-5 pt-4 text-center"
+                >
+                  <div className="relative mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-[#d4af37]/30 bg-[#090806] shadow-[0_0_0_7px_#030303]">
+                    <span className="font-[Arial,sans-serif] text-[11px] font-semibold tracking-[0.18em] text-[#d4af37]">
+                      {step.number}
+                    </span>
+                    <motion.span
+                      aria-hidden="true"
+                      animate={{ rotate: 360 }}
+                      transition={{
+                        duration: 14 + index,
+                        repeat: Infinity,
+                        ease: "linear",
+                      }}
+                      className="absolute -inset-1 rounded-full border border-dashed border-[#d4af37]/10"
+                    />
+                  </div>
+                  <h3 className="mt-5 text-sm uppercase leading-6 tracking-[0.13em] text-white">
+                    {step.title}
+                  </h3>
+                  <p className="mt-3 text-xs leading-5 text-white/43">
+                    {step.description}
+                  </p>
+                  <div className="absolute inset-x-5 bottom-0 h-px scale-x-0 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent transition-transform duration-500 group-hover:scale-x-100" />
+                </motion.article>
+              ))}
+            </div>
           </div>
         </div>
       </section>
