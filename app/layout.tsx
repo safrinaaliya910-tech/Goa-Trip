@@ -1,14 +1,31 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond } from "next/font/google";
+import { DM_Sans, Playfair_Display } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { Providers } from "@/components/providers";
 import "./globals.css";
 
-const cormorant = Cormorant_Garamond({
+/*
+ * DM Sans:
+ * Navigation, paragraphs, buttons, labels, forms and numbers.
+ */
+const dmSans = DM_Sans({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-cormorant",
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-dm-sans",
   display: "swap",
+  fallback: ["Arial", "Helvetica", "sans-serif"],
+});
+
+/*
+ * Playfair Display:
+ * Premium and luxury headings.
+ */
+const playfairDisplay = Playfair_Display({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-playfair",
+  display: "swap",
+  fallback: ["Georgia", "Times New Roman", "serif"],
 });
 
 export const metadata: Metadata = {
@@ -16,9 +33,8 @@ export const metadata: Metadata = {
   description:
     "Experience premium Goa with exclusive membership access to curated stays, dining, nightlife, travel, and luxury privileges.",
   generator: "v0.app",
-  // REMOVED: Old Vercel icon arrays so Next.js defaults to your new app/icon.png automatically
   verification: {
-    google: "cKmc-hEP2MYewTKPZrkffCK2SivxCjr_28ATvxWHDEc", // <-- ADDED FOR VERIFICATION
+    google: "cKmc-hEP2MYewTKPZrkffCK2SivxCjr_28ATvxWHDEc",
   },
 };
 
@@ -28,8 +44,14 @@ export const viewport: Viewport = {
   maximumScale: 5,
   userScalable: true,
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f5f3ef" },
-    { media: "(prefers-color-scheme: dark)", color: "#141414" },
+    {
+      media: "(prefers-color-scheme: light)",
+      color: "#f5f3ef",
+    },
+    {
+      media: "(prefers-color-scheme: dark)",
+      color: "#141414",
+    },
   ],
 };
 
@@ -39,9 +61,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={cormorant.variable} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${dmSans.variable} ${playfairDisplay.variable}`}
+      suppressHydrationWarning
+    >
       <body className="font-sans antialiased bg-background text-foreground">
         <Providers>{children}</Providers>
+
         {process.env.NODE_ENV === "production" && <Analytics />}
       </body>
     </html>
