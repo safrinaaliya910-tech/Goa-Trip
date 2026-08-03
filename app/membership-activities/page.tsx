@@ -795,13 +795,14 @@ export default function MembershipActivitiesPage() {
               transition={{ duration: 0.8, delay: 0.08, ease: easeOutExpo }}
               className="group relative min-h-[430px] overflow-hidden rounded-[30px] border border-white/[0.07] lg:col-span-7"
             >
-              <Image
-                src="/images/nightlife.jpg"
-                alt="Goa premium venues"
-                fill
-                sizes="(max-width: 1024px) 100vw, 58vw"
-                className="object-cover transition duration-[1600ms] group-hover:scale-105"
-              />
+             <video
+  src="/images/dining.mp4"
+  autoPlay
+  loop
+  muted
+  playsInline
+  className="absolute inset-0 w-full h-full object-cover transition duration-[1600ms] group-hover:scale-105"
+/>
               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/38 to-black/10" />
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(212,175,55,0.22),transparent_34%)]" />
 
@@ -827,13 +828,14 @@ export default function MembershipActivitiesPage() {
               transition={{ duration: 0.8, ease: easeOutExpo }}
               className="group relative min-h-[360px] overflow-hidden rounded-[30px] border border-white/[0.07] lg:col-span-7"
             >
-              <Image
-                src="/images/resort.jpg"
-                alt="Luxury Goa resort"
-                fill
-                sizes="(max-width: 1024px) 100vw, 58vw"
-                className="object-cover transition duration-[1600ms] group-hover:scale-105"
-              />
+<video
+  src="/images/resort.mp4"
+  autoPlay
+  loop
+  muted
+  playsInline
+  className="absolute inset-0 h-full w-full object-cover transition duration-[1600ms] group-hover:scale-105"
+/>
               <div className="absolute inset-0 bg-gradient-to-r from-black/88 via-black/55 to-black/20" />
               <div className="absolute inset-y-0 left-0 flex max-w-xl items-end p-7 sm:items-center sm:p-9">
                 <div>
