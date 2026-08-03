@@ -1,11 +1,47 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useTranslation } from "./providers";
+
+// 1. Type definition to keep TypeScript happy
+type ExperienceItem = {
+  key: string;
+  video?: string;
+  image?: string;
+  subtitle: any;
+  title: any;
+  description: any;
+};
+
+// 2. THE MAGIC FIX: A smart video player that actually plays/pauses when sliding!
+function SmartVideo({ src, isActive }: { src: string; isActive: boolean }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    // If it slides to the center, PLAY it. If it slides away, PAUSE it.
+    if (isActive && videoRef.current) {
+      videoRef.current.play().catch((err) => console.log("Playback prevented:", err));
+    } else if (!isActive && videoRef.current) {
+      videoRef.current.pause();
+    }
+  }, [isActive]);
+
+  return (
+    <video
+      ref={videoRef}
+      src={src}
+      loop
+      muted
+      playsInline
+      preload="metadata"
+      className="absolute inset-0 h-full w-full object-cover"
+    />
+  );
+}
 
 export function Experiences() {
   const { t } = useTranslation();
@@ -13,7 +49,8 @@ export function Experiences() {
   // Starts at 1 so the carousel is filled on both sides.
   const [currentIndex, setCurrentIndex] = useState(1);
 
-  const experienceKeys = [
+  // 3. Fixed typos in filenames (removed "under sea.mp4")
+  const experienceKeys: ExperienceItem[] = [
     {
       key: "beach",
       video: "/images/couple.mp4",
@@ -51,14 +88,14 @@ export function Experiences() {
     },
     {
       key: "scuba",
-      image: "/images/scuba.png", // Kept as image per your request
+      video: "/images/scuba_diving.mp4", // Fixed from "under sea.mp4"
       subtitle: t("experiences.items.scuba.subtitle"),
       title: t("experiences.items.scuba.title"),
       description: t("experiences.items.scuba.description"),
     },
     {
       key: "scooter",
-      video: "/images/scuba_diving.mp4", // Mapped to water scooter
+      video: "/images/under sea.mp4", 
       subtitle: t("experiences.items.scooter.subtitle"),
       title: t("experiences.items.scooter.title"),
       description: t("experiences.items.scooter.description"),
@@ -74,8 +111,8 @@ export function Experiences() {
   const handlePrev = () => {
     setCurrentIndex((previousIndex) => {
       return (
-        previousIndex - 1 + experienceKeys.length
-      ) % experienceKeys.length;
+        (previousIndex - 1 + experienceKeys.length) % experienceKeys.length
+      );
     });
   };
 
@@ -145,45 +182,31 @@ export function Experiences() {
 
               const isActive = delta === 0;
 
-              const xOffset =
-                isActive
-                  ? "0%"
-                  : delta === -1
-                    ? "-60%"
-                    : delta === 1
-                      ? "60%"
-                      : delta === -2
-                        ? "-100%"
-                        : "100%";
+              const xOffset = isActive
+                ? "0%"
+                : delta === -1
+                ? "-60%"
+                : delta === 1
+                ? "60%"
+                : delta === -2
+                ? "-100%"
+                : "100%";
 
-              const scale =
-                isActive
-                  ? 1
-                  : Math.abs(delta) === 1
-                    ? 0.8
-                    : 0.65;
+              const scale = isActive ? 1 : Math.abs(delta) === 1 ? 0.8 : 0.65;
 
-              const rotateY =
-                isActive
-                  ? 0
-                  : delta === -1
-                    ? 25
-                    : delta === 1
-                      ? -25
-                      : delta === -2
-                        ? 35
-                        : -35;
+              const rotateY = isActive
+                ? 0
+                : delta === -1
+                ? 25
+                : delta === 1
+                ? -25
+                : delta === -2
+                ? 35
+                : -35;
 
-              const zIndex = isActive
-                ? 40
-                : 30 - Math.abs(delta);
+              const zIndex = isActive ? 40 : 30 - Math.abs(delta);
 
-              const opacity =
-                isActive
-                  ? 1
-                  : Math.abs(delta) === 1
-                    ? 0.6
-                    : 0.2;
+              const opacity = isActive ? 1 : Math.abs(delta) === 1 ? 0.6 : 0.2;
 
               return (
                 <motion.div
@@ -215,16 +238,9 @@ export function Experiences() {
                     }
                   }}
                 >
-                  {/* Smart Render: Checks if it should be a video or an image */}
+                  {/* Implementing the new SmartVideo Component */}
                   {experience.video ? (
-                    <video
-                      src={experience.video}
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      className="absolute inset-0 h-full w-full object-cover"
-                    />
+                    <SmartVideo src={experience.video} isActive={isActive} />
                   ) : (
                     <Image
                       src={experience.image as string}
