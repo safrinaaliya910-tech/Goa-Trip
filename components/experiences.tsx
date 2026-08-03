@@ -16,49 +16,49 @@ export function Experiences() {
   const experienceKeys = [
     {
       key: "beach",
-      image: "/images/hero-beach.jpg",
+      video: "/images/couple.mp4",
       subtitle: t("experiences.items.beach.subtitle"),
       title: t("experiences.items.beach.title"),
       description: t("experiences.items.beach.description"),
     },
     {
       key: "nightlife",
-      image: "/images/nightlife.jpg",
+      video: "/images/dining.mp4",
       subtitle: t("experiences.items.nightlife.subtitle"),
       title: t("experiences.items.nightlife.title"),
       description: t("experiences.items.nightlife.description"),
     },
     {
       key: "casino",
-      image: "/images/casino.jpg",
+      video: "/images/game.mp4",
       subtitle: t("experiences.items.casino.subtitle"),
       title: t("experiences.items.casino.title"),
       description: t("experiences.items.casino.description"),
     },
     {
       key: "yacht",
-      image: "/images/yacht.jpg",
+      video: "/images/ship.mp4",
       subtitle: t("experiences.items.yacht.subtitle"),
       title: t("experiences.items.yacht.title"),
       description: t("experiences.items.yacht.description"),
     },
     {
       key: "parasailing",
-      image: "/images/parasailing.png",
+      video: "/images/parasute_ship.mp4",
       subtitle: t("experiences.items.parasailing.subtitle"),
       title: t("experiences.items.parasailing.title"),
       description: t("experiences.items.parasailing.description"),
     },
     {
       key: "scuba",
-      image: "/images/scuba.png",
+      image: "/images/scuba.png", // Kept as image per your request
       subtitle: t("experiences.items.scuba.subtitle"),
       title: t("experiences.items.scuba.title"),
       description: t("experiences.items.scuba.description"),
     },
     {
       key: "scooter",
-      image: "/images/scooter.png",
+      video: "/images/scuba_diving.mp4", // Mapped to water scooter
       subtitle: t("experiences.items.scooter.subtitle"),
       title: t("experiences.items.scooter.title"),
       description: t("experiences.items.scooter.description"),
@@ -215,14 +215,26 @@ export function Experiences() {
                     }
                   }}
                 >
-                  <Image
-                    src={experience.image}
-                    alt={experience.title}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    quality={90}
-                  />
+                  {/* Smart Render: Checks if it should be a video or an image */}
+                  {experience.video ? (
+                    <video
+                      src={experience.video}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      className="absolute inset-0 h-full w-full object-cover"
+                    />
+                  ) : (
+                    <Image
+                      src={experience.image as string}
+                      alt={experience.title}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                      quality={90}
+                    />
+                  )}
 
                   {/* Dark gradient for text readability */}
                   <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/60 to-transparent opacity-90" />
@@ -253,7 +265,7 @@ export function Experiences() {
                           {t("experiences.discover") || "Discover"}
                         </span>
 
-                        <div className="h-[2px] w-6 bg-[#C5A059] shadow-[0_0_8px_rgba(197,160,89,0.8)] transition-all duration-300 group-hover:w-12" />
+                        <div className="h-[2px] w-12 bg-[#C5A059] shadow-[0_0_8px_rgba(197,160,89,0.8)] transition-all duration-300" />
                       </div>
                     </motion.div>
                   </div>
@@ -288,17 +300,11 @@ export function Experiences() {
 
             <div className="flex items-center gap-2 sm:gap-3">
               <div className="h-[3px] w-[3px] rounded-full bg-[#C5A059]/40" />
-
               <div className="h-[3px] w-[3px] rounded-full bg-[#C5A059]/70" />
-
               <div className="h-[1px] w-12 bg-gradient-to-r from-transparent to-[#C5A059] sm:w-20" />
-
               <div className="h-2 w-2 rounded-full bg-[#ffebb3] shadow-[0_0_12px_3px_rgba(212,175,55,0.8)] sm:h-2.5 sm:w-2.5" />
-
               <div className="h-[1px] w-12 bg-gradient-to-l from-transparent to-[#C5A059] sm:w-20" />
-
               <div className="h-[3px] w-[3px] rounded-full bg-[#C5A059]/70" />
-
               <div className="h-[3px] w-[3px] rounded-full bg-[#C5A059]/40" />
             </div>
           </div>
