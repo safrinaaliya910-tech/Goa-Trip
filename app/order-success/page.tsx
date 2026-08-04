@@ -118,7 +118,9 @@ export default function OrderSuccessPage() {
           labelColor = "#94A3B8";
         }
 
-        const leftColX = canvas.width * 0.38;
+        // --- ALIGNMENT FIX APPLIED HERE ---
+        // Changed from 0.38 to 0.28 to shift text exactly to the marked red line
+        const leftColX = canvas.width * 0.28; 
         const rightColX = canvas.width * 0.92;
         let startY = canvas.height * 0.55;
 
@@ -215,7 +217,7 @@ export default function OrderSuccessPage() {
         ctx.fillText(email.toLowerCase(), rightColX, contactStartY + (canvas.height * 0.060));
 
         // Compress to 40% quality to bypass Vercel's 4.5MB payload limit
-const finalImageDataUrl = canvas.toDataURL("image/jpeg", 0.4);
+        const finalImageDataUrl = canvas.toDataURL("image/jpeg", 0.4);
         setPreviewUrl(finalImageDataUrl);
 
         try {
