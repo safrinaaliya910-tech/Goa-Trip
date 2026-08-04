@@ -88,14 +88,14 @@ export function Experiences() {
     },
     {
       key: "scuba",
-      video: "/images/scuba_diving.mp4", // Fixed from "under sea.mp4"
+      video: "/images/under sea.mp4",
       subtitle: t("experiences.items.scuba.subtitle"),
       title: t("experiences.items.scuba.title"),
       description: t("experiences.items.scuba.description"),
     },
     {
       key: "scooter",
-      video: "/images/under sea.mp4", 
+      video: "/images/scuba_diving.mp4", 
       subtitle: t("experiences.items.scooter.subtitle"),
       title: t("experiences.items.scooter.title"),
       description: t("experiences.items.scooter.description"),
