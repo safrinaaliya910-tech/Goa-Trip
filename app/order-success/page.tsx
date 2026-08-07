@@ -118,8 +118,6 @@ export default function OrderSuccessPage() {
           labelColor = "#94A3B8";
         }
 
-        // --- ALIGNMENT FIX APPLIED HERE ---
-        // Changed from 0.38 to 0.28 to shift text exactly to the marked red line
         const leftColX = canvas.width * 0.28; 
         const rightColX = canvas.width * 0.92;
         let startY = canvas.height * 0.55;
@@ -198,13 +196,17 @@ export default function OrderSuccessPage() {
 
         const qrSize = canvas.height * 0.14;
         const qrX = rightColX - qrSize;
-        const qrY = row1Y - (canvas.height * 0.01); 
+        
+        // --- CHANGED ONLY THIS: Moved QR Code up to match the red marked circle ---
+        const qrY = canvas.height * 0.26; 
 
         ctx.fillStyle = "#FFFFFF";
         ctx.fillRect(qrX - 3, qrY - 3, qrSize + 6, qrSize + 6);
         ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
 
-        const contactStartY = qrY + qrSize + (canvas.height * 0.05);
+        // Retained original offset logic so contact info stays exactly where it was before
+        const originalQrYForText = row1Y - (canvas.height * 0.01);
+        const contactStartY = originalQrYForText + qrSize + (canvas.height * 0.05);
 
         ctx.textAlign = "right";
         ctx.fillStyle = labelColor;
